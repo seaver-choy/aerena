@@ -8,10 +8,12 @@ import "./index.css";
 export const Root: FC = () => {
   const manifestUrl = useMemo(() => {
     return new URL(
-        "tonconnect-manifest.json",
-        window.location.href
-    ).toString();
+        "ton-connect-manifest.json",
+        import.meta.url
+    ).href;
   }, []);
+
+    console.log(manifestUrl);
 
     return (
       <TonConnectUIProvider manifestUrl={manifestUrl}>
