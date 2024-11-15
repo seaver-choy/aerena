@@ -1,15 +1,19 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-import IconCollection from "../../assets/icon-collection.svg";
+import IconFriends from "../../assets/icon-friends.svg";
+import IconQuests from "../../assets/icon-quests.svg";
 import IconPlay from "../../assets/icon-play.svg";
+import IconCollection from "../../assets/icon-collection.svg";
 import IconExchange from "../../assets/icon-exchange.svg";
 
 export const NavBar = () => {
   const location = useLocation();
   const tabs = [
-    { id: "/collection", text: "COLLECTION", Icon: IconCollection },
-    { id: "/", text: "PLAY", Icon: IconPlay },
-    { id: "/exchange", text: "EXCHANGE", Icon: IconExchange },
+    { id: "/friends", text: "Friends", Icon: IconFriends },
+    { id: "/quests", text: "Quests", Icon: IconQuests },
+    { id: "/", text: "Play", Icon: IconPlay },
+    { id: "/collection", text: "Collection", Icon: IconCollection },
+    { id: "/exchange", text: "Exchange", Icon: IconExchange },
   ];
 
   return (

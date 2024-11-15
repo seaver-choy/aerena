@@ -1,6 +1,8 @@
 import { ComponentType } from "react";
-import { CollectionScreen } from "../../pages/CollectionScreen";
+import { FriendsScreen } from "../../pages/FriendsScreen";
+import { QuestsScreen } from "../../pages/QuestsScreen";
 import { PlayScreen } from "../../pages/PlayScreen";
+import { CollectionScreen } from "../../pages/CollectionScreen";
 import { ExchangeScreen } from "../../pages/ExchangeScreen";
 
 interface Route {
@@ -10,7 +12,9 @@ interface Route {
 }
 
 export const routes: Route[] = [
-  { path: "/collection", Component: CollectionScreen },
+  { path: "/friends", Component: FriendsScreen },
+  { path: "/quests", Component: QuestsScreen },
   { path: "/", Component: PlayScreen },
+  { path: "/collection", Component: CollectionScreen },
   { path: "/exchange", Component: ExchangeScreen },
 ];
