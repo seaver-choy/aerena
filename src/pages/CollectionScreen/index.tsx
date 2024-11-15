@@ -6,7 +6,9 @@ import { collectionOptions } from "../../helpers/tabs";
 import { CollectionSection } from "./CollectionSection";
 
 export const CollectionScreen = () => {
-  const [setCollectionTab] = useState("Collection");
+  const [collectionTab, setCollectionTab] = useState("Collection");
+
+  console.log(collectionTab)
 
   return (
     <Layout>
