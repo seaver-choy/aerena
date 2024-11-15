@@ -1,3 +1,9 @@
+# AWS Amplify
+amplify_outputs.json
+.amplify
+
+.env
+
 # Logs
 logs
 *.log

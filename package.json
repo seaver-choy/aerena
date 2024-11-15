@@ -1,5 +1,5 @@
 {
-  "name": "aethena",
+  "name": "aerena",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,16 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@telegram-apps/init-data-node": "^1.1.1",
     "@telegram-apps/telegram-ui": "^2.1.8",
     "@ton/core": "^0.59.0",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.1.0",
+    "@tonconnect/ui-react": "^2.0.9",
+    "mongoose": "^8.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "vite-plugin-node-polyfills": "^0.22.0"
   },
   "devDependencies": {
+    "@aws-amplify/backend": "^1.7.0",
+    "@aws-amplify/backend-cli": "^1.4.2",
     "@eslint/js": "^9.13.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

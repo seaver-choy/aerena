@@ -1,11 +1,18 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import { routes } from "./setup/navigation/routes";
-import { NavBar } from "./components/NavBar";
 import { AppRoot } from "@telegram-apps/telegram-ui";
+import { useTonWallet } from "@tonconnect/ui-react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { NavBar } from "./components/NavBar";
+import { TutorialModal } from "./components/TutorialModal";
+import { routes } from "./setup/navigation/routes";
+
+
 
 const App = () => {
+  const wallet = useTonWallet()
+
   return (
     <AppRoot appearance="dark">
+      { !wallet && <TutorialModal />}
       <Routes>
         <Route path="/" element={<NavBar />}>
           {routes.map((route) => (
