@@ -13,18 +13,13 @@
     "@ton/core": "^0.59.0",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.1.0",
-    "mocha": "^10.8.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
-    "ton": "^11.18.2",
-    "ton-contract-executor": "^0.8.4",
     "vite-plugin-node-polyfills": "^0.22.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@types/bn.js": "^5.1.6",
-    "@types/jest": "^28.1.4",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
