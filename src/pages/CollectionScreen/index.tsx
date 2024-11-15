@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Layout } from "../../components/Layout";
 import { Header } from "../../components/Header";
+import { Layout } from "../../components/Layout";
 import { Tabs } from "../../components/Tabs";
-import { CollectionSection } from "./CollectionSection";
 import { collectionOptions } from "../../helpers/tabs";
+import { CollectionSection } from "./CollectionSection";
 
 export const CollectionScreen = () => {
-  const [collectionTab, setCollectionTab] = useState("Collection");
+  const [setCollectionTab] = useState("Collection");
 
   return (
     <Layout>
