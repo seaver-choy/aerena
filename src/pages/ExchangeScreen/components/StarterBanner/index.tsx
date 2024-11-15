@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { InfoModal } from "../../../../components/InfoModal";
 
 import LoadingStarter from "../../../../assets/loading-starter.svg";
-import BackgroundStarterPH14 from "../../../../assets/background-starter-ph14.svg";
+import BackgroundStarterM6 from "../../../../assets/background-starter-m6.svg";
 import ButtonInfo from "../../../../assets/button-info.svg";
 import ButtonBlack from "../../../../assets/button-black.svg";
 
@@ -42,12 +42,12 @@ export const StarterBanner = () => {
         <img className="h-full w-full" src={LoadingStarter} />
       </div>
       <div className={`${showAfterTimer ? "" : "hidden"} relative flex`}>
-        <img className="h-full w-full" src={BackgroundStarterPH14} />
+        <img className="h-full w-full" src={BackgroundStarterM6} />
         <div className="absolute ml-[10vw] flex h-full w-[31.2vw] items-end">
           <button className="relative mb-[13.8vw] flex h-[8vw] w-full justify-center">
             <img className="h-full" src={ButtonBlack} />
             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-              <p className="mt-[0.4vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
+              <p className="mt-[0.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
                 Claim
               </p>
             </div>
