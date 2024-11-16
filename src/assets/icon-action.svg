@@ -1,0 +1,12 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 246">
+<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M100 50C100 77.6143 77.6143 100 50 100C22.3857 100 0 77.6143 0 50C0 22.3857 22.3857 0 50 0C77.6143 0 100 22.3857 100 50ZM50.9307 80L44 72.8472L66.1382 50L44 27.1528L50.9307 20L80 50L50.9307 80ZM50.2095 49.7313L35.105 33.998L20 49.7313L35.105 65.4646L50.2095 49.7313Z" fill="url(#paint0_linear_2333_32967)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_2333_32967" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+</defs>
+</svg>
