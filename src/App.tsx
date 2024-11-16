@@ -7,10 +7,10 @@ import { routes } from "./setup/navigation/routes";
 
 const App = () => {
   const wallet = useTonWallet();
-
+  
   return (
     <AppRoot appearance="dark">
-      {wallet && <TutorialModal />}
+      {!wallet && <TutorialModal />}
       <Routes>
         <Route path="/" element={<NavBar />}>
           {routes.map((route) => (

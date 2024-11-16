@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  getAthletePositionLogo,
   getAthletePositionBackground,
+  getAthletePositionLogo,
 } from "../../../../helpers/athletes";
 import { AthleteModal } from "../../modals/AthleteModal";
 
 import ButtonFunction from "../../../../assets/button-function.svg";
-import LineBasic from "../../../../assets/line-basic.svg";
 import ButtonLeft from "../../../../assets/button-left.svg";
 import ButtonRight from "../../../../assets/button-right.svg";
+import LineBasic from "../../../../assets/line-basic.svg";
 import LoadingAthlete from "../../../../assets/loading-athlete.svg";
-import SampleAthlete from "../../../../assets/sample-athlete.svg";
+import { getAthletes } from "../../../../helpers/lambda.helpers";
 
 export const Collection = () => {
-  const [showAfterTimer, setShowAfterTimer] = useState<boolean>(true);
   const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
   const [maxLength] = useState<number>(positionList.length - 1);
   const [positionIndex, setPositionIndex] = useState<number>(0);
   const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
+  const [athletes, setAthletes] = useState<any[]>([]);
 
   const handlePreviousCategory = () => {
     if (positionIndex > 0) {
@@ -38,6 +38,17 @@ export const Collection = () => {
   const closeAthleteModal = () => {
     setShowAthleteModal(false);
   };
+
+  const getAllAthletes = async () => {
+    const athletesRes = await getAthletes();
+    setAthletes(athletesRes)
+  }
+
+  useEffect(() => {
+    if(!(athletes.length > 0)) {
+      getAllAthletes()
+    }
+  })
 
   return (
     <>
@@ -108,23 +119,34 @@ export const Collection = () => {
           </div>
           <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
             <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-              <div
-                className={`${
-                  !showAfterTimer ? "" : "hidden"
-                } relative flex h-[37vw] w-[28vw] animate-pulse`}
-              >
-                <img className="h-full w-full" src={LoadingAthlete} />
-              </div>
-              <button
-                className={`${
-                  showAfterTimer ? "" : "hidden"
-                } relative flex h-[37vw] w-[28vw] animate-appear`}
-                onClick={() => {
-                  displayAthleteModal();
-                }}
-              >
-                <img className="h-full w-full" src={SampleAthlete} />
-              </button>
+              { athletes?.length > 0 
+                ? (
+                  athletes.map((athlete, index) => {
+                    return (
+                      <>
+                        <button
+                          key={index}
+                          className={`relative flex h-[37vw] w-[28vw] animate-appear`}
+                          onClick={() => {
+                            displayAthleteModal();
+                          }}
+                        >
+                          <img className="h-full w-full" src={athlete.img} />
+                        </button>
+                      </>
+                    )
+                  })
+                ) : (
+                  Array.from({length:9}, (_, index) => (
+                    <div
+                      key={index}
+                      className={`relative flex h-[37vw] w-[28vw] animate-pulse`}
+                    >
+                    <img className="h-full w-full" src={LoadingAthlete} />
+                  </div>
+                  ))
+                )
+              }
             </div>
           </div>
         </div>

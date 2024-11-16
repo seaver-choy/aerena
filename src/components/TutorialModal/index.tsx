@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 
 export const TutorialModal = () => {
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
