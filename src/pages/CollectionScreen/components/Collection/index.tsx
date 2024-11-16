@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   getAthletePositionBackground,
@@ -11,14 +12,12 @@ import ButtonLeft from "../../../../assets/button-left.svg";
 import ButtonRight from "../../../../assets/button-right.svg";
 import LineBasic from "../../../../assets/line-basic.svg";
 import LoadingAthlete from "../../../../assets/loading-athlete.svg";
-import { getAthletes } from "../../../../helpers/lambda.helpers";
 
-export const Collection = () => {
+export const Collection = ({ athletes }: {athletes: any[]}) => {
   const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
   const [maxLength] = useState<number>(positionList.length - 1);
   const [positionIndex, setPositionIndex] = useState<number>(0);
   const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
-  const [athletes, setAthletes] = useState<any[]>([]);
 
   const handlePreviousCategory = () => {
     if (positionIndex > 0) {
@@ -38,17 +37,6 @@ export const Collection = () => {
   const closeAthleteModal = () => {
     setShowAthleteModal(false);
   };
-
-  const getAllAthletes = async () => {
-    const athletesRes = await getAthletes();
-    setAthletes(athletesRes)
-  }
-
-  useEffect(() => {
-    if(!(athletes.length > 0)) {
-      getAllAthletes()
-    }
-  })
 
   return (
     <>

@@ -11,7 +11,7 @@ import LoadingBooster from "../../../../assets/loading-booster.svg";
 export const MythicBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const [tonConnectUI] = useTonConnectUI();
   const [showAnimationModal, setShowAnimationModal] = useState<boolean>(false);
 
   const showBanner = () => {
@@ -41,9 +41,10 @@ export const MythicBanner = () => {
       },
     ],
   };
-  const displayAnimationModal = () => {
-    setShowAnimationModal(true);
-  };
+
+  // const displayAnimationModal = () => {
+  //   setShowAnimationModal(true);
+  // };
 
   const closeAnimationModal = () => {
     setShowAnimationModal(false);
