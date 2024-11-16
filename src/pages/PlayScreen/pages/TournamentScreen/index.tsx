@@ -52,7 +52,7 @@ export const TournamentScreen = () => {
           </div>
           <div className="absolute animate-appear flex top-[21vw]">
             <p className="text-nowrap font-russoone text-[9vw] font-normal text-white">
-              PHP 20,000
+              20 TON
             </p>
           </div>
           <div className="absolute flex w-[70%] bottom-[5vw] h-[10vw]">
