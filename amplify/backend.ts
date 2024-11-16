@@ -6,14 +6,12 @@ import {
   LambdaIntegration,
   RestApi
 } from "aws-cdk-lib/aws-apigateway";
-import { auth } from './auth/resource';
 import { athletesFunction } from './functions/athletes/resource';
 import { packsFunction } from './functions/packs/resource';
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
  */
 const backend = defineBackend({
-  auth,
   packsFunction,
   athletesFunction
 });
