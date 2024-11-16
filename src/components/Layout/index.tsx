@@ -8,11 +8,11 @@ export const Layout = (props: Props) => {
       className="disable-select disable-scrollbar bg-light disable-zoom flex h-screen w-full flex-col overflow-y-auto"
       style={{
         touchAction:
-          location.pathname === "/friends" || location.pathname === "/quest"
+          location.pathname === "/friends" || location.pathname === "/quests"
             ? "none"
             : "",
         paddingBottom:
-          location.pathname === "/friends" || location.pathname === "/quest"
+          location.pathname === "/friends" || location.pathname === "/quests"
             ? ""
             : "24vw",
       }}
