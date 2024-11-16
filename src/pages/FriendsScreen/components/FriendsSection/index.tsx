@@ -1,5 +1,5 @@
-import IconReferral from "../../../assets/icon-referral.svg";
-import IconGift from "../../../assets/icon-gift.svg";
+import IconReferral from "../../../../assets/icon-referral.svg";
+import IconGift from "../../../../assets/icon-gift.svg";
 
 export const FriendsSection = () => {
   return (

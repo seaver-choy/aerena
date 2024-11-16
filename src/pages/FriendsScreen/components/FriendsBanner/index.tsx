@@ -1,8 +1,12 @@
-import IconAddFriend from "../../../assets/icon-addfriend.svg";
-import IconNotifications from "../../../assets/icon-notifications.svg";
-import IconCopy from "../../../assets/icon-copy.svg";
+import IconAddFriend from "../../../../assets/icon-addfriend.svg";
+import IconNotifications from "../../../../assets/icon-notifications.svg";
+import IconCopy from "../../../../assets/icon-copy.svg";
 
-export const FriendsBanner = () => {
+interface FriendsBannerProps {
+  onClick: () => void;
+}
+
+export const FriendsBanner = ({ onClick }: FriendsBannerProps) => {
   return (
     <div className="z-10 ml-[4vw] mr-[4vw] mt-[4vw] flex animate-title flex-row rounded-[3vw] bg-gradient-to-b from-gold to-graydark pl-[0.5vh] pr-[0.5vh] pt-[0.5vh]">
       <div className="flex h-full w-screen rounded-[2.4vw] bg-graydark p-[4vw]">
@@ -24,7 +28,7 @@ export const FriendsBanner = () => {
           <button>
             <img className="h-[6vw] opacity-30" src={IconNotifications}></img>
           </button>
-          <button>
+          <button onClick={onClick}>
             <img className="h-[6vw]" src={IconCopy}></img>
           </button>
         </div>
