@@ -5,6 +5,5 @@ export const mintFunction = defineFunction({
     entry: "./handler.ts",
     environment: {
         MONGODB_URI: secret("MONGODB_URI"),
-        BOT_TOKEN: secret("BOT_TOKEN"),
     },
 });

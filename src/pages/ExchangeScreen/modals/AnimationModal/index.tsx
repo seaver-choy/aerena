@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 
+import ButtonGold from "../../../../assets/button-gold.svg";
 import DustGold from "../../../../assets/dust-gold.svg";
 import GlowRadial from "../../../../assets/glow-radial.svg";
 import IconBackCard from "../../../../assets/icon-backcard.svg";
-import ButtonGold from "../../../../assets/button-gold.svg";
 import IconMythicM6 from "../../../../assets/icon-mythic-m6.svg";
-import SampleAthlete from "../../../../assets/sample-athlete.svg";
 
 interface AnimationModalProps {
   onEnd: () => void;
+  athletes: [any]
 }
 
-export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
+export const AnimationModal = ({ onEnd, athletes }: AnimationModalProps) => {
   const [startOpenPack, setStartOpenPack] = useState(false);
   const [showOpenPack, setShowOpenPack] = useState(true);
   const [showBackCard, setShowBackCard] = useState(false);
@@ -26,7 +27,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
   };
 
   const handleChangeImage = () => {
-    if (index + 1 == 2) {
+    if (index + 1 == 5) {
       onEnd();
     } else {
       setIndex(index + 1);
@@ -137,7 +138,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                 showAthleteCard ? "animate-athlete backface-hidden" : ""
               } mb-[4vw] flex h-[101vw] items-center justify-center`}
             >
-              <img className="h-[80vw]" key={index} src={SampleAthlete} />
+              <img className="h-[80vw]" key={index} src={athletes[index].img} />
             </div>
           )}
           {showOpenPack && (

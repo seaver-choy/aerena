@@ -20,9 +20,7 @@ export const CollectionScreen = () => {
     if(!(athletes.length > 0)) {
       getAllAthletes()
     }
-  })
-
-  console.log(collectionTab);
+  },[])
 
   return (
     <Layout>
@@ -30,7 +28,6 @@ export const CollectionScreen = () => {
       <Tabs
         options={collectionOptions}
         onToggle={(selected) => {
-          console.log("Selected Option:", selected);
           setCollectionTab(selected);
         }}
       />

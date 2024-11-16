@@ -4,7 +4,7 @@ export const userSchema = new mongoose.Schema(
     {
         tonWalletString: String,
         userID: Number,
-        tokens: [
+        athletes: [
             {
                 type: new mongoose.Schema({
                     tokenId: String,

@@ -1,16 +1,30 @@
 import { AppRoot } from "@telegram-apps/telegram-ui";
-import { useTonWallet } from "@tonconnect/ui-react";
+import { useTonConnectUI } from "@tonconnect/ui-react";
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { TutorialModal } from "./components/TutorialModal";
+import { login } from "./helpers/lambda.helpers";
 import { routes } from "./setup/navigation/routes";
 
 const App = () => {
-  const wallet = useTonWallet();
+  const [tonConnectUI] = useTonConnectUI();
+  const [finishedTutorial, setFinishedTutorial] = useState(false);
+
+
+  const unsubscribe = tonConnectUI.onStatusChange(
+    async (walletAndWalletInfo) => {
+      console.log(walletAndWalletInfo)
+      if(walletAndWalletInfo) {
+        await login(walletAndWalletInfo?.account.address)
+        console.log("I'm called");
+      }
+    }
+  )
 
   return (
     <AppRoot appearance="dark">
-      {!wallet && <TutorialModal />}
+      {!finishedTutorial && <TutorialModal close={setFinishedTutorial} />}
       <Routes>
         <Route path="/" element={<NavBar />}>
           {routes.map((route) => (

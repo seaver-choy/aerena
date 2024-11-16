@@ -7,12 +7,14 @@ import BackgroundMythicM6 from "../../../../assets/background-mythic-m6.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
 import ButtonInfo from "../../../../assets/button-info.svg";
 import LoadingBooster from "../../../../assets/loading-booster.svg";
+import { mint } from "../../../../helpers/lambda.helpers";
 
 export const MythicBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [tonConnectUI] = useTonConnectUI();
   const [showAnimationModal, setShowAnimationModal] = useState<boolean>(false);
+  const [mintedAthletes, setMintedAthletes] = useState([])
 
   const showBanner = () => {
     setTimeout(() => {
@@ -68,8 +70,13 @@ export const MythicBanner = () => {
         <div className="absolute ml-[40vw] flex h-full w-[55.6vw] items-end justify-center gap-[1vw]">
           <button
             className="relative mb-[8.5vw] flex h-[7vw] justify-center"
-            onClick={() => {
+            onClick={async () => {
               tonConnectUI.sendTransaction(transaction);
+              const response = await mint(tonConnectUI.account?.address!);
+              setMintedAthletes(response.mintedAthletes);
+              setTimeout(() => {
+                setShowAnimationModal(true);
+              }, 1000);
             }}
           >
             <img className="h-full" src={ButtonGold} />
@@ -79,7 +86,7 @@ export const MythicBanner = () => {
               </p>
             </div>
           </button>
-          {showAnimationModal && <AnimationModal onEnd={closeAnimationModal} />}
+          {showAnimationModal && <AnimationModal onEnd={closeAnimationModal} athletes={mintedAthletes}/>}
         </div>
         <button className="absolute right-[4vw] top-[4vw] h-[5vw] w-[5vw]">
           <img

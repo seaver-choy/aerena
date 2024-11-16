@@ -7,13 +7,15 @@ import {
   RestApi
 } from "aws-cdk-lib/aws-apigateway";
 import { athletesFunction } from './functions/athletes/resource';
-import { packsFunction } from './functions/packs/resource';
+import { userFunction } from './functions/login/resource';
+import { mintFunction } from './functions/mint/resource';
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
  */
 const backend = defineBackend({
-  packsFunction,
-  athletesFunction
+  userFunction,
+  athletesFunction,
+  mintFunction
 });
 
 const apiStack = backend.createStack("api-stack");
@@ -35,14 +37,37 @@ const athleteIntegration = new LambdaIntegration(
   backend.athletesFunction.resources.lambda
 );
 
+const userIntegration = new LambdaIntegration(
+  backend.userFunction.resources.lambda
+)
+
+const mintIntegration = new LambdaIntegration(
+  backend.mintFunction.resources.lambda
+)
+
 const athletePath = api.root.addResource("athletes", {
     defaultMethodOptions: {
         authorizationType: AuthorizationType.NONE,
     },
 });
 
+const userPath = api.root.addResource("user", {
+  defaultMethodOptions: {
+    authorizationType: AuthorizationType.NONE,
+  }
+})
+
+const mintPath = api.root.addResource("mint", {
+  defaultMethodOptions: {
+    authorizationType: AuthorizationType.NONE,
+  }
+})
+
 athletePath.addMethod('GET', athleteIntegration)
 
+userPath.addMethod('POST', userIntegration)
+
+mintPath.addMethod('POST', mintIntegration)
 
 //final addOutput
 backend.addOutput({
