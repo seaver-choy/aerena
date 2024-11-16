@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { InfoModal } from "../../../../components/InfoModal";
 
-import LoadingStarter from "../../../../assets/loading-starter.svg";
 import BackgroundStarterM6 from "../../../../assets/background-starter-m6.svg";
-import ButtonInfo from "../../../../assets/button-info.svg";
 import ButtonBlack from "../../../../assets/button-black.svg";
+import ButtonInfo from "../../../../assets/button-info.svg";
+import LoadingStarter from "../../../../assets/loading-starter.svg";
 
 export const StarterBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);

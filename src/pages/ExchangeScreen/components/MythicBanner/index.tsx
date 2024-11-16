@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { InfoModal } from "../../../../components/InfoModal";
 
-import LoadingBooster from "../../../../assets/loading-booster.svg";
+import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
 import BackgroundMythicM6 from "../../../../assets/background-mythic-m6.svg";
-import ButtonInfo from "../../../../assets/button-info.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
+import ButtonInfo from "../../../../assets/button-info.svg";
+import LoadingBooster from "../../../../assets/loading-booster.svg";
 
 export const MythicBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [tonConnectUI, setOptions] = useTonConnectUI();
 
   const showBanner = () => {
     setTimeout(() => {
@@ -28,6 +30,17 @@ export const MythicBanner = () => {
     setShowInfoModal(false);
   };
 
+  const transaction: SendTransactionRequest = {
+    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    messages: [
+      {
+        address:
+          "0QDca4AyrK6pL6q1zHHbnnjXVC-Lfxv1yIkD36dpSPetRtvb", // message destination in user-friendly format
+        amount: "1000000000", // Toncoin in nanotons
+      },
+  ],
+  }
+
   return (
     <div
       className={`${
@@ -44,11 +57,14 @@ export const MythicBanner = () => {
       <div className={`${showAfterTimer ? "" : "hidden"} relative flex`}>
         <img className="h-full w-full" src={BackgroundMythicM6} />
         <div className="absolute ml-[40vw] flex h-full w-[55.6vw] items-end justify-center gap-[1vw]">
-          <button className="relative mb-[8.5vw] flex h-[7vw] justify-center">
+          <button className="relative mb-[8.5vw] flex h-[7vw] justify-center" onClick={() => {
+            tonConnectUI.sendTransaction(transaction);
+            
+          }}>
             <img className="h-full" src={ButtonGold} />
             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
               <p className="mt-[0.2vw] font-russoone text-[2.6vw] font-normal text-white">
-                5 TON
+                1 TON
               </p>
             </div>
           </button>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { InfoModal } from "../../../../components/InfoModal";
 
-import LoadingBooster from "../../../../assets/loading-booster.svg";
 import BackgroundEpicM6 from "../../../../assets/background-epic-m6.svg";
-import ButtonInfo from "../../../../assets/button-info.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
+import ButtonInfo from "../../../../assets/button-info.svg";
+import LoadingBooster from "../../../../assets/loading-booster.svg";
 
 export const EpicBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export const EpicBanner = () => {
             <img className="h-full" src={ButtonGold} />
             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
               <p className="mt-[0.2vw] font-russoone text-[2.6vw] font-normal text-white">
-                3 TON
+                0.75 TON
               </p>
             </div>
           </button>

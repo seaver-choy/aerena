@@ -10,7 +10,7 @@ const App = () => {
 
   return (
     <AppRoot appearance="dark">
-      {wallet && <TutorialModal />}
+      {!wallet && <TutorialModal />}
       <Routes>
         <Route path="/" element={<NavBar />}>
           {routes.map((route) => (
