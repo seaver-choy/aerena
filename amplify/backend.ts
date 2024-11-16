@@ -7,8 +7,8 @@ import {
   RestApi
 } from "aws-cdk-lib/aws-apigateway";
 import { athletesFunction } from './functions/athletes/resource';
-import { userFunction } from './functions/login/resource';
 import { mintFunction } from './functions/mint/resource';
+import { userFunction } from './functions/user/resource';
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
  */
@@ -65,6 +65,7 @@ const mintPath = api.root.addResource("mint", {
 
 athletePath.addMethod('GET', athleteIntegration)
 
+userPath.addMethod('GET', userIntegration)
 userPath.addMethod('POST', userIntegration)
 
 mintPath.addMethod('POST', mintIntegration)

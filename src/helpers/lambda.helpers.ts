@@ -16,6 +16,28 @@ export const getAthletes = async () => {
     }
 }
 
+
+export const getUserAthletesApi = async (tonWalletString: string) => {
+    try {
+
+    const restOperation = get({
+                apiName: "aerenaApi",
+                path: `user`,
+                options: {
+                    queryParams: {
+                        tonWalletString
+                    }
+                }
+            });
+
+    const { body } = await restOperation.response;
+    const response = await body.text();
+    return JSON.parse(response).athletes;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export const login = async (tonWalletString: string) => {
     try {
         const restOperation = post({

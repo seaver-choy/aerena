@@ -21,7 +21,6 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         }
 
         if (event.httpMethod === "POST") {
-            const eventProxy = event.pathParameters?.proxy;
 
             const req = JSON.parse(JSON.parse(event.body!));
             console.log(event.body);
@@ -49,7 +48,20 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 body: JSON.stringify("Logged In"),
             };
 
-        } else {
+        } else if( event.httpMethod == "GET") {
+
+            const user = await conn.model<any>("Users").findOne({tonWalletString: event.queryStringParameters?.tonWalletString})
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify(user),
+            };
+        }
+        else {
             return {
                 statusCode: 404,
                 headers: {
@@ -59,6 +71,14 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 body: JSON.stringify("Method not found for this path"),
             };
         }
+        return {
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify("Error"),
+        };
     } catch (e) {
         console.log(e)
         return {
