@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { useEffect, useState } from "react";
 
 import ButtonGold from "../../../../assets/button-gold.svg";
@@ -9,7 +9,7 @@ import IconMythicM6 from "../../../../assets/icon-mythic-m6.svg";
 
 interface AnimationModalProps {
   onEnd: () => void;
-  athletes: [any]
+  athletes;
 }
 
 export const AnimationModal = ({ onEnd, athletes }: AnimationModalProps) => {

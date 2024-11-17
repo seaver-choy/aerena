@@ -1,4 +1,4 @@
-import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
+import { TonConnectButton } from "@tonconnect/ui-react";
 import IconLogo from "../../assets/icon-logo.svg";
 
 export const Header = () => {

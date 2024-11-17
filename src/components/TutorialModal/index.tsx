@@ -23,7 +23,7 @@ export const TutorialModal = ({ close }: any) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    beforeChange: (current, next) => {
+    beforeChange: (current: any, next: any) => {
       if (next === 3) {
         setGetStarted(true);
       }

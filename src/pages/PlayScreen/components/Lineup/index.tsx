@@ -19,6 +19,35 @@ export const Lineup = () => {
 
   const [userAthletes, setUserAthletes] = useState([])
 
+  const [counter, setCounter] = useState(0)
+  const [roam, setRoam] = useState(null)
+  const [mid, setMid] = useState(null)
+  const [exp, setExp] = useState(null)
+  const [jungle, setJungle] = useState(null)
+  const [gold, setGold] = useState(null)
+
+  const onSelectAthlete = (athlete) => {
+    if(counter == 0) {
+      setRoam(athlete)
+      setCounter(1)
+    }
+    if(counter == 1){
+      setMid(athlete)
+      setCounter(2)
+    }
+    if(counter == 2){
+      setExp(athlete)
+      setCounter(3)
+    }
+    if(counter == 3){
+      setJungle(athlete)
+      setCounter(4)
+    }
+    if(counter == 4){
+      setGold(athlete)
+    }
+  }
+
   const getUserAthletes = async () => {
     const res = await getUserAthletesApi(tonConnectUI.account?.address!);
     setUserAthletes(res);
@@ -44,22 +73,26 @@ export const Lineup = () => {
         className="relative animate-appear flex h-[37vw] w-[28vw]"
         onClick={displayAthleteSelectModal}
       >
-        <img className="h-[100%]" src={EmptyRoam} />
+        <img className="h-[100%]" src={roam ? roam.img :EmptyRoam} />
       </button>
       {showAthleteSelectModal && (
-        <AthleteSelectModal cancel={closeAthleteSelectModal} athletes={userAthletes}/>
+        <AthleteSelectModal cancel={closeAthleteSelectModal} athletes={userAthletes} submission={onSelectAthlete}/>
       )}
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]">
-        <img className="h-[100%]" src={EmptyMid} />
+      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
+        onClick={displayAthleteSelectModal}>
+        <img className="h-[100%]" src={mid ? mid.img : EmptyMid} />
       </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]">
-        <img className="h-[100%]" src={EmptyJungle} />
+      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
+        onClick={displayAthleteSelectModal}>
+        <img className="h-[100%]" src={jungle ? jungle.img :EmptyJungle} />
       </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]">
-        <img className="h-[100%]" src={EmptyGold} />
+      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
+        onClick={displayAthleteSelectModal}>
+        <img className="h-[100%]" src={gold ? gold.img :EmptyGold} />
       </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]">
-        <img className="h-[100%]" src={EmptyEXP} />
+      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
+        onClick={displayAthleteSelectModal}>
+        <img className="h-[100%]" src={exp ? exp.img: EmptyEXP} />
       </button>
     </div>
   );

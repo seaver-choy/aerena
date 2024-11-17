@@ -12,7 +12,7 @@ const App = () => {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
 
 
-  const unsubscribe = tonConnectUI.onStatusChange(
+  tonConnectUI.onStatusChange(
     async (walletAndWalletInfo) => {
       console.log(walletAndWalletInfo)
       if(walletAndWalletInfo) {
