@@ -10,7 +10,7 @@ import SlideOne from "../../assets/slide-one.svg";
 import SlideThree from "../../assets/slide-three.svg";
 import SlideTwo from "../../assets/slide-two.svg";
 
-export const TutorialModal = ({close}: any) => {
+export const TutorialModal = ({ close }: any) => {
   const sliderRef = useRef(null);
   const [getStarted, setGetStarted] = useState(false);
 
@@ -24,10 +24,10 @@ export const TutorialModal = ({close}: any) => {
     slidesToScroll: 1,
     arrows: false,
     beforeChange: (current, next) => {
-        if(next === 3) {
-            setGetStarted(true)
-        }
-    }
+      if (next === 3) {
+        setGetStarted(true);
+      }
+    },
   };
 
   useEffect(() => {
@@ -45,8 +45,7 @@ export const TutorialModal = ({close}: any) => {
           <div className="mb-[4vw] flex h-full items-center justify-center">
             {/* <TonConnectButton /> */}
             <Slider
-              ref={(slider: any) => 
-                (sliderRef.current = slider)}
+              ref={(slider: any) => (sliderRef.current = slider)}
               className="w-full h-full"
               {...settings}
             >
@@ -90,45 +89,56 @@ export const TutorialModal = ({close}: any) => {
             </Slider>
           </div>
           <div className="flex justify-center h-[10vw] gap-[4vw]">
-            { getStarted ? 
-            (
-                    <button className="relative pr-[8vw] flex h-full w-full justify-center" onClick={() => {
-                        close(true)
-                    }}>
-                    <img className="h-full" src={ButtonGold} />
-                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-white">
-                        Get Started
-                        </p>
-                    </div>
-                    </button>
-            ): 
-            (
-                <>
-                    <button className="relative pl-[8vw] flex h-full w-full justify-center" onClick={() => {
-                        sliderRef && sliderRef.current && sliderRef.current.slickPrev()
-                    }}>
-                    <img className="h-full" src={ButtonWhite} />
-                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-transparent bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text">
-                        Back
-                        </p>
-                    </div>
-                    </button>
-                    <button className="relative pr-[8vw] flex h-full w-full justify-center" onClick={() => {
-                        sliderRef && sliderRef.current && sliderRef.current.slickNext()
-                    }}>
-                    <img className="h-full" src={ButtonGold} />
-                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-white">
-                        Next
-                        </p>
-                    </div>
-                    </button>
-                </>
-            )
-            }
-            
+            {getStarted ? (
+              <div className="px-[8vw] flex flex-row">
+                <button
+                  className="relative flex h-full w-full justify-center"
+                  onClick={() => {
+                    close(true);
+                  }}
+                >
+                  <img className="h-full" src={ButtonGold} />
+                  <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                    <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-white">
+                      Get Started
+                    </p>
+                  </div>
+                </button>
+              </div>
+            ) : (
+              <div className="px-[8vw] flex flex-row">
+                <button
+                  className="relative flex h-full w-full justify-center"
+                  onClick={() => {
+                    sliderRef &&
+                      sliderRef.current &&
+                      sliderRef.current.slickPrev();
+                  }}
+                >
+                  <img className="h-full" src={ButtonWhite} />
+                  <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                    <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-transparent bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text">
+                      Back
+                    </p>
+                  </div>
+                </button>
+                <button
+                  className="relative flex h-full w-full justify-center"
+                  onClick={() => {
+                    sliderRef &&
+                      sliderRef.current &&
+                      sliderRef.current.slickNext();
+                  }}
+                >
+                  <img className="h-full" src={ButtonGold} />
+                  <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                    <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-white">
+                      Next
+                    </p>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
