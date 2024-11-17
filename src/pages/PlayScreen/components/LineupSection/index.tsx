@@ -22,8 +22,9 @@ export const LineupSection = () => {
         { showSuccessModal && (
           <SuccessModal onClose={onCloseModal}/>
         )}
-        <div className="pointer-events-none absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end">
-          <button className="relative w-full items-center justify-center" onClick={() => 
+        <div className="absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end">
+          <button className="relative w-full items-center justify-center" onClick={
+            () => 
             {
               console.log("clicked")
               setShowSuccessModal(true)
