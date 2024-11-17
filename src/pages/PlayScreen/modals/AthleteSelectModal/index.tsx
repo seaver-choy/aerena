@@ -1,10 +1,10 @@
+/* eslint-disable */
 import { getAthletePositionLogo } from "../../../../helpers/athletes";
 
-import ModalLarge from "../../../../assets/modal-large.svg";
-import IconClose from "../../../../assets/icon-close.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
+import IconClose from "../../../../assets/icon-close.svg";
+import ModalLarge from "../../../../assets/modal-large.svg";
 
-import SampleAthlete from "../../../../assets/sample-athlete.svg";
 
 interface AthleteSelectModalProps {
   position: string;
@@ -14,6 +14,7 @@ interface AthleteSelectModalProps {
 export const AthleteSelectModal = ({
   position,
   cancel,
+  athletes
 }: AthleteSelectModalProps) => {
   return (
     <div className="fixed inset-0 z-40">
@@ -40,30 +41,15 @@ export const AthleteSelectModal = ({
             </div>
           </div>
           <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
-            <div className="flex h-[27.95w] w-[21.5vw]">
-              <img src={SampleAthlete} className="h-[100%]" />
-            </div>
+            {athletes.length > 0 && athletes.map(
+            (athlete: any) => {
+              return (
+                <div className="flex h-[27.95w] w-[21.5vw]">
+                  <img src={athlete.img} className="h-[100%]" />
+                </div>
+              )
+            }
+            )}
           </div>
           <div className="flex h-[7.5vw] justify-center">
             <div className="flex h-full w-full justify-end">

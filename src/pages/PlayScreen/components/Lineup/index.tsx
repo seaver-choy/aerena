@@ -47,7 +47,7 @@ export const Lineup = () => {
         <img className="h-[100%]" src={EmptyRoam} />
       </button>
       {showAthleteSelectModal && (
-        <AthleteSelectModal cancel={closeAthleteSelectModal} />
+        <AthleteSelectModal cancel={closeAthleteSelectModal} athletes={userAthletes}/>
       )}
       <button className="relative animate-appear flex h-[37vw] w-[28vw]">
         <img className="h-[100%]" src={EmptyMid} />
