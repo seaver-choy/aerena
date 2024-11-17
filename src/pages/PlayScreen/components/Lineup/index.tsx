@@ -10,7 +10,7 @@ import EmptyJungle from "../../../../assets/empty-jungle.svg";
 import EmptyMid from "../../../../assets/empty-mid.svg";
 import EmptyRoam from "../../../../assets/empty-roam.svg";
 
-export const Lineup = () => {
+export const Lineup = ({canShowFinished}) => {
   const [showAthleteSelectModal, setShowAthleteSelectModal] = useState<boolean>(
     false
   );
@@ -45,6 +45,7 @@ export const Lineup = () => {
     }
     if(counter == 4){
       setGold(athlete)
+      canShowFinished()
     }
   }
 

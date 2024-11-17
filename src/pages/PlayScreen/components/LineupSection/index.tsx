@@ -13,22 +13,30 @@ export const LineupSection = () => {
     setShowSuccessModal(false)
   }
 
+  const canShowSelected = () => {
+    setAllSelected(true);
+  }
+
+  const [allSelected, setAllSelected] = useState(false);
+
   return (
     <div className="mt-[4vw] h-[120vw]">
       <div className="relative flex justify-center">
         <img className="h-full w-full" src={BackgroundLineup} />
         <LineupTitle />
-        <Lineup />
+        <Lineup canShowFinished={canShowSelected}/>
         { showSuccessModal && (
           <SuccessModal onClose={onCloseModal}/>
         )}
-        <div className="absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end">
+        <div className={`absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end ${allSelected ? '': 'opacity-50'}`}>
           <button className="relative w-full items-center justify-center" onClick={
             () => 
             {
-              setShowSuccessModal(true)
+              if(allSelected) {
+                setShowSuccessModal(true)
+              }
             }}>
-            <div className="absolute flex h-full w-full items-center justify-center">
+            <div className={`absolute flex h-full w-full items-center justify-center`}>
               <p className="pt-[0.8vw] font-russoone text-[3vw] text-white">
                 Enter Tournament
               </p>
