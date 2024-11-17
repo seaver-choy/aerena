@@ -18,6 +18,8 @@ export const Collection = ({ athletes}: {athletes: any[]}) => {
   const [maxLength] = useState<number>(positionList.length - 1);
   const [positionIndex, setPositionIndex] = useState<number>(0);
   const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
+  const [selectedAthlete, setSelectedAthlete] = useState<any>(null);
+
 
   const handlePreviousCategory = () => {
     if (positionIndex > 0) {
@@ -40,7 +42,7 @@ export const Collection = ({ athletes}: {athletes: any[]}) => {
 
   return (
     <>
-      {showAthleteModal && <AthleteModal cancel={closeAthleteModal} />}
+      {showAthleteModal && <AthleteModal cancel={closeAthleteModal} selectedAthlete={selectedAthlete}/>}
       <div className="mt-[10vw] h-[193vw]">
         <div className="relative flex">
           <img
@@ -116,6 +118,7 @@ export const Collection = ({ athletes}: {athletes: any[]}) => {
                           key={index}
                           className={`relative flex h-[37vw] w-[28vw] animate-appear`}
                           onClick={() => {
+                            setSelectedAthlete(athlete)
                             displayAthleteModal();
                           }}
                         >
