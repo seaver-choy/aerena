@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useTonConnectUI } from "@tonconnect/ui-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserAthletesApi } from "../../../../helpers/lambda.helpers";
 import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
 
