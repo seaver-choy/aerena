@@ -10,7 +10,7 @@ export const LineupTitle = () => {
         </p>
       </div>
       <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
-        <button className="pointer-events-none relative flex h-[7vw] items-center justify-center">
+        <button className="pointer-events-none relative flex h-[7vw] items-center justify-center opacity-50" disabled>
           <div className="absolute flex">
             <p className="mt-[0.2vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
               Edit

@@ -44,7 +44,7 @@ export const WarriorBanner = () => {
       <div className={`${showAfterTimer ? "" : "hidden"} relative flex`}>
         <img className="h-full w-full" src={BackgroundWarriorM6} />
         <div className="absolute ml-[40vw] flex h-full w-[55.6vw] items-end justify-center gap-[1vw]">
-          <button className="relative mb-[8.5vw] flex h-[7vw] justify-center">
+          <button className="relative mb-[8.5vw] flex h-[7vw] justify-center opacity-50" disabled>
             <img className="h-full" src={ButtonGold} />
             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
               <p className="mt-[0.2vw] font-russoone text-[2.6vw] font-normal text-white">

@@ -26,7 +26,6 @@ export const LineupSection = () => {
           <button className="relative w-full items-center justify-center" onClick={
             () => 
             {
-              console.log("clicked")
               setShowSuccessModal(true)
             }}>
             <div className="absolute flex h-full w-full items-center justify-center">

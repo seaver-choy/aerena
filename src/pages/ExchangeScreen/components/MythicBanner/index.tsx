@@ -71,12 +71,16 @@ export const MythicBanner = () => {
           <button
             className="relative mb-[8.5vw] flex h-[7vw] justify-center"
             onClick={async () => {
-              tonConnectUI.sendTransaction(transaction);
-              const response = await mint(tonConnectUI.account?.address!);
-              setMintedAthletes(response.mintedAthletes);
-              setTimeout(() => {
-                setShowAnimationModal(true);
-              }, 1000);
+              if(tonConnectUI.account?.address) {
+                tonConnectUI.sendTransaction(transaction);
+                const response = await mint(tonConnectUI.account?.address!);
+                setMintedAthletes(response.mintedAthletes);
+                setTimeout(() => {
+                  setShowAnimationModal(true);
+                }, 1000);
+              } else {
+                tonConnectUI.openModal()
+              }
             }}
           >
             <img className="h-full" src={ButtonGold} />

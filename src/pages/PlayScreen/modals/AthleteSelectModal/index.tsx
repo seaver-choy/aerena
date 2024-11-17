@@ -40,7 +40,7 @@ export const AthleteSelectModal = ({
             </button>
           </div>
           <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {athletes.length > 0 && athletes.map(
+            {athletes && athletes.length > 0 && athletes.map(
             (athlete: any) => {
               return (
                 <div className="flex h-[27.95w] w-[21.5vw]" onClick={() => setSelectedAthlete(athlete)}>
