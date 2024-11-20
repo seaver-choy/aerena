@@ -10,9 +10,10 @@ import { useTonConnectUI, SendTransactionRequest } from "@tonconnect/ui-react";
 import BackgroundLineup from "../../../../assets/background-lineup.svg";
 import ButtonLineup from "../../../../assets/button-lineup.svg";
 import { TournamentLineup } from "../../../../helpers/interfaces";
-import { Cell, loadMessage } from "@ton/core";
+import { Cell } from "@ton/core";
 import { waitForTransaction } from "../../../../helpers/waitTransaction";
 import { useTonClient } from "../../../../hooks/useTonClient";
+import { Loading } from "../../../../components/Loading";
 
 export const LineupSection = () => {
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
@@ -86,6 +87,7 @@ export const LineupSection = () => {
 
     const handleSubmitLineup = async () => {
         const check = tournamentLineup.every((obj) => obj.athlete !== null);
+        //TODO: add check if wallet is connected
         if (check) {
             const lineup = tournamentLineup.map((obj) => {
                 return obj.athlete;
@@ -99,10 +101,6 @@ export const LineupSection = () => {
                 const hash = Cell.fromBase64(txResult.boc)
                     .hash()
                     .toString("base64");
-
-                const message = loadMessage(
-                    Cell.fromBase64(txResult.boc).asSlice()
-                );
 
                 if (client) {
                     const txFinalized = await waitForTransaction(
@@ -148,6 +146,7 @@ export const LineupSection = () => {
                     setTournamentLineup={setTournamentLineup}
                 />
                 {showSuccessModal && <SuccessModal onClose={onCloseModal} />}
+                {loading && <Loading />}
                 <div
                     className={`absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end ${allSelected ? "" : "opacity-50"}`}
                 >

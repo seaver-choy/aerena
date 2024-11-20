@@ -11,6 +11,7 @@ import { mint } from "../../../../helpers/lambda.helpers";
 import { Cell } from "@ton/core";
 import { waitForTransaction } from "../../../../helpers/waitTransaction";
 import { useTonClient } from "../../../../hooks/useTonClient";
+import { Loading } from "../../../../components/Loading";
 export const MythicBanner = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
@@ -138,6 +139,7 @@ export const MythicBanner = () => {
                 {showInfoModal && (
                     <InfoModal identifier={"Mythic"} cancel={closeInfoModal} />
                 )}
+                {loading && <Loading />}
             </div>
         </div>
     );
