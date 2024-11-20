@@ -13,3 +13,10 @@ export interface TournamentLineup {
     position: string;
     athlete: Token | null;
 }
+
+export interface WaitForTransactionOptions {
+    address: string;
+    hash: string;
+    refetchInterval?: number;
+    refetchLimit?: number;
+}

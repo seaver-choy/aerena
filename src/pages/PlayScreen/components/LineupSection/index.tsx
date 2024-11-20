@@ -6,14 +6,19 @@ import {
     getUserAthletesApi,
     submitLineup,
 } from "../../../../helpers/lambda.helpers";
-import { useTonConnectUI } from "@tonconnect/ui-react";
+import { useTonConnectUI, SendTransactionRequest } from "@tonconnect/ui-react";
 import BackgroundLineup from "../../../../assets/background-lineup.svg";
 import ButtonLineup from "../../../../assets/button-lineup.svg";
 import { TournamentLineup } from "../../../../helpers/interfaces";
+import { Cell, loadMessage } from "@ton/core";
+import { waitForTransaction } from "../../../../helpers/waitTransaction";
+import { useTonClient } from "../../../../hooks/useTonClient";
 
 export const LineupSection = () => {
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [userAthletes, setUserAthletes] = useState([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [mount, setMount] = useState<number>(0);
     const [tournamentLineup, setTournamentLineup] = useState<
         TournamentLineup[]
     >([
@@ -39,19 +44,45 @@ export const LineupSection = () => {
         },
     ]);
     const [tonConnectUI] = useTonConnectUI();
+    const [tonWalletString, setTonWalletString] = useState<string>(
+        tonConnectUI.account?.address!
+    );
+    const { client } = useTonClient();
     const onCloseModal = () => {
         setShowSuccessModal(false);
+    };
+
+    const submitTransaction: SendTransactionRequest = {
+        validUntil: Date.now() + 5 * 60 * 1000,
+        messages: [
+            {
+                address: "0QDca4AyrK6pL6q1zHHbnnjXVC-Lfxv1yIkD36dpSPetRtvb",
+                amount: "1000000000",
+            },
+        ],
     };
 
     const canShowSelected = () => {
         setAllSelected(true);
     };
 
-    const getAthletes = async () => {
-        const result = await getUserAthletesApi(tonConnectUI.account?.address!);
-        console.log(result);
-        setUserAthletes(result);
-    };
+    tonConnectUI.onStatusChange(async (walletAndWalletInfo) => {
+        if (walletAndWalletInfo) {
+            const result = await getUserAthletesApi(
+                tonConnectUI.account?.address!
+            );
+            setUserAthletes(result);
+            setMount(1);
+        }
+    });
+
+    // const getAthletes = async () => {
+    //     console.log(tonWalletString);
+    //     const result = await getUserAthletesApi(tonConnectUI.account?.address!);
+    //     console.log(result);
+    //     setUserAthletes(result);
+    //     setMount(1);
+    // };
 
     const handleSubmitLineup = async () => {
         const check = tournamentLineup.every((obj) => obj.athlete !== null);
@@ -61,24 +92,48 @@ export const LineupSection = () => {
             });
 
             try {
-                const result = await submitLineup(
-                    1,
-                    tonConnectUI.account?.address!,
-                    lineup
+                const txResult =
+                    await tonConnectUI.sendTransaction(submitTransaction);
+                setLoading(true);
+
+                const hash = Cell.fromBase64(txResult.boc)
+                    .hash()
+                    .toString("base64");
+
+                const message = loadMessage(
+                    Cell.fromBase64(txResult.boc).asSlice()
                 );
-                console.log(result);
-                setShowSuccessModal(true);
+
+                if (client) {
+                    const txFinalized = await waitForTransaction(
+                        {
+                            address: tonConnectUI.account?.address ?? "",
+                            hash: hash,
+                        },
+                        client
+                    );
+                    console.log(txFinalized);
+                    const result = await submitLineup(
+                        1,
+                        tonConnectUI.account?.address!,
+                        lineup
+                    );
+                    console.log(result);
+                    setShowSuccessModal(true);
+                }
             } catch (e) {
                 console.log(e);
+            } finally {
+                setLoading(false);
             }
         }
     };
 
     const [allSelected, setAllSelected] = useState(false);
 
-    useEffect(() => {
-        getAthletes();
-    }, []);
+    // useEffect(() => {
+    //     getAthletes();
+    // }, []);
 
     return (
         <div className="mt-[4vw] h-[120vw]">
@@ -86,7 +141,7 @@ export const LineupSection = () => {
                 <img className="h-full w-full" src={BackgroundLineup} />
                 <LineupTitle />
                 <Lineup
-                    key={userAthletes?.length}
+                    key={mount}
                     athletes={userAthletes}
                     canShowFinished={canShowSelected}
                     tournamentLineup={tournamentLineup}
@@ -101,6 +156,7 @@ export const LineupSection = () => {
                         onClick={() => {
                             handleSubmitLineup();
                         }}
+                        disabled={loading}
                     >
                         <div
                             className={`absolute flex h-full w-full items-center justify-center`}
