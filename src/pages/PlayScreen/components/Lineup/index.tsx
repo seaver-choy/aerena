@@ -3,98 +3,132 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect, useState } from "react";
 import { getUserAthletesApi } from "../../../../helpers/lambda.helpers";
 import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
-
+import { Token, TournamentLineup } from "../../../../helpers/interfaces";
 import EmptyEXP from "../../../../assets/empty-exp.svg";
 import EmptyGold from "../../../../assets/empty-gold.svg";
 import EmptyJungle from "../../../../assets/empty-jungle.svg";
 import EmptyMid from "../../../../assets/empty-mid.svg";
 import EmptyRoam from "../../../../assets/empty-roam.svg";
 
-export const Lineup = ({canShowFinished}) => {
-  const [showAthleteSelectModal, setShowAthleteSelectModal] = useState<boolean>(
-    false
-  );
+interface LineupProps {
+    canShowFinished: () => void;
+    athletes: Token[];
+    tournamentLineup: TournamentLineup[];
+    setTournamentLineup: (tournamentLineup: TournamentLineup[]) => void;
+}
 
-  const [tonConnectUI] = useTonConnectUI();
+export const Lineup = ({
+    canShowFinished,
+    athletes,
+    tournamentLineup,
+    setTournamentLineup,
+}: LineupProps) => {
+    const [showAthleteSelectModal, setShowAthleteSelectModal] =
+        useState<boolean>(false);
 
-  const [userAthletes, setUserAthletes] = useState([])
+    const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
+    const handleSelectAthlete = (athlete) => {
+        setShowAthleteSelectModal(false);
 
-  const [counter, setCounter] = useState(0)
-  const [roam, setRoam] = useState(null)
-  const [mid, setMid] = useState(null)
-  const [exp, setExp] = useState(null)
-  const [jungle, setJungle] = useState(null)
-  const [gold, setGold] = useState(null)
+        const newLineup = tournamentLineup.map((obj, i) => {
+            if (i === currentPositionIndex) {
+                return { ...obj, athlete: athlete };
+            } else {
+                return obj;
+            }
+        });
 
-  const onSelectAthlete = (athlete) => {
-    if(counter == 0) {
-      setRoam(athlete)
-      setCounter(1)
-    }
-    if(counter == 1){
-      setMid(athlete)
-      setCounter(2)
-    }
-    if(counter == 2){
-      setExp(athlete)
-      setCounter(3)
-    }
-    if(counter == 3){
-      setJungle(athlete)
-      setCounter(4)
-    }
-    if(counter == 4){
-      setGold(athlete)
-      canShowFinished()
-    }
-  }
+        const check = newLineup.every((obj) => obj.athlete !== null);
+        if (check) {
+            canShowFinished();
+        }
+        setTournamentLineup(newLineup);
+    };
 
-  const getUserAthletes = async () => {
-    const res = await getUserAthletesApi(tonConnectUI.account?.address!);
-    setUserAthletes(res);
-  }
+    const handleSetLineup = (index) => {
+        setShowAthleteSelectModal(true);
+        setCurrentPositionIndex(index);
+    };
 
-  const displayAthleteSelectModal = () => {
-    setShowAthleteSelectModal(true);
-  };
+    const closeAthleteSelectModal = () => {
+        setShowAthleteSelectModal(false);
+    };
 
-  const closeAthleteSelectModal = () => {
-    setShowAthleteSelectModal(false);
-  };
+    return (
+        <div className="absolute top-[25vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
+            {showAthleteSelectModal && (
+                <AthleteSelectModal
+                    cancel={closeAthleteSelectModal}
+                    athletes={athletes}
+                    submission={handleSelectAthlete}
+                />
+            )}
+            <button
+                className="relative flex h-[37vw] w-[28vw] animate-appear"
+                onClick={() => handleSetLineup(0)}
+            >
+                <img
+                    className="h-[100%]"
+                    src={
+                        tournamentLineup[0].athlete
+                            ? tournamentLineup[0].athlete.img
+                            : EmptyRoam
+                    }
+                />
+            </button>
 
-  useEffect(() => {
-    if(!(userAthletes.length > 0)) {
-      getUserAthletes()
-    }
-  }, [])
-
-  return (
-    <div className="absolute top-[25vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
-      <button
-        className="relative animate-appear flex h-[37vw] w-[28vw]"
-        onClick={displayAthleteSelectModal}
-      >
-        <img className="h-[100%]" src={roam ? roam.img :EmptyRoam} />
-      </button>
-      {showAthleteSelectModal && (
-        <AthleteSelectModal cancel={closeAthleteSelectModal} athletes={userAthletes} submission={onSelectAthlete}/>
-      )}
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
-        onClick={displayAthleteSelectModal}>
-        <img className="h-[100%]" src={mid ? mid.img : EmptyMid} />
-      </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
-        onClick={displayAthleteSelectModal}>
-        <img className="h-[100%]" src={jungle ? jungle.img :EmptyJungle} />
-      </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
-        onClick={displayAthleteSelectModal}>
-        <img className="h-[100%]" src={gold ? gold.img :EmptyGold} />
-      </button>
-      <button className="relative animate-appear flex h-[37vw] w-[28vw]"
-        onClick={displayAthleteSelectModal}>
-        <img className="h-[100%]" src={exp ? exp.img: EmptyEXP} />
-      </button>
-    </div>
-  );
+            <button
+                className="relative flex h-[37vw] w-[28vw] animate-appear"
+                onClick={() => handleSetLineup(1)}
+            >
+                <img
+                    className="h-[100%]"
+                    src={
+                        tournamentLineup[1].athlete
+                            ? tournamentLineup[1].athlete.img
+                            : EmptyMid
+                    }
+                />
+            </button>
+            <button
+                className="relative flex h-[37vw] w-[28vw] animate-appear"
+                onClick={() => handleSetLineup(2)}
+            >
+                <img
+                    className="h-[100%]"
+                    src={
+                        tournamentLineup[2].athlete
+                            ? tournamentLineup[2].athlete.img
+                            : EmptyJungle
+                    }
+                />
+            </button>
+            <button
+                className="relative flex h-[37vw] w-[28vw] animate-appear"
+                onClick={() => handleSetLineup(3)}
+            >
+                <img
+                    className="h-[100%]"
+                    src={
+                        tournamentLineup[3].athlete
+                            ? tournamentLineup[3].athlete.img
+                            : EmptyGold
+                    }
+                />
+            </button>
+            <button
+                className="relative flex h-[37vw] w-[28vw] animate-appear"
+                onClick={() => handleSetLineup(4)}
+            >
+                <img
+                    className="h-[100%]"
+                    src={
+                        tournamentLineup[4].athlete
+                            ? tournamentLineup[4].athlete.img
+                            : EmptyEXP
+                    }
+                />
+            </button>
+        </div>
+    );
 };
