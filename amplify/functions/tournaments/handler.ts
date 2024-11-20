@@ -82,7 +82,7 @@ async function submitLineupToTournament(event: APIGatewayProxyEvent) {
                 { new: true }
             );
             console.info(
-                `User ${payload.userID} has successfully joined tournament ${tournamentId}`
+                `User has successfully joined tournament ${tournamentId}`
             );
 
             return {

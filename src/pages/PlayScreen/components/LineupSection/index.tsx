@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
 import { SuccessModal } from "../SuccessModal";
-import { getUserAthletesApi } from "../../../../helpers/lambda.helpers";
+import {
+    getUserAthletesApi,
+    submitLineup,
+} from "../../../../helpers/lambda.helpers";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import BackgroundLineup from "../../../../assets/background-lineup.svg";
 import ButtonLineup from "../../../../assets/button-lineup.svg";
@@ -46,7 +49,29 @@ export const LineupSection = () => {
 
     const getAthletes = async () => {
         const result = await getUserAthletesApi(tonConnectUI.account?.address!);
+        console.log(result);
         setUserAthletes(result);
+    };
+
+    const handleSubmitLineup = async () => {
+        const check = tournamentLineup.every((obj) => obj.athlete !== null);
+        if (check) {
+            const lineup = tournamentLineup.map((obj) => {
+                return obj.athlete;
+            });
+
+            try {
+                const result = await submitLineup(
+                    1,
+                    tonConnectUI.account?.address!,
+                    lineup
+                );
+                console.log(result);
+                setShowSuccessModal(true);
+            } catch (e) {
+                console.log(e);
+            }
+        }
     };
 
     const [allSelected, setAllSelected] = useState(false);
@@ -74,9 +99,7 @@ export const LineupSection = () => {
                     <button
                         className="relative w-full items-center justify-center"
                         onClick={() => {
-                            if (allSelected) {
-                                setShowSuccessModal(true);
-                            }
+                            handleSubmitLineup();
                         }}
                     >
                         <div
