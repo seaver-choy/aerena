@@ -42,11 +42,11 @@ export const TutorialModal = ({ close }: any) => {
     <div className="fixed inset-0 z-40">
       <div className="relative flex h-full w-full items-center justify-center">
         <div className="absolute z-50 bg-light py-[20vw] flex h-full w-full animate-modal flex-col justify-center">
-          <div className="mb-[4vw] flex h-full items-center justify-center">
+          <div className="mb-[24vw] flex h-screen items-center justify-center">
             {/* <TonConnectButton /> */}
             <Slider
               ref={(slider: any) => (sliderRef.current = slider)}
-              className="w-full h-full"
+              className="w-full h-full mb-[24vw] mt-[15vw] items-center flex"
               {...settings}
             >
               <div className="px-[2vw] mt-[10vw]">
@@ -88,7 +88,7 @@ export const TutorialModal = ({ close }: any) => {
               </div>
             </Slider>
           </div>
-          <div className="flex justify-center h-[10vw] gap-[4vw]">
+          <div className="flex justify-center absolute bottom-[10vw] h-[10vw] gap-[4vw]">
             {getStarted ? (
               <div className="px-[8vw] flex flex-row">
                 <button
