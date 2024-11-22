@@ -51,6 +51,7 @@ export const MythicBanner = () => {
                     .toString("base64");
 
                 if (client) {
+                    console.log(`Hash: ${hash}`);
                     const txFinalized = await waitForTransaction(
                         {
                             address: tonConnectUI.account?.address ?? "",
@@ -58,6 +59,7 @@ export const MythicBanner = () => {
                         },
                         client
                     );
+                    console.log(txFinalized);
                     const response = await mint(tonConnectUI.account?.address!);
                     setMintedAthletes(response.mintedAthletes);
                     setTimeout(() => {

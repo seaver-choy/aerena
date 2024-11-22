@@ -45,9 +45,6 @@ export const LineupSection = () => {
         },
     ]);
     const [tonConnectUI] = useTonConnectUI();
-    const [tonWalletString, setTonWalletString] = useState<string>(
-        tonConnectUI.account?.address!
-    );
     const { client } = useTonClient();
     const onCloseModal = () => {
         setShowSuccessModal(false);
