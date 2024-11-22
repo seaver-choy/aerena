@@ -16,6 +16,7 @@ export default {
                 blue: "#003153",
                 cyan: "#0DF5E7",
                 red: "#FF5C5C",
+                ton: "#0088CC",
             },
             fontFamily: {
                 montserrat: ["Montserrat"],
