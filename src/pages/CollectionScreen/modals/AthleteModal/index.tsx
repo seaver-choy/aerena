@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BackgroundMainStatistics from "../../../../assets/background-mainstatistics.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
+import IconMint from '../../../../assets/icon-mint.svg'
 import IconClose from "../../../../assets/icon-close.svg";
 import IconStickerM6 from "../../../../assets/icon-sticker-m6.svg";
 import ModalLarge from "../../../../assets/modal-large.svg";
@@ -20,6 +21,11 @@ export const AthleteModal = ({ cancel, selectedAthlete }: AthleteModalProps) => 
         </div>
         <div className="absolute z-50 flex h-[99vw] w-[66vw] animate-modal flex-col justify-center">
           <div className="flex h-[11vw] flex-col items-center gap-[2vw]">
+          <button
+              className="absolute animate-modal left-0 h-[10vw] w-[10vw]"
+            >
+              <img className="h-full w-full" src={IconMint} />
+            </button>
             <p className="mt-[2vw] bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
               Athlete Profile
             </p>
@@ -77,11 +83,19 @@ export const AthleteModal = ({ cancel, selectedAthlete }: AthleteModalProps) => 
           </div>
           <div className="flex h-[7.5vw] justify-center">
             <div className="flex h-full w-full justify-end">
+                <button className="relative flex h-full w-full justify-center opacity-50" disabled>
+                <img className="h-full" src={ButtonGold} />
+                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                  <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                    All Stats
+                  </p>
+                </div>
+              </button>
               <button className="relative flex h-full w-full justify-center opacity-50" disabled>
                 <img className="h-full" src={ButtonGold} />
                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
                   <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                    Mint
+                    Upgrade
                   </p>
                 </div>
               </button>
