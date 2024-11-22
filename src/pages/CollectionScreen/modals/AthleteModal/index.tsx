@@ -7,7 +7,8 @@ import ModalLarge from "../../../../assets/modal-large.svg";
 import { AerenaCollection } from "../../../../../ton/wrappers/AerenaCollection";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useTonClient } from "../../../../hooks/useTonClient";
-import { address, Address, Sender, toNano } from "@ton/core";
+import { useTonConnect } from "../../../../hooks/useTonConnect";
+import { address, Address, Sender, SenderArguments, toNano } from "@ton/core";
 interface AthleteModalProps {
     cancel: () => void;
     selectedAthlete: any;
@@ -30,19 +31,38 @@ export const AthleteModal = ({
                 const providerTest = client.provider(
                     address(tonConnectUI.account?.address) //TODO: also same address of collection?
                 );
-
+                console.log(providerTest);
+                console.log(selectedAthlete);
+                console.log(`owner: ${address(tonConnectUI.account?.address)}`);
                 await aerenaCollection.sendMint(
                     providerTest,
-                    tonConnectUI.account?.address as unknown as Sender, //TODO: should be of type Sender
+                    {
+                        address: address(tonConnectUI.account?.address),
+                        send: async (args: SenderArguments) => {
+                            tonConnectUI.sendTransaction({
+                                messages: [
+                                    {
+                                        address: args.to.toString(),
+                                        amount: args.value.toString(),
+                                        payload: args.body
+                                            ?.toBoc()
+                                            .toString("base64"),
+                                    },
+                                ],
+                                validUntil: Date.now() + 5 * 60 * 1000,
+                            });
+                        },
+                    },
                     {
                         queryId: 0,
                         owner: address(tonConnectUI.account?.address),
-                        nftId: 0,
+                        nftId: selectedAthlete.id,
                         nftAmount: 1n,
-                        contentUrl: selectedAthlete.img,
+                        contentUrl: selectedAthlete.image,
                         gas: toNano("0.05"),
                     }
                 );
+                console.log("Done submit?");
             } catch (e) {
                 console.log(e);
             }
@@ -125,7 +145,8 @@ export const AthleteModal = ({
                         <div className="flex h-full w-full justify-end">
                             <button
                                 className="relative flex h-full w-full justify-center opacity-50"
-                                disabled
+                                disabled={false}
+                                onClick={mint}
                             >
                                 <img className="h-full" src={ButtonGold} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
