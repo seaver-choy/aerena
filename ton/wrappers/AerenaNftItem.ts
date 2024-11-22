@@ -15,20 +15,20 @@ export function nftItemConfigToCell(config: NftItemConfig): Cell {
     return beginCell().endCell();
 }
 
-export class NftItem implements Contract {
+export class AerenaNftItem implements Contract {
     constructor(
         readonly address: Address,
         readonly init?: { code: Cell; data: Cell }
     ) {}
 
     static createFromAddress(address: Address) {
-        return new NftItem(address);
+        return new AerenaNftItem(address);
     }
 
     static createFromConfig(config: NftItemConfig, code: Cell, workchain = 0) {
         const data = nftItemConfigToCell(config);
         const init = { code, data };
-        return new NftItem(contractAddress(workchain, init), init);
+        return new AerenaNftItem(contractAddress(workchain, init), init);
     }
 
     async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
@@ -42,15 +42,15 @@ export class NftItem implements Contract {
     async getItemData(provider: ContractProvider) {
         const { stack } = await provider.get("get_nft_data", []);
         console.log("NFT ITEM DATA", stack);
-        // const init = stack.readNumber()
-        // const nftId = stack.readNumber()
+        const init = stack.readNumber();
+        const nftId = stack.readNumber();
 
-        // return {
-        //     init,
-        //     nftId,
-        //     collection: stack.readAddress(),
-        // owner: stack.readAddress(),
-        // content: stack.readString()
-        // }
+        return {
+            init,
+            nftId,
+            collection: stack.readAddress(),
+            owner: stack.readAddress(),
+            content: stack.readString(),
+        };
     }
 }
