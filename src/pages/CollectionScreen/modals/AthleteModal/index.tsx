@@ -29,11 +29,12 @@ export const AthleteModal = ({
                 const aerenaCollection =
                     await AerenaCollection.createFromAddress(aerenaAddress);
                 const providerTest = client.provider(
-                    address(tonConnectUI.account?.address) //TODO: also same address of collection?
+                    aerenaAddress //TODO: also same address of collection?
                 );
                 console.log(providerTest);
                 console.log(selectedAthlete);
                 console.log(`owner: ${address(tonConnectUI.account?.address)}`);
+                console.log(selectedAthlete.img);
                 await aerenaCollection.sendMint(
                     providerTest,
                     {
@@ -54,11 +55,11 @@ export const AthleteModal = ({
                         },
                     },
                     {
-                        queryId: 0,
-                        owner: address(tonConnectUI.account?.address),
-                        nftId: selectedAthlete.id,
+                        queryId: 1,
+                        owner: aerenaAddress,
+                        nftId: 0,
                         nftAmount: 1n,
-                        contentUrl: selectedAthlete.image,
+                        contentUri: selectedAthlete.img,
                         gas: toNano("0.05"),
                     }
                 );
