@@ -7,7 +7,7 @@ import ModalLarge from "../../../../assets/modal-large.svg";
 import { AerenaCollection } from "../../../../../ton/wrappers/AerenaCollection";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useTonClient } from "../../../../hooks/useTonClient";
-import { Address } from "@ton/core";
+import { address, Address, Sender, toNano } from "@ton/core";
 interface AthleteModalProps {
     cancel: () => void;
     selectedAthlete: any;
@@ -19,16 +19,29 @@ export const AthleteModal = ({
 }: AthleteModalProps) => {
     const [tonConnectUI] = useTonConnectUI();
     const { client } = useTonClient();
-
+    const aerenaAddress = address(
+        "EQBDaQO4sT7EdgDpqAHt1Gqs5VbSyCThTM0466taN7vcEJv4"
+    );
     const mint = async () => {
         if (tonConnectUI.account?.address) {
             try {
                 const aerenaCollection =
-                    await AerenaCollection.createFromAddress(
-                        tonConnectUI.account?.address as unknown as Address
-                    );
+                    await AerenaCollection.createFromAddress(aerenaAddress);
                 const providerTest = client.provider(
-                    tonConnectUI.account?.address as unknown as Address
+                    address(tonConnectUI.account?.address) //TODO: also same address of collection?
+                );
+
+                await aerenaCollection.sendMint(
+                    providerTest,
+                    tonConnectUI.account?.address as unknown as Sender, //TODO: should be of type Sender
+                    {
+                        queryId: 0,
+                        owner: address(tonConnectUI.account?.address),
+                        nftId: 0,
+                        nftAmount: 1n,
+                        contentUrl: selectedAthlete.img,
+                        gas: toNano("0.05"),
+                    }
                 );
             } catch (e) {
                 console.log(e);
