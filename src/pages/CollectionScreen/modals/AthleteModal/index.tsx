@@ -146,7 +146,7 @@ export const AthleteModal = ({ cancel, selectedAthlete, showMintButton }: Athlet
                             </button>
                             <button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={() => setShowMintAthlete(true)}
+                                onClick={mint}
                             >
                                 <img className="h-full" src={ButtonGold} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
@@ -215,12 +215,13 @@ export const AthleteModal = ({ cancel, selectedAthlete, showMintButton }: Athlet
             ) : (
                 <div>
                     <div className="flex h-[11vw] flex-col items-center gap-[2vw]">
-                        <button
+                        {showMintButton ? (<button
                             className="absolute animate-modal left-0 h-[10vw] w-[10vw]"
                             onClick={() => setShowMintingBenefits(true)}
                         >
                             <img className="h-full w-full" src={IconMint} />
-                        </button>
+                        </button>) : (<></>)}
+                        
                         <p className="mt-[2vw] bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
                             Athlete Profile
                         </p>
