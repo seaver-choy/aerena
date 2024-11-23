@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { address, SenderArguments, toNano } from "@ton/core";
+import { useTonConnectUI } from "@tonconnect/ui-react";
+import { AerenaCollection } from "../../../../../ton/wrappers/AerenaCollection";
 import BackgroundMainStatistics from "../../../../assets/background-mainstatistics.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
 import IconClose from "../../../../assets/icon-close.svg";
 import IconStickerM6 from "../../../../assets/icon-sticker-m6.svg";
 import ModalLarge from "../../../../assets/modal-large.svg";
-import { AerenaCollection } from "../../../../../ton/wrappers/AerenaCollection";
-import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useTonClient } from "../../../../hooks/useTonClient";
-import { useTonConnect } from "../../../../hooks/useTonConnect";
-import { address, Address, Sender, SenderArguments, toNano } from "@ton/core";
 interface AthleteModalProps {
     cancel: () => void;
     selectedAthlete: any;
@@ -59,7 +58,7 @@ export const AthleteModal = ({
                         owner: aerenaAddress,
                         nftId: 0,
                         nftAmount: 1n,
-                        contentUri: selectedAthlete.img,
+                        contentUrl: selectedAthlete.img,
                         gas: toNano("0.05"),
                     }
                 );
