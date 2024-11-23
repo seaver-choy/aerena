@@ -13,7 +13,7 @@ import ButtonRight from "../../../../assets/button-right.svg";
 import LineBasic from "../../../../assets/line-basic.svg";
 import LoadingAthlete from "../../../../assets/loading-athlete.svg";
 
-export const Collection = ({ athletes}: {athletes: any[]}) => {
+export const Collection = ({ athletes, showMintButton}: {athletes: any[], showMintButton: boolean}) => {
   const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
   const [maxLength] = useState<number>(positionList.length - 1);
   const [positionIndex, setPositionIndex] = useState<number>(0);
@@ -42,7 +42,7 @@ export const Collection = ({ athletes}: {athletes: any[]}) => {
 
   return (
     <>
-      {showAthleteModal && <AthleteModal cancel={closeAthleteModal} selectedAthlete={selectedAthlete}/>}
+      {showAthleteModal && <AthleteModal cancel={closeAthleteModal} selectedAthlete={selectedAthlete} showMintButton={showMintButton} />}
       <div className="mt-[10vw] h-[193vw]">
         <div className="relative flex">
           <img

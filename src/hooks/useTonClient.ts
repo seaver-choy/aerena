@@ -20,7 +20,7 @@ export const useAsyncInitialize = <T>(
 
 export const useTonClient = () => {
     const wallet = useTonWallet();
-    console.log(wallet);
+
     const network = wallet?.account?.chain ?? null;
     const [client, setClient] = useState<TonClient>();
 

@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import { Lineup } from "../Lineup";
-import { LineupTitle } from "../LineupTitle";
-import { SuccessModal } from "../SuccessModal";
+import { Cell } from "@ton/core";
+import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
+import { useEffect, useState } from "react";
+import BackgroundLineup from "../../../../assets/background-lineup.svg";
+import ButtonLineup from "../../../../assets/button-lineup.svg";
+import { Loading } from "../../../../components/Loading";
+import { TournamentLineup } from "../../../../helpers/interfaces";
 import {
     getUserAthletesApi,
     submitLineup,
 } from "../../../../helpers/lambda.helpers";
-import { useTonConnectUI, SendTransactionRequest } from "@tonconnect/ui-react";
-import BackgroundLineup from "../../../../assets/background-lineup.svg";
-import ButtonLineup from "../../../../assets/button-lineup.svg";
-import { TournamentLineup } from "../../../../helpers/interfaces";
-import { Cell } from "@ton/core";
 import { waitForTransaction } from "../../../../helpers/waitTransaction";
 import { useTonClient } from "../../../../hooks/useTonClient";
-import { Loading } from "../../../../components/Loading";
+import { Lineup } from "../Lineup";
+import { LineupTitle } from "../LineupTitle";
+import { SuccessModal } from "../SuccessModal";
 
 export const LineupSection = () => {
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
@@ -45,9 +45,6 @@ export const LineupSection = () => {
         },
     ]);
     const [tonConnectUI] = useTonConnectUI();
-    const [tonWalletString, setTonWalletString] = useState<string>(
-        tonConnectUI.account?.address!
-    );
     const { client } = useTonClient();
     const onCloseModal = () => {
         setShowSuccessModal(false);
@@ -77,13 +74,12 @@ export const LineupSection = () => {
         }
     });
 
-    // const getAthletes = async () => {
-    //     console.log(tonWalletString);
-    //     const result = await getUserAthletesApi(tonConnectUI.account?.address!);
-    //     console.log(result);
-    //     setUserAthletes(result);
-    //     setMount(1);
-    // };
+    const getAthletes = async () => {
+        const result = await getUserAthletesApi(tonConnectUI.account?.address!);
+        console.log(result);
+        setUserAthletes(result);
+        setMount(1);
+    };
 
     const handleSubmitLineup = async () => {
         const check = tournamentLineup.every((obj) => obj.athlete !== null);
@@ -129,9 +125,9 @@ export const LineupSection = () => {
 
     const [allSelected, setAllSelected] = useState(false);
 
-    // useEffect(() => {
-    //     getAthletes();
-    // }, []);
+    useEffect(() => {
+        getAthletes();
+    }, []);
 
     return (
         <div className="mt-[4vw] h-[120vw]">

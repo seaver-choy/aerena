@@ -4,6 +4,8 @@ amplify_outputs.json
 
 .env
 
+ton/temp
+
 # Logs
 logs
 *.log

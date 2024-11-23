@@ -1,26 +1,85 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { address, SenderArguments, toNano } from "@ton/core";
+import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useState } from "react";
+import { AerenaCollection } from "../../../../../ton/wrappers/AerenaCollection";
 import BackgroundMainStatistics from "../../../../assets/background-mainstatistics.svg";
+import BackgroundMintingBenefits from '../../../../assets/background-mintingbenefits.svg';
+import BenefitOne from '../../../../assets/benefit-one.svg';
+import BenefitThree from '../../../../assets/benefit-three.svg';
+import BenefitTwo from '../../../../assets/benefit-two.svg';
 import ButtonGold from "../../../../assets/button-gold.svg";
-import ButtonWhite from '../../../../assets/button-white.svg'
-import IconMint from '../../../../assets/icon-mint.svg'
+import ButtonWhite from '../../../../assets/button-white.svg';
 import IconClose from "../../../../assets/icon-close.svg";
+import IconMint from '../../../../assets/icon-mint.svg';
 import IconStickerM6 from "../../../../assets/icon-sticker-m6.svg";
+import IconTON from '../../../../assets/icon-ton.svg';
 import ModalLarge from "../../../../assets/modal-large.svg";
-import BackgroundMintingBenefits from '../../../../assets/background-mintingbenefits.svg'
-import BenefitOne from '../../../../assets/benefit-one.svg'
-import BenefitTwo from '../../../../assets/benefit-two.svg'
-import BenefitThree from '../../../../assets/benefit-three.svg'
-import IconTON from '../../../../assets/icon-ton.svg'
 
+import { useTonClient } from "../../../../hooks/useTonClient";
 interface AthleteModalProps {
-  cancel: () => void;
-  selectedAthlete: any;
+    cancel: () => void;
+    selectedAthlete: any;
+    showMintButton: boolean
 }
 
-export const AthleteModal = ({ cancel, selectedAthlete }: AthleteModalProps) => {
+export const AthleteModal = ({ cancel, selectedAthlete, showMintButton }: AthleteModalProps) => {
     const [showMintingBenefits, setShowMintingBenefits] = useState(false);
     const [showMintAthlete, setShowMintAthlete] = useState(false);
+
+    const [tonConnectUI] = useTonConnectUI();
+    const { client } = useTonClient();
+    const aerenaAddress = address(
+        "Ef-0Qjjoiu3ULRsEJ8WP0I-P6hMhE9B3a9l5dGqFPHpXhU-K"
+    );
+
+    const mint = async () => {
+        if (tonConnectUI.account?.address) {
+            try {
+                const aerenaCollection =
+                    await AerenaCollection.createFromAddress(aerenaAddress);
+                const providerTest = client.provider(
+                    aerenaAddress //TODO: also same address of collection?
+                );
+                console.log(providerTest);
+                console.log(selectedAthlete);
+                console.log(`owner: ${address(tonConnectUI.account?.address)}`);
+                console.log(selectedAthlete.img);
+                await aerenaCollection.sendMint(
+                    providerTest,
+                    {
+                        address: address(tonConnectUI.account?.address),
+                        send: async (args: SenderArguments) => {
+                            tonConnectUI.sendTransaction({
+                                messages: [
+                                    {
+                                        address: args.to.toString(),
+                                        amount: args.value.toString(),
+                                        payload: args.body
+                                            ?.toBoc()
+                                            .toString("base64"),
+                                    },
+                                ],
+                                validUntil: Date.now() + 5 * 60 * 1000,
+                            });
+                        },
+                    },
+                    {
+                        queryId: 1,
+                        owner: address(tonConnectUI.account?.address),
+                        nftId: 1,
+                        nftAmount: toNano("0.05"),
+                        contentUrl: selectedAthlete.img,
+                        gas: toNano("0.2"),
+                    }
+                );
+                console.log("Done submit?");
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    };
+
 
   return (
     <div className="fixed inset-0 z-40">
@@ -240,7 +299,7 @@ export const AthleteModal = ({ cancel, selectedAthlete }: AthleteModalProps) => 
                 </div>
             )}   
         </div>
-      </div>
-    </div>
-  );
+        </div>
+        </div>
+    );
 };
