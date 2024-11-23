@@ -11,7 +11,7 @@ export async function run(provider: NetworkProvider) {
     const params = {
         owner: Address.parse(owner),
         content:
-            "https://magenta-occasional-cicada-332.mypinata.cloud/ipfs/QmTyh3n8dxRFRSYSLA4ZnDYaCBPhUS7oYNSDLwQvmNqeVk",
+            "https://turquoise-far-baboon-594.mypinata.cloud/ipfs/QmUGznxCQjVZTBVDEfd198gdgD5U6gNB8SRP7Cdi53rkZH",
         item: item,
         royalty: royalty,
     };
@@ -30,7 +30,7 @@ export async function run(provider: NetworkProvider) {
         owner: Address.parse(
             "0QBhS-wujl9vYcuzW6ZcQSKf4FU2p_EHXLN3PN609UtsQLsd"
         ),
-        contentUrl: "https://magenta-occasional-cicada-332.mypinata.cloud/ipfs/QmTyh3n8dxRFRSYSLA4ZnDYaCBPhUS7oYNSDLwQvmNqeVk",
+        contentUrl: "https://turquoise-far-baboon-594.mypinata.cloud/ipfs/QmUGznxCQjVZTBVDEfd198gdgD5U6gNB8SRP7Cdi53rkZH",
         gas: toNano("0.2"),
     });
 

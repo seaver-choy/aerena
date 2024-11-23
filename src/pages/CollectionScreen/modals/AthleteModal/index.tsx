@@ -11,17 +11,20 @@ import { useTonClient } from "../../../../hooks/useTonClient";
 interface AthleteModalProps {
     cancel: () => void;
     selectedAthlete: any;
+    showMintButton: boolean
 }
 
 export const AthleteModal = ({
     cancel,
     selectedAthlete,
+    showMintButton
 }: AthleteModalProps) => {
     const [tonConnectUI] = useTonConnectUI();
     const { client } = useTonClient();
     const aerenaAddress = address(
-        "EQBDaQO4sT7EdgDpqAHt1Gqs5VbSyCThTM0466taN7vcEJv4"
+        "Ef-0Qjjoiu3ULRsEJ8WP0I-P6hMhE9B3a9l5dGqFPHpXhU-K"
     );
+
     const mint = async () => {
         if (tonConnectUI.account?.address) {
             try {
@@ -55,11 +58,11 @@ export const AthleteModal = ({
                     },
                     {
                         queryId: 1,
-                        owner: aerenaAddress,
-                        nftId: 0,
-                        nftAmount: 1n,
+                        owner: address(tonConnectUI.account?.address),
+                        nftId: 1,
+                        nftAmount: toNano("0.05"),
                         contentUrl: selectedAthlete.img,
-                        gas: toNano("0.05"),
+                        gas: toNano("0.2"),
                     }
                 );
                 console.log("Done submit?");
@@ -141,10 +144,11 @@ export const AthleteModal = ({
                             </div>
                         </div>
                     </div>
-                    <div className="flex h-[7.5vw] justify-center">
+                    {showMintButton ? 
+                    (<div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full justify-end">
                             <button
-                                className="relative flex h-full w-full justify-center opacity-50"
+                                className="relative flex h-full w-full justify-center"
                                 disabled={false}
                                 onClick={mint}
                             >
@@ -156,7 +160,9 @@ export const AthleteModal = ({
                                 </div>
                             </button>
                         </div>
-                    </div>
+                    </div>): 
+                    (<></>)
+                    }
                 </div>
             </div>
         </div>

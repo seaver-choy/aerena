@@ -41,7 +41,7 @@ export const CollectionScreen = () => {
           setCollectionTab(selected);
         }}
       />
-      <Collection athletes={collectionTab == "Collection" ? userAthletes : athletes}/>
+      <Collection athletes={collectionTab == "Collection" ? userAthletes : athletes} showMintButton={collectionTab == "Collection" ? true : false}/>
     </Layout>
   );
 };
