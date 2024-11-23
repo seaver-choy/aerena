@@ -1,14 +1,12 @@
 /* eslint-disable */
-import { useTonConnectUI } from "@tonconnect/ui-react";
-import { useEffect, useState } from "react";
-import { getUserAthletesApi } from "../../../../helpers/lambda.helpers";
-import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
-import { Token, TournamentLineup } from "../../../../helpers/interfaces";
+import { useState } from "react";
 import EmptyEXP from "../../../../assets/empty-exp.svg";
 import EmptyGold from "../../../../assets/empty-gold.svg";
 import EmptyJungle from "../../../../assets/empty-jungle.svg";
 import EmptyMid from "../../../../assets/empty-mid.svg";
 import EmptyRoam from "../../../../assets/empty-roam.svg";
+import { Token, TournamentLineup } from "../../../../helpers/interfaces";
+import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
 
 interface LineupProps {
     canShowFinished: () => void;

@@ -90,7 +90,7 @@ export const TutorialModal = ({ close }: any) => {
           </div>
           <div className="flex justify-center absolute bottom-[10vw] h-[10vw] gap-[4vw]">
             {getStarted ? (
-              <div className="px-[8vw] flex flex-row">
+              <div className="px-[30vw] flex flex-row justify-center">
                 <button
                   className="relative flex h-full w-full justify-center"
                   onClick={() => {
