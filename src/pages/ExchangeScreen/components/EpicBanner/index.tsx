@@ -5,6 +5,8 @@ import BackgroundEpicM6 from "../../../../assets/background-epic-m6.svg";
 import ButtonGold from "../../../../assets/button-gold.svg";
 import ButtonInfo from "../../../../assets/button-info.svg";
 import LoadingBooster from "../../../../assets/loading-booster.svg";
+import { buyStars } from "../../../../helpers/lambda.helpers";
+import { invoice } from "@telegram-apps/sdk";
 
 export const EpicBanner = () => {
   const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
@@ -28,6 +30,13 @@ export const EpicBanner = () => {
     setShowInfoModal(false);
   };
 
+  const buyWithTelegramStars = async () => {
+    const result = await buyStars(1000);
+    console.log(result);
+    if(result != null && result['link'] != null)
+      await invoice.open(result['link'], 'url')
+  };
+
   return (
     <div
       className={`${
@@ -44,7 +53,12 @@ export const EpicBanner = () => {
       <div className={`${showAfterTimer ? "" : "hidden"} relative flex`}>
         <img className="h-full w-full" src={BackgroundEpicM6} />
         <div className="absolute ml-[40vw] flex h-full w-[55.6vw] items-end justify-center gap-[1vw]">
-          <button className="relative mb-[8.5vw] flex h-[7vw] justify-center opacity-50" disabled>
+          <button
+            className="relative mb-[8.5vw] flex h-[7vw] justify-center opacity-100"
+            onClick={() => {
+              buyWithTelegramStars();
+          }}
+          >
             <img className="h-full" src={ButtonGold} />
             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
               <p className="mt-[0.2vw] font-russoone text-[2.6vw] font-normal text-white">
