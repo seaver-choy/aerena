@@ -138,7 +138,7 @@ export const buyStars = async(amount) => {
                     username: "MaxChronicles12",
                     type: "private"
                     },
-                    text: "/pay 1000"
+                    text: "/pay " + amount
                 }
             }
         );

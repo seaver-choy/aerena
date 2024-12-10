@@ -31,7 +31,7 @@ export const EpicBanner = () => {
   };
 
   const buyWithTelegramStars = async () => {
-    const result = await buyStars(1000);
+    const result = await buyStars(1);
     console.log(result);
     if(result != null && result['link'] != null)
       await invoice.open(result['link'], 'url')
