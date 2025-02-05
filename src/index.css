@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.animation-text {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: sans-serif;
+    transform: translate(-50%, -100%);
+    transition:
+        transform 1s ease-out,
+        opacity 1s ease-out;
+    opacity: 1;
+    animation: riseUp 1s forwards;
+}
+
+@layer utilities {
+    .disable-select {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .disable-zoom {
+        touch-action: pan-y;
+    }
+
+    .disable-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .disable-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@keyframes riseUp {
+    0% {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -100px) scale(0.5);
+        opacity: 0;
+    }
+}
