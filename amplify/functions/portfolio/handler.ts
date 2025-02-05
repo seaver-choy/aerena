@@ -13,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         conn = await mongoose
             .createConnection(uri, {
                 serverSelectionTimeoutMS: 5000,
-                dbName: "playible",
+                dbName: "aerena",
             })
             .asPromise();
 
@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         conn.model<AthleteDocument, mongoose.PaginateModel<AthleteDocument>>(
             "Athletes",
             athleteSchema,
-            "temp_athletes"
+            "athletes"
         );
     }
     if (event.path.includes("paginated")) {

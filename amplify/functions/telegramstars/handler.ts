@@ -1,7 +1,11 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import axios from 'axios';
-import { starsTransactionSchema, tournamentSchema, userSchema } from "../../schema";
+import axios from "axios";
+import {
+    starsTransactionSchema,
+    tournamentSchema,
+    userSchema,
+} from "../../schema";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -13,7 +17,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         conn = await mongoose
             .createConnection(uri, {
                 serverSelectionTimeoutMS: 5000,
-                dbName: "playible",
+                dbName: "aerena",
             })
             .asPromise();
         conn.model("Users", userSchema);
@@ -22,8 +26,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
     }
     if (event.path.includes("invoice")) {
         return await getNewInvoice(event);
-    }
-    else {
+    } else {
         switch (event.httpMethod) {
             case "POST":
                 return await saveTelegramStarsTransaction(event);
@@ -63,23 +66,28 @@ async function getNewInvoice(event: APIGatewayProxyEvent) {
                 body: JSON.stringify({ message: "No user found" }),
             };
         }
-        
+
         const starsTransactionModel = conn!.model("StarsTransaction");
-        const latestTransaction = await starsTransactionModel.findOne({
-            userId: content.userId
-        })
-        .sort({ updateId: -1 });
+        const latestTransaction = await starsTransactionModel
+            .findOne({
+                userId: content.userId,
+            })
+            .sort({ updateId: -1 });
 
         let updateId = 1;
         if (!latestTransaction)
-            console.log(`[INFO] No transactions found for user ${content.userId}`);
-        else
-            updateId = latestTransaction.updateId + 1;
-        let title, description, payload, prices = [{ label: 'Total', amount: 0}], transactionInfo;
+            console.log(
+                `[INFO] No transactions found for user ${content.userId}`
+            );
+        else updateId = latestTransaction.updateId + 1;
+        let title,
+            description,
+            payload,
+            prices = [{ label: "Total", amount: 0 }],
+            transactionInfo;
         let responseData = {};
-        switch(content.transactionType){
-            case "premium_tournament":
-            {
+        switch (content.transactionType) {
+            case "premium_tournament": {
                 const tournamentModel = conn!.model("Tournaments");
                 const tournamentResult = await tournamentModel.findOne({
                     tournamentId: parseInt(content.tournamentId),
@@ -94,48 +102,57 @@ async function getNewInvoice(event: APIGatewayProxyEvent) {
                             "Access-Control-Allow-Origin": "*",
                             "Access-Control-Allow-Credentials": true,
                         },
-                        body: JSON.stringify({ message: "Tournament not found" }),
+                        body: JSON.stringify({
+                            message: "Tournament not found",
+                        }),
                     };
                 }
                 title = tournamentResult.tournamentName;
-                description = tournamentResult.tournament + " - Premium Tournament";
-                transactionInfo = "premium_tournament_" + tournamentResult.tournamentId + "_" + updateId;
+                description =
+                    tournamentResult.tournament + " - Premium Tournament";
+                transactionInfo =
+                    "premium_tournament_" +
+                    tournamentResult.tournamentId +
+                    "_" +
+                    updateId;
                 payload = JSON.stringify({ transactionInfo: transactionInfo });
-                prices = [{ label: 'Total', amount: content.amount}];
-                responseData = {userId: content.userId, transactionInfo: transactionInfo, transactionType: "premium_tournament", amount: content.amount};
+                prices = [{ label: "Total", amount: content.amount }];
+                responseData = {
+                    userId: content.userId,
+                    transactionInfo: transactionInfo,
+                    transactionType: "premium_tournament",
+                    amount: content.amount,
+                };
                 break;
             }
         }
-        const response = await axios.post(process.env.BOT_WEBHOOK_URL!,
-            {
-                update_id: updateId,
-                message: {
-                    chat: {
+        const response = await axios.post(process.env.BOT_WEBHOOK_URL!, {
+            update_id: updateId,
+            message: {
+                chat: {
                     id: content.userId,
                     title: title,
                     description: description,
                     payload: payload,
                     prices: prices,
-                    },
-                    text: "/pay " + prices[0].amount
-                }
-            }
-        );
+                },
+                text: "/pay " + prices[0].amount,
+            },
+        });
 
-          return {
-              statusCode: 200,
-              headers: {
-                  "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                  "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-              },
-              body: JSON.stringify({
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
                 ...responseData,
                 ...response.data,
                 updateId: updateId,
-              })
+            }),
             //   body: JSON.stringify({data: {title: title, description: description, payload: payload, prices: prices}})
-          };
-    
+        };
     } catch (err) {
         console.log(`[ERROR][TELEGRAMSTARS] ${err}`);
         return {
@@ -160,7 +177,9 @@ async function saveTelegramStarsTransaction(event: APIGatewayProxyEvent) {
             userID: content.userId,
         });
         if (!userResult) {
-            console.error(`[ERROR][TELEGRAMSTARS] User ${content.userID} not found`);
+            console.error(
+                `[ERROR][TELEGRAMSTARS] User ${content.userID} not found`
+            );
             return {
                 statusCode: 400,
                 headers: {
@@ -172,8 +191,7 @@ async function saveTelegramStarsTransaction(event: APIGatewayProxyEvent) {
         }
 
         const starsTransactionModel = conn!.model("StarsTransaction");
-        const transaction = new starsTransactionModel(
-          {
+        const transaction = new starsTransactionModel({
             userId: content.userId,
             updateId: content.updateId,
             // transactionId: content.transactionId,
@@ -181,8 +199,7 @@ async function saveTelegramStarsTransaction(event: APIGatewayProxyEvent) {
             transactionType: content.transactionType,
             amount: parseInt(content.amount),
             date: new Date(),
-          }
-        );
+        });
         await transaction.save();
 
         return {
@@ -192,8 +209,8 @@ async function saveTelegramStarsTransaction(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
             body: JSON.stringify({
-                "message": transaction.transactionId + " transaction saved",
-            })
+                message: transaction.transactionId + " transaction saved",
+            }),
         };
     } catch (err) {
         console.log(`[ERROR][TELEGRAMSTARS] ${err}`);

@@ -12,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         conn = await mongoose
             .createConnection(uri, {
                 serverSelectionTimeoutMS: 5000,
-                dbName: "playible",
+                dbName: "aerena",
             })
             .asPromise();
 
