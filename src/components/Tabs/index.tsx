@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { slideLeftAnimation } from "../../helpers/animation";
 
-import BattlePointsIcon from "../../assets/icon/battle-points.svg";
+import BattlePointsIcon from "../../assets/icon/battle-points-gold.svg";
 import TGStarsIcon from "../../assets/icon/tg-star-gold.svg";
 
 interface TabsProps {

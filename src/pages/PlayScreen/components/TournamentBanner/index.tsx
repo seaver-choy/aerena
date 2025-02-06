@@ -18,7 +18,7 @@ import PremiumTournamentBackground from "../../../../assets/background/tournamen
 import ChangeIcon from "../../../../assets/icon/change-white.svg";
 import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
-import BattlePointsIcon from "../../../../assets/icon/battle-points.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface TournamentBannerProps {
@@ -206,25 +206,31 @@ export const TournamentBanner = ({
                             className="absolute top-[23vw] flex"
                             {...appearTextAnimation}
                         >
-                            {
-                                currentTournamentType === "Free" ? (
+                            {currentTournamentType === "Free" ? (
                                 <img
                                     src={BattlePointsIcon}
+                                    className="mr-[2vw] mt-[2.8vw] h-[7vw]"
+                                />
+                            ) : ongoingTournament.prizeCurrency === "stars" ? (
+                                <img
+                                    src={TGStar}
                                     className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                 />
-                                )
-                                : ongoingTournament.prizeCurrency === "stars" ? (
-                                    <img
-                                        src={TGStar}
-                                        className="mr-[2vw] mt-[2.5vw] h-[7vw]"
-                                    />
-                                )
-                                :
-                                <p className={"text-nowrap font-russoone text-[9vw] font-normal text-white"}>
-                                    {ongoingTournament.prizeCurrency === "php" ? "P" : ""}&nbsp;
+                            ) : (
+                                <p
+                                    className={
+                                        "text-nowrap font-russoone text-[9vw] font-normal text-white"
+                                    }
+                                >
+                                    {ongoingTournament.prizeCurrency === "php"
+                                        ? "PHP"
+                                        : ""}
+                                    &nbsp;
                                 </p>
-                            }
-                            <p className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+                            )}
+                            <p
+                                className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                            >
                                 {ongoingTournament.prizePool.toLocaleString()}
                             </p>
                         </motion.div>

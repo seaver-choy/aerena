@@ -20,7 +20,7 @@ import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
-import BattlePointsIcon from "../../../../assets/icon/battle-points.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import { initInvoice } from "@telegram-apps/sdk-react";
 
 interface LineupSectionProps {
@@ -45,7 +45,7 @@ export const LineupSection = ({
     const [showErrorIncomplete, setShowErrorIncomplete] =
         useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
-    
+
     const defaultLineup = [
         {
             position: "Roam",
@@ -355,36 +355,33 @@ export const LineupSection = ({
                                       : () => setShowConfirmModal(true)
                             }
                         >
-                            
-                            {
-                                ongoingTournament.type === "free"
-                                    ?
-                                        <div className="absolute flex h-full w-full items-center justify-center">
-                                            <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                                JOIN FOR&nbsp;
-                                            </p>
-                                            <img
-                                                className="h-[3vw]"
-                                                src={BattlePointsIcon}
-                                            ></img>
-                                            <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                                &nbsp;{ongoingTournament.joinCost}
-                                            </p>
-                                        </div>
-                                    : 
-                                    <div className="absolute flex h-full w-full items-center justify-center">
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            JOIN FOR&nbsp;
-                                        </p>
-                                        <img
-                                            className="h-[3vw]"
-                                            src={TGStarWhite}
-                                        ></img>
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            &nbsp;{ongoingTournament.joinCost}
-                                        </p>
-                                    </div>
-                            }
+                            {ongoingTournament.type === "free" ? (
+                                <div className="absolute flex h-full w-full items-center justify-center">
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        JOIN FOR&nbsp;
+                                    </p>
+                                    <img
+                                        className="h-[2.5vw]"
+                                        src={BattlePointsIcon}
+                                    ></img>
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        &nbsp;{ongoingTournament.joinCost}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="absolute flex h-full w-full items-center justify-center">
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        JOIN FOR&nbsp;
+                                    </p>
+                                    <img
+                                        className="h-[2.5vw]"
+                                        src={TGStarWhite}
+                                    ></img>
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        &nbsp;{ongoingTournament.joinCost}
+                                    </p>
+                                </div>
+                            )}
                             <img className="w-full" src={LineupButton} />
                         </button>
                     </button>
