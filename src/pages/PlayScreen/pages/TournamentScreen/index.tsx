@@ -17,6 +17,7 @@ import TournamentSonner from "../../../../assets/sonner/tournament.svg";
 import FreeTournamentBackground from "../../../../assets/background/tournament-free.svg";
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 
 interface TournamentScreenProps {
     tournamentId: number;
@@ -121,20 +122,32 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                         {tournament.tournamentName}
                                     </p>
                                 </motion.div>
-                                {tournament.type != "free" && (
-                                    <motion.div
-                                        className="absolute top-[23vw] flex"
-                                        {...appearTextAnimation}
-                                    >
+                                <motion.div
+                                    className="absolute top-[23vw] flex"
+                                    {...appearTextAnimation}
+                                >
+                                    {
+                                        tournament.type === "free" ? (
                                         <img
-                                            src={TGStar}
+                                            src={BattlePointsIcon}
                                             className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                         />
-                                        <p className="text-nowrap font-russoone text-[9vw] font-normal text-white">
-                                            {tournament.prizePool.toLocaleString()}
+                                        )
+                                        : tournament.prizeCurrency === "stars" ? (
+                                            <img
+                                                src={TGStar}
+                                                className="mr-[2vw] mt-[2.5vw] h-[7vw]"
+                                            />
+                                        )
+                                        :
+                                        <p className={"text-nowrap font-russoone text-[9vw] font-normal text-white"}>
+                                            {tournament.prizeCurrency === "php" ? "PHP" : ""}&nbsp;
                                         </p>
-                                    </motion.div>
-                                )}
+                                    }
+                                    <p className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+                                        {tournament.prizePool.toLocaleString()}
+                                    </p>
+                                </motion.div>
                                 <motion.div
                                     className="absolute bottom-[8vw] flex h-[10vw] w-[70%]"
                                     {...appearTextAnimation}
