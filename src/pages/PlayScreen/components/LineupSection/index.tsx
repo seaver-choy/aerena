@@ -379,7 +379,7 @@ export const LineupSection = ({
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="h-[2.5vw]"
+                                        className="mt-[0.1vw] h-[2.5vw]"
                                         src={BattlePointsIcon}
                                     ></img>
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
@@ -392,7 +392,7 @@ export const LineupSection = ({
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="h-[2.5vw]"
+                                        className="mt-[0.1vw] h-[2.5vw]"
                                         src={TGStarWhite}
                                     ></img>
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
