@@ -685,7 +685,7 @@ export const getLeagues = async (initDataRaw) => {
     try {
         const restOperation = get({
             apiName: "playibleApi",
-            path: "packinfos/league",
+            path: "mltournaments/leagues",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,

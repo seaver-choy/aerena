@@ -93,6 +93,8 @@ export interface Tournament {
             score: number;
         },
     ];
+    prizeCurrency: string,
+    joinCost: number,
 }
 
 export interface TournamentLineup {

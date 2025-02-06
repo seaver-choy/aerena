@@ -204,6 +204,8 @@ export const tournamentSchema = new mongoose.Schema(
         league: String,
         type: String,
         prizePool: Number,
+        prizeCurrency: String,
+        joinCost: Number,
         usersJoined: [
             {
                 userID: Number,
@@ -365,5 +367,27 @@ export const starsTransactionSchema = new mongoose.Schema(
     },
     {
         collection: "stars_transactions",
+    }
+);
+
+export const teamSchema = new mongoose.Schema({
+    teamId: Number,
+    name: String,
+    key: String,
+    players: [athleteSchema]
+});
+
+
+export const mlTournamentSchema = new mongoose.Schema(
+    {
+        code: String,
+        name: String,
+        type: String,
+        startDate: Date,
+        endDate: Date,
+        teams: [teamSchema],
+    },
+    {
+        collection: "ml_tournaments",
     }
 );

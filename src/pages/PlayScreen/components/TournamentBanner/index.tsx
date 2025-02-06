@@ -18,6 +18,7 @@ import PremiumTournamentBackground from "../../../../assets/background/tournamen
 import ChangeIcon from "../../../../assets/icon/change-white.svg";
 import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface TournamentBannerProps {
@@ -201,20 +202,32 @@ export const TournamentBanner = ({
                                 {ongoingTournament.tournamentName}
                             </p>
                         </motion.div>
-                        {currentTournamentType != "Free" && (
-                            <motion.div
-                                className="absolute top-[23vw] flex"
-                                {...appearTextAnimation}
-                            >
+                        <motion.div
+                            className="absolute top-[23vw] flex"
+                            {...appearTextAnimation}
+                        >
+                            {
+                                currentTournamentType === "Free" ? (
                                 <img
-                                    src={TGStar}
+                                    src={BattlePointsIcon}
                                     className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                 />
-                                <p className="text-nowrap font-russoone text-[9vw] font-normal text-white">
-                                    {ongoingTournament.prizePool.toLocaleString()}
+                                )
+                                : ongoingTournament.prizeCurrency === "stars" ? (
+                                    <img
+                                        src={TGStar}
+                                        className="mr-[2vw] mt-[2.5vw] h-[7vw]"
+                                    />
+                                )
+                                :
+                                <p className={"text-nowrap font-russoone text-[9vw] font-normal text-white"}>
+                                    {ongoingTournament.prizeCurrency === "php" ? "P" : ""}&nbsp;
                                 </p>
-                            </motion.div>
-                        )}
+                            }
+                            <p className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+                                {ongoingTournament.prizePool.toLocaleString()}
+                            </p>
+                        </motion.div>
                         <div className="absolute bottom-[8vw] flex h-[10vw] w-[70%]">
                             <motion.div
                                 className="flex h-full w-[60%] flex-col items-start justify-center"

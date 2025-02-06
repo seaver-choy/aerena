@@ -20,6 +20,7 @@ import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points.svg";
 import { initInvoice } from "@telegram-apps/sdk-react";
 
 interface LineupSectionProps {
@@ -44,8 +45,7 @@ export const LineupSection = ({
     const [showErrorIncomplete, setShowErrorIncomplete] =
         useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
-    const starCost = 20; //TODO: for the cost of entering the premium tournament, maybe put in tournament collection in the future?
-
+    
     const defaultLineup = [
         {
             position: "Roam",
@@ -232,7 +232,7 @@ export const LineupSection = ({
                     user.id,
                     "premium_tournament",
                     ongoingTournament.tournamentId,
-                    starCost,
+                    ongoingTournament.joinCost,
                     user.initDataRaw
                 );
                 console.log(invoiceLink);
@@ -361,7 +361,14 @@ export const LineupSection = ({
                                     ?
                                         <div className="absolute flex h-full w-full items-center justify-center">
                                             <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                                JOIN FOR FREE
+                                                JOIN FOR&nbsp;
+                                            </p>
+                                            <img
+                                                className="h-[3vw]"
+                                                src={BattlePointsIcon}
+                                            ></img>
+                                            <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                                &nbsp;{ongoingTournament.joinCost}
                                             </p>
                                         </div>
                                     : 
@@ -374,7 +381,7 @@ export const LineupSection = ({
                                             src={TGStarWhite}
                                         ></img>
                                         <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            &nbsp;{starCost}
+                                            &nbsp;{ongoingTournament.joinCost}
                                         </p>
                                     </div>
                             }
