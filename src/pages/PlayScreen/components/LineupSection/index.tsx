@@ -7,6 +7,7 @@ import {
     getLuckyPicks,
     getInvoiceLinkForPremiumTournament,
     saveStarsTransaction,
+    joinFree,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
 import { Lineup } from "../Lineup";
@@ -44,6 +45,7 @@ export const LineupSection = ({
     const [showErrorDeadline, setShowErrorDeadline] = useState<boolean>(false);
     const [showErrorIncomplete, setShowErrorIncomplete] =
         useState<boolean>(false);
+    const [showInsufficientModal, setShowInsufficientModal] = useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
 
     const defaultLineup = [
@@ -220,59 +222,68 @@ export const LineupSection = ({
         }
     };
     const handleEnterTournament = async () => {
-        const check = tournamentLineup.every((obj) => obj.athlete !== null);
-        if (check) {
-            setIsLoading(true);
-            const lineup = tournamentLineup.map((obj) => {
-                return obj.athlete;
-            });
+        try {
+            const check = tournamentLineup.every((obj) => obj.athlete !== null);
+            if (check) {
+                setIsLoading(true);
+                const lineup = tournamentLineup.map((obj) => {
+                    return obj.athlete;
+                });
 
-            if (ongoingTournament.type === "premium") {
-                const invoiceLink = await getInvoiceLinkForPremiumTournament(
-                    user.id,
-                    "premium_tournament",
-                    ongoingTournament.tournamentId,
-                    ongoingTournament.joinCost,
-                    user.initDataRaw
-                );
-                console.log(invoiceLink);
-                setIsLoading(false);
-                if (invoiceLink != null && invoiceLink["link"] != null) {
-                    invoice
-                        .open(invoiceLink["link"], "url")
-                        .then(async (status) => {
-                            if (status === "paid") {
-                                const transactionResult =
-                                    await saveStarsTransaction(
-                                        user.id,
-                                        invoiceLink.updateId,
-                                        invoiceLink.transactionInfo,
-                                        invoiceLink.transactionType,
-                                        invoiceLink.amount,
-                                        user.initDataRaw
-                                    );
-                                if (transactionResult) {
-                                    setIsLoading(true);
-                                    lineupSubmission(lineup);
+                if (ongoingTournament.type === "premium") {
+                    const invoiceLink = await getInvoiceLinkForPremiumTournament(
+                        user.id,
+                        "premium_tournament",
+                        ongoingTournament.tournamentId,
+                        ongoingTournament.joinCost,
+                        user.initDataRaw
+                    );
+                    console.log(invoiceLink);
+                    setIsLoading(false);
+                    if (invoiceLink != null && invoiceLink["link"] != null) {
+                        invoice
+                            .open(invoiceLink["link"], "url")
+                            .then(async (status) => {
+                                if (status === "paid") {
+                                    const transactionResult =
+                                        await saveStarsTransaction(
+                                            user.id,
+                                            invoiceLink.updateId,
+                                            invoiceLink.transactionInfo,
+                                            invoiceLink.transactionType,
+                                            invoiceLink.amount,
+                                            user.initDataRaw
+                                        );
+                                    if (transactionResult) {
+                                        setIsLoading(true);
+                                        lineupSubmission(lineup);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                    }
+                } 
+                else if (user.points >= ongoingTournament.joinCost){
+                    const result = await joinFree(user.id, ongoingTournament.joinCost, user.initDataRaw);
+                    user.dispatch({
+                        type: "SET_POINTS",
+                        payload: { points: result["points"] },
+                    });
+                    lineupSubmission(lineup);
                 }
-            } else lineupSubmission(lineup);
-        } else {
-            setShowErrorIncomplete(true);
+                else {
+                    setIsLoading(false);
+                    setShowInsufficientModal(true);
+                }
+            }
+            else {
+                setShowErrorIncomplete(true);
+            }
+        } catch (e) {
+            console.log(e);
+            setIsLoading(false);
+            setShowErrorModal(true);
         }
     };
-    // const showBanner = () => {
-    //     setTimeout(() => {
-    //         setShowAfterTimer(true);
-    //     }, 1000);
-    // };
-
-    useEffect(() => {
-        // setShowAfterTimer(false);
-        // showBanner();
-    }, [playTab]);
 
     useEffect(() => {
         if (ongoingTournament != null) setupTournamentLineup();
@@ -308,6 +319,13 @@ export const LineupSection = ({
                         title="Error!"
                         message="Something went wrong. Please try again."
                         onClose={() => setShowErrorModal(false)}
+                    />
+                )}
+                {showInsufficientModal && (
+                    <ErrorModal
+                        title="Error!"
+                        message="You do not have enough Battle Points to join the tournament."
+                        onClose={() => setShowInsufficientModal(false)}
                     />
                 )}
                 {showConfirmModal && (

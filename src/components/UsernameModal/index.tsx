@@ -3,7 +3,14 @@ import { useUsers } from "../../hooks/useUser";
 import { createUser, checkUsernameExists } from "../../helpers/lambda.helper";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 
-import UsernameBackground from "../../assets/background/username.svg";
+import { motion } from "motion/react";
+import {
+    appearAnimation,
+    appearModalAnimation,
+} from "../../helpers/animation";
+
+import UsernameBackground from "../../assets/modal/username.svg";
+import AerenaTextLogo from "../../assets/logo/aerena-text.svg";
 import RightIcon from "../../assets/icon/right-gold.svg";
 
 const UsernameModal: React.FC = () => {
@@ -199,43 +206,55 @@ const UsernameModal: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-40">
-            <div className="relative flex h-full w-full items-center justify-center bg-graydark">
-                <div className="z-40 flex flex-col gap-[2vw]">
-                    <div className="flex justify-center">
-                        <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                            Please enter your username.
-                        </p>
-                    </div>
-                    <div className="relative flex h-[20vw] w-[76vw] items-center justify-center">
-                        <img src={UsernameBackground} />
-                        <div className="absolute mt-[2vw] flex h-[16.5vw] w-[67vw] items-center">
-                            <input
-                                className="mb-[4vw] ml-[6vw] mr-[4vw] mt-[4vw] flex h-[8.5vw] w-[40vw] bg-transparent font-russoone text-[5vw] font-normal text-white"
-                                type="text"
-                                value={username}
-                                onChange={handleUsernameChange}
-                                maxLength={12}
-                            ></input>
-                            <button className="flex h-full w-[17vw] items-center justify-center">
-                                <img
-                                    className="h-[6vw] w-[6vw]"
-                                    src={RightIcon}
-                                    onClick={() => handleSubmit()}
-                                />
-                            </button>
+            <div className="relative flex h-full w-full items-center justify-center bg-light">
+                <div className="absolute z-40 h-[59.8vw] w-[92vw]">
+                    <div className="relative h-full w-full ">
+                        <motion.div {...appearModalAnimation}>
+                            <img
+                                className="h-full w-full"
+                                src={UsernameBackground}
+                            />
+                        </motion.div>
+                        <motion.div
+                            className="absolute top-[10vw] h-[9vw]" 
+                            {...appearAnimation}
+                        >
+                            <img
+                                className="h-full w-full"
+                                src={AerenaTextLogo}
+                            />
+                        </motion.div>
+                        <div className="absolute left-[5.6vw] top-[25.7vw] flex h-[13.1vw] w-[81vw]">
+                            <div className="flex h-full w-[85%] flex-col justify-center px-[4vw]">
+                                <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent">
+                                    USERNAME
+                                </p>
+                                <input
+                                    className="-mt-[1vw] flex w-full bg-transparent font-russoone text-[4.5vw] font-normal text-white focus:outline-none"
+                                    type="text"
+                                    value={username}
+                                    placeholder="Enter your username"
+                                    onChange={handleUsernameChange}
+                                    maxLength={12}
+                                    disabled={isLoading}
+                                ></input>
+                            </div>
+                            <motion.button
+                                className="flex h-full w-[15%] items-center justify-center"
+                                onClick={() => handleSubmit()}
+                                disabled={isLoading}
+                                {...appearAnimation}
+                            >
+                                <img className="h-[5vw]" src={RightIcon} />
+                            </motion.button>
                         </div>
-                    </div>
-                    <div className="mt-[2vw] flex h-[10vw] w-[76vw] items-center justify-center">
-                        {isLoading && (
-                            <p className="text-center font-russoone text-[2.5vw] font-extralight text-white">
-                                Loading
-                            </p>
-                        )}
-                        {errorMessage && (
-                            <p className="text-center font-russoone text-[2.5vw] font-extralight text-red">
-                                {errorMessage}
-                            </p>
-                        )}
+                        <div className="absolute left-[5.6vw] top-[40.8vw] flex h-[8vw] w-[81vw] justify-center">
+                            {errorMessage && (
+                                <p className="text-center font-russoone text-[3vw] font-extralight text-red">
+                                    {errorMessage}
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

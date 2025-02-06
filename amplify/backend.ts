@@ -428,6 +428,16 @@ const leaguePath = api.root.addResource("leagues", {
     // },
 });
 
+const joinFreePath = api.root.addResource("joinfree", {
+    // defaultMethodOptions: {
+    //     authorizer: telegramAuthorizer,
+    //     authorizationType: AuthorizationType.CUSTOM,
+    // },
+    // defaultMethodOptions: {
+    //     authorizationType: AuthorizationType.NONE,
+    // },
+});
+
 
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
@@ -538,6 +548,10 @@ mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
 });
 
 leaguePath.addMethod("GET", mlTournamentIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
+joinFreePath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 

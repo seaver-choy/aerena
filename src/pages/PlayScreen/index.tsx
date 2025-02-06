@@ -8,8 +8,11 @@ import { TournamentSection } from "./components/TournamentSection";
 import { LineupSection } from "./components/LineupSection";
 import { PersonalLineup } from "./components/PersonalLineup";
 import { Tournament } from "../../helpers/interfaces";
+import { useUsers } from "../../hooks/useUser";
+import UsernameModal from "../../components/UsernameModal";
 
 export const PlayScreen = () => {
+    const user = useUsers();
     const [playTab, setPlayTab] = useState("Play Free");
     const [showTournament, setShowTournament] = useState<boolean>(false);
     const [keyRemount, setKeyRemount] = useState<number>(0);
@@ -34,39 +37,46 @@ export const PlayScreen = () => {
 
     return (
         <>
-            <Layout>
-                <Tabs
-                    options={tournamentOptions}
-                    onToggle={(selected) => {
-                        console.log("Selected Option:", selected);
-                        setPlayTab(selected);
-                    }}
-                    selectedTab={playTab}
-                />
-                <div>
-                    <TournamentBanner
-                        ongoingTournament={ongoingTournament}
-                        setOngoingTournament={setOngoingTournament}
-                        showTournament={showTournament}
-                        setShowTournament={setShowTournament}
-                        playTab={playTab}
-                    />
-                    <TournamentSection playTab={playTab} showTournament={showTournament}/>
-                    <LineupSection
-                        ongoingTournament={ongoingTournament}
-                        updateLineup={handleUpdatePersonalLineup}
-                        showTournament={showTournament}
-                        playTab={playTab}
-                    />
-                    <Title title="My Lineups" showTitle={showTournament}/>
-                    <PersonalLineup
-                        key={keyRemount}
-                        ongoingTournament={ongoingTournament}
-                        showTournament={showTournament}
-                        playTab={playTab}
-                    />
+            {user.id != 0 && user.username == "" && (
+                <div style={{ position: "relative", zIndex: 51 }}>
+                    <UsernameModal />
                 </div>
-            </Layout>
+            )}
+            {user.id != 0 && user.username != "" && (
+                <Layout>
+                    <Tabs
+                        options={tournamentOptions}
+                        onToggle={(selected) => {
+                            console.log("Selected Option:", selected);
+                            setPlayTab(selected);
+                        }}
+                        selectedTab={playTab}
+                    />
+                    <div>
+                        <TournamentBanner
+                            ongoingTournament={ongoingTournament}
+                            setOngoingTournament={setOngoingTournament}
+                            showTournament={showTournament}
+                            setShowTournament={setShowTournament}
+                            playTab={playTab}
+                        />
+                        <TournamentSection playTab={playTab} showTournament={showTournament}/>
+                        <LineupSection
+                            ongoingTournament={ongoingTournament}
+                            updateLineup={handleUpdatePersonalLineup}
+                            showTournament={showTournament}
+                            playTab={playTab}
+                        />
+                        <Title title="My Lineups" showTitle={showTournament}/>
+                        <PersonalLineup
+                            key={keyRemount}
+                            ongoingTournament={ongoingTournament}
+                            showTournament={showTournament}
+                            playTab={playTab}
+                        />
+                    </div>
+                </Layout>
+            )}
         </>
     );
 };

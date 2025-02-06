@@ -1034,3 +1034,30 @@ export const updateTempLineup = async (
         console.log(e);
     }
 };
+
+export const joinFree = async (userId, bpCost, initDataRaw) => {
+    try {
+        const payload = {
+            userID: userId,
+            bpCost: bpCost,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: "user/joinfree",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(payload),
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};

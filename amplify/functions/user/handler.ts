@@ -87,6 +87,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return claimBattlepassReward(event);
     } else if (event.path.includes("templineup")) {
         return updateTempLineup(event);
+    }  else if (event.path.includes("joinfree")) {
+        return subtractBP(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -348,9 +350,9 @@ async function createUser(event: APIGatewayProxyEvent) {
             });
 
             //for bp initialization
-            const bpModel = conn!.model("Battlepass");
-            const bpResult = await bpModel.findOne({ season: 1 });
-            const bpLevels = bpResult.levels;
+            // const bpModel = conn!.model("Battlepass");
+            // const bpResult = await bpModel.findOne({ season: 1 });
+            // const bpLevels = bpResult.levels;
 
             const userData = {
                 username: payload.username,
@@ -377,8 +379,9 @@ async function createUser(event: APIGatewayProxyEvent) {
                 ],
                 taskStatus: taskStatus,
                 inventory: inventory,
-                battlepass: bpLevels,
+                // battlepass: bpLevels,
                 seasonalLogins: 1,
+                points: 20000, //TODO: temporary hardcoded to give 20k BP to new users for Aerena free tournament
             };
 
             if (payload.isReferred && payload.referredBy !== payload.username) {
@@ -1490,6 +1493,62 @@ async function updateTempLineup(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Wrong type",
+            }),
+        };
+    }
+}
+
+async function subtractBP(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    const payload = JSON.parse(JSON.parse(event.body!));
+    try {
+        const userID = payload.userID;
+        const bpCost = parseInt(payload.bpCost);
+        if (userID === "0") throw new Error("Invalid user ID");
+        const updateResult = await userModel.findOneAndUpdate(
+            { userID },
+            [
+                {
+                    $set: {
+                        points: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $gt: ["$currentMana", 0] },
+                                        { $gte: ["$currentMana", bpCost] },
+                                    ],
+                                },
+                                {
+                                    $subtract: [
+                                        "$points", bpCost
+                                    ],
+                                },
+                                "$points",
+                            ],
+                        },
+                        pointsUpdatedAt: new Date(),
+                    },
+                },
+            ],
+            { new: true }
+        );
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(updateResult),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to update points: " + e,
             }),
         };
     }
