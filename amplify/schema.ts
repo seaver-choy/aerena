@@ -241,7 +241,7 @@ export const athleteSchema = new mongoose.Schema(
         type: String,
     },
     {
-        collection: "temp_athletes",
+        collection: "athletes",
     }
 );
 
