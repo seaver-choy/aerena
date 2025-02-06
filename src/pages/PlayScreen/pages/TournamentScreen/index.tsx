@@ -101,7 +101,9 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
             {tournament != null && (
                 <div>
                     {showTournament ? (
-                        <div className="h-[58.4vw] bg-graydark">
+                        <div
+                            className={`h-[58.4vw] ${tournament.type == "free" ? "" : "bg-graydark"}`}
+                        >
                             <div className="relative flex justify-center">
                                 <img
                                     className="h-full w-full"
@@ -120,18 +122,18 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                     </p>
                                 </motion.div>
                                 {tournament.type != "free" && (
-                                <motion.div
-                                    className="absolute top-[23vw] flex"
-                                    {...appearTextAnimation}
-                                >
-                                    <img
-                                        src={TGStar}
-                                        className="mr-[2vw] mt-[2.5vw] h-[7vw]"
-                                    />
-                                    <p className="text-nowrap font-russoone text-[9vw] font-normal text-white">
-                                        {tournament.prizePool.toLocaleString()}
-                                    </p>
-                                </motion.div>
+                                    <motion.div
+                                        className="absolute top-[23vw] flex"
+                                        {...appearTextAnimation}
+                                    >
+                                        <img
+                                            src={TGStar}
+                                            className="mr-[2vw] mt-[2.5vw] h-[7vw]"
+                                        />
+                                        <p className="text-nowrap font-russoone text-[9vw] font-normal text-white">
+                                            {tournament.prizePool.toLocaleString()}
+                                        </p>
+                                    </motion.div>
                                 )}
                                 <motion.div
                                     className="absolute bottom-[8vw] flex h-[10vw] w-[70%]"

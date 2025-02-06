@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import SmallModal from "../../../assets/modal/small.svg";
-import PlayibleLogo from "../../../assets/logo/playible.svg";
+import AerenaLogo from "../../../assets/logo/aerena.svg";
 
 export const Loading = () => {
     useEffect(() => {
@@ -26,7 +26,7 @@ export const Loading = () => {
                         </div>
                         <img
                             className="absolute mt-[4vw] h-[10vw] w-[10vw] animate-bounce"
-                            src={PlayibleLogo}
+                            src={AerenaLogo}
                         />
                     </div>
                 </div>

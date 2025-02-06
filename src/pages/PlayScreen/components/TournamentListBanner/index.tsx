@@ -45,15 +45,17 @@ export const TournamentListBanner = ({
     return (
         <div>
             {showTournament ? (
-                <div className="mx-[4vw] mt-[4vw] h-[30.6vw]">
-                    <div className="relative flex justify-center bg-graydark">
+                <div
+                    className={`mx-[4vw] mt-[4vw] h-[30.6vw] ${tournament.type == "free" ? "" : "bg-graydark"}`}
+                >
+                    <div className="relative flex justify-center">
                         <img
                             className="h-full w-full"
                             src={
                                 tournament.type == "free"
                                     ? FreeTournamentListBackground
-                                    :PremiumTournamentListBackground
-                                }
+                                    : PremiumTournamentListBackground
+                            }
                         />
                         <motion.div
                             className="absolute top-[0.3vw] flex"
@@ -87,7 +89,7 @@ export const TournamentListBanner = ({
                             {dateRangeFormat(
                                 tournament.tournamentStartSubmissionDate,
                                 tournament.tournamentEndSubmissionDate,
-                                tournament.type,
+                                tournament.type
                             )}
                         </motion.div>
                         <motion.div
