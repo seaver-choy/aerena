@@ -44,7 +44,14 @@ export const PreviousScreen = () => {
             }
             {
                 previousTournaments != null && previousTournaments.length === 0 && (
-                    <p>No Previous Tournaments</p>
+                    <div className="mt-[30vh]">
+                        <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-bold text-transparent">
+                            No Previous Tournaments
+                        </p>
+                        <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[4vw] font-normal text-transparent">
+                            Please check again later.
+                        </p>
+                    </div>
                 )
             }
         </Layout>
