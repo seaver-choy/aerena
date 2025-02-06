@@ -4,10 +4,7 @@ import { createUser, checkUsernameExists } from "../../helpers/lambda.helper";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 
 import { motion } from "motion/react";
-import {
-    appearAnimation,
-    appearModalAnimation,
-} from "../../helpers/animation";
+import { appearAnimation, appearModalAnimation } from "../../helpers/animation";
 
 import UsernameBackground from "../../assets/modal/username.svg";
 import AerenaTextLogo from "../../assets/logo/aerena-text.svg";
@@ -206,9 +203,9 @@ const UsernameModal: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-40">
-            <div className="relative flex h-full w-full items-center justify-center bg-light">
+            <div className="relative flex h-full w-full items-center justify-center bg-graydark">
                 <div className="absolute z-40 h-[59.8vw] w-[92vw]">
-                    <div className="relative h-full w-full ">
+                    <div className="relative h-full w-full">
                         <motion.div {...appearModalAnimation}>
                             <img
                                 className="h-full w-full"
@@ -216,7 +213,7 @@ const UsernameModal: React.FC = () => {
                             />
                         </motion.div>
                         <motion.div
-                            className="absolute top-[10vw] h-[9vw]" 
+                            className="absolute top-[10vw] h-[9vw] w-full"
                             {...appearAnimation}
                         >
                             <img
