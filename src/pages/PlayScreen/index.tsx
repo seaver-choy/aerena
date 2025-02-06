@@ -65,7 +65,6 @@ export const PlayScreen = () => {
                             ongoingTournament={ongoingTournament}
                             updateLineup={handleUpdatePersonalLineup}
                             showTournament={showTournament}
-                            playTab={playTab}
                         />
                         <Title title="My Lineups" showTitle={showTournament}/>
                         <PersonalLineup

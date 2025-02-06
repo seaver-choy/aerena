@@ -28,14 +28,14 @@ interface LineupSectionProps {
     ongoingTournament: Tournament;
     updateLineup: (ongoingTournament: Tournament) => void;
     showTournament: boolean;
-    playTab: string;
+    // playTab: string;
 }
 
 export const LineupSection = ({
     ongoingTournament,
     updateLineup,
     showTournament,
-    playTab,
+    // playTab,
 }: LineupSectionProps) => {
     // const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
     const user = useUsers();
