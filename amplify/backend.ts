@@ -22,6 +22,7 @@ import { upgradeFunction } from "./functions/upgrade/resource";
 import { packInfoFunction } from "./functions/packinfo/resource";
 import { leaderboardFunction } from "./functions/leaderboard/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
+import { mlTournamentFunction } from './functions/mltournaments/resource';
 import * as dotenv from "dotenv";
 import * as path from "path";
 /**
@@ -42,6 +43,7 @@ const backend = defineBackend({
     packInfoFunction,
     leaderboardFunction,
     telegramstarsFunction,
+    mlTournamentFunction,
 });
 
 const __dirname = path.dirname("../.env");
@@ -182,6 +184,9 @@ const telegramstarsIntegration = new LambdaIntegration(
     backend.telegramstarsFunction.resources.lambda
 );
 
+const mlTournamentIntegration = new LambdaIntegration(
+    backend.mlTournamentFunction.resources.lambda
+);
 //addResource section
 
 const userPath = api.root.addResource("user", {
@@ -353,17 +358,6 @@ const packInfoPath = api.root.addResource("packinfos", {
     //     authorizationType: AuthorizationType.NONE,
     // },
 });
-
-const leaguePath = api.root.addResource("league", {
-    // defaultMethodOptions: {
-    //     authorizer: telegramAuthorizer,
-    //     authorizationType: AuthorizationType.CUSTOM,
-    // },
-    // defaultMethodOptions: {
-    //     authorizationType: AuthorizationType.NONE,
-    // },
-});
-
 const upgradePath = api.root.addResource("upgrade", {
     // defaultMethodOptions: {
     //     authorizer: telegramAuthorizer,
@@ -413,6 +407,27 @@ const invoicelinkPath = api.root.addResource("invoice", {
     //     authorizationType: AuthorizationType.NONE,
     // },
 });
+
+const mlTournamentPath = api.root.addResource("mltournaments", {
+    // defaultMethodOptions: {
+    //     authorizer: telegramAuthorizer,
+    //     authorizationType: AuthorizationType.CUSTOM,
+    // },
+    // defaultMethodOptions: {
+    //     authorizationType: AuthorizationType.NONE,
+    // },
+});
+
+const leaguePath = api.root.addResource("leagues", {
+    // defaultMethodOptions: {
+    //     authorizer: telegramAuthorizer,
+    //     authorizationType: AuthorizationType.CUSTOM,
+    // },
+    // defaultMethodOptions: {
+    //     authorizationType: AuthorizationType.NONE,
+    // },
+});
+
 
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
@@ -498,9 +513,6 @@ battlePassPath.addMethod("PUT", userIntegration, {
 packInfoPath.addMethod("GET", packInfoIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
-leaguePath.addMethod("GET", packInfoIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
 
 upgradePath.addMethod("PUT", upgradeIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
@@ -516,7 +528,16 @@ lbInfoPath.addMethod("GET", leaderboardIntegration, {
 telegramstarsPath.addMethod("POST", telegramstarsIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
+
 invoicelinkPath.addMethod("POST", telegramstarsIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
+mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
+leaguePath.addMethod("GET", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
@@ -557,6 +578,11 @@ statsProxy.addMethod("GET", statsIntegration, {
 telegramstarsPath.addProxy({
     anyMethod: true,
     defaultIntegration: telegramstarsIntegration,
+});
+
+mlTournamentPath.addProxy({
+    anyMethod: true,
+    defaultIntegration: mlTournamentIntegration,
 });
 
 //final addOutput

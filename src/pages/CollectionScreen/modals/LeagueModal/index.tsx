@@ -11,19 +11,18 @@ import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { LeagueCompetition } from "../../../../helpers/interfaces";
 import { getStickerImage } from "../../../../helpers/packs";
 
 interface LeagueModalProps {
     closeModal: () => void;
-    leagueTypes: LeagueCompetition[];
-    chosenLeagueType: LeagueCompetition;
-    setChosenLeagueType: (chosenLeagueTypes: LeagueCompetition) => void;
+    leagueTypes: string[];
+    chosenLeagueType: string;
+    setChosenLeagueType: (chosenLeagueTypes: string) => void;
 }
 
 export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChosenLeagueType }: LeagueModalProps) => {
     const sliderRef = useRef(null);
-    const [leagueSlide, setLeagueSlide] = useState<number>(leagueTypes.findIndex(item => item.leagueType === chosenLeagueType.leagueType));
+    const [leagueSlide, setLeagueSlide] = useState<number>(leagueTypes.findIndex(item => item === chosenLeagueType));
     const settings = {
         centerMode: true,
         centerPadding: "20%",
@@ -87,7 +86,7 @@ export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChos
                                         >
                                             <img
                                                 className="w-full"
-                                                src={getStickerImage(league.leagueType)}
+                                                src={getStickerImage(league)}
                                             />
                                         </div>
                                     );

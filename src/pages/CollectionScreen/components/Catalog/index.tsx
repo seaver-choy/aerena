@@ -12,7 +12,7 @@ import {
     getAthletePositionBackground,
     getBaseTeamColor,
 } from "../../../../helpers/athletes";
-import { Athlete, LeagueCompetition, TeamColor } from "../../../../helpers/interfaces";
+import { Athlete, TeamColor } from "../../../../helpers/interfaces";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
@@ -33,9 +33,9 @@ export const Catalog = () => {
     const [allAthletes, setAllAthletes] = useState<Athlete[]>([]);
     const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>(null);
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
-    const [leagueTypes, setLeagueTypes] = useState<LeagueCompetition[]>(null);
+    const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
     const [chosenLeagueType, setChosenLeagueType] =
-        useState<LeagueCompetition>(null);
+        useState<string>(null);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
 
     const handlePreviousCategory = () => {
@@ -94,7 +94,7 @@ export const Catalog = () => {
     useEffect(() => {
         if(allAthletes !== null && chosenLeagueType != null) {
             const tempAthletes = allAthletes.filter((obj) =>
-                obj.league.includes(chosenLeagueType.leagueType)
+                obj.league.includes(chosenLeagueType)
             );
             setLeagueAthletes(tempAthletes);
         }
@@ -104,10 +104,12 @@ export const Catalog = () => {
     const getAllAthletes = async () => {
         const allAthletes = await getAthletes(user.initDataRaw);
         const allLeagueTypes = await getLeagues(user.initDataRaw); //TODO: currently uses packinfos, will have to update to whatever collection lists the leagues
+        console.log(allLeagueTypes);
         const initialLeagueType = allLeagueTypes[0];
         setChosenLeagueType(initialLeagueType);
+        console.log(initialLeagueType)
         const tempAthletes = allAthletes.filter((obj) =>
-            obj.league.includes(initialLeagueType.leagueType)
+            obj.league.includes(initialLeagueType)
         );
         setAllAthletes(allAthletes);
         setLeagueTypes(allLeagueTypes);
