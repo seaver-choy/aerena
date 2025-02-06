@@ -13,12 +13,16 @@ interface ConfirmModalProps {
     onCancel: () => void;
     onConfirm: () => void;
     loading: boolean;
+    tournamentType?: string;
+    joinCost?: number;
 }
 
 export const ConfirmModal = ({
     onCancel,
     onConfirm,
     loading,
+    tournamentType = null,
+    joinCost = 0,
 }: ConfirmModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -43,7 +47,7 @@ export const ConfirmModal = ({
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
                                 You will join this tournament using your
-                                selected lineup. Do you want to continue?
+                                selected lineup. {tournamentType === "free" ? <p>{"Entry to the tournament costs " + joinCost + " Battle Points."}</p> : <p>{"Entry to the tournament costs " + joinCost + " Telegram Stars."}</p>} Do you want to continue?
                             </p>
                         </motion.div>
                     </div>

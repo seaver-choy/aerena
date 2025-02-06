@@ -336,6 +336,8 @@ export const LineupSection = ({
                             handleEnterTournament();
                         }}
                         loading={isLoading}
+                        tournamentType={ongoingTournament.type}
+                        joinCost={ongoingTournament.joinCost}
                     />
                 )}
                 {isLoading && <LoadingModal />}
