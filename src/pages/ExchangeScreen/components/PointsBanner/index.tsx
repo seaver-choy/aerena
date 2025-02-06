@@ -8,8 +8,10 @@ import {
 import PointsBannerBackground from "../../../../assets/background/points-banner.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import InventoryIcon from "../../../../assets/icon/inventory.svg";
+import { useUsers } from "../../../../hooks/useUser";
 
 export const PointsBanner = () => {
+    const user = useUsers();
     const count = useMotionValue(0);
     const amount = useTransform(count, (latest) => {
         const roundedValue = Math.round(latest);
@@ -17,9 +19,11 @@ export const PointsBanner = () => {
     });
 
     useEffect(() => {
-        const controls = animate(count, 1000000, { duration: 2 });
-        return () => controls.stop();
-    }, []);
+        if(user.id != 0) {
+            const controls = animate(count, user.points, { duration: 2 });
+            return () => controls.stop();
+        }
+    }, [user]);
 
     return (
         <div className="mt-[4vw] h-[19.8vw]">
