@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUsers } from "../../hooks/useUser";
 import { createUser, checkUsernameExists } from "../../helpers/lambda.helper";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
@@ -157,6 +157,14 @@ const UsernameModal: React.FC = () => {
             }
         }
     };
+        
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
 
     return (
         <div className="fixed inset-0 z-40">
