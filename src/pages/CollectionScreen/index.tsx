@@ -6,7 +6,7 @@ import { Collection } from "./components/Collection";
 import { Catalog } from "./components/Catalog";
 
 export const CollectionScreen = () => {
-    const [collectionTab, setCollectionTab] = useState("Collection");
+    const [collectionTab, setCollectionTab] = useState("Catalog");
 
     return (
         <Layout>
