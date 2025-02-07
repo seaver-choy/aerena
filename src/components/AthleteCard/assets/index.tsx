@@ -246,12 +246,12 @@ export const Glow = () => {
 };
 
 export const IGN = ({ color, ign }) => {
-    const numSpaceCheck = ign.match(/ /g);
+    const numSpaceCheck = ign.match(/ /g)?.length;
     const splitCheck = ign.includes("-") || ign.includes(" ") ? true : false;
 
     const longName = ign.length > 8 ? true : false;
     let split = "";
-    if (splitCheck && numSpaceCheck < 2) {
+    if (splitCheck && numSpaceCheck !== undefined && numSpaceCheck < 2) {
         split = ign.split(/[ ,-]+/);
         console.log(split[0]);
     }
@@ -263,7 +263,7 @@ export const IGN = ({ color, ign }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            {splitCheck && numSpaceCheck < 2 ? (
+            {splitCheck && numSpaceCheck !== undefined && numSpaceCheck < 2 ? (
                 <text
                     xmlSpace="preserve"
                     fill={color.details}
