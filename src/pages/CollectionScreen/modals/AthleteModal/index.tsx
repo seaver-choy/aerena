@@ -10,6 +10,7 @@ import { Slider } from "../../../../components/Slider";
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
+import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface AthleteModalProps {
@@ -118,14 +119,29 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                             </div>
                         </motion.div>
                     </div>
-                    <div className="mb-[2vw] h-[6vw] bg-green-200"></div>
-                    <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
-                        <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                            Basic Skin
-                        </p>
+                    <div className="mb-[1vw] flex h-[6vw] justify-center">
+                        <motion.button
+                            className="relative flex h-[6vw] items-center justify-center"
+                            {...appearTextAnimation}
+                        >
+                            <div className="absolute flex">
+                                <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
+                                    View Player Profile
+                                </p>
+                            </div>
+                            <img
+                                className="h-[100%]"
+                                src={FunctionModalButton}
+                            ></img>
+                        </motion.button>
+                    </div>
+                    <div className="mb-[5vw] flex h-[55vw] flex-col items-center">
                         <motion.div {...appearAnimation}>
                             <Slider />
                         </motion.div>
+                        <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
+                            Basic Skin
+                        </p>
                     </div>
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
