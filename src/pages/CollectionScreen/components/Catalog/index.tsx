@@ -152,6 +152,7 @@ export const Catalog = () => {
                             className="relative flex h-[7vw] items-center justify-center"
                             onClick={displayLeagueModal}
                             {...appearTextAnimation}
+                            disabled={leagueTypes === null || currentAthletes === null}
                         >
                             <div className="absolute flex">
                                 <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
