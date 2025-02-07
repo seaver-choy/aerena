@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 import {
     appearAnimation,
@@ -18,8 +19,13 @@ interface AthleteModalProps {
 }
 
 export const AthleteModal = ({ onClose }: AthleteModalProps) => {
+    const navigate = useNavigate();
     const count = useMotionValue(0);
     const stats = useTransform(() => count.get().toFixed(2));
+
+    const handleViewPlayerProfile = () => {
+        navigate(`/athlete`);
+    };
 
     useEffect(() => {
         const controls = animate(count, 10, { duration: 2 });
@@ -46,12 +52,12 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                 <div className="absolute z-50 flex h-[99vw] w-[66vw] flex-col justify-center">
                     <div className="relative flex h-[11vw] flex-col items-center">
                         <motion.div {...appearTextAnimation}>
-                            <p className="font-montserrat text-[3vw] font-extrabold text-graydark opacity-40">
+                            <p className="font-montserrat text-[3vw] font-extrabold text-golddark">
                                 ONIC PH
                             </p>
                         </motion.div>
                         <motion.div
-                            className="-mt-[1vw]"
+                            className="-mt-[1.5vw]"
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[5vw] text-transparent">
@@ -122,6 +128,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                     <div className="mb-[1vw] flex h-[6vw] justify-center">
                         <motion.button
                             className="relative flex h-[6vw] items-center justify-center"
+                            onClick={handleViewPlayerProfile}
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex">
