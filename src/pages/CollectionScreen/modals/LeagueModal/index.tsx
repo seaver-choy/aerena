@@ -14,15 +14,23 @@ import GoldButton from "../../../../assets/button/gold.svg";
 import { getStickerImage } from "../../../../helpers/packs";
 
 interface LeagueModalProps {
-    closeModal: () => void;
+    onClose: () => void;
     leagueTypes: string[];
     chosenLeagueType: string;
     setChosenLeagueType: (chosenLeagueTypes: string) => void;
 }
 
-export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChosenLeagueType }: LeagueModalProps) => {
+export const LeagueModal = ({
+    onClose,
+    leagueTypes,
+    chosenLeagueType,
+    setChosenLeagueType,
+}: LeagueModalProps) => {
     const sliderRef = useRef(null);
-    const [leagueSlide, setLeagueSlide] = useState<number>(leagueTypes.findIndex(item => item === chosenLeagueType));
+    const [leagueSlide, setLeagueSlide] = useState<number>(
+        leagueTypes.findIndex((item) => item === chosenLeagueType)
+    );
+
     const settings = {
         centerMode: true,
         centerPadding: "20%",
@@ -31,14 +39,16 @@ export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChos
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        arrows: false,afterChange: (index: number) => {
+        arrows: false,
+        afterChange: (index: number) => {
             setLeagueSlide(index);
         },
         initialSlide: leagueSlide,
     };
+
     const handleSelect = () => {
-        setChosenLeagueType(leagueTypes[leagueSlide])
-        closeModal();
+        setChosenLeagueType(leagueTypes[leagueSlide]);
+        onClose();
     };
 
     useEffect(() => {
@@ -77,10 +87,9 @@ export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChos
                                 className="w-full"
                                 {...settings}
                             >
-                            {
-                                leagueTypes.map((league, index) => {
+                                {leagueTypes.map((league, index) => {
                                     return (
-                                        <div 
+                                        <div
                                             key={index}
                                             className="mt-[7vw] h-full px-[2vw]"
                                         >
@@ -90,8 +99,7 @@ export const LeagueModal = ({ closeModal, leagueTypes, chosenLeagueType, setChos
                                             />
                                         </div>
                                     );
-                                })
-                            }
+                                })}
                             </Slider>
                         </motion.div>
                     </div>

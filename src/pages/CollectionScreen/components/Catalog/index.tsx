@@ -21,6 +21,7 @@ import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 import { getAthletes, getLeagues } from "../../../../helpers/lambda.helper";
 import { LeagueModal } from "../../modals/LeagueModal";
+import { AthleteModal } from "../../modals/AthleteModal";
 import { AthleteCard } from "../../../../components/AthleteCard";
 
 export const Catalog = () => {
@@ -34,9 +35,9 @@ export const Catalog = () => {
     const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>(null);
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
-    const [chosenLeagueType, setChosenLeagueType] =
-        useState<string>(null);
+    const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
+    const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
 
     const handlePreviousCategory = () => {
         if (positionIndex > 0) {
@@ -56,6 +57,14 @@ export const Catalog = () => {
 
     const closeLeagueModal = () => {
         setShowLeagueModal(false);
+    };
+
+    const displayAthleteModal = () => {
+        setShowAthleteModal(true);
+    };
+
+    const closeAthleteModal = () => {
+        setShowAthleteModal(false);
     };
 
     function compileAthletes(position: string) {
@@ -80,7 +89,7 @@ export const Catalog = () => {
     }
 
     useEffect(() => {
-        if(allAthletes !== null && leagueAthletes != null) {
+        if (allAthletes !== null && leagueAthletes != null) {
             compileAthletes(positionList[positionIndex]);
             setShowAthlete(false);
 
@@ -92,7 +101,7 @@ export const Catalog = () => {
     }, [positionIndex, leagueAthletes]);
 
     useEffect(() => {
-        if(allAthletes !== null && chosenLeagueType != null) {
+        if (allAthletes !== null && chosenLeagueType != null) {
             const tempAthletes = allAthletes.filter((obj) =>
                 obj.league.includes(chosenLeagueType)
             );
@@ -100,14 +109,13 @@ export const Catalog = () => {
         }
     }, [chosenLeagueType]);
 
-
     const getAllAthletes = async () => {
         const allAthletes = await getAthletes(user.initDataRaw);
         const allLeagueTypes = await getLeagues(user.initDataRaw); //TODO: currently uses packinfos, will have to update to whatever collection lists the leagues
         console.log(allLeagueTypes);
         const initialLeagueType = allLeagueTypes[0];
         setChosenLeagueType(initialLeagueType);
-        console.log(initialLeagueType)
+        console.log(initialLeagueType);
         const tempAthletes = allAthletes.filter((obj) =>
             obj.league.includes(initialLeagueType)
         );
@@ -115,17 +123,16 @@ export const Catalog = () => {
         setLeagueTypes(allLeagueTypes);
         setLeagueAthletes(tempAthletes);
     };
-    
+
     useEffect(() => {
         getAllAthletes();
     }, []);
 
     return (
         <div className="mt-[10vw] h-[193vw]">
-            
             {showLeagueModal && (
                 <LeagueModal
-                    closeModal={closeLeagueModal}
+                    onClose={closeLeagueModal}
                     leagueTypes={leagueTypes}
                     chosenLeagueType={chosenLeagueType}
                     setChosenLeagueType={setChosenLeagueType}
@@ -200,46 +207,47 @@ export const Catalog = () => {
                 </div>
                 <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
                     <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                        { currentAthletes != null && currentAthletes?.length > 0 ? (
-                            currentAthletes?.map((athlete, index) =>
-                                showAthlete ? (
-                                    <motion.button
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        key={index}
-                                        {...appearCardAnimation}
-                                    >
-                                        <AthleteCard
-                                            color={baseColor}
-                                            ign={
-                                                athlete.displayName
-                                            }
-                                            role={
-                                                athlete.position[0]
-                                            }
-                                            opacity={{
-                                                wave: baseColor.wave,
-                                            }}
-                                        />
-                                    </motion.button>
-                                ) : (
-                                    <motion.div
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        {...pulseAnimation}
-                                    >
-                                        <img
-                                            className="h-full w-full"
-                                            src={AthleteSonner}
-                                        />
-                                    </motion.div>
-                                )
-                            )
-                        ) : currentAthletes != null && (
-                            <div className="mt-[2vw] px-[5vw]">
-                                <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
-                                    There are currently no athletes for{" "}
-                                    {positionList[positionIndex]}. Please check again later.
-                                </p>
-                            </div>
+                        {currentAthletes != null && currentAthletes?.length > 0
+                            ? currentAthletes?.map((athlete, index) =>
+                                  showAthlete ? (
+                                      <motion.button
+                                          className="relative flex h-[36.4vw] w-[28vw]"
+                                          key={index}
+                                          onClick={displayAthleteModal}
+                                          {...appearCardAnimation}
+                                      >
+                                          <AthleteCard
+                                              color={baseColor}
+                                              ign={athlete.displayName}
+                                              role={athlete.position[0]}
+                                              opacity={{
+                                                  wave: baseColor.wave,
+                                              }}
+                                          />
+                                      </motion.button>
+                                  ) : (
+                                      <motion.div
+                                          className="relative flex h-[36.4vw] w-[28vw]"
+                                          {...pulseAnimation}
+                                      >
+                                          <img
+                                              className="h-full w-full"
+                                              src={AthleteSonner}
+                                          />
+                                      </motion.div>
+                                  )
+                              )
+                            : currentAthletes != null && (
+                                  <div className="mt-[2vw] px-[5vw]">
+                                      <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
+                                          There are currently no athletes for{" "}
+                                          {positionList[positionIndex]}. Please
+                                          check again later.
+                                      </p>
+                                  </div>
+                              )}
+                        {showAthleteModal && (
+                            <AthleteModal onClose={closeAthleteModal} />
                         )}
                     </div>
                 </div>
