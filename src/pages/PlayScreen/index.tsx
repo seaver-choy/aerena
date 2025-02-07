@@ -37,45 +37,47 @@ export const PlayScreen = () => {
 
     return (
         <>
-            {user.id != 0 && user.username == "" && (
-                <div style={{ position: "relative", zIndex: 51 }}>
-                    <UsernameModal />
-                </div>
-            )}
-            {user.id != 0 && user.username != "" && (
-                <Layout>
-                    <Tabs
-                        options={tournamentOptions}
-                        onToggle={(selected) => {
-                            console.log("Selected Option:", selected);
-                            setPlayTab(selected);
-                        }}
-                        selectedTab={playTab}
-                    />
-                    <div>
-                        <TournamentBanner
-                            ongoingTournament={ongoingTournament}
-                            setOngoingTournament={setOngoingTournament}
-                            showTournament={showTournament}
-                            setShowTournament={setShowTournament}
-                            playTab={playTab}
-                        />
-                        <TournamentSection playTab={playTab} showTournament={showTournament}/>
-                        <LineupSection
-                            ongoingTournament={ongoingTournament}
-                            updateLineup={handleUpdatePersonalLineup}
-                            showTournament={showTournament}
-                        />
-                        <Title title="My Lineups" showTitle={showTournament}/>
-                        <PersonalLineup
-                            key={keyRemount}
-                            ongoingTournament={ongoingTournament}
-                            showTournament={showTournament}
-                            playTab={playTab}
-                        />
+            <Layout>
+                {user.id != 0 && user.username == "" && (
+                    <div style={{ position: "relative", zIndex: 51 }}>
+                        <UsernameModal />
                     </div>
-                </Layout>
-            )}
+                )}
+                {user.id != 0 && user.username != "" && (
+                    <div>
+                        <Tabs
+                            options={tournamentOptions}
+                            onToggle={(selected) => {
+                                console.log("Selected Option:", selected);
+                                setPlayTab(selected);
+                            }}
+                            selectedTab={playTab}
+                        />
+                        <div>
+                            <TournamentBanner
+                                ongoingTournament={ongoingTournament}
+                                setOngoingTournament={setOngoingTournament}
+                                showTournament={showTournament}
+                                setShowTournament={setShowTournament}
+                                playTab={playTab}
+                            />
+                            <TournamentSection playTab={playTab} showTournament={showTournament}/>
+                            <LineupSection
+                                ongoingTournament={ongoingTournament}
+                                updateLineup={handleUpdatePersonalLineup}
+                                showTournament={showTournament}
+                            />
+                            <Title title="My Lineups" showTitle={showTournament}/>
+                            <PersonalLineup
+                                key={keyRemount}
+                                ongoingTournament={ongoingTournament}
+                                showTournament={showTournament}
+                                playTab={playTab}
+                            />
+                        </div>
+                    </div>
+                )}
+            </Layout>
         </>
     );
 };
