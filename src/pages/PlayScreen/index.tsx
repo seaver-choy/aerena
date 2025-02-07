@@ -39,9 +39,7 @@ export const PlayScreen = () => {
         <>
             <Layout>
                 {user.id != 0 && user.username == "" && (
-                    <div style={{ position: "relative", zIndex: 51 }}>
-                        <UsernameModal />
-                    </div>
+                    <UsernameModal />
                 )}
                 {user.id != 0 && user.username != "" && (
                     <div>
