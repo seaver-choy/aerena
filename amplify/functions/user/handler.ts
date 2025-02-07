@@ -2,7 +2,6 @@ import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import {
     userSchema,
-    levelStatsSchema,
     questSchema,
     battlePassSchema,
     packInfoSchema,
@@ -29,7 +28,6 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             })
             .asPromise();
         conn.model("User", userSchema);
-        conn.model("LevelStats", levelStatsSchema);
         conn.model("Quest", questSchema);
         conn.model("Battlepass", battlePassSchema);
         conn.model("PackInfo", packInfoSchema);
@@ -54,31 +52,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 };
             }
         }
-    } else if (event.path.includes("tasks")) {
-        switch (event.httpMethod) {
-            case "GET":
-                return getTasks();
-            default: {
-                return {
-                    statusCode: 405,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify({
-                        message: "Unsupported HTTP method or path",
-                    }),
-                };
-            }
-        }
-    } else if (event.path.includes("levelup")) {
-        return levelUp(event);
-    } else if (event.path.includes("refill")) {
-        return refillMana(event);
     } else if (event.path.includes("checkUsername")) {
         return checkUserNameExists(event);
-    } else if (event.path.includes("claimTask")) {
-        return claimTask(event);
     } else if (event.path.includes("joinTgChannel")) {
         return joinTgChannel(event);
     } else if (event.path.includes("login")) {
@@ -95,8 +70,6 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 return getUser(event);
             case "POST":
                 return createUser(event);
-            case "PUT":
-                return updateUser(event);
             default:
                 return {
                     statusCode: 405,
@@ -116,7 +89,7 @@ async function getUser(event: APIGatewayProxyEvent) {
     const userModel = conn!.model("User");
     try {
         const userID = event.queryStringParameters?.user_id;
-        let userResult = await userModel.findOne({ userID });
+        const userResult = await userModel.findOne({ userID });
         if (!userResult) {
             return {
                 statusCode: 404,
@@ -129,48 +102,6 @@ async function getUser(event: APIGatewayProxyEvent) {
                 }),
             };
         }
-
-        //to update taskStatus before returning data
-        const levelModel = conn!.model("LevelStats");
-
-        const levelModelResult = await levelModel
-            .find(
-                {},
-                {
-                    level: 1,
-                    tasks: 1,
-                }
-            )
-            .sort({ level: 1 });
-
-        const taskStatus = userResult.taskStatus;
-
-        for (let i = 0; i < taskStatus.length; i++) {
-            const tasks = taskStatus[i].tasks;
-            for (let j = 0; j < tasks.length; j++) {
-                const task = tasks[j];
-                if (!task.isDone) {
-                    if (
-                        userResult[task.taskName] >=
-                        levelModelResult[i].tasks[j].value
-                    )
-                        task.isClaimable = true;
-                    else task.isClaimable = false;
-                }
-            }
-        }
-
-        userResult = await userModel.findOneAndUpdate(
-            { userID },
-            [
-                {
-                    $set: {
-                        taskStatus: taskStatus,
-                    },
-                },
-            ],
-            { new: true }
-        );
 
         return {
             statusCode: 200,
@@ -195,105 +126,15 @@ async function getUser(event: APIGatewayProxyEvent) {
     }
 }
 
-async function updateUser(event: APIGatewayProxyEvent) {
-    const userModel = conn!.model("User");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    try {
-        const userID = payload.userID;
-        const tapCounter = parseInt(payload.tapCounter);
-        if (userID === "0") throw new Error("Invalid user ID");
-        const updateResult = await userModel.findOneAndUpdate(
-            { userID },
-            [
-                {
-                    $set: {
-                        points: {
-                            $cond: [
-                                {
-                                    $and: [
-                                        { $gt: ["$currentMana", 0] },
-                                        { $gte: ["$currentMana", tapCounter] },
-                                    ],
-                                },
-                                {
-                                    $add: [
-                                        "$points",
-                                        {
-                                            $multiply: [
-                                                tapCounter,
-                                                "$pointMultiplier",
-                                            ],
-                                        },
-                                    ],
-                                },
-                                "$points",
-                            ],
-                        },
-                        currentMana: {
-                            $cond: [
-                                {
-                                    $and: [
-                                        { $gt: ["$currentMana", 0] },
-                                        { $gte: ["$currentMana", tapCounter] },
-                                    ],
-                                },
-                                {
-                                    $subtract: ["$currentMana", tapCounter],
-                                },
-                                "$currentMana",
-                            ],
-                        },
-                        pointsUpdatedAt: new Date(),
-                    },
-                },
-            ],
-            { new: true }
-        );
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify(updateResult),
-        };
-    } catch (e) {
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                message: "Failed to update points: " + e,
-            }),
-        };
-    }
-}
-
 async function createUser(event: APIGatewayProxyEvent) {
     try {
         const userModel = conn!.model("User");
-        const levelStatsModel = conn!.model("LevelStats");
 
         const payload = JSON.parse(JSON.parse(event.body!));
         const checkUser = await userModel.findOne({
             userID: payload.userID,
         });
         if (!checkUser) {
-            const allLevelStats = await levelStatsModel
-                .find()
-                .sort({ level: 1 })
-                .limit(9); // Get all level stats up to level 9 only
-            const taskStatus = allLevelStats.map((stat) => ({
-                level: stat.level,
-                tasks: stat.tasks.map((task: { taskName: string }) => ({
-                    taskName: task.taskName,
-                    isClaimable: false,
-                    isDone: false,
-                })),
-            }));
-
             //for getting packInfo for inventory
             const packInfoModel = conn!.model("PackInfo");
             const packinfoResult = await packInfoModel.aggregate([
@@ -348,19 +189,9 @@ async function createUser(event: APIGatewayProxyEvent) {
                         : { stock: 0 }),
                 });
             });
-
-            //for bp initialization
-            // const bpModel = conn!.model("Battlepass");
-            // const bpResult = await bpModel.findOne({ season: 1 });
-            // const bpLevels = bpResult.levels;
-
             const userData = {
                 username: payload.username,
                 userID: payload.userID,
-                level: allLevelStats[0].level,
-                pointMultiplier: allLevelStats[0].pointMultiplier,
-                maxMana: allLevelStats[0].maxMana,
-                currentMana: allLevelStats[0].maxMana,
                 tokens: [],
                 friends: [],
                 quests: [
@@ -377,9 +208,7 @@ async function createUser(event: APIGatewayProxyEvent) {
                         isClaimed: false,
                     },
                 ],
-                taskStatus: taskStatus,
                 inventory: inventory,
-                // battlepass: bpLevels,
                 seasonalLogins: 1,
                 points: 20000, //TODO: temporary hardcoded to give 20k BP to new users for Aerena free tournament
             };
@@ -493,51 +322,6 @@ async function createUser(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Failed to create new user: " + e,
-            }),
-        };
-    }
-}
-
-async function getTasks() {
-    const levelModel = conn!.model("LevelStats");
-    try {
-        const result = await levelModel
-            .find(
-                {},
-                {
-                    level: 1,
-                    tasks: 1,
-                }
-            )
-            .sort({ level: 1 });
-
-        if (!result) {
-            return {
-                statusCode: 500,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({ message: "No tasks found" }),
-            };
-        }
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify(result),
-        };
-    } catch (e) {
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                message: `Failed to get tasks list: ${e}`,
             }),
         };
     }
@@ -700,189 +484,6 @@ async function updateQuestClaim(event: APIGatewayProxyEvent) {
     }
 }
 
-async function levelUp(event: APIGatewayProxyEvent) {
-    console.log("inside levelup");
-    const userModel = conn!.model("User");
-    const levelStatsModel = conn!.model("LevelStats");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    const userID = payload.userID;
-    const level = payload.level;
-
-    const user = await userModel.findOne({ userID });
-
-    if (!user) {
-        return {
-            statusCode: 404,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify({ message: "User not found " }),
-        };
-    }
-    if (user.level !== level) {
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify({
-                message: "User level and task level are not equal",
-            }),
-        };
-    }
-    //checking of task requirements
-    const levelUpStats = await levelStatsModel.findOne({
-        level: level,
-    });
-    let levelingUp = false;
-    for (const task of levelUpStats.tasks) {
-        if (user[task.taskName] >= task.value) {
-            levelingUp = true;
-        } else {
-            levelingUp = false;
-            break;
-        }
-    }
-    if (levelingUp) {
-        try {
-            const nextLevel = await levelStatsModel.findOne({
-                level: user.level + 1,
-            });
-            const result = await userModel.findOneAndUpdate(
-                {
-                    userID,
-                },
-                [
-                    {
-                        $set: {
-                            level: nextLevel.level,
-                            pointMultiplier: nextLevel.pointMultiplier,
-                            maxMana: nextLevel.maxMana,
-                            currentMana: {
-                                $add: [
-                                    "$currentMana",
-                                    parseInt(nextLevel.maxMana) -
-                                        parseInt(user.maxMana),
-                                ],
-                            },
-                        },
-                    },
-                ],
-                {
-                    new: true,
-                }
-            );
-            console.info(
-                `[LEVELUP] User ${userID} has leveled up to level ${nextLevel.level}`
-            );
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Credentials": true,
-                },
-                body: JSON.stringify(result),
-            };
-        } catch (e) {
-            return {
-                statusCode: 500,
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Credentials": true,
-                },
-                body: JSON.stringify({
-                    message: `Error occured during level up of ${userID}`,
-                    error: e,
-                }),
-            };
-        }
-    } else {
-        console.error(
-            `[ERROR][LEVELUP] User ${userID} does not meet the requirements to level up to level ${level + 1}`
-        );
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify({
-                message: `${userID} does not meet the requirements to level up`,
-            }),
-        };
-    }
-}
-
-async function refillMana(event: APIGatewayProxyEvent) {
-    const userModel = conn!.model("User");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    const userID = payload.userID;
-    try {
-        if (userID === "0") throw new Error("Invalid user ID");
-        const userResult = await userModel.findOne({ userID });
-
-        if (userResult.dailyRefill && userResult.paidManaClaim) {
-            const updateResult = await userModel.findOneAndUpdate(
-                { userID },
-                [
-                    {
-                        $set: {
-                            currentMana: {
-                                $add: ["$currentMana", "$maxMana"],
-                            },
-                            dailyRefill: false,
-                            paidManaClaim: false,
-                            totalManaRefills: {
-                                $add: ["$totalManaRefills", 1],
-                            },
-                        },
-                    },
-                ],
-                { new: true }
-            );
-
-            console.info(`[REFILLMANA] User ${userID} has refilled mana`);
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({ userUpdate: updateResult }),
-            };
-        } //might have to change
-        else {
-            console.info(
-                `[REFILLMANA] User ${userID} has already refilled mana`
-            );
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({ userUpdate: userResult }),
-            };
-        }
-    } catch (e) {
-        console.error(
-            `[ERROR][REFILLMANA] User ${userID} could not refill mana`
-        );
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                message: "Failed to refill mana: " + e,
-            }),
-        };
-    }
-}
-
 async function checkUserNameExists(event: APIGatewayProxyEvent) {
     const userModel = conn!.model("User");
     try {
@@ -924,70 +525,6 @@ async function checkUserNameExists(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Failed to check username: " + error,
-            }),
-        };
-    }
-}
-
-async function claimTask(event: APIGatewayProxyEvent) {
-    const userModel = conn!.model("User");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    try {
-        const userID = payload.userID;
-        const level = payload.level;
-        const taskName = payload.taskName;
-        if (userID === "0") throw new Error("Invalid user ID");
-
-        // Retrieve the user document
-        const user = await userModel.findOne({ userID });
-
-        if (!user) {
-            return {
-                statusCode: 404,
-                body: JSON.stringify({ message: "User not found" }),
-            };
-        }
-
-        const levelIndex = user.taskStatus.findIndex(
-            (status: { level: number }) => status.level === level
-        );
-        const taskIndex = user.taskStatus[levelIndex].tasks.findIndex(
-            (task: { taskName: string }) => task.taskName === taskName
-        );
-
-        const updateResult = await userModel.findOneAndUpdate(
-            { userID },
-            {
-                $set: {
-                    [`taskStatus.${levelIndex}.tasks.${taskIndex}.isClaimable`]:
-                        true,
-                    [`taskStatus.${levelIndex}.tasks.${taskIndex}.isDone`]:
-                        true,
-                },
-            },
-            { new: true }
-        );
-        console.info(`[CLAIMTASK] User ${userID} has claimed task ${taskName}`);
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify(updateResult),
-        };
-    } catch (e) {
-        console.error(
-            `[ERROR][CLAIMTASK] User ${payload.userID} failed to claim task: ${e}`
-        );
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                message: "Failed to update points: " + e,
             }),
         };
     }
@@ -1290,7 +827,6 @@ async function claimBattlepassReward(event: APIGatewayProxyEvent) {
                         }),
                     };
                 } else {
-                    //TODO: add pack to user inventory instead of adding to paidBoosterClaimCounter
                     const updateResult = await userModel.findOneAndUpdate(
                         { userID },
                         {
@@ -1510,22 +1046,12 @@ async function subtractBP(event: APIGatewayProxyEvent) {
             [
                 {
                     $set: {
-                        points: {
-                            $cond: [
-                                {
-                                    $and: [
-                                        { $gt: ["$currentMana", 0] },
-                                        { $gte: ["$currentMana", bpCost] },
-                                    ],
-                                },
+                        points:
                                 {
                                     $subtract: [
                                         "$points", bpCost
                                     ],
                                 },
-                                "$points",
-                            ],
-                        },
                         pointsUpdatedAt: new Date(),
                     },
                 },

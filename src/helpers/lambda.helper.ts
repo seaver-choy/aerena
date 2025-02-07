@@ -209,34 +209,6 @@ export const getPortfolioApi = async (userId, position) => {
     }
 };
 
-export const updateUserPacks = async (userId, packType) => {
-    try {
-        const { initDataRaw } = retrieveLaunchParams();
-
-        const queryParams = {
-            userId: userId,
-            packType: packType,
-            initData: encodeURIComponent(initDataRaw),
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "packs",
-            options: {
-                queryParams: queryParams,
-            },
-        });
-
-        const { body } = await restOperation.response;
-
-        const response = await body.json();
-        console.log(`Successful update on user packs`);
-        console.log(response);
-    } catch (e) {
-        console.log(`Update user packs failed ${e}`);
-    }
-};
-
 export const getFriends = async (userId, initDataRaw) => {
     try {
         const queryParams = {
@@ -263,34 +235,6 @@ export const getFriends = async (userId, initDataRaw) => {
         return {};
     }
 };
-
-// export const updateReferrals = async (username, referral) => {
-//     try {
-//         const { initDataRaw } = retrieveLaunchParams();
-
-//         const queryParams = {
-//             username: username,
-//             initData: encodeURIComponent(initDataRaw),
-//         };
-
-//         const restOperation = put({
-//             apiName: "playibleApi",
-//             path: "referrals",
-//             options: {
-//                 queryParams: queryParams,
-//                 body: JSON.stringify(referral),
-//             },
-//         });
-
-//         const { body } = await restOperation.response;
-
-//         const response = await body.json();
-//         console.log(`Success update of referrals for ${username}`);
-//         console.log(response);
-//     } catch (e) {
-//         console.log(`Update referral failed for ${username}`);
-//     }
-// };
 
 export const createUser = async (
     userId,
@@ -326,59 +270,6 @@ export const createUser = async (
     }
 };
 
-export const levelUp = async (level, userId, initDataRaw) => {
-    try {
-        const payload = {
-            userID: userId,
-            level: level,
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "user/levelup",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(payload),
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        console.log(response);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
-export const refillMana = async (userId, initDataRaw) => {
-    try {
-        const payload = {
-            userID: userId,
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "user/refill",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(payload),
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        console.log(response);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
 export const claimQuest = async (userId, questId, initDataRaw) => {
     try {
         const payload = {
@@ -403,29 +294,6 @@ export const claimQuest = async (userId, questId, initDataRaw) => {
         return response;
     } catch (e) {
         console.log(e);
-    }
-};
-
-export const getTasks = async (initDataRaw) => {
-    try {
-        const restOperation = get({
-            apiName: "playibleApi",
-            path: "user/tasks",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-            },
-        });
-
-        const { body } = await restOperation.response;
-
-        const response = await body.text();
-        //console.log(JSON.parse(response.toLocaleString()));
-        console.log(`Successful GET of tasks`);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(`Encountered error during GET of tasks ${e}`);
     }
 };
 
@@ -476,34 +344,6 @@ export const checkUsernameExists = async (username, initDataRaw) => {
     }
 };
 
-export const claimTask = async (userId, level, taskName, initDataRaw) => {
-    try {
-        const payload = {
-            userID: userId,
-            level: level,
-            taskName,
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "user/claimTask",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(payload),
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        console.log(response);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
 export const joinTgChannel = async (userId, initDataRaw) => {
     try {
         const payload = {
@@ -524,29 +364,6 @@ export const joinTgChannel = async (userId, initDataRaw) => {
         const { body } = await restOperation.response;
         const response = await body.text();
         console.log(response);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-export const getCashPackInfo = async () => {
-    try {
-        const { initDataRaw } = retrieveLaunchParams();
-
-        const queryParams = {
-            initData: encodeURIComponent(initDataRaw),
-        };
-
-        const restOperation = get({
-            apiName: "playibleApi",
-            path: "counters",
-            options: {
-                queryParams: queryParams,
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
@@ -607,30 +424,6 @@ export const claimReward = async (userID, bpLevel, isPremium, initDataRaw) => {
         console.log(e);
     }
 };
-
-// export const getAthleteAllStats = async (playerName, league) => {
-//     try {
-//         const { initDataRaw } = retrieveLaunchParams();
-//         const queryParams = {
-//             initData: encodeURIComponent(initDataRaw),
-//         };
-
-//         const restOperation = get({
-//             apiName: "playibleApi",
-//             path: `stats/${encodeURIComponent(playerName)}/${league}/all`,
-//             options: {
-//                 queryParams: queryParams,
-//             },
-//         });
-
-//         const { body } = await restOperation.response;
-//         const response = await body.text();
-//         console.log(response);
-//         return JSON.parse(response);
-//     } catch (e) {
-//         console.log(e);
-//     }
-// };
 
 export const getAthleteStats = async (
     playerName,
@@ -788,50 +581,6 @@ export const upgradeAthlete = async (
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
-    }
-};
-
-export const getLeaderboard = async (initDataRaw) => {
-    try {
-        const restOperation = get({
-            apiName: "playibleApi",
-            path: "leaderboard",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        console.log(`GET request success for leaderboard`);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(`GET leaderboard failed`);
-        return {};
-    }
-};
-
-export const getCurrentLeaderboardInfo = async (initDataRaw) => {
-    try {
-        const restOperation = get({
-            apiName: "playibleApi",
-            path: "leaderboard/lbinfo",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        console.log(`GET request success for leaderboard info`);
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(`GET leaderboard info failed`);
-        return {};
     }
 };
 

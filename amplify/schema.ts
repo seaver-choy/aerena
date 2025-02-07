@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import { Schema } from "mongoose";
+
 export const tokenSchema = new mongoose.Schema({
     tokenId: String,
     player: String,
@@ -17,21 +18,6 @@ export const userSchema = new mongoose.Schema(
         username: String,
         userID: Number,
         points: { type: Number, default: 0 },
-        level: { type: Number, default: 1 },
-        pointMultiplier: Number,
-        maxMana: Number,
-        currentMana: Number,
-        // tokens: [
-        //     {
-        //         tokenId: String,
-        //         player: String,
-        //         displayName: String,
-        //         team: String,
-        //         position: [String],
-        //         img: String,
-        //         packId: String,
-        //     },
-        // ],
         tokens: [
             {
                 type: new mongoose.Schema({
@@ -60,44 +46,16 @@ export const userSchema = new mongoose.Schema(
                 referralDate: Date,
             },
         ],
-        dailyRefill: { type: Boolean, default: true },
         referralCount: { type: Number, default: 0 },
         joinedTournaments: { type: Number, default: 0 },
         hasWonTournament: { type: Boolean, default: false },
         // tonWalletConnected: { type: Boolean, default: false },
         joinedTgChannel: { type: Boolean, default: false },
-        paidBoosterClaimCounter: { type: Number, default: 0 },
-        paidBoosterOrderNum: { type: String, default: "" },
-        paidManaClaim: { type: Boolean, default: false },
-        paidManaOrderNum: { type: String, default: "" },
-        totalManaRefills: { type: Number, default: 0 },
-        dreamTeamInfo: [
-            {
-                position: String,
-                stocksLeft: Number,
-                canClaimAthlete: Boolean,
-                dreamOrderNum: String,
-            },
-        ],
-        totalDreamTeamPointsBought: { type: Number, default: 0 },
-        totalDreamTeamCashBought: { type: Number, default: 0 },
         weeklyReferralCount: { type: Number, default: 0 },
         quests: [
             {
                 questId: Number,
                 isClaimed: Boolean,
-            },
-        ],
-        taskStatus: [
-            {
-                level: Number,
-                tasks: [
-                    {
-                        taskName: String,
-                        isClaimable: Boolean,
-                        isDone: Boolean,
-                    },
-                ],
             },
         ],
         pointsUpdatedAt: {
@@ -163,24 +121,6 @@ export const userSchema = new mongoose.Schema(
     }
 );
 
-export const levelStatsSchema = new mongoose.Schema(
-    {
-        level: Number,
-        pointMultiplier: Number,
-        maxMana: Number,
-        tasks: [
-            {
-                taskName: String,
-                value: mongoose.Schema.Types.Mixed,
-                description: String,
-            },
-        ],
-    },
-    {
-        collection: "levelstats",
-    }
-);
-
 export const questSchema = new mongoose.Schema({
     questId: Number,
     tasks: [
@@ -236,7 +176,6 @@ export const athleteSchema = new mongoose.Schema(
         kda: Number,
         killParticipation: Number,
         position: [String],
-        dreamTeam: Boolean,
         img: String,
         numSeasonsPlayed: Number,
         league: String,
@@ -335,23 +274,6 @@ export const totalStatsSchema = new mongoose.Schema(
     },
     {
         collection: "totalstats",
-    }
-);
-
-export const leaderboardSchema = new mongoose.Schema(
-    {
-        leaderboardId: Number,
-        leaderboardStartDate: Date,
-        leaderboardEndDate: Date,
-        counts: [
-            {
-                username: String,
-                weeklyReferralCount: Number,
-            },
-        ],
-    },
-    {
-        collection: "leaderboards",
     }
 );
 

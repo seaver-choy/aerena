@@ -30,7 +30,6 @@ interface AthleteData {
     avgAssists: number;
     killParticipation: number;
     position: [string];
-    dreamTeam: boolean;
     img: string;
     numSeasonsPlayed: number;
     league: string;

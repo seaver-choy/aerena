@@ -57,30 +57,6 @@ async function getFriends(event: APIGatewayProxyEvent) {
         };
     }
 
-    const friendIDs = result.friends.map(
-        (friend: { userID: number; username: string; isReferred: boolean }) =>
-            friend.userID
-    );
-
-    const friendLevels: Record<string, number> = {};
-
-    let levelsResult = [];
-    try {
-        // Perform a single query to fetch levels for all friends
-        levelsResult = await userModel.find(
-            { userID: { $in: friendIDs } },
-            { userID: 1, level: 1 }
-        );
-
-        // Map levels to the friendLevels object
-        levelsResult.forEach((user) => {
-            friendLevels[user.userID] = user.level || 0;
-        });
-    } catch (error) {
-        console.error(`Error fetching levels for friends:`, error);
-        Object.values(friendLevels).forEach(() => {});
-    }
-
     // Map users to add level information
     const updatedFriends = result.friends.map(
         (friend: {
@@ -91,7 +67,6 @@ async function getFriends(event: APIGatewayProxyEvent) {
             userID: friend.userID,
             username: friend.username,
             isReferred: friend.isReferred,
-            level: friendLevels[friend.userID],
         })
     );
 

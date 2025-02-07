@@ -86,22 +86,6 @@ const UsernameModal: React.FC = () => {
                     payload: { points: data["points"] },
                 });
                 user.dispatch({
-                    type: "SET_LEVEL",
-                    payload: { level: data["level"] },
-                });
-                user.dispatch({
-                    type: "SET_POINT_MULTIPLIER",
-                    payload: { pointMultiplier: data["pointMultiplier"] },
-                });
-                user.dispatch({
-                    type: "SET_MAX_MANA",
-                    payload: { maxMana: data["maxMana"] },
-                });
-                user.dispatch({
-                    type: "SET_CURRENT_MANA",
-                    payload: { currentMana: data["currentMana"] },
-                });
-                user.dispatch({
                     type: "SET_TOKENS",
                     payload: { tokens: data["tokens"] },
                 });
@@ -122,10 +106,6 @@ const UsernameModal: React.FC = () => {
                     payload: { friends: data["friends"] },
                 });
                 user.dispatch({
-                    type: "SET_DAILY_REFILL",
-                    payload: { dailyRefill: data["dailyRefill"] },
-                });
-                user.dispatch({
                     type: "SET_REFERRAL_COUNT",
                     payload: { referralCount: data["referralCount"] },
                 });
@@ -140,36 +120,13 @@ const UsernameModal: React.FC = () => {
                     type: "SET_HAS_WON_TOURNAMENT",
                     payload: { hasWonTournament: data["hasWonTournament"] },
                 });
-                // user.dispatch({
-                //     type: "SET_TON_WALLET_CONNECTED",
-                //     payload: { tonWalletConnected: data["tonWalletConnected"] },
-                // });
                 user.dispatch({
                     type: "SET_JOINED_TG_CHANNEL",
                     payload: { joinedTgChannel: data["joinedTgChannel"] },
                 });
                 user.dispatch({
-                    type: "SET_PAID_BOOSTER_CLAIM_COUNTER",
-                    payload: {
-                        paidBoosterClaimCounter:
-                            data["paidBoosterClaimCounter"],
-                    },
-                });
-                user.dispatch({
-                    type: "SET_PAID_MANA_CLAIM",
-                    payload: { paidManaClaim: data["paidManaClaim"] },
-                });
-                user.dispatch({
-                    type: "SET_DREAM_TEAM_INFO",
-                    payload: { dreamTeamInfo: data["dreamTeamInfo"] },
-                });
-                user.dispatch({
                     type: "SET_QUESTS",
                     payload: { quests: data["quests"] },
-                });
-                user.dispatch({
-                    type: "SET_TASK_STATUS",
-                    payload: { taskStatus: data["taskStatus"] },
                 });
                 user.dispatch({
                     type: "SET_SEASONAL_LOGINS",

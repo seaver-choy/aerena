@@ -17,18 +17,6 @@ export interface UpgradeToken extends Token {
     isSelected: boolean;
 }
 
-export interface DreamTeamInfo {
-    position: string;
-    stocksLeft: number;
-    canClaimAthlete: boolean;
-    dreamOrderNum: string;
-}
-
-export interface CashPackInfo {
-    value: number;
-    stocksLeft: number;
-}
-
 export interface Friend {
     userID: number;
     username: string;
@@ -38,24 +26,6 @@ export interface Friend {
 export interface Quest {
     questId: number;
     isClaimed: boolean;
-}
-export interface TaskStatus {
-    level: number;
-    tasks: Task[];
-}
-
-export interface Task {
-    taskName: string;
-    isClaimable: boolean;
-    isDone: boolean;
-}
-
-export interface TaskDisplay {
-    taskName: string;
-    value: number | boolean;
-    description: string;
-    isClaimable: boolean;
-    isDone: boolean;
 }
 
 export interface Athlete {
@@ -70,7 +40,6 @@ export interface Athlete {
     avgAssists: number;
     killParticipation: number;
     position: [string];
-    dreamTeam: boolean;
     img: string;
     numSeasonsPlayed: number;
     league: string;
@@ -117,10 +86,6 @@ export interface PackInfo {
     leagueType: string;
     isActive: boolean;
 }
-export interface LeagueCompetition {
-    competitionType: string;
-    leagueType: string;
-}
 
 export interface InventoryItem {
     key: string;
@@ -133,18 +98,6 @@ export interface Referral {
     userID: number;
     username: string;
     referralDate: Date;
-}
-
-export interface LeaderboardData {
-    username: string;
-    weeklyReferralCount: number;
-    referrals: Referral[];
-}
-
-export interface LeaderboardInfo {
-    leaderboardId: number;
-    leaderboardStartDate: string;
-    leaderboardEndDate: string;
 }
 
 export interface TeamColor {
