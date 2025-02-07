@@ -2,7 +2,6 @@ import { validate } from "@telegram-apps/init-data-node";
 
 export const handler = async (event) => {
     const secret = JSON.parse(process.env.BOT_TOKEN);
-    console.log(secret);
     const initDataRaw = event.headers["x-telegram-auth"].split("tma ")[1] ?? "";
     console.log(initDataRaw);
     const decodedString = decodeURIComponent(initDataRaw);
