@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { useLocation, useParams } from "react-router-dom";
 import { motion } from "motion/react";
-import { useUsers } from "../../../../hooks/useUser";
-import { dateFormat, dateRangeFormat } from "../../../../hooks/dateFormat";
-import { Tournament } from "../../../../helpers/interfaces";
-import { getTournament } from "../../../../helpers/lambda.helper";
 import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
+import { Tournament } from "../../../../helpers/interfaces";
+import { getTournament } from "../../../../helpers/lambda.helper";
+import { dateFormat, dateRangeFormat } from "../../../../hooks/dateFormat";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
@@ -126,25 +126,31 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                     className="absolute top-[23vw] flex"
                                     {...appearTextAnimation}
                                 >
-                                    {
-                                        tournament.type === "free" ? (
+                                    {tournament.type === "free" ? (
                                         <img
                                             src={BattlePointsIcon}
                                             className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                         />
-                                        )
-                                        : tournament.prizeCurrency === "stars" ? (
-                                            <img
-                                                src={TGStar}
-                                                className="mr-[2vw] mt-[2.5vw] h-[7vw]"
-                                            />
-                                        )
-                                        :
-                                        <p className={"text-nowrap font-russoone text-[9vw] font-normal text-white"}>
-                                            {tournament.prizeCurrency === "php" ? "PHP" : ""}&nbsp;
+                                    ) : tournament.prizeCurrency === "stars" ? (
+                                        <img
+                                            src={TGStar}
+                                            className="mr-[2vw] mt-[2.5vw] h-[7vw]"
+                                        />
+                                    ) : (
+                                        <p
+                                            className={
+                                                "text-nowrap font-russoone text-[9vw] font-normal text-white"
+                                            }
+                                        >
+                                            {tournament.prizeCurrency === "php"
+                                                ? "PHP"
+                                                : ""}
+                                            &nbsp;
                                         </p>
-                                    }
-                                    <p className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+                                    )}
+                                    <p
+                                        className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                                    >
                                         {tournament.prizePool.toLocaleString()}
                                     </p>
                                 </motion.div>

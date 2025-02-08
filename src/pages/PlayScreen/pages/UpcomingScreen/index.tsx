@@ -1,11 +1,11 @@
+import { useState, useEffect } from "react";
+import { useUsers } from "../../../../hooks/useUser";
+import { useLocation } from "react-router-dom";
 import { Tournament } from "../../../../helpers/interfaces";
+import { getUpcomingTournaments } from "../../../../helpers/lambda.helper";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
 import { TournamentListBanner } from "../../components/TournamentListBanner";
-import { getUpcomingTournaments } from "../../../../helpers/lambda.helper";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useUsers } from "../../../../hooks/useUser";
 
 export const UpcomingScreen = () => {
     const user = useUsers();

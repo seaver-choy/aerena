@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useUsers } from "../../hooks/useUser";
+import { Tournament } from "../../helpers/interfaces";
 import { tournamentOptions } from "../../helpers/tabs";
+import UsernameModal from "../../components/UsernameModal";
 import { Layout } from "../../components/Layout";
 import { Tabs } from "../../components/Tabs";
 import { Title } from "../../components/Title";
@@ -7,9 +10,6 @@ import { TournamentBanner } from "./components/TournamentBanner";
 import { TournamentSection } from "./components/TournamentSection";
 import { LineupSection } from "./components/LineupSection";
 import { PersonalLineup } from "./components/PersonalLineup";
-import { Tournament } from "../../helpers/interfaces";
-import { useUsers } from "../../hooks/useUser";
-import UsernameModal from "../../components/UsernameModal";
 
 export const PlayScreen = () => {
     const user = useUsers();
@@ -38,9 +38,7 @@ export const PlayScreen = () => {
     return (
         <>
             <Layout>
-                {user.id != 0 && user.username == "" && (
-                    <UsernameModal />
-                )}
+                {user.id != 0 && user.username == "" && <UsernameModal />}
                 {user.id != 0 && user.username != "" && (
                     <div>
                         <Tabs
@@ -59,13 +57,19 @@ export const PlayScreen = () => {
                                 setShowTournament={setShowTournament}
                                 playTab={playTab}
                             />
-                            <TournamentSection playTab={playTab} showTournament={showTournament}/>
+                            <TournamentSection
+                                playTab={playTab}
+                                showTournament={showTournament}
+                            />
                             <LineupSection
                                 ongoingTournament={ongoingTournament}
                                 updateLineup={handleUpdatePersonalLineup}
                                 showTournament={showTournament}
                             />
-                            <Title title="My Lineups" showTitle={showTournament}/>
+                            <Title
+                                title="My Lineups"
+                                showTitle={showTournament}
+                            />
                             <PersonalLineup
                                 key={keyRemount}
                                 ongoingTournament={ongoingTournament}

@@ -1,5 +1,5 @@
 <svg width="393" height="430" viewBox="0 0 393 430" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="lineup-basic">
+<g id="board-basic">
 <path id="base" fill-rule="evenodd" clip-rule="evenodd" d="M393 50V96V141V430H294.75H196.5H0V96V51V28.5V17L12 6H24.5625H49.125H98.25H196.5H245.625H272.111L296.556 50H393Z" fill="#EBE5DB"/>
 <path id="Subtract" d="M393 45L367.788 0H274L299.212 45H393Z" fill="url(#paint0_linear_1016_24864)"/>
 <path id="Subtract_2" d="M9 6H0V14.25L9 6Z" fill="#AB750F"/>

@@ -4,7 +4,7 @@ import { Tabs } from "../../../../components/Tabs";
 
 import WinnersBackground from "../../../../assets/background/winners.svg";
 import WinnersRankBackground from "../../../../assets/background/winners-rank.svg";
-import SkinLineupBackground from "../../../../assets/background/lineup-skin.svg";
+import SpecialBoardBackground from "../../../../assets/background/board-special.svg";
 
 export const Winners = () => {
     const [winnersTab, setWinnersTab] = useState("Winners");
@@ -49,7 +49,7 @@ export const Winners = () => {
                     <div className="relative h-[109.5vw] w-full">
                         <img
                             className="h-full w-full"
-                            src={SkinLineupBackground}
+                            src={SpecialBoardBackground}
                         />
                         <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
                             <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">
@@ -92,7 +92,7 @@ export const Winners = () => {
                     <div className="relative h-[109.5vw] w-full">
                         <img
                             className="h-full w-full"
-                            src={SkinLineupBackground}
+                            src={SpecialBoardBackground}
                         />
                         <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
                             <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">

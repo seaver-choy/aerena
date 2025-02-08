@@ -10,12 +10,13 @@ import {
     appearTextLuckyPickAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import { getEmptyAthleteCard } from "../../../../helpers/athletes";
-import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
-import AthleteSonnerGold from "../../../../assets/sonner/athlete-gold.svg";
-import { AthleteCard } from "../../../../components/AthleteCard";
 import { TeamColor } from "../../../../helpers/interfaces";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { getEmptyAthleteCard } from "../../../../helpers/athletes";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
+
+import AthleteSonnerGold from "../../../../assets/sonner/athlete-gold.svg";
 
 interface LineupProps {
     // playTab: string;
@@ -188,10 +189,10 @@ export const Lineup = ({
                 <AthleteSelectModal
                     // playTab={playTab}
                     // athletes={athletes}
+                    onClose={closeAthleteModal}
+                    onSelect={handleSelect}
                     position={positionList[currentPositionIndex]}
                     tournamentLineup={tournamentLineup}
-                    select={handleSelect}
-                    cancel={closeAthleteModal}
                     tournament={tournament}
                 />
             )}

@@ -13,16 +13,16 @@ import {
     getBaseTeamColor,
 } from "../../../../helpers/athletes";
 import { Athlete, TeamColor } from "../../../../helpers/interfaces";
+import { getAthletes, getLeagues } from "../../../../helpers/lambda.helper";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteModal } from "../../modals/AthleteModal";
+import { LeagueModal } from "../../modals/LeagueModal";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
-import { getAthletes, getLeagues } from "../../../../helpers/lambda.helper";
-import { LeagueModal } from "../../modals/LeagueModal";
-import { AthleteModal } from "../../modals/AthleteModal";
-import { AthleteCard } from "../../../../components/AthleteCard";
 
 export const Catalog = () => {
     const user = useUsers();
@@ -159,7 +159,9 @@ export const Catalog = () => {
                             className="relative flex h-[7vw] items-center justify-center"
                             onClick={displayLeagueModal}
                             {...appearTextAnimation}
-                            disabled={leagueTypes === null || currentAthletes === null}
+                            disabled={
+                                leagueTypes === null || currentAthletes === null
+                            }
                         >
                             <div className="absolute flex">
                                 <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">

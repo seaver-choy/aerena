@@ -1,14 +1,14 @@
 import { useEffect } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 import {
     appearAnimation,
     slideUpAnimation,
 } from "../../../../helpers/animation";
 
-import PointsBannerBackground from "../../../../assets/background/points-banner.svg";
+import PointsHeaderBackground from "../../../../assets/background/points-header.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import InventoryIcon from "../../../../assets/icon/inventory.svg";
-import { useUsers } from "../../../../hooks/useUser";
 
 export const PointsBanner = () => {
     const user = useUsers();
@@ -19,7 +19,7 @@ export const PointsBanner = () => {
     });
 
     useEffect(() => {
-        if(user.id != 0) {
+        if (user.id != 0) {
             const controls = animate(count, user.points, { duration: 2 });
             return () => controls.stop();
         }
@@ -56,7 +56,7 @@ export const PointsBanner = () => {
                 <div className="absolute bottom-0 h-[9.6vw] w-[100vw]">
                     <img
                         className="h-full w-full"
-                        src={PointsBannerBackground}
+                        src={PointsHeaderBackground}
                     />
                 </div>
             </div>

@@ -10,6 +10,7 @@ import {
     joinFree,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
 import { ConfirmModal } from "../../modals/ConfirmModal";
@@ -22,7 +23,6 @@ import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
-import { initInvoice } from "@telegram-apps/sdk-react";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
@@ -45,7 +45,8 @@ export const LineupSection = ({
     const [showErrorDeadline, setShowErrorDeadline] = useState<boolean>(false);
     const [showErrorIncomplete, setShowErrorIncomplete] =
         useState<boolean>(false);
-    const [showInsufficientModal, setShowInsufficientModal] = useState<boolean>(false);
+    const [showInsufficientModal, setShowInsufficientModal] =
+        useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
 
     const defaultLineup = [
@@ -231,13 +232,14 @@ export const LineupSection = ({
                 });
 
                 if (ongoingTournament.type === "premium") {
-                    const invoiceLink = await getInvoiceLinkForPremiumTournament(
-                        user.id,
-                        "premium_tournament",
-                        ongoingTournament.tournamentId,
-                        ongoingTournament.joinCost,
-                        user.initDataRaw
-                    );
+                    const invoiceLink =
+                        await getInvoiceLinkForPremiumTournament(
+                            user.id,
+                            "premium_tournament",
+                            ongoingTournament.tournamentId,
+                            ongoingTournament.joinCost,
+                            user.initDataRaw
+                        );
                     console.log(invoiceLink);
                     setIsLoading(false);
                     if (invoiceLink != null && invoiceLink["link"] != null) {
@@ -261,21 +263,22 @@ export const LineupSection = ({
                                 }
                             });
                     }
-                } 
-                else if (user.points >= ongoingTournament.joinCost){
-                    const result = await joinFree(user.id, ongoingTournament.joinCost, user.initDataRaw);
+                } else if (user.points >= ongoingTournament.joinCost) {
+                    const result = await joinFree(
+                        user.id,
+                        ongoingTournament.joinCost,
+                        user.initDataRaw
+                    );
                     user.dispatch({
                         type: "SET_POINTS",
                         payload: { points: result["points"] },
                     });
                     lineupSubmission(lineup);
-                }
-                else {
+                } else {
                     setIsLoading(false);
                     setShowInsufficientModal(true);
                 }
-            }
-            else {
+            } else {
                 setShowErrorIncomplete(true);
             }
         } catch (e) {

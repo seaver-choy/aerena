@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useUsers } from "../../hooks/useUser";
-import { createUser, checkUsernameExists } from "../../helpers/lambda.helper";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
-
+import { useUsers } from "../../hooks/useUser";
 import { motion } from "motion/react";
 import { appearAnimation, appearModalAnimation } from "../../helpers/animation";
+import { createUser, checkUsernameExists } from "../../helpers/lambda.helper";
 
 import UsernameBackground from "../../assets/modal/username.svg";
 import AerenaTextLogo from "../../assets/logo/aerena-text.svg";
@@ -157,7 +156,7 @@ const UsernameModal: React.FC = () => {
             }
         }
     };
-        
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 

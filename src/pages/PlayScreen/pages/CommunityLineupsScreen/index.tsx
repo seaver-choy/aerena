@@ -1,16 +1,16 @@
+import { useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
+import { useLocation } from "react-router-dom";
+import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { getStickerImage } from "../../../../helpers/packs";
+import { TeamColor } from "../../../../helpers/interfaces";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
-
-import { useState } from "react";
-import BasicLineupBackground from "../../../../assets/background/lineup-basic.svg";
-import GoldButton from "../../../../assets/button/gold.svg";
-import { useLocation } from "react-router-dom";
-import { useUsers } from "../../../../hooks/useUser";
-import { getStickerImage } from "../../../../helpers/packs";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { TeamColor } from "../../../../helpers/interfaces";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
 // import InfiniteScroll from "react-infinite-scroll-component";
+
+import BasicBoardBackground from "../../../../assets/background/board-basic.svg";
+import GoldButton from "../../../../assets/button/gold.svg";
 
 export const CommunityLineupsScreen = () => {
     const user = useUsers();
@@ -61,7 +61,7 @@ export const CommunityLineupsScreen = () => {
                             <div className="relative h-[109.5vw] w-full">
                                 <img
                                     className="h-full w-full"
-                                    src={BasicLineupBackground}
+                                    src={BasicBoardBackground}
                                 />
                                 <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
                                     <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">

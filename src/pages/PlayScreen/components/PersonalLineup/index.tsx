@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUsers } from "../../../../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 import { Token, Tournament } from "../../../../helpers/interfaces";
 import { getStickerImage } from "../../../../helpers/packs";
-import EmptyLineupBackground from "../../../../assets/background/lineup-empty.svg";
-import BasicLineupBackground from "../../../../assets/background/lineup-basic.svg";
-import { AthleteCard } from "../../../../components/AthleteCard";
 import { TeamColor } from "../../../../helpers/interfaces";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { AthleteCard } from "../../../../components/AthleteCard";
+
+import EmptyBoardBackground from "../../../../assets/background/board-empty.svg";
+import BasicBoardBackground from "../../../../assets/background/board-basic.svg";
+
 interface PersonalLineupProps {
     ongoingTournament: Tournament;
     showTournament: boolean;
@@ -57,7 +59,7 @@ export const PersonalLineup = ({
                     <div className="relative h-[49.7vw] w-full">
                         <img
                             className="h-full w-full"
-                            src={EmptyLineupBackground}
+                            src={EmptyBoardBackground}
                         />
                         <div className="absolute right-[7.5vw] top-[1.4vw] flex h-[9vw] w-[15vw] flex-col items-center opacity-50">
                             <p className="font-russoone text-[2.5vw] text-white">
@@ -90,7 +92,7 @@ export const PersonalLineup = ({
                                 <div className="relative h-[109.5vw] w-full">
                                     <img
                                         className="h-full w-full"
-                                        src={BasicLineupBackground}
+                                        src={BasicBoardBackground}
                                     />
                                     <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
                                         <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">

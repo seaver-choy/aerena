@@ -188,7 +188,7 @@ export const TournamentBanner = ({
                         </motion.button>
                         {showLeagueModal && (
                             <LeagueModal
-                                closeModal={closeLeagueModal}
+                                onClose={closeLeagueModal}
                                 ongoingTournament={ongoingTournament}
                                 ongoingTournaments={ongoingTournaments}
                                 setOngoingTournament={setOngoingTournament}
