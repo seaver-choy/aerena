@@ -6,7 +6,7 @@ import { Tabs } from "../../components/Tabs";
 import { DreamTeamSection } from "./components/DreamTeamSection";
 
 export const FriendsScreen = () => {
-    const [friendsTab, setFriendsTab] = useState("Dream Team");
+    const [friendsTab, setFriendsTab] = useState("Favorites");
 
     return (
         <Layout>
@@ -18,7 +18,7 @@ export const FriendsScreen = () => {
                 }}
                 selectedTab={friendsTab}
             />
-            <DreamTeamSection />
+            {friendsTab === "Favorites" && <DreamTeamSection />}
         </Layout>
     );
 };

@@ -1,4 +1,4 @@
-export const friendsOptions = ["Dream Team", "Friends"];
+export const friendsOptions = ["Favorites", "Friends"];
 export const tournamentOptions = ["Play Free", "Play Premium"];
 export const collectionOptions = ["Collection", "Catalog"];
 export const winnersOptions = ["Winners", "My Lineups"];

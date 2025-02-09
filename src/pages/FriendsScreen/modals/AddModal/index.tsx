@@ -1,58 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import {
-    appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { getStickerImage } from "../../../../helpers/packs";
 
-interface LeagueModalProps {
+interface AddModalProps {
     onClose: () => void;
-    leagueTypes: string[];
-    chosenLeagueType: string;
-    setChosenLeagueType: (chosenLeagueTypes: string) => void;
 }
 
-export const LeagueModal = ({
-    onClose,
-    leagueTypes,
-    chosenLeagueType,
-    setChosenLeagueType,
-}: LeagueModalProps) => {
-    const sliderRef = useRef(null);
-    const [leagueSlide, setLeagueSlide] = useState<number>(
-        leagueTypes.findIndex((item) => item === chosenLeagueType)
-    );
-
-    const settings = {
-        centerMode: true,
-        centerPadding: "20%",
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        afterChange: (index: number) => {
-            setLeagueSlide(index);
-        },
-        initialSlide: leagueSlide,
-    };
-
-    const handleSelect = () => {
-        setChosenLeagueType(leagueTypes[leagueSlide]);
-        onClose();
-    };
-
+export const AddModal = ({ onClose }: AddModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
+
         return () => {
             document.body.style.overflow = "auto";
         };
@@ -75,45 +38,39 @@ export const LeagueModal = ({
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
-                                Catalog Filter
+                                Referral Code
                             </p>
                         </motion.div>
                         <motion.div
-                            className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
-                            {...appearAnimation}
+                            className="mt-[4vw] flex h-[41.5vw] w-full flex-col items-center justify-center"
+                            {...appearTextAnimation}
                         >
-                            <Slider
-                                ref={(slider) => (sliderRef.current = slider)}
-                                className="w-full"
-                                {...settings}
-                            >
-                                {leagueTypes.map((league, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="mt-[7vw] h-full px-[2vw]"
-                                        >
-                                            <img
-                                                className="w-full"
-                                                src={getStickerImage(league)}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                            <div className="h-[13vw] w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]">
+                                <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw] py-[4vw]">
+                                    <input
+                                        className="flex w-full bg-transparent font-russoone text-[4.5vw] font-normal text-white focus:outline-none"
+                                        type="text"
+                                        placeholder="Enter Referral Code"
+                                        maxLength={12}
+                                    ></input>
+                                </div>
+                            </div>
+                            <p className="mx-[2vw] mt-[2vw] text-center font-montserrat text-[3.5vw] text-graydark">
+                                Enter the referral code from your friend.
+                            </p>
                         </motion.div>
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={handleSelect}
+                                onClick={onClose}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
                                     <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Select
+                                        Enter
                                     </p>
                                 </div>
                             </motion.button>

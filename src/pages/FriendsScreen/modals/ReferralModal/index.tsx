@@ -7,23 +7,12 @@ import {
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import WhiteButton from "../../../../assets/button/white.svg";
 
-interface ConfirmModalProps {
-    onCancel: () => void;
-    onConfirm: () => void;
-    loading: boolean;
-    tournamentType?: string;
-    joinCost?: number;
+interface ReferralModalProps {
+    onClose: () => void;
 }
 
-export const ConfirmModal = ({
-    onCancel,
-    onConfirm,
-    loading,
-    tournamentType = null,
-    joinCost = 0,
-}: ConfirmModalProps) => {
+export const ReferralModal = ({ onClose }: ReferralModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -46,22 +35,7 @@ export const ConfirmModal = ({
                     <div className="mb-[4vw] flex h-[55vw] flex-col items-center justify-center px-[4vw]">
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                You will join this tournament using your
-                                selected lineup.{" "}
-                                {tournamentType === "free" ? (
-                                    <p>
-                                        {"Entry to the tournament costs " +
-                                            joinCost +
-                                            " Battle Points."}
-                                    </p>
-                                ) : (
-                                    <p>
-                                        {"Entry to the tournament costs " +
-                                            joinCost +
-                                            " Telegram Stars."}
-                                    </p>
-                                )}{" "}
-                                Do you want to continue?
+                                Referral code copied!
                             </p>
                         </motion.div>
                     </div>
@@ -69,26 +43,13 @@ export const ConfirmModal = ({
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onCancel}
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={WhiteButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.8vw] font-normal text-transparent">
-                                        Cancel
-                                    </p>
-                                </div>
-                            </motion.button>
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                onClick={onConfirm}
-                                disabled={loading}
+                                onClick={onClose}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
                                     <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Confirm
+                                        Okay
                                     </p>
                                 </div>
                             </motion.button>
