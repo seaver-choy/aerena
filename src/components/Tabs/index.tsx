@@ -20,12 +20,7 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
 
     return (
         <motion.div
-            className={`mx-[4vw] mt-[4vw] flex justify-center gap-[2vw] rounded-[2.5vw] p-[1.5vw] ${
-                location.pathname === "/quest" ||
-                location.pathname === "/friends"
-                    ? "bg-graylight"
-                    : "bg-graydark"
-            }`}
+            className="mx-[4vw] mt-[4vw] flex justify-center gap-[2vw] rounded-[2.5vw] bg-graydark p-[1.5vw]"
             {...slideLeftAnimation}
         >
             {options.map((option) => (

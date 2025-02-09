@@ -158,7 +158,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                    <p className="mt-[0.4vw] font-russoone text-[2.8vw] font-normal text-white">
                                         Purchase
                                     </p>
                                 </div>

@@ -47,7 +47,21 @@ export const ConfirmModal = ({
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
                                 You will join this tournament using your
-                                selected lineup. {tournamentType === "free" ? <p>{"Entry to the tournament costs " + joinCost + " Battle Points."}</p> : <p>{"Entry to the tournament costs " + joinCost + " Telegram Stars."}</p>} Do you want to continue?
+                                selected lineup.{" "}
+                                {tournamentType === "free" ? (
+                                    <p>
+                                        {"Entry to the tournament costs " +
+                                            joinCost +
+                                            " Battle Points."}
+                                    </p>
+                                ) : (
+                                    <p>
+                                        {"Entry to the tournament costs " +
+                                            joinCost +
+                                            " Telegram Stars."}
+                                    </p>
+                                )}{" "}
+                                Do you want to continue?
                             </p>
                         </motion.div>
                     </div>
@@ -73,7 +87,7 @@ export const ConfirmModal = ({
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                    <p className="mt-[0.4vw] font-russoone text-[2.8vw] font-normal text-white">
                                         Confirm
                                     </p>
                                 </div>

@@ -365,7 +365,7 @@ export const LineupSection = ({
                         loadLuckyPick={loadLuckyPick}
                         setLoadLuckyPick={setLoadLuckyPick}
                     />
-                    <button className="absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end">
+                    <div className="absolute bottom-[3vw] flex h-[7.2vh] w-[56vw] items-end">
                         <button
                             className="relative w-full items-center justify-center"
                             onClick={
@@ -407,7 +407,7 @@ export const LineupSection = ({
                             )}
                             <img className="w-full" src={LineupButton} />
                         </button>
-                    </button>
+                    </div>
                     <motion.button
                         className="absolute bottom-[6.5vw] right-[4vw] h-[15vw] w-[15vw]"
                         onClick={handleFetchLuckyPicks}
