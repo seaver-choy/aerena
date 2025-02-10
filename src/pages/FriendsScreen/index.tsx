@@ -4,6 +4,7 @@ import { Layout } from "../../components/Layout";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { Tabs } from "../../components/Tabs";
 import { DreamTeamSection } from "./components/DreamTeamSection";
+import { FriendsSection } from "./components/FriendsSection";
 
 export const FriendsScreen = () => {
     const [friendsTab, setFriendsTab] = useState("Favorites");
@@ -19,6 +20,7 @@ export const FriendsScreen = () => {
                 selectedTab={friendsTab}
             />
             {friendsTab === "Favorites" && <DreamTeamSection />}
+            {friendsTab === "Friends" && <FriendsSection />}
         </Layout>
     );
 };
