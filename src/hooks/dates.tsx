@@ -47,3 +47,21 @@ export function dateRangeFormat(date1, date2, tournamentType = null) {
         </p>
     );
 }
+
+export function isTournamentClosed(tournament){
+    if (tournament !== null) {
+        console.log(tournament);
+        if (
+            Date.now() >
+            new Date(
+                tournament.tournamentEndSubmissionDate
+            ).getTime()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+};

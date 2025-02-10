@@ -360,8 +360,18 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
         const result = await tournamentModel.find({
             type: type,
             $and: [
-                { tournamentStartSubmissionDate: { $lte: currentDate } },
-                { tournamentEndSubmissionDate: { $gt: currentDate } },
+                {
+                    $or: [
+                        {
+                            tournamentStartSubmissionDate: { $lte: currentDate },
+                            tournamentEndSubmissionDate: { $gt: currentDate }
+                        },
+                        {
+                            tournamentStartSubmissionDate: { $lte: currentDate },
+                            resultsTallied: false
+                        }
+                    ]
+                }
             ],
         });
         if (!result) {
@@ -413,7 +423,9 @@ async function getPreviousTournaments(event: APIGatewayProxyEvent) {
         const result = await tournamentModel.find({
             type: type,
             tournamentEndSubmissionDate: { $lt: currentDate },
-        });
+            resultsTallied: true,
+        })
+        .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Previous tournaments not found in database.`
@@ -463,7 +475,8 @@ async function getUpcomingTournaments(event: APIGatewayProxyEvent) {
         const result = await tournamentModel.find({
             type: type,
             tournamentStartSubmissionDate: { $gt: currentDate },
-        });
+        })
+        .sort({ tournamentStartSubmissionDate: 1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Upcoming tournaments not found in database.`

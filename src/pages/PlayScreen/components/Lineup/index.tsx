@@ -10,19 +10,19 @@ import {
     appearTextLuckyPickAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import { getEmptyAthleteCard } from "../../../../helpers/athletes";
-import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
-import AthleteSonnerGold from "../../../../assets/sonner/athlete-gold.svg";
-import { AthleteCard } from "../../../../components/AthleteCard";
 import { TeamColor } from "../../../../helpers/interfaces";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { getEmptyAthleteCard } from "../../../../helpers/athletes";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
+
+import AthleteSonnerGold from "../../../../assets/sonner/athlete-gold.svg";
 
 interface LineupProps {
     // playTab: string;
     //athletes: Token[];
     tournament: Tournament;
     tournamentLineup: TournamentLineup[];
-    editLineup: boolean;
     setTournamentLineup: (tournamentLineup: TournamentLineup[]) => void;
     loadLuckyPick: boolean;
     setLoadLuckyPick: (loadLuckPick: boolean) => void;
@@ -33,7 +33,6 @@ export const Lineup = ({
     //athletes,
     tournament,
     tournamentLineup,
-    editLineup,
     setTournamentLineup,
     loadLuckyPick,
     setLoadLuckyPick,
@@ -66,10 +65,8 @@ export const Lineup = ({
 
     const handleSetLineup = (index) => {
         setNewSelected(false);
-        if (editLineup) {
-            setShowAthleteSelectModal(true);
-            setCurrentPositionIndex(index);
-        }
+        setShowAthleteSelectModal(true);
+        setCurrentPositionIndex(index);
     };
 
     const closeAthleteModal = () => {
@@ -188,10 +185,10 @@ export const Lineup = ({
                 <AthleteSelectModal
                     // playTab={playTab}
                     // athletes={athletes}
+                    onClose={closeAthleteModal}
+                    onSelect={handleSelect}
                     position={positionList[currentPositionIndex]}
                     tournamentLineup={tournamentLineup}
-                    select={handleSelect}
-                    cancel={closeAthleteModal}
                     tournament={tournament}
                 />
             )}

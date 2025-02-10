@@ -3,11 +3,7 @@ import { slideRightTextAnimation } from "../../../../helpers/animation";
 
 import GoldLine from "../../../../assets/others/line-gold.svg";
 
-interface Props {
-    handleEdit: () => void;
-    isTournamentClosed: boolean;
-}
-export const LineupTitle = ({ isTournamentClosed }: Props) => {
+export const LineupTitle = () => {
     return (
         <div className="absolute top-0 flex h-[20vw] w-full justify-center px-[4vw] pt-[6vw]">
             <div className="flex h-full w-[50%] items-center pl-[4vw]">
@@ -19,7 +15,7 @@ export const LineupTitle = ({ isTournamentClosed }: Props) => {
                 </motion.p>
             </div>
             <div
-                className={`flex h-full w-[50%] items-center justify-end gap-[2vw] ${isTournamentClosed ? "opacity-50" : ""}`}
+                className="flex h-full w-[50%] items-center justify-end gap-[2vw]"
             ></div>
             <img className="absolute bottom-0 w-full" src={GoldLine}></img>
         </div>

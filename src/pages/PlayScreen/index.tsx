@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useUsers } from "../../hooks/useUser";
+import { Tournament } from "../../helpers/interfaces";
 import { tournamentOptions } from "../../helpers/tabs";
+import UsernameModal from "../../components/UsernameModal";
 import { Layout } from "../../components/Layout";
 import { Tabs } from "../../components/Tabs";
 import { Title } from "../../components/Title";
@@ -7,9 +10,6 @@ import { TournamentBanner } from "./components/TournamentBanner";
 import { TournamentSection } from "./components/TournamentSection";
 import { LineupSection } from "./components/LineupSection";
 import { PersonalLineup } from "./components/PersonalLineup";
-import { Tournament } from "../../helpers/interfaces";
-import { useUsers } from "../../hooks/useUser";
-import UsernameModal from "../../components/UsernameModal";
 
 export const PlayScreen = () => {
     const user = useUsers();
@@ -37,45 +37,49 @@ export const PlayScreen = () => {
 
     return (
         <>
-            {user.id != 0 && user.username == "" && (
-                <div style={{ position: "relative", zIndex: 51 }}>
-                    <UsernameModal />
-                </div>
-            )}
-            {user.id != 0 && user.username != "" && (
-                <Layout>
-                    <Tabs
-                        options={tournamentOptions}
-                        onToggle={(selected) => {
-                            console.log("Selected Option:", selected);
-                            setPlayTab(selected);
-                        }}
-                        selectedTab={playTab}
-                    />
+            <Layout>
+                {user.id != 0 && user.username == "" && <UsernameModal />}
+                {user.id != 0 && user.username != "" && (
                     <div>
-                        <TournamentBanner
-                            ongoingTournament={ongoingTournament}
-                            setOngoingTournament={setOngoingTournament}
-                            showTournament={showTournament}
-                            setShowTournament={setShowTournament}
-                            playTab={playTab}
+                        <Tabs
+                            options={tournamentOptions}
+                            onToggle={(selected) => {
+                                console.log("Selected Option:", selected);
+                                setPlayTab(selected);
+                            }}
+                            selectedTab={playTab}
                         />
-                        <TournamentSection playTab={playTab} showTournament={showTournament}/>
-                        <LineupSection
-                            ongoingTournament={ongoingTournament}
-                            updateLineup={handleUpdatePersonalLineup}
-                            showTournament={showTournament}
-                        />
-                        <Title title="My Lineups" showTitle={showTournament}/>
-                        <PersonalLineup
-                            key={keyRemount}
-                            ongoingTournament={ongoingTournament}
-                            showTournament={showTournament}
-                            playTab={playTab}
-                        />
+                        <div>
+                            <TournamentBanner
+                                ongoingTournament={ongoingTournament}
+                                setOngoingTournament={setOngoingTournament}
+                                showTournament={showTournament}
+                                setShowTournament={setShowTournament}
+                                playTab={playTab}
+                            />
+                            <TournamentSection
+                                playTab={playTab}
+                                showTournament={showTournament}
+                            />
+                            <LineupSection
+                                ongoingTournament={ongoingTournament}
+                                updateLineup={handleUpdatePersonalLineup}
+                                showTournament={showTournament}
+                            />
+                            <Title
+                                title="My Lineups"
+                                showTitle={showTournament}
+                            />
+                            <PersonalLineup
+                                key={keyRemount}
+                                ongoingTournament={ongoingTournament}
+                                showTournament={showTournament}
+                                playTab={playTab}
+                            />
+                        </div>
                     </div>
-                </Layout>
-            )}
+                )}
+            </Layout>
         </>
     );
 };

@@ -10,6 +10,7 @@ import {
     joinFree,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
 import { ConfirmModal } from "../../modals/ConfirmModal";
@@ -22,7 +23,8 @@ import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
-import { initInvoice } from "@telegram-apps/sdk-react";
+import LockedIcon from "../../../../assets/icon/locked.svg";
+import { isTournamentClosed } from "../../../../hooks/dates";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
@@ -45,7 +47,8 @@ export const LineupSection = ({
     const [showErrorDeadline, setShowErrorDeadline] = useState<boolean>(false);
     const [showErrorIncomplete, setShowErrorIncomplete] =
         useState<boolean>(false);
-    const [showInsufficientModal, setShowInsufficientModal] = useState<boolean>(false);
+    const [showInsufficientModal, setShowInsufficientModal] =
+        useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
 
     const defaultLineup = [
@@ -94,9 +97,6 @@ export const LineupSection = ({
             athlete: null,
         },
     ]);
-    const [initialLineup, setInitialLineup] =
-        useState<TournamentLineup[]>(tournamentLineup);
-    const [editLineup, setEditLineup] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const invoice = initInvoice();
 
@@ -138,35 +138,6 @@ export const LineupSection = ({
 
             console.log(lineup);
             setTournamentLineup(lineup);
-        }
-    };
-
-    const isTournamentClosed = () => {
-        if (ongoingTournament !== null) {
-            console.log(ongoingTournament);
-            if (
-                Date.now() >
-                new Date(
-                    ongoingTournament.tournamentEndSubmissionDate
-                ).getTime()
-            ) {
-                console.log("true1");
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
-    };
-
-    const handleEditLineup = () => {
-        if (editLineup) {
-            setEditLineup(false);
-            setTournamentLineup(initialLineup);
-        } else {
-            setEditLineup(true);
-            setInitialLineup(tournamentLineup);
         }
     };
 
@@ -231,13 +202,14 @@ export const LineupSection = ({
                 });
 
                 if (ongoingTournament.type === "premium") {
-                    const invoiceLink = await getInvoiceLinkForPremiumTournament(
-                        user.id,
-                        "premium_tournament",
-                        ongoingTournament.tournamentId,
-                        ongoingTournament.joinCost,
-                        user.initDataRaw
-                    );
+                    const invoiceLink =
+                        await getInvoiceLinkForPremiumTournament(
+                            user.id,
+                            "premium_tournament",
+                            ongoingTournament.tournamentId,
+                            ongoingTournament.joinCost,
+                            user.initDataRaw
+                        );
                     console.log(invoiceLink);
                     setIsLoading(false);
                     if (invoiceLink != null && invoiceLink["link"] != null) {
@@ -261,21 +233,22 @@ export const LineupSection = ({
                                 }
                             });
                     }
-                } 
-                else if (user.points >= ongoingTournament.joinCost){
-                    const result = await joinFree(user.id, ongoingTournament.joinCost, user.initDataRaw);
+                } else if (user.points >= ongoingTournament.joinCost) {
+                    const result = await joinFree(
+                        user.id,
+                        ongoingTournament.joinCost,
+                        user.initDataRaw
+                    );
                     user.dispatch({
                         type: "SET_POINTS",
                         payload: { points: result["points"] },
                     });
                     lineupSubmission(lineup);
-                }
-                else {
+                } else {
                     setIsLoading(false);
                     setShowInsufficientModal(true);
                 }
-            }
-            else {
+            } else {
                 setShowErrorIncomplete(true);
             }
         } catch (e) {
@@ -343,10 +316,7 @@ export const LineupSection = ({
                 {isLoading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
-                    <LineupTitle
-                        handleEdit={handleEditLineup}
-                        isTournamentClosed={isTournamentClosed()}
-                    />
+                    <LineupTitle/>
                     <Lineup
                         key={
                             ongoingTournament != null
@@ -357,54 +327,58 @@ export const LineupSection = ({
                         //athletes={user.tokens}
                         tournament={ongoingTournament}
                         tournamentLineup={tournamentLineup}
-                        editLineup={true}
                         setTournamentLineup={setTournamentLineup}
                         loadLuckyPick={loadLuckyPick}
                         setLoadLuckyPick={setLoadLuckyPick}
                     />
-                    <button className="absolute bottom-[3.2vw] flex h-[7.2vh] w-[56vw] items-end">
+                    <div className="absolute bottom-[3vw] flex h-[7.2vh] w-[56vw] items-end">
                         <button
                             className="relative w-full items-center justify-center"
-                            onClick={
-                                editLineup
-                                    ? () => {
-                                          setEditLineup(false);
-                                      }
-                                    : isLoading || isTournamentClosed()
-                                      ? () => {}
-                                      : () => setShowConfirmModal(true)
+                            onClick={isLoading
+                                ? () => {}
+                                : () => setShowConfirmModal(true)
                             }
+                            disabled={isTournamentClosed(ongoingTournament)}
                         >
-                            {ongoingTournament.type === "free" ? (
-                                <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                        JOIN FOR&nbsp;
-                                    </p>
-                                    <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
-                                        src={BattlePointsIcon}
-                                    ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                        &nbsp;{ongoingTournament.joinCost}
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                        JOIN FOR&nbsp;
-                                    </p>
-                                    <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
-                                        src={TGStarWhite}
-                                    ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                        &nbsp;{ongoingTournament.joinCost}
-                                    </p>
-                                </div>
-                            )}
+                            {
+                                isTournamentClosed(ongoingTournament) ? (
+                                    <div className="absolute flex h-full w-full items-center justify-center">
+                                        <img
+                                            className="mt-[0.1vw] h-[2.5vw]"
+                                            src={LockedIcon}
+                                        ></img>
+                                    </div>
+                                )
+                                : ongoingTournament.type === "free" ? (
+                                    <div className="absolute flex h-full w-full items-center justify-center">
+                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                            JOIN FOR&nbsp;
+                                        </p>
+                                        <img
+                                            className="mt-[0.1vw] h-[2.5vw]"
+                                            src={BattlePointsIcon}
+                                        ></img>
+                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                            &nbsp;{ongoingTournament.joinCost}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="absolute flex h-full w-full items-center justify-center">
+                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                            JOIN FOR&nbsp;
+                                        </p>
+                                        <img
+                                            className="mt-[0.1vw] h-[2.5vw]"
+                                            src={TGStarWhite}
+                                        ></img>
+                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                            &nbsp;{ongoingTournament.joinCost}
+                                        </p>
+                                    </div>
+                                )}
                             <img className="w-full" src={LineupButton} />
                         </button>
-                    </button>
+                    </div>
                     <motion.button
                         className="absolute bottom-[6.5vw] right-[4vw] h-[15vw] w-[15vw]"
                         onClick={handleFetchLuckyPicks}

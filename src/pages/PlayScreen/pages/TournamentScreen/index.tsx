@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { useLocation, useParams } from "react-router-dom";
 import { motion } from "motion/react";
-import { useUsers } from "../../../../hooks/useUser";
-import { dateFormat, dateRangeFormat } from "../../../../hooks/dateFormat";
-import { Tournament } from "../../../../helpers/interfaces";
-import { getTournament } from "../../../../helpers/lambda.helper";
 import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
+import { Tournament } from "../../../../helpers/interfaces";
+import { getTournament } from "../../../../helpers/lambda.helper";
+import { dateFormat, dateRangeFormat, isTournamentClosed } from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
@@ -126,25 +126,31 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                     className="absolute top-[23vw] flex"
                                     {...appearTextAnimation}
                                 >
-                                    {
-                                        tournament.type === "free" ? (
+                                    {tournament.type === "free" ? (
                                         <img
                                             src={BattlePointsIcon}
                                             className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                         />
-                                        )
-                                        : tournament.prizeCurrency === "stars" ? (
-                                            <img
-                                                src={TGStar}
-                                                className="mr-[2vw] mt-[2.5vw] h-[7vw]"
-                                            />
-                                        )
-                                        :
-                                        <p className={"text-nowrap font-russoone text-[9vw] font-normal text-white"}>
-                                            {tournament.prizeCurrency === "php" ? "PHP" : ""}&nbsp;
+                                    ) : tournament.prizeCurrency === "stars" ? (
+                                        <img
+                                            src={TGStar}
+                                            className="mr-[2vw] mt-[2.5vw] h-[7vw]"
+                                        />
+                                    ) : (
+                                        <p
+                                            className={
+                                                "text-nowrap font-russoone text-[9vw] font-normal text-white"
+                                            }
+                                        >
+                                            {tournament.prizeCurrency === "php"
+                                                ? "PHP"
+                                                : ""}
+                                            &nbsp;
                                         </p>
-                                    }
-                                    <p className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+                                    )}
+                                    <p
+                                        className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                                    >
                                         {tournament.prizePool.toLocaleString()}
                                     </p>
                                 </motion.div>
@@ -163,16 +169,26 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                         {classification != undefined &&
                                             classification === "" && (
                                                 <div className="flex flex-col items-center">
-                                                    {dateFormat(
-                                                        tournament.tournamentEndSubmissionDate,
-                                                        tournament.type
-                                                    )}
-                                                    <p
-                                                        className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                                    >
-                                                        Closes in{" "}
-                                                        {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                                    </p>
+                                                    <div>
+                                                        {dateFormat(
+                                                            tournament.tournamentEndSubmissionDate,
+                                                            tournament.type
+                                                        )}
+                                                    </div>
+                                                    {
+                                                        tournament != null && isTournamentClosed(tournament) ? (
+                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                                Calculating Results
+                                                            </p>
+                                                        )
+                                                        :
+                                                        <p
+                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                                        >
+                                                            Closes in{" "}
+                                                            {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                                        </p>
+                                                    }
                                                 </div>
                                             )}
                                     </div>
@@ -192,8 +208,8 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" ? <PointsSystem /> : ""}
-                    {classification == "PREVIOUS" ? <Winners /> : ""}
+                    {classification != "PREVIOUS" || !tournament.resultsTallied ? <PointsSystem /> : ""}
+                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners /> : ""}
                 </div>
             )}
         </Layout>

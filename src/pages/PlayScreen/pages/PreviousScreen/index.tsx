@@ -1,11 +1,11 @@
+import { useState, useEffect } from "react";
+import { useUsers } from "../../../../hooks/useUser";
+import { useLocation } from "react-router-dom";
 import { Tournament } from "../../../../helpers/interfaces";
+import { getPreviousTournaments } from "../../../../helpers/lambda.helper";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
 import { TournamentListBanner } from "../../components/TournamentListBanner";
-import { getPreviousTournaments } from "../../../../helpers/lambda.helper";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useUsers } from "../../../../hooks/useUser";
 
 export const PreviousScreen = () => {
     const user = useUsers();
@@ -33,17 +33,17 @@ export const PreviousScreen = () => {
         <Layout>
             {/* sample button for back, needs useNavigate above */}
             {/* <button onClick={() => navigate(-1)} className="text-black">Back</button> */}
-            
+
             <Title title="Previous Tournaments" />
-            {
-                previousTournaments != null && (
-                    previousTournaments.map((tournament) => (
-                <TournamentListBanner classification="PREVIOUS" tournament={tournament} />
-                ))
-                )
-            }
-            {
-                previousTournaments != null && previousTournaments.length === 0 && (
+            {previousTournaments != null &&
+                previousTournaments.map((tournament) => (
+                    <TournamentListBanner
+                        classification="PREVIOUS"
+                        tournament={tournament}
+                    />
+                ))}
+            {previousTournaments != null &&
+                previousTournaments.length === 0 && (
                     <div className="mt-[30vh]">
                         <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-bold text-transparent">
                             No Previous Tournaments
@@ -52,8 +52,7 @@ export const PreviousScreen = () => {
                             Please check again later.
                         </p>
                     </div>
-                )
-            }
+                )}
         </Layout>
     );
 };

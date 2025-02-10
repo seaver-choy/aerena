@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
@@ -20,29 +20,29 @@ import {
     TournamentLineup,
     TeamColor,
 } from "../../../../helpers/interfaces";
-
 import { AthleteCard } from "../../../../components/AthleteCard";
+
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
 
 interface AthleteSelectModalProps {
+    onClose: () => void;
+    onSelect: (lineup) => void;
     position: string;
     //athletes: Token[];
     tournamentLineup: TournamentLineup[];
-    select: (lineup) => void;
-    cancel: () => void;
     // playTab: string;
     tournament: Tournament;
 }
 
 export const AthleteSelectModal = ({
+    onClose,
+    onSelect,
     position,
     //athletes,
     tournamentLineup,
-    select,
-    cancel,
     //playTab,
     tournament,
 }: AthleteSelectModalProps) => {
@@ -159,7 +159,7 @@ export const AthleteSelectModal = ({
                         </motion.div>
                         <motion.button
                             className="absolute right-0 top-0 h-[5vw] w-[5vw]"
-                            onClick={cancel}
+                            onClick={onClose}
                             {...appearAnimation}
                         >
                             <img className="h-full w-full" src={CloseIcon} />
@@ -254,10 +254,10 @@ export const AthleteSelectModal = ({
                                 onClick={
                                     hasSelected
                                         ? () =>
-                                              select(
+                                              onSelect(
                                                   displayAthletes[selectedIndex]
                                               )
-                                        : () => cancel()
+                                        : () => onClose()
                                 }
                                 {...appearTextAnimation}
                             >

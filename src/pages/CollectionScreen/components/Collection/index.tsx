@@ -110,8 +110,8 @@ export const Collection = () => {
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex">
-                                <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
-                                    Purchase
+                                <p className="font-russoone text-[2.4vw] font-normal tracking-wide text-white">
+                                    Buy
                                 </p>
                             </div>
                             <img

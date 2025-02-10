@@ -9,7 +9,6 @@ export const Layout = (props: Props) => {
             className="disable-select disable-scrollbar disable-zoom h-screen w-full flex-col overflow-y-auto bg-light pb-[24vw]"
             style={{
                 touchAction:
-                    location.pathname === "/friends" ||
                     location.pathname === "/quests" ||
                     location.pathname === "/exchange"
                         ? "none"

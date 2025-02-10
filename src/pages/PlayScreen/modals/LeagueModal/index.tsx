@@ -5,27 +5,35 @@ import {
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
+import { Tournament } from "../../../../helpers/interfaces";
+import { getStickerImage } from "../../../../helpers/packs";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { Tournament } from "../../../../helpers/interfaces";
-import { getStickerImage } from "../../../../helpers/packs";
 
 interface LeagueModalProps {
-    closeModal: () => void;
+    onClose: () => void;
     ongoingTournament: Tournament;
     ongoingTournaments: Tournament[];
     setOngoingTournament: (tournament: Tournament) => void;
 }
 
-export const LeagueModal = ({ closeModal, ongoingTournament, ongoingTournaments, setOngoingTournament }: LeagueModalProps) => {
+export const LeagueModal = ({
+    onClose,
+    ongoingTournament,
+    ongoingTournaments,
+    setOngoingTournament,
+}: LeagueModalProps) => {
     const sliderRef = useRef(null);
-    const [leagueSlide, setLeagueSlide] = useState<number>(ongoingTournaments.findIndex(
-        tournament => tournament.tournamentId === ongoingTournament?.tournamentId
-      ));
+    const [leagueSlide, setLeagueSlide] = useState<number>(
+        ongoingTournaments.findIndex(
+            (tournament) =>
+                tournament.tournamentId === ongoingTournament?.tournamentId
+        )
+    );
     const settings = {
         centerMode: true,
         centerPadding: "20%",
@@ -43,10 +51,10 @@ export const LeagueModal = ({ closeModal, ongoingTournament, ongoingTournaments,
 
     const handleSelect = () => {
         const selectedTournament = ongoingTournaments[leagueSlide];
-        console.log('Selected tournament:', selectedTournament);
-        console.log('League slide:', leagueSlide);
+        console.log("Selected tournament:", selectedTournament);
+        console.log("League slide:", leagueSlide);
         setOngoingTournament(ongoingTournaments[leagueSlide]);
-        closeModal();
+        onClose();
     };
 
     useEffect(() => {
@@ -86,14 +94,19 @@ export const LeagueModal = ({ closeModal, ongoingTournament, ongoingTournaments,
                                 className="w-full"
                                 {...settings}
                             >
-                            {
-                                ongoingTournaments.map((tournament) => (
-                                    <div key={tournament.tournamentId} className="mt-[7vw] h-full px-[2vw]">
-                                        <img className="w-full" src={getStickerImage(tournament.league)} />
+                                {ongoingTournaments.map((tournament) => (
+                                    <div
+                                        key={tournament.tournamentId}
+                                        className="mt-[7vw] h-full px-[2vw]"
+                                    >
+                                        <img
+                                            className="w-full"
+                                            src={getStickerImage(
+                                                tournament.league
+                                            )}
+                                        />
                                     </div>
-                                    )       
-                                )
-                            }
+                                ))}
                             </Slider>
                         </motion.div>
                     </div>

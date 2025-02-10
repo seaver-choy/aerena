@@ -47,7 +47,21 @@ export const ConfirmModal = ({
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
                                 You will join this tournament using your
-                                selected lineup. {tournamentType === "free" ? <p>{"Entry to the tournament costs " + joinCost + " Battle Points."}</p> : <p>{"Entry to the tournament costs " + joinCost + " Telegram Stars."}</p>} Do you want to continue?
+                                selected lineup.{" "}
+                                {tournamentType === "free" ? (
+                                    <p>
+                                        {"Entry to the tournament costs " +
+                                            joinCost +
+                                            " Battle Points."}
+                                    </p>
+                                ) : (
+                                    <p>
+                                        {"Entry to the tournament costs " +
+                                            joinCost +
+                                            " Telegram Stars."}
+                                    </p>
+                                )}{" "}
+                                Do you want to continue?
                             </p>
                         </motion.div>
                     </div>
