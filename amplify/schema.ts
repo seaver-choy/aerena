@@ -154,6 +154,7 @@ export const tournamentSchema = new mongoose.Schema(
                 score: Number,
             },
         ],
+        resultsTallied: { type: Boolean, default: false },
     },
     {
         collection: "tournaments",

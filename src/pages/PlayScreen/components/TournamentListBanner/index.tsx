@@ -8,7 +8,7 @@ import {
 } from "../../../../helpers/animation";
 import { Tournament } from "../../../../helpers/interfaces";
 import { getStickerImage } from "../../../../helpers/packs";
-import { dateRangeFormat } from "../../../../hooks/dateFormat";
+import { dateRangeFormat } from "../../../../hooks/dates";
 
 import TournamentListSonner from "../../../../assets/sonner/tournament-list.svg";
 import FreeTournamentListBackground from "../../../../assets/background/tournament-list-free.svg";

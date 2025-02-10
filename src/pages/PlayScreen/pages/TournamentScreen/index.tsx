@@ -8,7 +8,7 @@ import {
 } from "../../../../helpers/animation";
 import { Tournament } from "../../../../helpers/interfaces";
 import { getTournament } from "../../../../helpers/lambda.helper";
-import { dateFormat, dateRangeFormat } from "../../../../hooks/dateFormat";
+import { dateFormat, dateRangeFormat, isTournamentClosed } from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
@@ -169,16 +169,26 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                         {classification != undefined &&
                                             classification === "" && (
                                                 <div className="flex flex-col items-center">
-                                                    {dateFormat(
-                                                        tournament.tournamentEndSubmissionDate,
-                                                        tournament.type
-                                                    )}
-                                                    <p
-                                                        className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                                    >
-                                                        Closes in{" "}
-                                                        {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                                    </p>
+                                                    <div>
+                                                        {dateFormat(
+                                                            tournament.tournamentEndSubmissionDate,
+                                                            tournament.type
+                                                        )}
+                                                    </div>
+                                                    {
+                                                        tournament != null && isTournamentClosed(tournament) ? (
+                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                                Calculating Results
+                                                            </p>
+                                                        )
+                                                        :
+                                                        <p
+                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                                        >
+                                                            Closes in{" "}
+                                                            {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                                        </p>
+                                                    }
                                                 </div>
                                             )}
                                     </div>
@@ -198,8 +208,8 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" ? <PointsSystem /> : ""}
-                    {classification == "PREVIOUS" ? <Winners /> : ""}
+                    {classification != "PREVIOUS" || !tournament.resultsTallied ? <PointsSystem /> : ""}
+                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners /> : ""}
                 </div>
             )}
         </Layout>

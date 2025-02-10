@@ -217,6 +217,7 @@ export const Catalog = () => {
                                           key={index}
                                           onClick={displayAthleteModal}
                                           {...appearCardAnimation}
+                                          disabled
                                       >
                                           <AthleteCard
                                               color={baseColor}

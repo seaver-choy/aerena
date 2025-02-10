@@ -23,7 +23,6 @@ interface LineupProps {
     //athletes: Token[];
     tournament: Tournament;
     tournamentLineup: TournamentLineup[];
-    editLineup: boolean;
     setTournamentLineup: (tournamentLineup: TournamentLineup[]) => void;
     loadLuckyPick: boolean;
     setLoadLuckyPick: (loadLuckPick: boolean) => void;
@@ -34,7 +33,6 @@ export const Lineup = ({
     //athletes,
     tournament,
     tournamentLineup,
-    editLineup,
     setTournamentLineup,
     loadLuckyPick,
     setLoadLuckyPick,
@@ -67,10 +65,8 @@ export const Lineup = ({
 
     const handleSetLineup = (index) => {
         setNewSelected(false);
-        if (editLineup) {
-            setShowAthleteSelectModal(true);
-            setCurrentPositionIndex(index);
-        }
+        setShowAthleteSelectModal(true);
+        setCurrentPositionIndex(index);
     };
 
     const closeAthleteModal = () => {

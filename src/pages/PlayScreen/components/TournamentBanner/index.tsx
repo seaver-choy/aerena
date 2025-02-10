@@ -20,6 +20,7 @@ import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import { isTournamentClosed } from "../../../../hooks/dates";
 
 interface TournamentBannerProps {
     ongoingTournament: Tournament;
@@ -239,15 +240,23 @@ export const TournamentBanner = ({
                                 className="flex h-full w-[60%] flex-col items-start justify-center"
                                 {...appearTextAnimation}
                             >
-                                {formatDate(
-                                    ongoingTournament.tournamentEndSubmissionDate
-                                )}
-                                <p
-                                    className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                >
-                                    Closes in{" "}
-                                    {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                </p>
+                                <div>
+                                    {formatDate(ongoingTournament.tournamentEndSubmissionDate)}
+                                </div>
+                                {
+                                    ongoingTournament != null && isTournamentClosed(ongoingTournament) ? (
+                                        <p className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                            Calculating Results
+                                        </p>
+                                    )
+                                    :
+                                    <p
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                    >
+                                        Closes in{" "}
+                                        {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                    </p>
+                                }
                             </motion.div>
                             <motion.div
                                 className="flex h-full w-[40%] items-center justify-end"

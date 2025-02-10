@@ -64,6 +64,7 @@ export interface Tournament {
     ];
     prizeCurrency: string,
     joinCost: number,
+    resultsTallied: boolean,
 }
 
 export interface TournamentLineup {
