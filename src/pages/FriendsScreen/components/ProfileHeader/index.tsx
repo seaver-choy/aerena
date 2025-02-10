@@ -34,7 +34,7 @@ export const ProfileHeader = () => {
     };
 
     return (
-        <div className="h-[39.9vw]">
+        <div className="mt-[4vw] h-[39.9vw]">
             <div className="relative h-full w-full">
                 <img className="h-full w-full" src={ProfileHeaderBackground} />
                 <div className="absolute left-[8vw] top-[6vw] flex h-[24vw] w-[84vw]">

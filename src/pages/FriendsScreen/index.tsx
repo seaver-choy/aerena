@@ -19,8 +19,8 @@ export const FriendsScreen = () => {
                 }}
                 selectedTab={friendsTab}
             />
-            {friendsTab === "Favorites" && <DreamTeamSection />}
             {friendsTab === "Friends" && <FriendsSection />}
+            {friendsTab === "Favorites" && <DreamTeamSection />}
         </Layout>
     );
 };
