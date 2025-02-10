@@ -97,8 +97,6 @@ export const LineupSection = ({
             athlete: null,
         },
     ]);
-    const [initialLineup, setInitialLineup] =
-        useState<TournamentLineup[]>(tournamentLineup);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const invoice = initInvoice();
 
