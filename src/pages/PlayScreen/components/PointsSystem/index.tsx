@@ -1,5 +1,8 @@
 import { motion } from "motion/react";
-import { appearTextAnimation } from "../../../../helpers/animation";
+import {
+    appearTextAnimation,
+    slideRightTextAnimation,
+} from "../../../../helpers/animation";
 
 import PointsSystemBackground from "../../../../assets/background/points-system.svg";
 import PointsSystemOneBackground from "../../../../assets/background/points-system-one.svg";
@@ -7,6 +10,7 @@ import PointsSystemTwoBackground from "../../../../assets/background/points-syst
 import PointsSystemThreeBackground from "../../../../assets/background/points-system-three.svg";
 import PointsSystemFourBackground from "../../../../assets/background/points-system-four.svg";
 import PointsSystemFiveBackground from "../../../../assets/background/points-system-five.svg";
+import PointsSystemSixBackground from "../../../../assets/background/points-system-six.svg";
 
 export const PointsSystem = () => {
     return (
@@ -97,7 +101,7 @@ export const PointsSystem = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-[2vw] h-[39vw] bg-graydark">
+            <div className="mt-[2vw] h-[38.7vw] bg-graydark">
                 <div className="relative">
                     <img
                         className="h-full w-full"
@@ -125,7 +129,7 @@ export const PointsSystem = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-[2vw] h-[39vw] bg-graydark">
+            <div className="mt-[2vw] h-[38.7vw] bg-graydark">
                 <div className="relative">
                     <img
                         className="h-full w-full"
@@ -153,7 +157,7 @@ export const PointsSystem = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-[2vw] h-[39vw] bg-graydark">
+            <div className="mt-[2vw] h-[38.7vw] bg-graydark">
                 <div className="relative">
                     <img
                         className="h-full w-full"
@@ -181,7 +185,7 @@ export const PointsSystem = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-[2vw] h-[39vw] bg-graydark">
+            <div className="mt-[2vw] h-[38.7vw] bg-graydark">
                 <div className="relative">
                     <img
                         className="h-full w-full"
@@ -299,12 +303,115 @@ export const PointsSystem = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="absolute bottom-[4vw] left-[3.5vw] h-[8vw] w-[35vw]">
+                    <div className="absolute bottom-[5vw] left-[3.8vw] h-[8vw] w-[35vw]">
                         <motion.p
                             className="text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[5vw] text-transparent"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             33 POINTS
+                        </motion.p>
+                    </div>
+                </div>
+            </div>
+            <div className="mt-[2vw] h-[38.7vw] bg-graydark">
+                <div className="relative">
+                    <img
+                        className="h-full w-full"
+                        src={PointsSystemSixBackground}
+                    />
+                    <div className="absolute right-[14vw] top-[5vw] flex h-[7.5vw] w-[34.7vw] items-center justify-center">
+                        <motion.p
+                            className={
+                                "text-nowrap font-russoone text-[4vw] font-normal text-white"
+                            }
+                            {...appearTextAnimation}
+                        >
+                            PHP 10,000
+                        </motion.p>
+                    </div>
+                    <div className="absolute right-[5.4vw] top-[15.2vw] flex h-[12.6vw] gap-[1.5vw]">
+                        <div className="flex h-full w-[16.4vw] flex-col">
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] text-transparent"
+                                    {...appearTextAnimation}
+                                >
+                                    RANK 01
+                                </motion.p>
+                            </div>
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] font-russoone text-[2.8vw] text-white"
+                                    {...appearTextAnimation}
+                                >
+                                    40%
+                                </motion.p>
+                            </div>
+                        </div>
+                        <div className="flex h-full w-[16.4vw] flex-col">
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] text-transparent"
+                                    {...appearTextAnimation}
+                                >
+                                    RANK 02
+                                </motion.p>
+                            </div>
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] font-russoone text-[2.8vw] text-white"
+                                    {...appearTextAnimation}
+                                >
+                                    20%
+                                </motion.p>
+                            </div>
+                        </div>
+                        <div className="flex h-full w-[16.4vw] flex-col">
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] text-transparent"
+                                    {...appearTextAnimation}
+                                >
+                                    RANK 03
+                                </motion.p>
+                            </div>
+                            <div className="flex h-full items-center justify-center">
+                                <motion.p
+                                    className="mt-[0.5vw] font-russoone text-[2.8vw] text-white"
+                                    {...appearTextAnimation}
+                                >
+                                    12%
+                                </motion.p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="absolute bottom-[2.3vw] right-[31.6vw] h-[6.5vw] w-[26.2vw]">
+                        <div className="flex h-full items-center justify-center">
+                            <motion.p
+                                className="mt-[0.5vw] text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] text-transparent"
+                                {...appearTextAnimation}
+                            >
+                                RANK 04 - 10
+                            </motion.p>
+                        </div>
+                    </div>
+                    <div className="absolute bottom-[2.3vw] right-[5.4vw] h-[6.5vw] w-[26.2vw]">
+                        <div className="flex h-full items-center justify-center">
+                            <motion.p
+                                className="mt-[0.5vw] font-russoone text-[2.8vw] text-white"
+                                {...appearTextAnimation}
+                            >
+                                4% each
+                            </motion.p>
+                        </div>
+                    </div>
+                    <div className="absolute bottom-[4vw] left-[3.8vw] h-[8vw] w-[35vw]">
+                        <motion.p
+                            className="font-russoone text-[2.4vw] text-white"
+                            {...slideRightTextAnimation}
+                        >
+                            Tied players will split the prize pool % for their
+                            rank.
                         </motion.p>
                     </div>
                 </div>
