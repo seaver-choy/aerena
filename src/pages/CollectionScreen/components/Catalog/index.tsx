@@ -84,7 +84,6 @@ export const Catalog = () => {
 
             return teamOrder || nameOrder;
         });
-        console.log(sorted);
         setCurrentAthletes(sorted);
     }
 
@@ -112,10 +111,8 @@ export const Catalog = () => {
     const getAllAthletes = async () => {
         const allAthletes = await getAthletes(user.initDataRaw);
         const allLeagueTypes = await getLeagues(user.initDataRaw); //TODO: currently uses packinfos, will have to update to whatever collection lists the leagues
-        console.log(allLeagueTypes);
         const initialLeagueType = allLeagueTypes[0];
         setChosenLeagueType(initialLeagueType);
-        console.log(initialLeagueType);
         const tempAthletes = allAthletes.filter((obj) =>
             obj.league.includes(initialLeagueType)
         );

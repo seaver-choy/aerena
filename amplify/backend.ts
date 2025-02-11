@@ -174,7 +174,6 @@ const mlTournamentPath = api.root.addResource("mltournaments", {});
 const leaguePath = api.root.addResource("leagues", {});
 const joinFreePath = api.root.addResource("joinfree", {});
 
-
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },

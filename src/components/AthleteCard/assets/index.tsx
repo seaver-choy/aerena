@@ -253,7 +253,6 @@ export const IGN = ({ color, ign }) => {
     let split = "";
     if (splitCheck && numSpaceCheck !== undefined && numSpaceCheck < 2) {
         split = ign.split(/[ ,-]+/);
-        console.log(split[0]);
     }
     return (
         <svg

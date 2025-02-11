@@ -50,9 +50,6 @@ export const LeagueModal = ({
     };
 
     const handleSelect = () => {
-        const selectedTournament = ongoingTournaments[leagueSlide];
-        console.log("Selected tournament:", selectedTournament);
-        console.log("League slide:", leagueSlide);
         setOngoingTournament(ongoingTournaments[leagueSlide]);
         onClose();
     };

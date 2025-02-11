@@ -85,7 +85,6 @@ export const AthleteSelectModal = ({
     // }
 
     const fetchAthlete = async () => {
-        console.log(tournament);
         const result = await getAthletePositionFilter(
             position,
             tournament.league,

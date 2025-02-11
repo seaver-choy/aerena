@@ -6,8 +6,8 @@ import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import { Tournament } from "../../../../helpers/interfaces";
-import { getTournament } from "../../../../helpers/lambda.helper";
+import { Tournament, Ranking } from "../../../../helpers/interfaces";
+import { getTournament, getTournamentResults } from "../../../../helpers/lambda.helper";
 import { dateFormat, dateRangeFormat, isTournamentClosed } from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
@@ -19,13 +19,10 @@ import PremiumTournamentBackground from "../../../../assets/background/tournamen
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 
-interface TournamentScreenProps {
-    tournamentId: number;
-}
 
 const formatTime = (time: number) => String(time).padStart(2, "0");
 
-export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
+export const TournamentScreen = () => {
     const user = useUsers();
     const { tournamentId: paramTournamentId } = useParams();
     const [tournament, setTournament] = useState<Tournament>(null);
@@ -41,7 +38,7 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
         location.state?.classification === undefined
             ? ""
             : location.state?.classification;
-
+    const [rankings, setRankings] = useState<Ranking[]>(null);
     const fetchTournament = async () => {
         try {
             const result = await getTournament(
@@ -49,11 +46,22 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                 user.initDataRaw
             );
             setTournament(result);
-            console.log(result);
         } catch (e) {
             setTournament(null);
         }
         setShowTournament(true);
+    };
+
+    const handleTournamentResults = async () => {
+        try {
+            const result = await getTournamentResults(
+                paramTournamentId,
+                user.initDataRaw
+            );
+            setRankings(result.rankings);
+        } catch (e) {
+            console.log("error");
+        }
     };
 
     useEffect(() => {
@@ -82,6 +90,12 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
             const timer = setInterval(calculateTimeLeft);
 
             return () => clearInterval(timer);
+        } else if  (
+            tournament != null &&
+            classification != undefined &&
+            classification === "PREVIOUS"
+        ) {
+            handleTournamentResults();
         }
     }, [tournament]);
 
@@ -93,7 +107,6 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
     // }, []);
 
     useEffect(() => {
-        console.log(tournamentId);
         fetchTournament();
     }, []);
 
@@ -209,7 +222,7 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                         </div>
                     )}
                     {classification != "PREVIOUS" || !tournament.resultsTallied ? <PointsSystem /> : ""}
-                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners /> : ""}
+                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners rankings={rankings} tournament={tournament}/> : ""}
                 </div>
             )}
         </Layout>

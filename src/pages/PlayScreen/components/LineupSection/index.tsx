@@ -101,7 +101,6 @@ export const LineupSection = ({
     const invoice = initInvoice();
 
     const setupTournamentLineup = () => {
-        console.log(ongoingTournament);
         if (ongoingTournament !== null) {
             const lineup: TournamentLineup[] = [];
 
@@ -135,8 +134,6 @@ export const LineupSection = ({
             //         lineup.push(obj);
             //     }
             // }
-
-            console.log(lineup);
             setTournamentLineup(lineup);
         }
     };
@@ -153,7 +150,6 @@ export const LineupSection = ({
             const lineup = tournamentLineup.map((obj, i) => {
                 return { ...obj, athlete: luckyPicks[i] };
             });
-            console.log(lineup);
             setTournamentLineup(lineup);
         }
     };
@@ -168,7 +164,6 @@ export const LineupSection = ({
                 user.initDataRaw
             );
             if (result.userUpdate) {
-                console.log("Joined a tournament");
                 user.dispatch({
                     type: "SET_JOINED_TOURNAMENTS",
                     payload: {
@@ -176,7 +171,6 @@ export const LineupSection = ({
                             result.userUpdate["joinedTournaments"],
                     },
                 });
-                console.log();
                 //setHasJoinedTournament(true);
                 setIsLoading(false);
                 setShowSuccessModal(true);
@@ -188,7 +182,6 @@ export const LineupSection = ({
                 setShowErrorModal(true);
             }
         } catch (e) {
-            console.log(e);
             setShowErrorModal(true);
         }
     };
@@ -210,7 +203,6 @@ export const LineupSection = ({
                             ongoingTournament.joinCost,
                             user.initDataRaw
                         );
-                    console.log(invoiceLink);
                     setIsLoading(false);
                     if (invoiceLink != null && invoiceLink["link"] != null) {
                         invoice

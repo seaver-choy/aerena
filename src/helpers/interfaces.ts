@@ -109,3 +109,13 @@ export interface TeamColor {
     details: string;
     wave: string;
 }
+
+export interface UsersJoined {
+    username: string;
+    lineup: Token[];
+    score: number;
+};
+export interface Ranking {
+    score: number;
+    users: UsersJoined[];
+}

@@ -62,8 +62,6 @@ export const TournamentBanner = ({
             setOngoingTournaments(result);
             if (result.length > 0) setOngoingTournament(result[0]);
             else setOngoingTournament(null);
-            console.log("result");
-            console.log(result);
         } catch (e) {
             setOngoingTournaments(null);
             setOngoingTournament(null);

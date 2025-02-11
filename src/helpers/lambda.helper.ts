@@ -70,8 +70,6 @@ export const mintApiPoints = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log("PUT call success, minted");
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`PUT call failed ${e}`);
@@ -93,8 +91,6 @@ export const getTournament = async (tournamentId, initDataRaw) => {
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`GET tournament ${tournamentId} success`);
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET tournament ${tournamentId} failed`);
@@ -119,8 +115,6 @@ export const getOngoingTournaments = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`GET ongoing tournaments success`);
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET ongoing tournaments failed`);
@@ -145,8 +139,6 @@ export const getPreviousTournaments = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`GET previous tournaments success`);
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET previous tournaments failed`);
@@ -171,8 +163,6 @@ export const getUpcomingTournaments = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`GET upcoming tournaments success`);
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET upcoming tournaments failed`);
@@ -228,7 +218,6 @@ export const getFriends = async (userId, initDataRaw) => {
 
         const { body } = await restOperation.response;
         const response = await body.text();
-        console.log(`GET request success for friends`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET friends failed`);
@@ -263,7 +252,6 @@ export const createUser = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`Succesful creation of new user ${userId}`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`Create user ${userId} failed ${e}`);
@@ -290,7 +278,6 @@ export const claimQuest = async (userId, questId, initDataRaw) => {
 
         const { body } = await restOperation.response;
         const response = await body.json();
-        console.log(response);
         return response;
     } catch (e) {
         console.log(e);
@@ -314,7 +301,6 @@ export const getQuests = async (initDataRaw) => {
         const response = await body.text();
 
         const quests = JSON.parse(response);
-        console.log(quests);
         return quests;
     } catch (e) {
         console.log(`Encountered error during GET of quests ${e}`);
@@ -335,7 +321,6 @@ export const checkUsernameExists = async (username, initDataRaw) => {
         const response = await restOperation.response;
 
         const data = await response.body.text();
-        console.log(JSON.parse(data));
         return JSON.parse(data);
     } catch (e) {
         console.log(`Check Username failed ${e}`);
@@ -363,7 +348,6 @@ export const joinTgChannel = async (userId, initDataRaw) => {
 
         const { body } = await restOperation.response;
         const response = await body.text();
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
@@ -444,7 +428,6 @@ export const getAthleteStats = async (
 
         const { body } = await restOperation.response;
         const response = await body.text();
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
@@ -466,8 +449,6 @@ export const getPackInfos = async (initDataRaw) => {
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        // console.log(JSON.parse(response.toLocaleString()));
-        console.log(`Successful GET of packinfos`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`Encountered error during GET of packinfos ${e}`);
@@ -489,8 +470,6 @@ export const getLeagues = async (initDataRaw) => {
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        // console.log(JSON.parse(response.toLocaleString()));
-        console.log(`Successful GET of leagues`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`Encountered error during GET of leagues ${e}`);
@@ -512,7 +491,6 @@ export const getAthletes = async (initDataRaw) => {
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log("GET athletes success");
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET athletes fail ${e}`);
@@ -543,7 +521,6 @@ export const getAthletePositionFilter = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log("GET athletes position filtered success");
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET athletes position filtered fail ${e}`);
@@ -611,7 +588,6 @@ export const getInvoiceLinkForPremiumTournament = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`Invoice for user ${userId}`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`Invoice for user ${userId} failed ${e}`);
@@ -649,7 +625,6 @@ export const saveStarsTransaction = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(`Stars transaction for user ${userId}`);
         return JSON.parse(response);
     } catch (e) {
         console.log(`Stars transaction for user ${userId} failed ${e}`);
@@ -684,9 +659,6 @@ export const getAthletePaginated = async (
         const { body } = await restOperation.response;
 
         const response = await body.json();
-        console.log("GET Paginated");
-        console.log(response);
-
         return JSON.parse(JSON.stringify(response));
     } catch (e) {
         console.log(`GET Paginated Request Failed`);
@@ -718,8 +690,6 @@ export const getLineupPaginated = async (
 
         const { body } = await restOperation.response;
         const response = await body.json();
-        console.log(response);
-
         return JSON.parse(JSON.stringify(response));
     } catch (e) {
         console.log(`GET Tournament Lineup Pagination Request FAILED`);
@@ -744,7 +714,6 @@ export const getLuckyPicks = async (league: string, initDataRaw: string) => {
 
     const { body } = await restOperation.response;
     const response = await body.json();
-    console.log(response);
     return JSON.parse(JSON.stringify(response));
 };
 
@@ -804,7 +773,30 @@ export const joinFree = async (userId, bpCost, initDataRaw) => {
 
         const { body } = await restOperation.response;
         const response = await body.text();
-        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getTournamentResults = async (
+    tournamentId,
+    initDataRaw
+) => {
+    try {
+        console.log(tournamentId)
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `tournaments/results?tournamentId=${tournamentId}`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
         return JSON.parse(response);
     } catch (e) {
         console.log(e);

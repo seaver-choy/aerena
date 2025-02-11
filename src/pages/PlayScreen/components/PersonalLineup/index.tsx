@@ -35,9 +35,8 @@ export const PersonalLineup = ({
         if (ongoingTournament.usersJoined.length > 0) {
             const filteredUserLineups = ongoingTournament.usersJoined.filter(
                 (currentUser) => currentUser.username === user.username
-            );
+            ).reverse();
             setUserLineups(filteredUserLineups);
-            console.log(filteredUserLineups);
         } else setUserLineups([]);
     };
 
