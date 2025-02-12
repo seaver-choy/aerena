@@ -150,7 +150,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                PPG
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -273,7 +273,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                PPG
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -396,7 +396,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                PPG
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
