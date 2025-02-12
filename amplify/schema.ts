@@ -3,12 +3,13 @@ import paginate from "mongoose-paginate-v2";
 import { Schema } from "mongoose";
 
 export const tokenSchema = new mongoose.Schema({
-    tokenId: String,
+    athleteId: Number,
     player: String,
     displayName: String,
     team: String,
     position: [String],
     img: String,
+    athleteScore: Number,
     packId: String,
     tournamentLeague: String,
 });
@@ -297,9 +298,8 @@ export const teamSchema = new mongoose.Schema({
     teamId: Number,
     name: String,
     key: String,
-    players: [athleteSchema]
+    players: [athleteSchema],
 });
-
 
 export const mlTournamentSchema = new mongoose.Schema(
     {
