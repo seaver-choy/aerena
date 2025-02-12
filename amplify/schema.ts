@@ -9,7 +9,7 @@ export const tokenSchema = new mongoose.Schema({
     team: String,
     position: [String],
     img: String,
-    athleteScore: Number,
+    athleteScore: { type: Number, default: 0 },
     packId: String,
     tournamentLeague: String,
 });
