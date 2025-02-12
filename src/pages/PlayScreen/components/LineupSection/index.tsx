@@ -10,6 +10,7 @@ import {
     joinFree,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import { isTournamentClosed } from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
@@ -24,7 +25,6 @@ import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
-import { isTournamentClosed } from "../../../../hooks/dates";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
@@ -308,7 +308,7 @@ export const LineupSection = ({
                 {isLoading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
-                    <LineupTitle/>
+                    <LineupTitle />
                     <Lineup
                         key={
                             ongoingTournament != null
@@ -326,48 +326,47 @@ export const LineupSection = ({
                     <div className="absolute bottom-[3vw] flex h-[7.2vh] w-[56vw] items-end">
                         <button
                             className="relative w-full items-center justify-center"
-                            onClick={isLoading
-                                ? () => {}
-                                : () => setShowConfirmModal(true)
+                            onClick={
+                                isLoading
+                                    ? () => {}
+                                    : () => setShowConfirmModal(true)
                             }
                             disabled={isTournamentClosed(ongoingTournament)}
                         >
-                            {
-                                isTournamentClosed(ongoingTournament) ? (
-                                    <div className="absolute flex h-full w-full items-center justify-center">
-                                        <img
-                                            className="mt-[0.1vw] h-[2.5vw]"
-                                            src={LockedIcon}
-                                        ></img>
-                                    </div>
-                                )
-                                : ongoingTournament.type === "free" ? (
-                                    <div className="absolute flex h-full w-full items-center justify-center">
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            JOIN FOR&nbsp;
-                                        </p>
-                                        <img
-                                            className="mt-[0.1vw] h-[2.5vw]"
-                                            src={BattlePointsIcon}
-                                        ></img>
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            &nbsp;{ongoingTournament.joinCost}
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className="absolute flex h-full w-full items-center justify-center">
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            JOIN FOR&nbsp;
-                                        </p>
-                                        <img
-                                            className="mt-[0.1vw] h-[2.5vw]"
-                                            src={TGStarWhite}
-                                        ></img>
-                                        <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
-                                            &nbsp;{ongoingTournament.joinCost}
-                                        </p>
-                                    </div>
-                                )}
+                            {isTournamentClosed(ongoingTournament) ? (
+                                <div className="absolute flex h-full w-full items-center justify-center">
+                                    <img
+                                        className="mt-[0.1vw] h-[4vw]"
+                                        src={LockedIcon}
+                                    ></img>
+                                </div>
+                            ) : ongoingTournament.type === "free" ? (
+                                <div className="absolute flex h-full w-full items-center justify-center">
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        JOIN FOR&nbsp;
+                                    </p>
+                                    <img
+                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        src={BattlePointsIcon}
+                                    ></img>
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        &nbsp;{ongoingTournament.joinCost}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="absolute flex h-full w-full items-center justify-center">
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        JOIN FOR&nbsp;
+                                    </p>
+                                    <img
+                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        src={TGStarWhite}
+                                    ></img>
+                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                        &nbsp;{ongoingTournament.joinCost}
+                                    </p>
+                                </div>
+                            )}
                             <img className="w-full" src={LineupButton} />
                         </button>
                     </div>
