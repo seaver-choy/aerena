@@ -2,6 +2,7 @@ import {
     Back,
     Base,
     BigDiamond,
+    BorderBasic,
     BottomDiamond,
     BottomWings,
     BottomWingsAccent,
@@ -15,6 +16,7 @@ import {
     Outline,
     Role,
     SmallDiamond,
+    Sticker,
     TopWings,
     TopWingsAccent,
     Wave,
@@ -79,6 +81,12 @@ export const AthleteCard = ({ color, ign, opacity, role }) => {
             </div>
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
+            </div>
+            <div className="absolute h-full w-full">
+                <BorderBasic />
+            </div>
+            <div className="absolute h-full w-full">
+                <Sticker />
             </div>
         </div>
     );
