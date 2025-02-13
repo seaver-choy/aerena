@@ -1,5 +1,6 @@
 export interface Token {
     tokenId: string;
+    athleteId: number;
     player: string;
     displayName: string;
     team: string;
@@ -8,6 +9,7 @@ export interface Token {
     amount?: string;
     packId: string;
     mintedAt: Date;
+    athleteScore: number;
     star: number;
     statMultiplier: number;
     numAthletesNeededToUpgrade: number;
@@ -29,6 +31,7 @@ export interface Quest {
 }
 
 export interface Athlete {
+    athleteId: number;
     player: string;
     displayName: string;
     team: string;
@@ -62,9 +65,9 @@ export interface Tournament {
             score: number;
         },
     ];
-    prizeCurrency: string,
-    joinCost: number,
-    resultsTallied: boolean,
+    prizeCurrency: string;
+    joinCost: number;
+    resultsTallied: boolean;
 }
 
 export interface TournamentLineup {
@@ -114,8 +117,28 @@ export interface UsersJoined {
     username: string;
     lineup: Token[];
     score: number;
-};
+}
 export interface Ranking {
     score: number;
     users: UsersJoined[];
+}
+
+export interface Stats {
+    player: string;
+    team: string;
+    kills: number;
+    deaths: number;
+    assists: number;
+    isMVP: boolean;
+    teamWon: boolean;
+    game: number;
+    day: number;
+    match_id: string;
+    league: string;
+    competitionType: string;
+}
+export interface AverageStats {
+    averageKills: number;
+    averageDeaths: number;
+    averageAssists: number;
 }

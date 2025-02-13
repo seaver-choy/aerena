@@ -38,7 +38,7 @@ export const Catalog = () => {
     const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
-
+    const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
     const handlePreviousCategory = () => {
         if (positionIndex > 0) {
             setPositionIndex(positionIndex - 1);
@@ -59,7 +59,8 @@ export const Catalog = () => {
         setShowLeagueModal(false);
     };
 
-    const displayAthleteModal = () => {
+    const displayAthleteModal = (athlete: Athlete) => {
+        setSelectedAthlete(athlete);
         setShowAthleteModal(true);
     };
 
@@ -212,7 +213,9 @@ export const Catalog = () => {
                                       <motion.button
                                           className="relative flex h-[36.4vw] w-[28vw]"
                                           key={index}
-                                          onClick={displayAthleteModal}
+                                          onClick={() => {
+                                              displayAthleteModal(athlete);
+                                          }}
                                           {...appearCardAnimation}
                                       >
                                           <AthleteCard
@@ -246,7 +249,10 @@ export const Catalog = () => {
                                   </div>
                               )}
                         {showAthleteModal && (
-                            <AthleteModal onClose={closeAthleteModal} />
+                            <AthleteModal
+                                athlete={selectedAthlete}
+                                onClose={closeAthleteModal}
+                            />
                         )}
                     </div>
                 </div>

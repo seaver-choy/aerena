@@ -33,8 +33,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 params[1] = week
                 params[2] = league
             */
-            if (params?.[2] === "all") {
-                return await getAthleteTotalStats(event);
+            if (params?.[1] === "average") {
+                return await getAthleteAllStats(event);
             } else {
                 return await getAthleteWeeklyStats(event);
             }
@@ -181,61 +181,84 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
     }
 }
 
-async function getAthleteTotalStats(event: APIGatewayProxyEvent) {
-    const athleteModel = conn!.model("Athletes");
+async function getAthleteAllStats(event: APIGatewayProxyEvent) {
+    const statsModel = conn!.model("AthleteStats");
     //const totalStatsModel = conn!.model("TotalStats");
     const params = event.pathParameters?.proxy?.split("/");
 
     /*
-      params[0] = playerName
-      params[1] = league
+      params[0] = athleteId
     */
-    if (params !== undefined) {
-        try {
-            const allStats = await athleteModel.findOne({
-                player: decodeURIComponent(params[0]),
-                league: params[1],
-            });
 
-            if (!allStats) {
-                console.error(`[STATS] Athlete ${params[0]} does not exist`);
-                return {
-                    statusCode: 404,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+    const athleteModel = conn!.model("Athletes");
+
+    if (params !== undefined) {
+        const athleteId = params[0];
+
+        /*
+            Temporary code to get the name of the athlete using athleteId
+            Remove when athleteId exists in matchstats
+        */
+
+        try {
+            const athlete = await athleteModel.findOne({
+                athleteId: parseInt(athleteId),
+            });
+            const average = await statsModel.aggregate(
+                [
+                    {
+                        $match: {
+                            player: athlete.player,
+                        },
                     },
-                    body: JSON.stringify(`Athlete ${params[0]} does not exist`),
-                };
-            }
+                    {
+                        $group: {
+                            _id: "$player",
+                            averageKills: {
+                                $avg: "$kills",
+                            },
+                            averageDeaths: {
+                                $avg: "$deaths",
+                            },
+                            averageAssists: {
+                                $avg: "$assists",
+                            },
+                        },
+                    },
+                ],
+                { allowDiskUse: true, maxTimeMS: 60000 }
+            );
+
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ allStats: allStats }),
+                body: JSON.stringify({ average: average }),
             };
         } catch (e) {
-            console.error(`[STATS] Failed to get athlete total stats \n ${e}`);
+            console.log(e);
             return {
                 statusCode: 500,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify("Failed to get athlete total stats"),
+                body: JSON.stringify({
+                    message: "An error has occured while getting all stats",
+                    error: e,
+                }),
             };
         }
     } else {
-        console.error(`[STATS] Params is undefined`);
         return {
             statusCode: 404,
             headers: {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify("Path parameters are undefined"),
+            body: JSON.stringify({ message: "Path parameters are undefined" }),
         };
     }
 }

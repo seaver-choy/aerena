@@ -409,6 +409,29 @@ export const claimReward = async (userID, bpLevel, isPremium, initDataRaw) => {
     }
 };
 
+export const getAthleteAverageStats = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `stats/${athleteId}/average`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getAthleteStats = async (
     playerName,
     league,
@@ -697,7 +720,6 @@ export const getLineupPaginated = async (
 };
 
 export const getLuckyPicks = async (league: string, initDataRaw: string) => {
-    
     const queryParams = {
         league,
     };
@@ -779,12 +801,9 @@ export const joinFree = async (userId, bpCost, initDataRaw) => {
     }
 };
 
-export const getTournamentResults = async (
-    tournamentId,
-    initDataRaw
-) => {
+export const getTournamentResults = async (tournamentId, initDataRaw) => {
     try {
-        console.log(tournamentId)
+        console.log(tournamentId);
         const restOperation = get({
             apiName: "playibleApi",
             path: `tournaments/results?tournamentId=${tournamentId}`,

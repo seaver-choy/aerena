@@ -223,24 +223,45 @@ export const battlePassSchema = new mongoose.Schema(
     }
 );
 
+// old athleteStatsSchema
+// export const athleteStatsSchema = new mongoose.Schema(
+//     {
+//         athleteId: Number,
+//         player: String,
+//         hero: String,
+//         kill: Number,
+//         death: Number,
+//         assist: Number,
+//         KDA: Number,
+//         gold: Number,
+//         hero_damage: Number,
+//         damage_taken: Number,
+//         tower_damage: Number,
+//         game: Number,
+//         match_id: String,
+//         week: Number,
+//         league: String,
+//         type: String,
+//     },
+//     {
+//         collection: "matchstats",
+//     }
+// );
+
 export const athleteStatsSchema = new mongoose.Schema(
     {
-        athleteId: Number,
         player: String,
-        hero: String,
-        kill: Number,
-        death: Number,
-        assist: Number,
-        KDA: Number,
-        gold: Number,
-        hero_damage: Number,
-        damage_taken: Number,
-        tower_damage: Number,
+        team: String,
+        kills: Number,
+        deaths: Number,
+        assists: Number,
+        isMVP: Boolean,
+        teamWon: Boolean,
         game: Number,
+        day: Number,
         match_id: String,
-        week: Number,
         league: String,
-        type: String,
+        competitionType: String,
     },
     {
         collection: "matchstats",
@@ -297,9 +318,8 @@ export const teamSchema = new mongoose.Schema({
     teamId: Number,
     name: String,
     key: String,
-    players: [athleteSchema]
+    players: [athleteSchema],
 });
-
 
 export const mlTournamentSchema = new mongoose.Schema(
     {
