@@ -95,12 +95,16 @@ export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
             </div>
-            <div className="absolute h-full w-full">
-                <BorderBasic />
-            </div>
-            <div className="absolute h-full w-full">
-                <Sticker />
-            </div>
+            {type !== undefined && type === "basic" && (
+                <>
+                    <div className="absolute h-full w-full">
+                        <BorderBasic />
+                    </div>
+                    <div className="absolute h-full w-full">
+                        <Sticker />
+                    </div>
+                </>
+            )}
         </div>
     );
 };
