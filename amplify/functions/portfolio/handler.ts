@@ -194,44 +194,85 @@ async function getAthletePositionFilter(event: APIGatewayProxyEvent) {
     //         "_id athleteId player displayName team position img"
     //     )
     //     .distinct("athleteId");
+    let res;
 
-    const res = await athleteModel.aggregate([
-        {
-            $match: {
-                position: position,
-                league: league,
-            },
-        },
-        {
-            $group: {
-                _id: "$_id",
-                athleteId: {
-                    $first: "$athleteId",
-                },
-                player: {
-                    $first: "$player",
-                },
-                displayName: {
-                    $first: "$displayName",
-                },
-                team: {
-                    $first: "$team",
-                },
-                position: {
-                    $first: "$position",
-                },
-                img: {
-                    $first: "$img",
+    if(league == ""){
+        res = await athleteModel.aggregate([
+            {
+                $match: {
+                    position: position,
                 },
             },
-        },
-        {
-            $sort: {
-                team: 1,
-                displayName: 1,
+            {
+                $group: {
+                    _id: "$athleteId",
+                    athleteId: {
+                        $first: "$athleteId",
+                    },
+                    player: {
+                        $first: "$player",
+                    },
+                    displayName: {
+                        $first: "$displayName",
+                    },
+                    team: {
+                        $first: "$team",
+                    },
+                    position: {
+                        $first: "$position",
+                    },
+                    img: {
+                        $first: "$img",
+                    },
+                },
             },
-        },
-    ]);
+            {
+                $sort: {
+                    team: 1,
+                    displayName: 1,
+                },
+            },
+        ]);
+    }
+    else {
+        res = await athleteModel.aggregate([
+            {
+                $match: {
+                    position: position,
+                    league: league,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    athleteId: {
+                        $first: "$athleteId",
+                    },
+                    player: {
+                        $first: "$player",
+                    },
+                    displayName: {
+                        $first: "$displayName",
+                    },
+                    team: {
+                        $first: "$team",
+                    },
+                    position: {
+                        $first: "$position",
+                    },
+                    img: {
+                        $first: "$img",
+                    },
+                },
+            },
+            {
+                $sort: {
+                    team: 1,
+                    displayName: 1,
+                },
+            },
+        ]);
+    }
 
     if (res.length > 0) {
         return {

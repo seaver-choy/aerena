@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import { Token, Tournament } from "../../../../helpers/interfaces";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 import { TeamColor } from "../../../../helpers/interfaces";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { AthleteCard } from "../../../../components/AthleteCard";
@@ -86,9 +86,9 @@ export const PersonalLineup = ({
                 {userLineups != null &&
                     userLineups.length > 0 &&
                     ongoingTournament.usersJoined.map(
-                        (userInfo) =>
+                        (userInfo, index) =>
                             userInfo.username === user.username && (
-                                <div className="relative h-[109.5vw] w-full">
+                                <div key={index} className="relative h-[109.5vw] w-full">
                                     <img
                                         className="h-full w-full"
                                         src={BasicBoardBackground}
@@ -112,8 +112,8 @@ export const PersonalLineup = ({
                                         </p>
                                     </div>
                                     <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                        {userInfo.lineup.map((athlete) => (
-                                            <div className="relative flex h-[36.4vw] w-[28vw]">
+                                        {userInfo.lineup.map((athlete, index) => (
+                                            <div key={index} className="relative flex h-[36.4vw] w-[28vw]">
                                                 {/* <img
                                                     className="h-full"
                                                     src={athlete.img}

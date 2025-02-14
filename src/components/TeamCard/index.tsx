@@ -24,10 +24,8 @@ interface Props {
     color: TeamColor;
     team: string;
     opacity: { wave: string };
-    role: string;
-    type?: string;
 }
-export const AthleteCard = ({ color, team, opacity }: Props) => {
+export const TeamCard = ({ color, team, opacity }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">

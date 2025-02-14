@@ -7,7 +7,7 @@ import {
     pulseAnimation,
 } from "../../../../helpers/animation";
 import { Tournament } from "../../../../helpers/interfaces";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 import { dateRangeFormat } from "../../../../hooks/dates";
 
 import TournamentListSonner from "../../../../assets/sonner/tournament-list.svg";

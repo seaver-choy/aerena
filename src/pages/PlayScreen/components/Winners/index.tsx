@@ -10,7 +10,7 @@ import { Ranking, TeamColor, Tournament, UsersJoined } from "../../../../helpers
 import { useUsers } from "../../../../hooks/useUser";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 interface WinnersProps {
     rankings: Ranking[];
     tournament: Tournament;

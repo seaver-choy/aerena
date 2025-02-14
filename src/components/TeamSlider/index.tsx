@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { motion, useMotionValue } from "motion/react";
 import { appearAnimation } from "../../helpers/animation";
-import { Athlete, TeamColor } from "../../helpers/interfaces";
-import { getBaseTeamColor } from "../../helpers/athletes";
-import { AthleteCard } from "../AthleteCard";
+import { TeamProfile } from "../../helpers/interfaces";
+import { TeamCard } from "../TeamCard";
 
 const buffer = 30;
 const transition = {
@@ -13,49 +11,22 @@ const transition = {
     damping: 50,
 };
 
-interface Props {
-    athlete: Athlete;
-    teamColor: TeamColor;
+interface TeamSliderProps {
+    teams: TeamProfile[];
+    cardIndex: number;
+    setCardIndex: (index: number) => void;
 }
 
-interface Cards {
-    color: TeamColor;
-    ign: string;
-    opacity: {
-        wave: string;
-    };
-    role: string;
-    type: string;
-}
-
-export const Slider = ({ athlete, teamColor }: Props) => {
-    //const [imageIndex, setImageIndex] = useState(0);
-    const [cardIndex, setCardIndex] = useState<number>(0);
-    const [cards] = useState<Cards[]>([
-        {
-            color: getBaseTeamColor(),
-            ign: athlete.player,
-            opacity: { wave: getBaseTeamColor().wave },
-            role: athlete.position[0],
-            type: "default",
-        },
-        {
-            color: teamColor,
-            ign: athlete.player,
-            opacity: { wave: teamColor.wave },
-            role: athlete.position[0],
-            type: "basic",
-        },
-    ]);
+export const TeamSlider = ({ teams, cardIndex, setCardIndex }: TeamSliderProps) => {
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
         const x = dragX.get();
 
-        if (x <= -buffer && cardIndex < cards.length - 1) {
-            setCardIndex((pv) => pv + 1);
+        if (x <= -buffer && cardIndex < teams.length - 1) {
+            setCardIndex(cardIndex + 1);
         } else if (x >= buffer && cardIndex > 0) {
-            setCardIndex((pv) => pv - 1);
+            setCardIndex(cardIndex - 1);
         }
     };
 
@@ -93,7 +64,8 @@ export const Slider = ({ athlete, teamColor }: Props) => {
                         />
                     </motion.div>
                 ))} */}
-                {cards.map((card, index) => {
+                {teams.map((teamProfile, index) => {
+                    const teamColors = teamProfile.baseTeamColors;
                     return (
                         <motion.div
                             key={index}
@@ -104,12 +76,10 @@ export const Slider = ({ athlete, teamColor }: Props) => {
                             }}
                             transition={transition}
                         >
-                            <AthleteCard
-                                color={card.color}
-                                ign={card.ign}
-                                opacity={{ wave: card.opacity.wave }}
-                                role={card.role}
-                                type={card.type}
+                            <TeamCard
+                                color={teamColors}
+                                team={teamProfile.key}
+                                opacity={{ wave: teamColors.wave }}
                             />
                         </motion.div>
                     );

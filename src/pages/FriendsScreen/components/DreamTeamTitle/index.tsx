@@ -8,8 +8,13 @@ import { TeamModal } from "../../modals/TeamModal";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
+import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
+interface DreamTeamTitleProps {
+    dreamTeam: DreamTeam;
+    handleDreamTeam: (teamProfile: TeamProfile, tokens: Token[]) => void;
+}
 
-export const DreamTeamTitle = () => {
+export const DreamTeamTitle = ({dreamTeam, handleDreamTeam}: DreamTeamTitleProps) => {
     const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
 
     const displayTeamModal = () => {
@@ -27,7 +32,7 @@ export const DreamTeamTitle = () => {
                     className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                     {...slideRightTextAnimation}
                 >
-                    My Dream Team
+                    {dreamTeam.teamProfile.key != undefined ? dreamTeam.teamProfile.key : "My Dream Team"}
                 </motion.p>
             </div>
             <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
@@ -43,7 +48,7 @@ export const DreamTeamTitle = () => {
                     </div>
                     <img className="h-[100%]" src={FunctionButton}></img>
                 </motion.button>
-                {showTeamModal && <TeamModal onClose={closeTeamModal} />}
+                {showTeamModal && <TeamModal dreamTeam={dreamTeam} onSelect={handleDreamTeam} onClose={closeTeamModal} />}
             </div>
             <img className="absolute bottom-0 w-full" src={GoldLine}></img>
         </div>

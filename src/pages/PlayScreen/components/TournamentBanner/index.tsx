@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
 import { Tournament } from "../../../../helpers/interfaces";
 import { getOngoingTournaments } from "../../../../helpers/lambda.helper";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 import {
     appearAnimation,
     appearTextAnimation,

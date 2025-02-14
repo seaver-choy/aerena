@@ -89,7 +89,7 @@ export const Lineup = ({
         <>
             <div className="absolute top-[25vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
                 {positionList.map((position, index) => (
-                    <div>
+                    <div key={index}>
                         {loadLuckyPick && (
                             <motion.div
                                 className="relative flex h-[36.4vw] w-[28vw]"

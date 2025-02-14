@@ -5,13 +5,8 @@ export interface Token {
     team: string;
     position: string[];
     img: string;
-    // amount?: string;
-    // packId: string;
-    // mintedAt: Date;
     athleteScore: number;
-    // star: number;
-    // statMultiplier: number;
-    // numAthletesNeededToUpgrade: number;
+    league: string;
 }
 
 export interface UpgradeToken extends Token {
@@ -34,6 +29,7 @@ export interface Athlete {
     player: string;
     displayName: string;
     team: string;
+    teamName: string,
     totalKills: number;
     avgKills: number;
     totalDeaths: number;
@@ -150,4 +146,18 @@ export interface AverageStats {
     averageKills: number;
     averageDeaths: number;
     averageAssists: number;
+}
+
+export interface TeamProfile {
+    teamId: number;
+    name: string;
+    key: string;
+    baseTeamColors: TeamColor;
+    altName: string;
+    country: string;
+}
+
+export interface DreamTeam {
+    teamProfile: TeamProfile;
+    lineup: Token[];
 }

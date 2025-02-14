@@ -1,6 +1,6 @@
 import { get, put, post } from "aws-amplify/api";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
-import { PackInfo } from "./interfaces";
+import { DreamTeam, PackInfo } from "./interfaces";
 
 export const submitLineup = async (
     tournamentId,
@@ -555,7 +555,7 @@ export const getAthletes = async (initDataRaw) => {
 
 export const getAthletePositionFilter = async (
     position: string,
-    league: string,
+    league: string = "",
     initDataRaw: string
 ) => {
     try {
@@ -852,5 +852,57 @@ export const getTournamentResults = async (tournamentId, initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
+    }
+};
+
+export const getTeamProfiles = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/teamprofiles",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of leagues ${e}`);
+    }
+};
+
+export const saveDreamTeam = async (
+    userId,
+    dreamTeam: DreamTeam,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            dreamTeam: dreamTeam,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/savedreamteam`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response)
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`POST call failed ${e}`);
     }
 };

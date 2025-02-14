@@ -1,5 +1,5 @@
 export const Back = ({ color }) => {
-    const gradientId = `back-${color.light}-${color.dark}`;
+    const gradientId = `back-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
 
     return (
         <svg
@@ -52,7 +52,7 @@ export const Base = ({ color }) => {
 };
 
 export const BigDiamond = ({ color }) => {
-    const gradientId = `big-diamond-${color.light}-${color.dark}`;
+    const gradientId = `big-diamond-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
 
     return (
         <svg
@@ -317,7 +317,7 @@ export const BorderBasic = () => {
 };
 
 export const BottomDiamond = ({ color }) => {
-    const gradientId = `bottom-diamond-${color.light}-${color.dark}`;
+    const gradientId = `bottom-diamond-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
 
     return (
         <svg

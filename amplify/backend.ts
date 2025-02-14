@@ -171,11 +171,13 @@ const upgradePath = api.root.addResource("upgrade", {});
 const telegramstarsPath = api.root.addResource("telegramstars", {});
 const invoicelinkPath = api.root.addResource("invoice", {});
 const mlTournamentPath = api.root.addResource("mltournaments", {});
-const leaguePath = api.root.addResource("leagues", {});
 const joinFreePath = api.root.addResource("joinfree", {});
 
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+userPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 userPath.addMethod("POST", userIntegration, {
@@ -248,11 +250,10 @@ invoicelinkPath.addMethod("POST", telegramstarsIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
-mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
+mlTournamentPath.addMethod("GET", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
-
-leaguePath.addMethod("GET", mlTournamentIntegration, {
+mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
