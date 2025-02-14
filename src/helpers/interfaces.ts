@@ -116,6 +116,7 @@ export interface TeamColor {
     main: string;
     light: string;
     dark: string;
+    wings: string;
     accent: string;
     details: string;
     wave: string;
