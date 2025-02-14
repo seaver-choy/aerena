@@ -24,6 +24,7 @@ export const GlobalStats = () => {
         main: "#333",
         light: "#D8A956",
         dark: "#AB750F",
+        wings: "#D8A956",
         accent: "#fff",
         details: "#fff",
         wave: "0.15",
@@ -35,6 +36,7 @@ export const GlobalStats = () => {
     const color = {
         main: team.main,
         light: team.light,
+        wings: team.wings,
         dark: team.dark,
         accent: team.accent,
         details: team.details,
