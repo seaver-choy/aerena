@@ -318,6 +318,7 @@ export const colorSchema = new mongoose.Schema(
         main: String,
         light: String,
         dark: String,
+        wings: String,
         accent: String,
         details: String,
         wave: String,
