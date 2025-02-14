@@ -7,13 +7,16 @@ import {
     appearTextAnimation,
 } from "../../../../helpers/animation";
 import { Slider } from "../../../../components/Slider";
-import { getAthleteAverageStats } from "../../../../helpers/lambda.helper";
+import {
+    getAthleteAverageStats,
+    getTeamInfo,
+} from "../../../../helpers/lambda.helper";
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { Athlete, AverageStats } from "../../../../helpers/interfaces";
+import { Athlete, AverageStats, Team } from "../../../../helpers/interfaces";
 import { useUsers } from "../../../../hooks/useUser";
 interface AthleteModalProps {
     athlete: Athlete;
@@ -33,6 +36,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`);
     };
+    const [teamInfo, setTeamInfo] = useState<Team>();
 
     useEffect(() => {
         if (averageStats !== undefined) {
@@ -56,6 +60,21 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
             };
         }
     }, [killMV, deathMV, assistMV, averageStats]);
+
+    useEffect(() => {
+        async function fetchTeamInfo() {
+            const res = await getTeamInfo(
+                athlete.team,
+                athlete.league,
+                athlete.type,
+                user.initDataRaw
+            );
+
+            console.log(res);
+            setTeamInfo(res);
+        }
+        fetchTeamInfo();
+    }, [averageStats]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -180,7 +199,16 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                         </motion.button>
                     </div>
                     <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
-                        <Slider />
+                        {teamInfo !== undefined && (
+                            <Slider
+                                athlete={athlete}
+                                teamColor={teamInfo.colors}
+                            />
+                        )}
+                        {/* <Slider
+                            athlete={athlete}
+                            teamColor={teamInfo.colors}
+                        /> */}
                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
                             Basic Skin
                         </p>

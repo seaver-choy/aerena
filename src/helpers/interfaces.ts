@@ -1,18 +1,17 @@
 export interface Token {
-    tokenId: string;
     athleteId: number;
     player: string;
     displayName: string;
     team: string;
     position: string[];
     img: string;
-    amount?: string;
-    packId: string;
-    mintedAt: Date;
+    // amount?: string;
+    // packId: string;
+    // mintedAt: Date;
     athleteScore: number;
-    star: number;
-    statMultiplier: number;
-    numAthletesNeededToUpgrade: number;
+    // star: number;
+    // statMultiplier: number;
+    // numAthletesNeededToUpgrade: number;
 }
 
 export interface UpgradeToken extends Token {
@@ -104,6 +103,15 @@ export interface Referral {
     referralDate: Date;
 }
 
+export interface Team {
+    teamId: number;
+    name: string;
+    key: string;
+    colors: TeamColor;
+    league: string;
+    type: string;
+    players: Token[];
+}
 export interface TeamColor {
     main: string;
     light: string;
