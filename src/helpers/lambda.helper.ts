@@ -409,6 +409,39 @@ export const claimReward = async (userID, bpLevel, isPremium, initDataRaw) => {
     }
 };
 
+export const getTeamInfo = async (
+    teamKey: string,
+    league: string,
+    type: string,
+    initDataRaw: string
+) => {
+    try {
+        const queryParams = {
+            teamKey: teamKey,
+            league: league,
+            type: type,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "portfolio/teams",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        console.log(response);
+        //console.log(JSON.parse(response));
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getAthleteAverageStats = async (
     athleteId: number,
     initDataRaw: string

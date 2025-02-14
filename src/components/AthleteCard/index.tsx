@@ -9,6 +9,7 @@ import {
     Darken,
     Dust,
     Glow,
+    GlowBasic,
     IGN,
     Line,
     Logo,
@@ -22,11 +23,23 @@ import {
     Wave,
 } from "./assets";
 
-export const AthleteCard = ({ color, ign, opacity, role }) => {
+import { TeamColor } from "../../helpers/interfaces";
+interface Props {
+    color: TeamColor;
+    ign: string;
+    opacity: { wave: string };
+    role: string;
+    type?: string;
+}
+export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
-                <Glow />
+                {type !== undefined && type === "basic" ? (
+                    <GlowBasic />
+                ) : (
+                    <Glow />
+                )}
             </div>
             <div className="absolute h-full w-full">
                 <Back color={color} />
@@ -82,12 +95,16 @@ export const AthleteCard = ({ color, ign, opacity, role }) => {
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
             </div>
-            <div className="absolute h-full w-full">
-                <BorderBasic />
-            </div>
-            <div className="absolute h-full w-full">
-                <Sticker />
-            </div>
+            {type !== undefined && type === "basic" && (
+                <>
+                    <div className="absolute h-full w-full">
+                        <BorderBasic />
+                    </div>
+                    <div className="absolute h-full w-full">
+                        <Sticker />
+                    </div>
+                </>
+            )}
         </div>
     );
 };

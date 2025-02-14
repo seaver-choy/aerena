@@ -313,13 +313,34 @@ export const starsTransactionSchema = new mongoose.Schema(
         collection: "stars_transactions",
     }
 );
+export const colorSchema = new mongoose.Schema(
+    {
+        main: String,
+        light: String,
+        dark: String,
+        accent: String,
+        details: String,
+        wave: String,
+    },
+    {
+        _id: false,
+    }
+);
 
-export const teamSchema = new mongoose.Schema({
-    teamId: Number,
-    name: String,
-    key: String,
-    players: [athleteSchema],
-});
+export const teamSchema = new mongoose.Schema(
+    {
+        teamId: Number,
+        name: String,
+        key: String,
+        colors: colorSchema,
+        league: String,
+        type: String,
+        players: [athleteSchema],
+    },
+    {
+        collection: "teams",
+    }
+);
 
 export const mlTournamentSchema = new mongoose.Schema(
     {

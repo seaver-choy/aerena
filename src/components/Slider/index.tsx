@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion, useMotionValue } from "motion/react";
 import { appearAnimation } from "../../helpers/animation";
-
+import { Athlete, TeamColor } from "../../helpers/interfaces";
 import Sample from "../../assets/card/sample.svg";
+import { getBaseTeamColor } from "../../helpers/athletes";
+import { AthleteCard } from "../AthleteCard";
 
 const images = [Sample, Sample];
 const buffer = 30;
@@ -13,18 +15,49 @@ const transition = {
     damping: 50,
 };
 
-export const Slider = () => {
-    const [imageIndex, setImageIndex] = useState(0);
+interface Props {
+    athlete: Athlete;
+    teamColor: TeamColor;
+}
 
+interface Cards {
+    color: TeamColor;
+    ign: string;
+    opacity: {
+        wave: string;
+    };
+    role: string;
+    type: string;
+}
+
+export const Slider = ({ athlete, teamColor }: Props) => {
+    //const [imageIndex, setImageIndex] = useState(0);
+    const [cardIndex, setCardIndex] = useState<number>(0);
+    const [cards] = useState<Cards[]>([
+        {
+            color: getBaseTeamColor(),
+            ign: athlete.player,
+            opacity: { wave: getBaseTeamColor().wave },
+            role: athlete.position[0],
+            type: "default",
+        },
+        {
+            color: teamColor,
+            ign: athlete.player,
+            opacity: { wave: teamColor.wave },
+            role: athlete.position[0],
+            type: "basic",
+        },
+    ]);
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
         const x = dragX.get();
 
-        if (x <= -buffer && imageIndex < images.length - 1) {
-            setImageIndex((pv) => pv + 1);
-        } else if (x >= buffer && imageIndex > 0) {
-            setImageIndex((pv) => pv - 1);
+        if (x <= -buffer && cardIndex < cards.length - 1) {
+            setCardIndex((pv) => pv + 1);
+        } else if (x >= buffer && cardIndex > 0) {
+            setCardIndex((pv) => pv - 1);
         }
     };
 
@@ -41,11 +74,11 @@ export const Slider = () => {
                     right: 0,
                 }}
                 style={{ x: dragX }}
-                animate={{ translateX: `-${imageIndex * 100}%` }}
+                animate={{ translateX: `-${cardIndex * 100}%` }}
                 transition={transition}
                 onDragEnd={onDragEnd}
             >
-                {images.map((imageSource, index) => (
+                {/* {images.map((imageSource, index) => (
                     <motion.div
                         key={index}
                         className="flex w-full shrink-0 justify-center"
@@ -61,7 +94,28 @@ export const Slider = () => {
                             draggable={false}
                         />
                     </motion.div>
-                ))}
+                ))} */}
+                {cards.map((card, index) => {
+                    return (
+                        <motion.div
+                            key={index}
+                            className="flex h-full w-full shrink-0 justify-center"
+                            animate={{
+                                scale: cardIndex === index ? 0.95 : 0.8,
+                                opacity: cardIndex === index ? 1 : 0.5,
+                            }}
+                            transition={transition}
+                        >
+                            <AthleteCard
+                                color={card.color}
+                                ign={card.ign}
+                                opacity={{ wave: card.opacity.wave }}
+                                role={card.role}
+                                type={card.type}
+                            />
+                        </motion.div>
+                    );
+                })}
             </motion.div>
         </motion.div>
     );
