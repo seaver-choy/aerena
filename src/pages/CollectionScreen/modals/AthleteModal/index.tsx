@@ -162,7 +162,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                             </div>
                         </motion.div>
                     </div>
-                    <div className="mb-[1vw] flex h-[6vw] justify-center">
+                    <div className="mb-[2vw] flex h-[6vw] justify-center">
                         <motion.button
                             className="relative flex h-[6vw] items-center justify-center"
                             onClick={handleViewPlayerProfile}
@@ -179,10 +179,8 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                             ></img>
                         </motion.button>
                     </div>
-                    <div className="mb-[5vw] flex h-[55vw] flex-col items-center">
-                        <motion.div {...appearAnimation}>
-                            <Slider />
-                        </motion.div>
+                    <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
+                        <Slider />
                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
                             Basic Skin
                         </p>

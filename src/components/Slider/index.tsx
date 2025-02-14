@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, useMotionValue } from "motion/react";
+import { appearAnimation } from "../../helpers/animation";
 
 import Sample from "../../assets/card/sample.svg";
 
-const images = [Sample, Sample, Sample];
+const images = [Sample, Sample];
 const buffer = 30;
 const transition = {
     type: "spring",
@@ -28,7 +29,10 @@ export const Slider = () => {
     };
 
     return (
-        <div className="relative flex h-full w-full justify-center overflow-hidden">
+        <motion.div
+            className="relative flex h-full w-full justify-center overflow-hidden"
+            {...appearAnimation}
+        >
             <motion.div
                 className="flex w-[60%] items-center"
                 drag="x"
@@ -59,6 +63,6 @@ export const Slider = () => {
                     </motion.div>
                 ))}
             </motion.div>
-        </div>
+        </motion.div>
     );
 };
