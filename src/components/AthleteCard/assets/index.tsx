@@ -1,5 +1,5 @@
 export const Back = ({ color }) => {
-    const gradientId = `back-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
+    const gradientId = `back-${color.light.replace(/^#/, "")}-${color.dark.replace(/^#/, "")}`;
 
     return (
         <svg
@@ -52,7 +52,7 @@ export const Base = ({ color }) => {
 };
 
 export const BigDiamond = ({ color }) => {
-    const gradientId = `big-diamond-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
+    const gradientId = `big-diamond-${color.light.replace(/^#/, "")}-${color.dark.replace(/^#/, "")}`;
 
     return (
         <svg
@@ -317,7 +317,7 @@ export const BorderBasic = () => {
 };
 
 export const BottomDiamond = ({ color }) => {
-    const gradientId = `bottom-diamond-${color.light.replace(/^#/, '')}-${color.dark.replace(/^#/, '')}`;
+    const gradientId = `bottom-diamond-${color.light.replace(/^#/, "")}-${color.dark.replace(/^#/, "")}`;
 
     return (
         <svg
@@ -522,14 +522,44 @@ export const GlowBasic = () => {
 };
 
 export const IGN = ({ color, ign }) => {
-    const numSpaceCheck = ign.match(/ /g)?.length;
-    const splitCheck = ign.includes("-") || ign.includes(" ") ? true : false;
+    const splitCheck = ign.includes(" ");
+    const longName = ign.length > 8;
+    const veryLongName = ign.length > 10;
 
-    const longName = ign.length > 8 ? true : false;
-    let split = "";
-    if (splitCheck && numSpaceCheck !== undefined && numSpaceCheck < 2) {
-        split = ign.split(/[ ,-]+/);
+    let split: string | string[] = ign;
+    let fontSize = 10;
+
+    if (!splitCheck && longName) {
+        fontSize = veryLongName ? 7 : 8;
+        split = ign;
+    } else if (splitCheck) {
+        const splitArray = ign.split(" ");
+        let combinedPart = "";
+        let splitParts = [];
+
+        for (let i = 0; i < splitArray.length; i++) {
+            const word = splitArray[i];
+            const space = i < splitArray.length - 1 ? " " : "";
+            const partWithSpace = word + space;
+
+            if (combinedPart.length + partWithSpace.length > 8) {
+                splitParts.push(combinedPart.trim());
+                combinedPart = partWithSpace;
+            } else {
+                combinedPart += partWithSpace;
+            }
+        }
+
+        splitParts.push(combinedPart.trim());
+
+        if (splitParts.length > 1) {
+            split = splitParts;
+        }
+    } else if (longName) {
+        fontSize = 8;
+        split = [ign.slice(0, 8), ign.slice(8)];
     }
+
     return (
         <svg
             width="100%"
@@ -538,22 +568,17 @@ export const IGN = ({ color, ign }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            {splitCheck && numSpaceCheck !== undefined && numSpaceCheck < 2 ? (
+            {typeof split === "string" ? (
                 <text
                     xmlSpace="preserve"
                     fill={color.details}
                     fontFamily="Russo One"
-                    fontSize={longName && !splitCheck ? 8 : 10}
+                    fontSize={fontSize}
                     letterSpacing="0em"
-                    style={{
-                        whiteSpace: "pre",
-                    }}
+                    style={{ whiteSpace: "pre" }}
                 >
-                    <tspan x={50} y={61} textAnchor="middle">
-                        {split[0]}
-                    </tspan>
-                    <tspan x={50} y={70} textAnchor="middle">
-                        {split[1]}
+                    <tspan x={50} y={66} textAnchor="middle">
+                        {split}
                     </tspan>
                 </text>
             ) : (
@@ -561,15 +586,20 @@ export const IGN = ({ color, ign }) => {
                     xmlSpace="preserve"
                     fill={color.details}
                     fontFamily="Russo One"
-                    fontSize={longName && !splitCheck ? 8 : 10}
+                    fontSize={fontSize}
                     letterSpacing="0em"
-                    style={{
-                        whiteSpace: "pre",
-                    }}
+                    style={{ whiteSpace: "pre" }}
                 >
-                    <tspan x={50} y={66} textAnchor="middle">
-                        {ign}
-                    </tspan>
+                    {split.map((part, index) => (
+                        <tspan
+                            key={index}
+                            x={50}
+                            y={61 + index * 9}
+                            textAnchor="middle"
+                        >
+                            {part}
+                        </tspan>
+                    ))}
                 </text>
             )}
         </svg>

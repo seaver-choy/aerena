@@ -5,10 +5,18 @@ import { motion } from "motion/react";
 import {
     appearTextAnimation,
     pulseAnimation,
+    slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import { Tournament, Ranking } from "../../../../helpers/interfaces";
-import { getTournament, getTournamentResults } from "../../../../helpers/lambda.helper";
-import { dateFormat, dateRangeFormat, isTournamentClosed } from "../../../../hooks/dates";
+import {
+    getTournament,
+    getTournamentResults,
+} from "../../../../helpers/lambda.helper";
+import {
+    dateFormat,
+    dateRangeFormat,
+    isTournamentClosed,
+} from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
@@ -18,7 +26,7 @@ import FreeTournamentBackground from "../../../../assets/background/tournament-f
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
-
+import Closed from "../../../../assets/others/closed.svg";
 
 const formatTime = (time: number) => String(time).padStart(2, "0");
 
@@ -90,7 +98,7 @@ export const TournamentScreen = () => {
             const timer = setInterval(calculateTimeLeft);
 
             return () => clearInterval(timer);
-        } else if  (
+        } else if (
             tournament != null &&
             classification != undefined &&
             classification === "PREVIOUS"
@@ -168,6 +176,15 @@ export const TournamentScreen = () => {
                                     </p>
                                 </motion.div>
                                 <motion.div
+                                    className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                                    {...slideRightTextAnimation}
+                                >
+                                    <img
+                                        className="h-full w-full"
+                                        src={Closed}
+                                    />
+                                </motion.div>
+                                <motion.div
                                     className="absolute bottom-[8vw] flex h-[10vw] w-[70%]"
                                     {...appearTextAnimation}
                                 >
@@ -188,20 +205,23 @@ export const TournamentScreen = () => {
                                                             tournament.type
                                                         )}
                                                     </div>
-                                                    {
-                                                        tournament != null && isTournamentClosed(tournament) ? (
-                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
-                                                                Calculating Results
-                                                            </p>
-                                                        )
-                                                        :
+                                                    {tournament != null &&
+                                                    isTournamentClosed(
+                                                        tournament
+                                                    ) ? (
+                                                        <p
+                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                                        >
+                                                            Calculating Results
+                                                        </p>
+                                                    ) : (
                                                         <p
                                                             className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                                         >
                                                             Closes in{" "}
                                                             {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                                         </p>
-                                                    }
+                                                    )}
                                                 </div>
                                             )}
                                     </div>
@@ -221,8 +241,18 @@ export const TournamentScreen = () => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" || !tournament.resultsTallied ? <PointsSystem /> : ""}
-                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners rankings={rankings} tournament={tournament}/> : ""}
+                    {classification != "PREVIOUS" ||
+                    !tournament.resultsTallied ? (
+                        <PointsSystem />
+                    ) : (
+                        ""
+                    )}
+                    {classification == "PREVIOUS" &&
+                    tournament.resultsTallied ? (
+                        <Winners rankings={rankings} tournament={tournament} />
+                    ) : (
+                        ""
+                    )}
                 </div>
             )}
         </Layout>

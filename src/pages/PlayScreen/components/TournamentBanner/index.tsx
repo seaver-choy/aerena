@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
+import { isTournamentClosed } from "../../../../hooks/dates";
 import { Tournament } from "../../../../helpers/interfaces";
 import { getOngoingTournaments } from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
@@ -9,6 +10,7 @@ import {
     appearAnimation,
     appearTextAnimation,
     pulseAnimation,
+    slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import { LeagueModal } from "../../modals/LeagueModal";
 
@@ -19,8 +21,8 @@ import ChangeIcon from "../../../../assets/icon/change-white.svg";
 import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import Closed from "../../../../assets/others/closed.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { isTournamentClosed } from "../../../../hooks/dates";
 
 interface TournamentBannerProps {
     ongoingTournament: Tournament;
@@ -233,28 +235,37 @@ export const TournamentBanner = ({
                                 {ongoingTournament.prizePool.toLocaleString()}
                             </p>
                         </motion.div>
+                        <motion.div
+                            className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                            {...slideRightTextAnimation}
+                        >
+                            <img className="h-full w-full" src={Closed} />
+                        </motion.div>
                         <div className="absolute bottom-[8vw] flex h-[10vw] w-[70%]">
                             <motion.div
                                 className="flex h-full w-[60%] flex-col items-start justify-center"
                                 {...appearTextAnimation}
                             >
                                 <div>
-                                    {formatDate(ongoingTournament.tournamentEndSubmissionDate)}
+                                    {formatDate(
+                                        ongoingTournament.tournamentEndSubmissionDate
+                                    )}
                                 </div>
-                                {
-                                    ongoingTournament != null && isTournamentClosed(ongoingTournament) ? (
-                                        <p className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
-                                            Calculating Results
-                                        </p>
-                                    )
-                                    :
+                                {ongoingTournament != null &&
+                                isTournamentClosed(ongoingTournament) ? (
+                                    <p
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                    >
+                                        Calculating Results
+                                    </p>
+                                ) : (
                                     <p
                                         className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                     >
                                         Closes in{" "}
                                         {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                     </p>
-                                }
+                                )}
                             </motion.div>
                             <motion.div
                                 className="flex h-full w-[40%] items-center justify-end"
