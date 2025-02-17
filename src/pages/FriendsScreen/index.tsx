@@ -21,7 +21,7 @@ export const FriendsScreen = () => {
                 selectedTab={friendsTab}
             />
             {friendsTab === "Friends" && <FriendsSection />}
-            {friendsTab === "Favorites" && <DreamTeamSection />}*/}
+            {friendsTab === "Favorites" && <DreamTeamSection />} */}
             <div className="flex h-full items-center justify-center">
                 <img className="h-[80vw] w-[80vw]" src={Upgrading} />
             </div>

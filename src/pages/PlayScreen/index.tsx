@@ -44,7 +44,6 @@ export const PlayScreen = () => {
                         <Tabs
                             options={tournamentOptions}
                             onToggle={(selected) => {
-                                console.log("Selected Option:", selected);
                                 setPlayTab(selected);
                             }}
                             selectedTab={playTab}

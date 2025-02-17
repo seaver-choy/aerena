@@ -147,6 +147,10 @@ const UsernameModal: React.FC = () => {
                     type: "SET_REFERRAL_PURCHASES",
                     payload: { referralPurchases: 0 },
                 });
+                user.dispatch({
+                    type: "SET_DREAM_TEAM",
+                    payload: { dreamTeam: data["dreamTeam"] },
+                });
 
                 user.dispatch({
                     type: "SET_REFERRAL_CHECK",

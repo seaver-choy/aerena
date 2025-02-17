@@ -1,16 +1,12 @@
 export interface Token {
-    tokenId: string;
+    athleteId: number;
     player: string;
     displayName: string;
     team: string;
     position: string[];
     img: string;
-    amount?: string;
-    packId: string;
-    mintedAt: Date;
-    star: number;
-    statMultiplier: number;
-    numAthletesNeededToUpgrade: number;
+    athleteScore: number;
+    league: string;
 }
 
 export interface UpgradeToken extends Token {
@@ -29,9 +25,11 @@ export interface Quest {
 }
 
 export interface Athlete {
+    athleteId: number;
     player: string;
     displayName: string;
     team: string;
+    teamName: string,
     totalKills: number;
     avgKills: number;
     totalDeaths: number;
@@ -62,9 +60,9 @@ export interface Tournament {
             score: number;
         },
     ];
-    prizeCurrency: string,
-    joinCost: number,
-    resultsTallied: boolean,
+    prizeCurrency: string;
+    joinCost: number;
+    resultsTallied: boolean;
 }
 
 export interface TournamentLineup {
@@ -101,11 +99,65 @@ export interface Referral {
     referralDate: Date;
 }
 
+export interface Team {
+    teamId: number;
+    name: string;
+    key: string;
+    colors: TeamColor;
+    league: string;
+    type: string;
+    players: Token[];
+}
 export interface TeamColor {
     main: string;
     light: string;
     dark: string;
+    wings: string;
     accent: string;
     details: string;
     wave: string;
+}
+
+export interface UsersJoined {
+    username: string;
+    lineup: Token[];
+    score: number;
+}
+export interface Ranking {
+    score: number;
+    users: UsersJoined[];
+}
+
+export interface Stats {
+    player: string;
+    team: string;
+    kills: number;
+    deaths: number;
+    assists: number;
+    isMVP: boolean;
+    teamWon: boolean;
+    game: number;
+    day: number;
+    match_id: string;
+    league: string;
+    competitionType: string;
+}
+export interface AverageStats {
+    averageKills: number;
+    averageDeaths: number;
+    averageAssists: number;
+}
+
+export interface TeamProfile {
+    teamId: number;
+    name: string;
+    key: string;
+    baseTeamColors: TeamColor;
+    altName: string;
+    country: string;
+}
+
+export interface DreamTeam {
+    teamProfile: TeamProfile;
+    lineup: Token[];
 }

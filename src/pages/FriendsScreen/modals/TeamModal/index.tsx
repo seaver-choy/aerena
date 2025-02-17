@@ -1,25 +1,101 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import { Slider } from "../../../../components/Slider";
 
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
-import PhilippinesSticker from "../../../../assets/sticker/philippines.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
+import { useUsers } from "../../../../hooks/useUser";
+import { getTeamProfiles } from "../../../../helpers/lambda.helper";
+import { getCountryImage } from "../../../../helpers/images";
+import { TeamSlider } from "../../../../components/TeamSlider";
 
 interface TeamModalProps {
+    dreamTeam: DreamTeam;
+    onSelect: (teamProfile: TeamProfile, tokens: Token[], index? : number) => void;
     onClose: () => void;
 }
 
-export const TeamModal = ({ onClose }: TeamModalProps) => {
+export const TeamModal = ({  dreamTeam, onSelect, onClose }: TeamModalProps) => {
+    const user = useUsers();
+    const [teams, setTeams] = useState<TeamProfile[]>(null);
+    const [countries, setCountries] = useState<string[]>(null);
+    const [filteredTeams, setFilteredTeams] = useState<TeamProfile[]>(null);
+    const [countryIndex, setCountryIndex] = useState<number>(0);
+    const [teamIndex, setTeamIndex] = useState<number>(0);
+    
+
+    const fetchTeams = async () => {
+        const result = await getTeamProfiles(user.initDataRaw);
+        setTeams(result);
+    }
+
+    const handleCountryChange = (newIndex) => {
+        const matchingTeams = teams.filter(team => team.country === countries[newIndex]).sort((a, b) => a.key.localeCompare(b.key));
+        setFilteredTeams(matchingTeams);
+        if(dreamTeam.teamProfile.teamId !== undefined && countries[newIndex] === dreamTeam.teamProfile.country){
+            const currentTeamIndex = matchingTeams.findIndex(team => team.teamId === dreamTeam.teamProfile.teamId);
+            setTeamIndex(currentTeamIndex);
+            console.log(currentTeamIndex);
+        }
+        else
+            setTeamIndex(0);
+    }
+    
+    const handleContent = () => {
+        const uniqueCountries = [...new Set(teams.map(team => team.country).filter(country => country !== undefined && country !== null))].sort();
+        setCountries(uniqueCountries);
+        if(dreamTeam.teamProfile.teamId !== undefined){
+            const matchingTeams = teams.filter(team => team.country === dreamTeam.teamProfile.country).sort((a, b) => a.key.localeCompare(b.key));
+            setFilteredTeams(matchingTeams);
+            console.log(matchingTeams);
+            const currentCountryIndex = uniqueCountries.findIndex(country => country === dreamTeam.teamProfile.country);
+            setCountryIndex(currentCountryIndex);
+            const currentTeamIndex = matchingTeams.findIndex(team => team.teamId === dreamTeam.teamProfile.teamId);
+            setTeamIndex(currentTeamIndex);
+        }
+        else {
+            const matchingTeams = teams.filter(team => team.country === uniqueCountries[0]).sort((a, b) => a.key.localeCompare(b.key));
+            setFilteredTeams(matchingTeams);
+        }
+    }
+    
+    const handleTeamSelect = async() => {
+        onSelect(filteredTeams[teamIndex], dreamTeam.lineup);
+        onClose();
+    }
+
+    const handleCountryPrevious = () => {
+        if (countryIndex > 0) {
+            const newIndex = countryIndex - 1;
+            setCountryIndex(newIndex);
+            handleCountryChange(newIndex);
+        }
+    };
+    
+    const handleCountryNext = () => {
+        if (countryIndex < countries.length - 1) {
+            const newIndex = countryIndex + 1;
+            setCountryIndex(newIndex);
+            handleCountryChange(newIndex);
+        }
+    };
+    
     useEffect(() => {
+        if(teams != null) {
+            handleContent();
+        }
+    }, [teams]);
+    
+    useEffect(() => {
+        fetchTeams();
         document.body.style.overflow = "hidden";
 
         return () => {
@@ -56,32 +132,36 @@ export const TeamModal = ({ onClose }: TeamModalProps) => {
                         <motion.button
                             className="flex h-[5vw] w-[30%] justify-start"
                             {...appearAnimation}
+                            onClick={handleCountryPrevious}
+                            disabled={countries == null}
                         >
-                            <img className="ml-[4vw] h-full" src={LeftIcon} />
+                            <img className={`ml-[4vw] h-full ${countries != null && countryIndex > 0 ? "opacity-100" : "opacity-50"}`} src={LeftIcon} />
                         </motion.button>
-                        <motion.div
-                            className="flex h-full w-[40%] items-center justify-center"
-                            {...appearAnimation}
-                        >
-                            <img className="h-full" src={PhilippinesSticker} />
-                        </motion.div>
+                                <motion.div
+                                    className="flex h-full w-[40%] items-center justify-center"
+                                {...appearAnimation}
+                                >
+                                <img className="h-full" src={getCountryImage(countries != null ? countries[countryIndex] : "")} alt={countries != null ? countries[countryIndex] : ""}/>
+                                </motion.div>
                         <motion.button
                             className="flex h-[5vw] w-[30%] justify-end"
                             {...appearAnimation}
+                            onClick={handleCountryNext}
+                            disabled={countries == null}
                         >
-                            <img className="mr-[4vw] h-full" src={RightIcon} />
+                            <img className={`mr-[4vw] h-full ${countries != null && countryIndex < countries.length - 1 ? "opacity-100" : "opacity-50"}`} src={RightIcon} />
                         </motion.button>
                     </div>
-                    <div className="mb-[4vw] flex h-[58.5vw]">
-                        <motion.div {...appearAnimation}>
-                            <Slider />
-                        </motion.div>
-                    </div>
+                            <div className="mb-[4vw] flex h-[58.5vw]">
+                            {
+                                filteredTeams != null && <TeamSlider teams={filteredTeams} cardIndex={teamIndex} setCardIndex={setTeamIndex}/>
+                            }
+                            </div>
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onClose}
+                                onClick={handleTeamSelect}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />

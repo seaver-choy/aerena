@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { useLocation } from "react-router-dom";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 import { TeamColor } from "../../../../helpers/interfaces";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
@@ -17,22 +17,24 @@ export const CommunityLineupsScreen = () => {
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
+    const reversedUsersJoined = ongoingTournament.usersJoined.filter(entry => entry.username !== user.username).reverse();
     // const playTab = location.state?.playTab;
 
     const [displayLineup, setDisplayLineup] = useState(
-        ongoingTournament.usersJoined.slice(0, 5)
+        reversedUsersJoined.slice(0, 5)
     );
     // const [hasMore, setHasMore] = useState<boolean>(true);
     const [currentIndex, setCurrentIndex] = useState<number>(5);
     const fetchMoreData = () => {
         console.log("test");
+        console.log(currentIndex);
         setTimeout(() => {
-            if (currentIndex >= ongoingTournament.usersJoined.length) {
+            if (currentIndex >= reversedUsersJoined.length) {
                 // setHasMore(false);
             } else {
                 setDisplayLineup(
                     displayLineup.concat(
-                        ongoingTournament.usersJoined.slice(
+                        reversedUsersJoined.slice(
                             currentIndex,
                             currentIndex + 5
                         )
@@ -57,7 +59,7 @@ export const CommunityLineupsScreen = () => {
             <div className="mt-[6vw] flex flex-col gap-[4vw]">
                 {displayLineup !== null &&
                     displayLineup.map((userInfo) =>
-                        userInfo.userName != user.username ? (
+                        userInfo.username != user.username ? (
                             <div className="relative h-[109.5vw] w-full">
                                 <img
                                     className="h-full w-full"
@@ -113,7 +115,7 @@ export const CommunityLineupsScreen = () => {
                         )
                     )}
             </div>
-            {ongoingTournament.usersJoined.length == 0 ? (
+            {reversedUsersJoined.length == 0 ? (
                 <div className="mt-[30vh]">
                     <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-bold text-transparent">
                         No Community Lineups
@@ -122,12 +124,12 @@ export const CommunityLineupsScreen = () => {
                         Please check again later
                     </p>
                 </div>
-            ) : currentIndex < ongoingTournament.usersJoined.length ? (
+            ) : currentIndex < reversedUsersJoined.length ? (
                 <div className="mt-[4vw] flex w-full flex-col items-center">
                     <div className="flex flex-col items-center">
                         <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[4vw] font-normal text-transparent">
                             Displaying {currentIndex} out of{" "}
-                            {ongoingTournament.usersJoined.length} lineups.
+                            {reversedUsersJoined.length} lineups.
                         </p>
                         <button
                             className="relative mt-[2vw] flex h-[8vw] justify-center"

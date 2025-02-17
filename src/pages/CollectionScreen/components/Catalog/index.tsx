@@ -38,7 +38,7 @@ export const Catalog = () => {
     const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
-
+    const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
     const handlePreviousCategory = () => {
         if (positionIndex > 0) {
             setPositionIndex(positionIndex - 1);
@@ -59,7 +59,8 @@ export const Catalog = () => {
         setShowLeagueModal(false);
     };
 
-    const displayAthleteModal = () => {
+    const displayAthleteModal = (athlete: Athlete) => {
+        setSelectedAthlete(athlete);
         setShowAthleteModal(true);
     };
 
@@ -84,7 +85,6 @@ export const Catalog = () => {
 
             return teamOrder || nameOrder;
         });
-        console.log(sorted);
         setCurrentAthletes(sorted);
     }
 
@@ -112,10 +112,8 @@ export const Catalog = () => {
     const getAllAthletes = async () => {
         const allAthletes = await getAthletes(user.initDataRaw);
         const allLeagueTypes = await getLeagues(user.initDataRaw); //TODO: currently uses packinfos, will have to update to whatever collection lists the leagues
-        console.log(allLeagueTypes);
         const initialLeagueType = allLeagueTypes[0];
         setChosenLeagueType(initialLeagueType);
-        console.log(initialLeagueType);
         const tempAthletes = allAthletes.filter((obj) =>
             obj.league.includes(initialLeagueType)
         );
@@ -215,7 +213,9 @@ export const Catalog = () => {
                                       <motion.button
                                           className="relative flex h-[36.4vw] w-[28vw]"
                                           key={index}
-                                          onClick={displayAthleteModal}
+                                          onClick={() => {
+                                              displayAthleteModal(athlete);
+                                          }}
                                           {...appearCardAnimation}
                                           disabled
                                       >
@@ -250,7 +250,10 @@ export const Catalog = () => {
                                   </div>
                               )}
                         {showAthleteModal && (
-                            <AthleteModal onClose={closeAthleteModal} />
+                            <AthleteModal
+                                athlete={selectedAthlete}
+                                onClose={closeAthleteModal}
+                            />
                         )}
                     </div>
                 </div>

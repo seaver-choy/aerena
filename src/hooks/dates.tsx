@@ -50,7 +50,6 @@ export function dateRangeFormat(date1, date2, tournamentType = null) {
 
 export function isTournamentClosed(tournament){
     if (tournament !== null) {
-        console.log(tournament);
         if (
             Date.now() >
             new Date(

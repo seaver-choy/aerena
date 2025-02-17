@@ -24,6 +24,7 @@ export const GlobalStats = () => {
         main: "#333",
         light: "#D8A956",
         dark: "#AB750F",
+        wings: "#D8A956",
         accent: "#fff",
         details: "#fff",
         wave: "0.15",
@@ -35,6 +36,7 @@ export const GlobalStats = () => {
     const color = {
         main: team.main,
         light: team.light,
+        wings: team.wings,
         dark: team.dark,
         accent: team.accent,
         details: team.details,
@@ -150,7 +152,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -273,7 +275,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -396,7 +398,7 @@ export const GlobalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}

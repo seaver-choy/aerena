@@ -21,7 +21,6 @@ export const UpcomingScreen = () => {
                 user.initDataRaw
             );
             setUpcomingTournaments(result);
-            console.log(result);
         } catch (e) {
             setUpcomingTournaments(null);
         }

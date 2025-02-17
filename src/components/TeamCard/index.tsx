@@ -2,22 +2,18 @@ import {
     Back,
     Base,
     BigDiamond,
-    BorderBasic,
     BottomDiamond,
     BottomWings,
     BottomWingsAccent,
     Darken,
     Dust,
     Glow,
-    GlowBasic,
-    IGN,
     Line,
     Logo,
     MiddleDiamond,
     Outline,
-    Role,
     SmallDiamond,
-    Sticker,
+    Team,
     TopWings,
     TopWingsAccent,
     Wave,
@@ -26,20 +22,14 @@ import {
 import { TeamColor } from "../../helpers/interfaces";
 interface Props {
     color: TeamColor;
-    ign: string;
+    team: string;
     opacity: { wave: string };
-    role: string;
-    type?: string;
 }
-export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
+export const TeamCard = ({ color, team, opacity }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
-                {type !== undefined && type === "basic" ? (
-                    <GlowBasic />
-                ) : (
-                    <Glow />
-                )}
+                <Glow />
             </div>
             <div className="absolute h-full w-full">
                 <Back color={color} />
@@ -75,16 +65,13 @@ export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
                 <Line color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Role color={color} role={role} />
-            </div>
-            <div className="absolute h-full w-full">
                 <MiddleDiamond color={color} />
             </div>
             <div className="absolute h-full w-full">
                 <Darken />
             </div>
             <div className="absolute h-full w-full">
-                <IGN color={color} ign={ign} />
+                <Team color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <BottomDiamond color={color} />
@@ -95,16 +82,6 @@ export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
             </div>
-            {type !== undefined && type === "basic" && (
-                <>
-                    <div className="absolute h-full w-full">
-                        <BorderBasic />
-                    </div>
-                    <div className="absolute h-full w-full">
-                        <Sticker />
-                    </div>
-                </>
-            )}
         </div>
     );
 };

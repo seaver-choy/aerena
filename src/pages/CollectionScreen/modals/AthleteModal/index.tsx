@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 import {
@@ -7,36 +7,92 @@ import {
     appearTextAnimation,
 } from "../../../../helpers/animation";
 import { Slider } from "../../../../components/Slider";
-
+import {
+    getAthleteAverageStats,
+    getTeamInfo,
+} from "../../../../helpers/lambda.helper";
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-
+import { Athlete, AverageStats, Team } from "../../../../helpers/interfaces";
+import { useUsers } from "../../../../hooks/useUser";
 interface AthleteModalProps {
+    athlete: Athlete;
     onClose: () => void;
 }
 
-export const AthleteModal = ({ onClose }: AthleteModalProps) => {
+export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
+    const user = useUsers();
     const navigate = useNavigate();
-    const count = useMotionValue(0);
-    const stats = useTransform(() => count.get().toFixed(2));
-
+    const killMV = useMotionValue(0);
+    const deathMV = useMotionValue(0);
+    const assistMV = useMotionValue(0);
+    const killStat = useTransform(() => killMV.get().toFixed(2));
+    const deathStat = useTransform(() => deathMV.get().toFixed(2));
+    const assistStat = useTransform(() => assistMV.get().toFixed(2));
+    const [averageStats, setAverageStats] = useState<AverageStats>();
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`);
     };
+    const [teamInfo, setTeamInfo] = useState<Team>();
 
     useEffect(() => {
-        const controls = animate(count, 10, { duration: 2 });
-        return () => controls.stop();
-    });
+        if (averageStats !== undefined) {
+            const killControl = animate(killMV, averageStats.averageKills, {
+                duration: 2,
+            });
+            const deathControl = animate(deathMV, averageStats.averageDeaths, {
+                duration: 2,
+            });
+            const assistControl = animate(
+                assistMV,
+                averageStats.averageAssists,
+                {
+                    duration: 2,
+                }
+            );
+            return () => {
+                killControl.stop();
+                deathControl.stop();
+                assistControl.stop();
+            };
+        }
+    }, [killMV, deathMV, assistMV, averageStats]);
+
+    useEffect(() => {
+        async function fetchTeamInfo() {
+            const res = await getTeamInfo(
+                athlete.team,
+                athlete.league,
+                athlete.type,
+                user.initDataRaw
+            );
+
+            console.log(res);
+            setTeamInfo(res);
+        }
+        fetchTeamInfo();
+    }, [averageStats]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
         };
+    }, []);
+
+    useEffect(() => {
+        async function fetchAthleteAverageStats() {
+            const res = await getAthleteAverageStats(
+                athlete.athleteId,
+                user.initDataRaw
+            );
+
+            setAverageStats(res.average[0]);
+        }
+        fetchAthleteAverageStats();
     }, []);
 
     return (
@@ -53,7 +109,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                     <div className="relative flex h-[11vw] flex-col items-center">
                         <motion.div {...appearTextAnimation}>
                             <p className="font-montserrat text-[3vw] font-extrabold text-golddark">
-                                ONIC PH
+                                {athlete.team}
                             </p>
                         </motion.div>
                         <motion.div
@@ -61,7 +117,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[5vw] text-transparent">
-                                SUPER FRINCE
+                                {athlete.displayName}
                             </p>
                         </motion.div>
                         <motion.button
@@ -86,7 +142,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                                     KILLS
                                 </p>
                                 <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {stats}
+                                    {killStat}
                                 </motion.pre>
                             </div>
                         </motion.div>
@@ -103,7 +159,7 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                                     DEATHS
                                 </p>
                                 <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {stats}
+                                    {deathStat}
                                 </motion.pre>
                             </div>
                         </motion.div>
@@ -120,12 +176,12 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                                     ASSISTS
                                 </p>
                                 <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {stats}
+                                    {assistStat}
                                 </motion.pre>
                             </div>
                         </motion.div>
                     </div>
-                    <div className="mb-[1vw] flex h-[6vw] justify-center">
+                    <div className="mb-[2vw] flex h-[6vw] justify-center">
                         <motion.button
                             className="relative flex h-[6vw] items-center justify-center"
                             onClick={handleViewPlayerProfile}
@@ -142,10 +198,17 @@ export const AthleteModal = ({ onClose }: AthleteModalProps) => {
                             ></img>
                         </motion.button>
                     </div>
-                    <div className="mb-[5vw] flex h-[55vw] flex-col items-center">
-                        <motion.div {...appearAnimation}>
-                            <Slider />
-                        </motion.div>
+                    <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
+                        {teamInfo !== undefined && (
+                            <Slider
+                                athlete={athlete}
+                                teamColor={teamInfo.colors}
+                            />
+                        )}
+                        {/* <Slider
+                            athlete={athlete}
+                            teamColor={teamInfo.colors}
+                        /> */}
                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
                             Basic Skin
                         </p>

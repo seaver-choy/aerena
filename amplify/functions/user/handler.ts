@@ -62,8 +62,10 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return claimBattlepassReward(event);
     } else if (event.path.includes("templineup")) {
         return updateTempLineup(event);
-    }  else if (event.path.includes("joinfree")) {
+    } else if (event.path.includes("joinfree")) {
         return subtractBP(event);
+    }  else if (event.path.includes("savedreamteam")) {
+        return saveDreamTeam(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -1075,6 +1077,50 @@ async function subtractBP(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Failed to update points: " + e,
+            }),
+        };
+    }
+}
+
+async function saveDreamTeam(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    const payload = JSON.parse(JSON.parse(event.body!));
+    try {
+        const userID = payload.userId;
+        if (userID === "0") throw new Error("Invalid user Id");
+        const dreamTeam = payload.dreamTeam;
+        console.info(dreamTeam);
+        const userResult = await userModel.findOneAndUpdate(
+            { userID },
+            [
+                {
+                    $set: {
+                        dreamTeam: dreamTeam,
+                    },
+                },
+            ],
+            { new: true }
+        );
+        console.info(
+            `[SAVEDREAMTEAM] User ${userID} has saved Dream Team`
+        );
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(userResult),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to save dream team " + e,
             }),
         };
     }

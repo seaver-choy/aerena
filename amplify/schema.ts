@@ -10,9 +10,79 @@ export const tokenSchema = new mongoose.Schema({
     position: [String],
     img: String,
     athleteScore: { type: Number, default: 0 },
-    packId: String,
-    tournamentLeague: String,
+    league: String,
 });
+
+export const athleteSchema = new mongoose.Schema(
+    {
+        player: String,
+        displayName: String,
+        team: String,
+        totalKills: Number,
+        avgKills: Number,
+        totalDeaths: Number,
+        avgDeaths: Number,
+        totalAssists: Number,
+        avgAssists: Number,
+        kda: Number,
+        killParticipation: Number,
+        position: [String],
+        img: String,
+        numSeasonsPlayed: Number,
+        league: String,
+        type: String,
+    },
+    {
+        collection: "athletes",
+    }
+);
+
+export const teamSchema = new mongoose.Schema(
+    {
+        teamId: Number,
+        name: String,
+        key: String,
+        colors: {
+            main: String,
+            light: String,
+            dark: String,
+            accent: String,
+            details: String,
+            wave: String,
+        },
+        league: String,
+        type: String,
+        players: [athleteSchema]
+    },
+    {
+        collection: "teams",
+    }
+);
+
+export const teamProfileSchema = new mongoose.Schema(
+    {
+        teamId: Number,
+        name: String,
+        key: String,
+        baseTeamColors: {
+            main: String,
+            light: String,
+            dark: String,
+            accent: String,
+            details: String,
+            wave: String,
+        },
+        recentTournament: {
+            code: String,
+            endDate: Date,
+        },
+        country: String,
+    },
+    {
+        collection: "teamprofiles",
+    }
+);
+
 
 export const userSchema = new mongoose.Schema(
     {
@@ -114,6 +184,16 @@ export const userSchema = new mongoose.Schema(
                 lineup: [tokenSchema],
             },
         ],
+        dreamTeam: {
+            type: {
+                teamProfile: teamProfileSchema,
+                lineup: [tokenSchema]
+            },
+            default: () => ({
+                team: {},
+                lineup: [],
+            })
+        },
         hasBeenReset: { type: Boolean },
     },
     {
@@ -164,30 +244,6 @@ export const tournamentSchema = new mongoose.Schema(
 
 tournamentSchema.plugin(paginate);
 
-export const athleteSchema = new mongoose.Schema(
-    {
-        player: String,
-        displayName: String,
-        team: String,
-        totalKills: Number,
-        avgKills: Number,
-        totalDeaths: Number,
-        avgDeaths: Number,
-        totalAssists: Number,
-        avgAssists: Number,
-        kda: Number,
-        killParticipation: Number,
-        position: [String],
-        img: String,
-        numSeasonsPlayed: Number,
-        league: String,
-        type: String,
-    },
-    {
-        collection: "athletes",
-    }
-);
-
 athleteSchema.plugin(paginate);
 
 export const counterSchema = new mongoose.Schema(
@@ -224,24 +280,45 @@ export const battlePassSchema = new mongoose.Schema(
     }
 );
 
+// old athleteStatsSchema
+// export const athleteStatsSchema = new mongoose.Schema(
+//     {
+//         athleteId: Number,
+//         player: String,
+//         hero: String,
+//         kill: Number,
+//         death: Number,
+//         assist: Number,
+//         KDA: Number,
+//         gold: Number,
+//         hero_damage: Number,
+//         damage_taken: Number,
+//         tower_damage: Number,
+//         game: Number,
+//         match_id: String,
+//         week: Number,
+//         league: String,
+//         type: String,
+//     },
+//     {
+//         collection: "matchstats",
+//     }
+// );
+
 export const athleteStatsSchema = new mongoose.Schema(
     {
-        athleteId: Number,
         player: String,
-        hero: String,
-        kill: Number,
-        death: Number,
-        assist: Number,
-        KDA: Number,
-        gold: Number,
-        hero_damage: Number,
-        damage_taken: Number,
-        tower_damage: Number,
+        team: String,
+        kills: Number,
+        deaths: Number,
+        assists: Number,
+        isMVP: Boolean,
+        teamWon: Boolean,
         game: Number,
+        day: Number,
         match_id: String,
-        week: Number,
         league: String,
-        type: String,
+        competitionType: String,
     },
     {
         collection: "matchstats",
@@ -293,13 +370,20 @@ export const starsTransactionSchema = new mongoose.Schema(
         collection: "stars_transactions",
     }
 );
-
-export const teamSchema = new mongoose.Schema({
-    teamId: Number,
-    name: String,
-    key: String,
-    players: [athleteSchema],
-});
+export const colorSchema = new mongoose.Schema(
+    {
+        main: String,
+        light: String,
+        dark: String,
+        wings: String,
+        accent: String,
+        details: String,
+        wave: String,
+    },
+    {
+        _id: false,
+    }
+);
 
 export const mlTournamentSchema = new mongoose.Schema(
     {

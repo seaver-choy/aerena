@@ -16,7 +16,7 @@ export const LocalStats = () => {
     const [showStatsBanner, setShowStatsBanner] = useState(false);
 
     const athlete = {
-        ign: "KELRA",
+        ign: "SPIDER MILEZ",
         role: "Gold",
     };
 
@@ -24,6 +24,7 @@ export const LocalStats = () => {
         main: "#333",
         light: "#D8A956",
         dark: "#AB750F",
+        wings: "#D8A956",
         accent: "#fff",
         details: "#fff",
         wave: "0.15",
@@ -36,6 +37,7 @@ export const LocalStats = () => {
         main: team.main,
         light: team.light,
         dark: team.dark,
+        wings: team.wings,
         accent: team.accent,
         details: team.details,
         wave: team.wave,
@@ -150,7 +152,7 @@ export const LocalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -273,7 +275,7 @@ export const LocalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}
@@ -396,7 +398,7 @@ export const LocalStats = () => {
                                         />
                                         <div className="absolute flex h-full w-full flex-col items-center justify-center">
                                             <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] font-normal text-transparent">
-                                                KDA
+                                                POINTS
                                             </p>
                                             <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
                                                 {stats}

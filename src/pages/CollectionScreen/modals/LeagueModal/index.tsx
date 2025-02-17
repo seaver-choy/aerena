@@ -11,7 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 
 interface LeagueModalProps {
     onClose: () => void;

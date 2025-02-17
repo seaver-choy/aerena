@@ -66,6 +66,7 @@ export function getBaseTeamColor() {
         main: "#333",
         light: "#D8A956",
         dark: "#AB750F",
+        wings: "#D8A956",
         accent: "#fff",
         details: "#fff",
         wave: "0.15",

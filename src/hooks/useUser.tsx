@@ -15,6 +15,7 @@ import {
     Quest,
     BattlePass,
     InventoryItem,
+    DreamTeam,
 } from "../helpers/interfaces";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
 
@@ -41,6 +42,7 @@ interface State {
     inventory: InventoryItem[];
     referralPurchases: number;
     initDataRaw: string;
+    dreamTeam: DreamTeam;
 }
 
 interface Action {
@@ -65,7 +67,8 @@ interface Action {
         | "SET_BATTLEPASS"
         | "SET_PREMIUM_MEMBER"
         | "SET_INVENTORY"
-        | "SET_REFERRAL_PURCHASES";
+        | "SET_REFERRAL_PURCHASES"
+        | "SET_DREAM_TEAM";
     payload?: Partial<State>;
 }
 
@@ -91,6 +94,7 @@ export interface UserContextValue {
     premiumMember: boolean;
     inventory: InventoryItem[];
     referralPurchases: number;
+    dreamTeam: DreamTeam;
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -124,6 +128,7 @@ const initialState: State = {
     inventory: [],
     premiumMember: false,
     referralPurchases: 0,
+    dreamTeam: null,
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -239,6 +244,13 @@ function reducer(state: State, action: Action): State {
                     action.payload?.referralPurchases ??
                     state.referralPurchases,
             };
+        case "SET_DREAM_TEAM":
+            return {
+                ...state,
+                dreamTeam:
+                    action.payload?.dreamTeam ??
+                    state.dreamTeam,
+            };
         default:
             return state;
     }
@@ -265,6 +277,7 @@ export const UserContext = createContext<UserContextValue>({
     premiumMember: false,
     inventory: [],
     referralPurchases: 0,
+    dreamTeam: null,
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -373,6 +386,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_REFERRAL_PURCHASES",
                         payload: {
                             referralPurchases: data["referralPurchases"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_DREAM_TEAM",
+                        payload: {
+                            dreamTeam: data["dreamTeam"],
                         },
                     });
                 } catch (e) {

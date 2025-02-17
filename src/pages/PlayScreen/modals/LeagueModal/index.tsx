@@ -6,7 +6,7 @@ import {
     appearTextAnimation,
 } from "../../../../helpers/animation";
 import { Tournament } from "../../../../helpers/interfaces";
-import { getStickerImage } from "../../../../helpers/packs";
+import { getStickerImage } from "../../../../helpers/images";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -50,9 +50,6 @@ export const LeagueModal = ({
     };
 
     const handleSelect = () => {
-        const selectedTournament = ongoingTournaments[leagueSlide];
-        console.log("Selected tournament:", selectedTournament);
-        console.log("League slide:", leagueSlide);
         setOngoingTournament(ongoingTournaments[leagueSlide]);
         onClose();
     };

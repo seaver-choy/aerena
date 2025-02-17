@@ -1,7 +1,7 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import paginate from "mongoose-paginate-v2";
-import { userSchema, athleteSchema } from "../../schema";
+import { userSchema, athleteSchema, teamSchema } from "../../schema";
 import { AthleteDocument } from "../../interface";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -18,6 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             .asPromise();
 
         conn.model("Users", userSchema);
+        conn.model("Teams", teamSchema);
         athleteSchema.plugin(paginate);
         conn.model<AthleteDocument, mongoose.PaginateModel<AthleteDocument>>(
             "Athletes",
@@ -27,10 +28,60 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
     }
     if (event.path.includes("paginated")) {
         return getPaginatedAthletes(event);
+    } else if (event.path.includes("teams")) {
+        return getTeamInfo(event);
     } else {
         return getAthletePositionFilter(event);
     }
 };
+async function getTeamInfo(event: APIGatewayProxyEvent) {
+    const teamModel = conn!.model("Teams", teamSchema);
+    const teamKey = event.queryStringParameters!.teamKey!;
+    const league = event.queryStringParameters!.league!;
+    const type = event.queryStringParameters!.type!;
+    try {
+        const res = await teamModel.findOne({
+            key: teamKey,
+            league: league,
+            type: type,
+        });
+
+        if (res) {
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify(res),
+            };
+        } else {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Team not found",
+                }),
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An unexpected error occured",
+                error: e,
+            }),
+        };
+    }
+}
 
 async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const athleteModel = conn!.model<
@@ -143,44 +194,85 @@ async function getAthletePositionFilter(event: APIGatewayProxyEvent) {
     //         "_id athleteId player displayName team position img"
     //     )
     //     .distinct("athleteId");
+    let res;
 
-    const res = await athleteModel.aggregate([
-        {
-            $match: {
-                position: position,
-                league: league,
-            },
-        },
-        {
-            $group: {
-                _id: "$_id",
-                athleteId: {
-                    $first: "$athleteId",
-                },
-                player: {
-                    $first: "$player",
-                },
-                displayName: {
-                    $first: "$displayName",
-                },
-                team: {
-                    $first: "$team",
-                },
-                position: {
-                    $first: "$position",
-                },
-                img: {
-                    $first: "$img",
+    if(league == ""){
+        res = await athleteModel.aggregate([
+            {
+                $match: {
+                    position: position,
                 },
             },
-        },
-        {
-            $sort: {
-                team: 1,
-                displayName: 1,
+            {
+                $group: {
+                    _id: "$athleteId",
+                    athleteId: {
+                        $first: "$athleteId",
+                    },
+                    player: {
+                        $first: "$player",
+                    },
+                    displayName: {
+                        $first: "$displayName",
+                    },
+                    team: {
+                        $first: "$team",
+                    },
+                    position: {
+                        $first: "$position",
+                    },
+                    img: {
+                        $first: "$img",
+                    },
+                },
             },
-        },
-    ]);
+            {
+                $sort: {
+                    team: 1,
+                    displayName: 1,
+                },
+            },
+        ]);
+    }
+    else {
+        res = await athleteModel.aggregate([
+            {
+                $match: {
+                    position: position,
+                    league: league,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    athleteId: {
+                        $first: "$athleteId",
+                    },
+                    player: {
+                        $first: "$player",
+                    },
+                    displayName: {
+                        $first: "$displayName",
+                    },
+                    team: {
+                        $first: "$team",
+                    },
+                    position: {
+                        $first: "$position",
+                    },
+                    img: {
+                        $first: "$img",
+                    },
+                },
+            },
+            {
+                $sort: {
+                    team: 1,
+                    displayName: 1,
+                },
+            },
+        ]);
+    }
 
     if (res.length > 0) {
         return {

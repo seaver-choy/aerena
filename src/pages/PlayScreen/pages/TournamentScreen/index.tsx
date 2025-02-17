@@ -5,10 +5,18 @@ import { motion } from "motion/react";
 import {
     appearTextAnimation,
     pulseAnimation,
+    slideRightTextAnimation,
 } from "../../../../helpers/animation";
-import { Tournament } from "../../../../helpers/interfaces";
-import { getTournament } from "../../../../helpers/lambda.helper";
-import { dateFormat, dateRangeFormat, isTournamentClosed } from "../../../../hooks/dates";
+import { Tournament, Ranking } from "../../../../helpers/interfaces";
+import {
+    getTournament,
+    getTournamentResults,
+} from "../../../../helpers/lambda.helper";
+import {
+    dateFormat,
+    dateRangeFormat,
+    isTournamentClosed,
+} from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
@@ -18,14 +26,11 @@ import FreeTournamentBackground from "../../../../assets/background/tournament-f
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import TGStar from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
-
-interface TournamentScreenProps {
-    tournamentId: number;
-}
+import Closed from "../../../../assets/others/closed.svg";
 
 const formatTime = (time: number) => String(time).padStart(2, "0");
 
-export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
+export const TournamentScreen = () => {
     const user = useUsers();
     const { tournamentId: paramTournamentId } = useParams();
     const [tournament, setTournament] = useState<Tournament>(null);
@@ -41,7 +46,7 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
         location.state?.classification === undefined
             ? ""
             : location.state?.classification;
-
+    const [rankings, setRankings] = useState<Ranking[]>(null);
     const fetchTournament = async () => {
         try {
             const result = await getTournament(
@@ -49,18 +54,30 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                 user.initDataRaw
             );
             setTournament(result);
-            console.log(result);
         } catch (e) {
             setTournament(null);
         }
         setShowTournament(true);
     };
 
+    const handleTournamentResults = async () => {
+        try {
+            const result = await getTournamentResults(
+                paramTournamentId,
+                user.initDataRaw
+            );
+            setRankings(result.rankings);
+        } catch (e) {
+            console.log("error");
+        }
+    };
+
     useEffect(() => {
         if (
             tournament != null &&
             classification != undefined &&
-            classification === ""
+            classification === "" &&
+            !tournament.resultsTallied
         ) {
             const calculateTimeLeft = () => {
                 const now = new Date();
@@ -82,6 +99,12 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
             const timer = setInterval(calculateTimeLeft);
 
             return () => clearInterval(timer);
+        } else if (
+            tournament != null &&
+            classification != undefined &&
+            (classification === "PREVIOUS" || tournament.resultsTallied)
+        ) {
+            handleTournamentResults();
         }
     }, [tournament]);
 
@@ -93,7 +116,6 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
     // }, []);
 
     useEffect(() => {
-        console.log(tournamentId);
         fetchTournament();
     }, []);
 
@@ -155,6 +177,15 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                     </p>
                                 </motion.div>
                                 <motion.div
+                                    className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                                    {...slideRightTextAnimation}
+                                >
+                                    <img
+                                        className="h-full w-full"
+                                        src={Closed}
+                                    />
+                                </motion.div>
+                                <motion.div
                                     className="absolute bottom-[8vw] flex h-[10vw] w-[70%]"
                                     {...appearTextAnimation}
                                 >
@@ -175,20 +206,23 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                                                             tournament.type
                                                         )}
                                                     </div>
-                                                    {
-                                                        tournament != null && isTournamentClosed(tournament) ? (
-                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
-                                                                Calculating Results
-                                                            </p>
-                                                        )
-                                                        :
+                                                    {tournament != null &&
+                                                    isTournamentClosed(
+                                                        tournament
+                                                    ) ? (
+                                                        <p
+                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                                        >
+                                                            {tournament.resultsTallied ? "" : "Calculating Results"}
+                                                        </p>
+                                                    ) : (
                                                         <p
                                                             className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                                         >
                                                             Closes in{" "}
                                                             {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                                         </p>
-                                                    }
+                                                    )}
                                                 </div>
                                             )}
                                     </div>
@@ -208,8 +242,18 @@ export const TournamentScreen = ({ tournamentId }: TournamentScreenProps) => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" || !tournament.resultsTallied ? <PointsSystem /> : ""}
-                    {classification == "PREVIOUS" && tournament.resultsTallied ? <Winners /> : ""}
+                    {classification != "PREVIOUS" &&
+                    !tournament.resultsTallied ? (
+                        <PointsSystem />
+                    ) : (
+                        ""
+                    )}
+                    {classification == "PREVIOUS" ||
+                    tournament.resultsTallied ? (
+                        <Winners rankings={rankings} tournament={tournament} />
+                    ) : (
+                        ""
+                    )}
                 </div>
             )}
         </Layout>

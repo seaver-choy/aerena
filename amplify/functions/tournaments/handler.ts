@@ -6,6 +6,12 @@ import paginate from "mongoose-paginate-v2";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
 
+type UserJoined = {
+    userID: number;
+    username: string;
+    score: number;
+};
+
 export const handler: APIGatewayProxyHandler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
     if (!conn) {
@@ -29,12 +35,16 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
     if (event.path.includes("ongoing")) {
         return getOngoingTournaments(event);
+    } else if (event.path.includes("latestprevious")) {
+        return getLatestPreviousTournament(event);
     } else if (event.path.includes("previous")) {
         return getPreviousTournaments(event);
     } else if (event.path.includes("upcoming")) {
         return getUpcomingTournaments(event);
     } else if (event.path.includes("randomize")) {
         return getLuckyPicks(event);
+    } else if (event.path.includes("results")) {
+        return getTournamentResults(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -414,6 +424,59 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
     }
 }
 
+async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
+    const tournamentModel = conn!.model("Tournaments");
+
+    try {
+        const type = event.queryStringParameters?.type;
+        const currentDate = new Date();
+        const result = await tournamentModel.find({
+            type: type,
+            tournamentEndSubmissionDate: { $lt: currentDate },
+            resultsTallied: true,
+        })
+        .sort({ tournamentEndSubmissionDate: -1 })
+        .limit(1);
+        if (!result) {
+            console.error(
+                `[ERROR][TOURNAMENT] Previous latest tournament not found in database.`
+            );
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "No previous latest tournament found",
+                }),
+            };
+        }
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(result),
+        };
+    } catch (e) {
+        console.error(
+            `[ERROR][TOURNAMENTS] An error occured during getPreviousLatestTournament: \n${e}`
+        );
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to get previous latest tournament",
+            }),
+        };
+    }
+}
+
 async function getPreviousTournaments(event: APIGatewayProxyEvent) {
     const tournamentModel = conn!.model("Tournaments");
 
@@ -513,6 +576,80 @@ async function getUpcomingTournaments(event: APIGatewayProxyEvent) {
             body: JSON.stringify({
                 message: "Failed to get ongoing tournaments list",
             }),
+        };
+    }
+}
+
+async function getTournamentResults(event: APIGatewayProxyEvent) {
+    const tournamentModel = conn!.model("Tournaments");
+
+    try {
+        const result = await tournamentModel.findOne({
+            tournamentId: event.queryStringParameters?.tournamentId,
+        });
+        if (!result) {
+            console.error(
+                `[ERROR][TOURNAMENT] Tournament ${event.queryStringParameters?.tournamentId} not found in database.`
+            );
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({ message: "Tournament not found" }),
+            };
+        }
+        const usersJoined = result.usersJoined.sort((a: UserJoined, b: UserJoined) => b.score - a.score);;
+        const rankings = [];
+        let currentScore = -1, currentRankingIndex = -1;
+        for(let i = 0; i < usersJoined.length; i++){
+            const currentUser = usersJoined[i];
+            if(currentScore == -1)
+                currentScore = currentUser.score;
+            if(currentRankingIndex == -1)
+                currentRankingIndex = 0;
+
+            if(currentScore == currentUser.score){
+                if(!rankings[currentRankingIndex]) {
+                    rankings[currentRankingIndex] = {
+                        score: currentScore,
+                        users: []
+                    };
+                }
+                rankings[currentRankingIndex].users.push(currentUser);
+            } else {
+                currentScore = currentUser.score;
+                currentRankingIndex++;
+                if(i < 10){
+                    rankings[currentRankingIndex] = {
+                        score: currentScore,
+                        users: [currentUser]
+                    };
+                }
+                else
+                    break;
+            }
+        }
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({rankings: rankings}),
+        };
+    } catch (e) {
+        console.error(
+            `[ERROR][TOURNAMENTS] An error occured during getTournamentResults: \n${e}`
+        );
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({ message: "Failed to get tournament results" }),
         };
     }
 }
