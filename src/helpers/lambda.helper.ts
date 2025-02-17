@@ -121,6 +121,30 @@ export const getOngoingTournaments = async (
     }
 };
 
+export const getLatestPreviousTournament = async (
+    type: string,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `tournaments/latestprevious?type=${type.toLowerCase()}`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`GET previous latest tournament failed`);
+    }
+};
+
 export const getPreviousTournaments = async (
     type: string,
     initDataRaw: string

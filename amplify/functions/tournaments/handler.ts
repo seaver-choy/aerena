@@ -35,6 +35,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
     if (event.path.includes("ongoing")) {
         return getOngoingTournaments(event);
+    } else if (event.path.includes("latestprevious")) {
+        return getLatestPreviousTournament(event);
     } else if (event.path.includes("previous")) {
         return getPreviousTournaments(event);
     } else if (event.path.includes("upcoming")) {
@@ -417,6 +419,59 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Failed to get ongoing tournaments list",
+            }),
+        };
+    }
+}
+
+async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
+    const tournamentModel = conn!.model("Tournaments");
+
+    try {
+        const type = event.queryStringParameters?.type;
+        const currentDate = new Date();
+        const result = await tournamentModel.find({
+            type: type,
+            tournamentEndSubmissionDate: { $lt: currentDate },
+            resultsTallied: true,
+        })
+        .sort({ tournamentEndSubmissionDate: -1 })
+        .limit(1);
+        if (!result) {
+            console.error(
+                `[ERROR][TOURNAMENT] Previous latest tournament not found in database.`
+            );
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "No previous latest tournament found",
+                }),
+            };
+        }
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(result),
+        };
+    } catch (e) {
+        console.error(
+            `[ERROR][TOURNAMENTS] An error occured during getPreviousLatestTournament: \n${e}`
+        );
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to get previous latest tournament",
             }),
         };
     }

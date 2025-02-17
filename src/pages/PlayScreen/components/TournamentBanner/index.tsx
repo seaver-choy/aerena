@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
 import { isTournamentClosed } from "../../../../hooks/dates";
 import { Tournament } from "../../../../helpers/interfaces";
-import { getOngoingTournaments } from "../../../../helpers/lambda.helper";
+import { getOngoingTournaments, getLatestPreviousTournament } from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
 import {
     appearAnimation,
@@ -61,9 +61,20 @@ export const TournamentBanner = ({
                 playTab.split(" ")[1], //current strings are Play Free & Play Premium, hence the split
                 user.initDataRaw
             );
+            console.log(result);
             setOngoingTournaments(result);
-            if (result.length > 0) setOngoingTournament(result[0]);
-            else setOngoingTournament(null);
+            if (result.length > 0)
+                setOngoingTournament(result[0]);
+            else {
+                const previousTournamentResult = await getLatestPreviousTournament(
+                    playTab.split(" ")[1],
+                    user.initDataRaw
+                );
+                console.log("previousTournamentResult");
+                console.log(previousTournamentResult);
+                setOngoingTournaments(previousTournamentResult);
+                setOngoingTournament(previousTournamentResult[0]);
+            }
         } catch (e) {
             setOngoingTournaments(null);
             setOngoingTournament(null);
@@ -256,7 +267,7 @@ export const TournamentBanner = ({
                                     <p
                                         className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                     >
-                                        Calculating Results
+                                        {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
                                     </p>
                                 ) : (
                                     <p

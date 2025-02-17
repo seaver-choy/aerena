@@ -212,7 +212,7 @@ export const TournamentScreen = () => {
                                                         <p
                                                             className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                                         >
-                                                            Calculating Results
+                                                            {tournament.resultsTallied ? "" : "Calculating Results"}
                                                         </p>
                                                     ) : (
                                                         <p
