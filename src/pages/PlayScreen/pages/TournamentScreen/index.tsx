@@ -76,7 +76,8 @@ export const TournamentScreen = () => {
         if (
             tournament != null &&
             classification != undefined &&
-            classification === ""
+            classification === "" &&
+            !tournament.resultsTallied
         ) {
             const calculateTimeLeft = () => {
                 const now = new Date();
@@ -101,7 +102,7 @@ export const TournamentScreen = () => {
         } else if (
             tournament != null &&
             classification != undefined &&
-            classification === "PREVIOUS"
+            (classification === "PREVIOUS" || tournament.resultsTallied)
         ) {
             handleTournamentResults();
         }
@@ -241,13 +242,13 @@ export const TournamentScreen = () => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" ||
+                    {classification != "PREVIOUS" &&
                     !tournament.resultsTallied ? (
                         <PointsSystem />
                     ) : (
                         ""
                     )}
-                    {classification == "PREVIOUS" &&
+                    {classification == "PREVIOUS" ||
                     tournament.resultsTallied ? (
                         <Winners rankings={rankings} tournament={tournament} />
                     ) : (

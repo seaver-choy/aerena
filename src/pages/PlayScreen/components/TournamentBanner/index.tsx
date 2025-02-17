@@ -61,7 +61,6 @@ export const TournamentBanner = ({
                 playTab.split(" ")[1], //current strings are Play Free & Play Premium, hence the split
                 user.initDataRaw
             );
-            console.log(result);
             setOngoingTournaments(result);
             if (result.length > 0)
                 setOngoingTournament(result[0]);
@@ -70,8 +69,6 @@ export const TournamentBanner = ({
                     playTab.split(" ")[1],
                     user.initDataRaw
                 );
-                console.log("previousTournamentResult");
-                console.log(previousTournamentResult);
                 setOngoingTournaments(previousTournamentResult);
                 setOngoingTournament(previousTournamentResult[0]);
             }
