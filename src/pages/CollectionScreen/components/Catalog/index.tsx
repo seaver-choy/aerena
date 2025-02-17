@@ -217,7 +217,6 @@ export const Catalog = () => {
                                               displayAthleteModal(athlete);
                                           }}
                                           {...appearCardAnimation}
-                                          disabled
                                       >
                                           <AthleteCard
                                               color={baseColor}
