@@ -101,6 +101,7 @@ export const Catalog = () => {
     }, [positionIndex, leagueAthletes]);
 
     useEffect(() => {
+        console.log(chosenLeagueType);
         if (allAthletes !== null && chosenLeagueType != null) {
             const tempAthletes = allAthletes.filter((obj) =>
                 obj.league.includes(chosenLeagueType)

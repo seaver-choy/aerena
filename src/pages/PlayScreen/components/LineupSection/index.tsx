@@ -10,7 +10,7 @@ import {
     joinBasic,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
-import { isTournamentClosed } from "../../../../hooks/dates";
+import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
@@ -331,9 +331,9 @@ export const LineupSection = ({
                                     ? () => {}
                                     : () => setShowConfirmModal(true)
                             }
-                            disabled={isTournamentClosed(ongoingTournament)}
+                            disabled={isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)}
                         >
-                            {isTournamentClosed(ongoingTournament) ? (
+                            {isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament) ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <img
                                         className="mt-[0.1vw] h-[4vw]"

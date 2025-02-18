@@ -16,6 +16,7 @@ import {
     dateFormat,
     dateRangeFormat,
     isTournamentClosed,
+    isTournamentUpcoming,
 } from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
@@ -82,7 +83,7 @@ export const TournamentScreen = () => {
             const calculateTimeLeft = () => {
                 const now = new Date();
                 const difference =
-                    new Date(tournament.tournamentEndSubmissionDate).getTime() -
+                    new Date(isTournamentUpcoming(tournament) ? tournament.tournamentStartSubmissionDate : tournament.tournamentEndSubmissionDate).getTime() -
                     now.getTime();
                 if (difference > 0) {
                     setTimeLeft({
@@ -179,7 +180,7 @@ export const TournamentScreen = () => {
                                 {
                                     classification != undefined &&
                                     classification == "" &&
-                                    isTournamentClosed(tournament) &&
+                                    (isTournamentClosed(tournament) || isTournamentUpcoming(tournament)) &&
                                     (
                                         <motion.div
                                             className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
@@ -209,7 +210,7 @@ export const TournamentScreen = () => {
                                                 <div className="flex flex-col items-center">
                                                     <div>
                                                         {dateFormat(
-                                                            tournament.tournamentEndSubmissionDate,
+                                                            isTournamentUpcoming(tournament) ? tournament.tournamentStartSubmissionDate : tournament.tournamentEndSubmissionDate,
                                                             tournament.type
                                                         )}
                                                     </div>
@@ -226,7 +227,7 @@ export const TournamentScreen = () => {
                                                         <p
                                                             className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                                         >
-                                                            Closes in{" "}
+                                                            {isTournamentUpcoming(tournament) ? "Opens in " : "Closes in "}
                                                             {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                                         </p>
                                                     )}

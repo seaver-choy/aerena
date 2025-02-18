@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
-import { isTournamentClosed } from "../../../../hooks/dates";
+import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
 import { Tournament } from "../../../../helpers/interfaces";
 import { getOngoingTournaments, getLatestPreviousTournament } from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
@@ -109,7 +109,10 @@ export const TournamentBanner = ({
         if (ongoingTournament != null) {
             const difference =
                 new Date(
-                    ongoingTournament.tournamentEndSubmissionDate
+                    isTournamentUpcoming(ongoingTournament) ?
+                        ongoingTournament.tournamentStartSubmissionDate
+                        :
+                        ongoingTournament.tournamentEndSubmissionDate
                 ).getTime() - now.getTime();
             if (difference > 0) {
                 setTimeLeft({
@@ -245,7 +248,7 @@ export const TournamentBanner = ({
                         </motion.div>
                         {
                             ongoingTournament != null &&
-                            isTournamentClosed(ongoingTournament) &&
+                            (isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)) &&
                             (
                                 <motion.div
                                     className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
@@ -261,25 +264,28 @@ export const TournamentBanner = ({
                                 {...appearTextAnimation}
                             >
                                 <div>
-                                    {formatDate(
-                                        ongoingTournament.tournamentEndSubmissionDate
-                                    )}
+                                    {formatDate(isTournamentUpcoming(ongoingTournament) ? ongoingTournament.tournamentStartSubmissionDate : ongoingTournament.tournamentEndSubmissionDate)}
                                 </div>
-                                {ongoingTournament != null &&
-                                isTournamentClosed(ongoingTournament) ? (
-                                    <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
-                                    >
-                                        {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
-                                    </p>
-                                ) : (
-                                    <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                    >
-                                        Closes in{" "}
-                                        {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                    </p>
-                                )}
+                                {
+                                    ongoingTournament != null &&
+                                    isTournamentClosed(ongoingTournament) ?
+                                    (
+                                        <p
+                                            className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                        >
+                                            {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
+                                        </p>
+                                    )
+                                    :
+                                    (
+                                        <p
+                                            className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                        >
+                                            {isTournamentUpcoming(ongoingTournament) ? "Opens in " : "Closes in "}
+                                            {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                        </p>
+                                    )
+                                }
                             </motion.div>
                             <motion.div
                                 className="flex h-full w-[40%] items-center justify-end"

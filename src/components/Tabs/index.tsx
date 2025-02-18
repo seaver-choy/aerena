@@ -14,8 +14,10 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
     const [selectedOption, setSelectedOption] = useState(selectedTab);
 
     const handleToggle = (option) => {
+        if(option !== "Favorites") //temporary in disabling Favorites; comment together with the line in FriendsScreen/index.tsx to enable
         setSelectedOption(option);
-        if (onToggle) onToggle(option);
+        if (onToggle)
+            onToggle(option);
     };
 
     return (

@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import { getStickerImage } from "../../../../helpers/images";
+import { ImageSlider } from "../../../../components/ImageSlider";
 
 interface LeagueModalProps {
     onClose: () => void;
@@ -26,32 +26,25 @@ export const LeagueModal = ({
     chosenLeagueType,
     setChosenLeagueType,
 }: LeagueModalProps) => {
-    const sliderRef = useRef(null);
     const [leagueSlide, setLeagueSlide] = useState<number>(
         leagueTypes.findIndex((item) => item === chosenLeagueType)
     );
-
-    const settings = {
-        centerMode: true,
-        centerPadding: "20%",
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        afterChange: (index: number) => {
-            setLeagueSlide(index);
-        },
-        initialSlide: leagueSlide,
-    };
+    const [images, setImages] = useState<string[]>([]);
 
     const handleSelect = () => {
         setChosenLeagueType(leagueTypes[leagueSlide]);
         onClose();
     };
 
+    const fetchImages = async () => {
+        const leagueImages = await Promise.all(leagueTypes.map(async (league) => {
+            return getStickerImage(league);
+            }));
+        setImages(leagueImages);
+    };
+
     useEffect(() => {
+        fetchImages();
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
@@ -82,25 +75,7 @@ export const LeagueModal = ({
                             className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
                             {...appearAnimation}
                         >
-                            <Slider
-                                ref={(slider) => (sliderRef.current = slider)}
-                                className="w-full"
-                                {...settings}
-                            >
-                                {leagueTypes.map((league, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="mt-[7vw] h-full px-[2vw]"
-                                        >
-                                            <img
-                                                className="w-full"
-                                                src={getStickerImage(league)}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                            <ImageSlider images={images} imageIndex={leagueSlide} setImageIndex={setLeagueSlide}/>
                         </motion.div>
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">

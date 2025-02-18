@@ -64,3 +64,21 @@ export function isTournamentClosed(tournament){
         return true;
     }
 };
+
+export function isTournamentUpcoming(tournament){
+    if (tournament !== null) {
+        if (
+            Date.now() <
+            new Date(
+                tournament.tournamentStartSubmissionDate
+            ).getTime()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+};
+

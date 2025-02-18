@@ -5,7 +5,6 @@ import {
 } from "../../../../helpers/animation";
 
 import ReferralIcon from "../../../../assets/icon/referral.svg";
-import GiftIcon from "../../../../assets/icon/gift.svg";
 import { useUsers } from "../../../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Friend } from "../../../../helpers/interfaces";
@@ -41,9 +40,9 @@ export const FriendsSection = () => {
                                         </motion.button>
                                     )
                                 }
-                                <motion.button className="h-[5vw]" {...appearAnimation} disabled>
+                                {/* <motion.button className="h-[5vw]" {...appearAnimation} disabled>
                                     <img className="h-full" src={GiftIcon} />
-                                </motion.button>
+                                </motion.button> */}
                             </div>
                         </div>
                     </div>

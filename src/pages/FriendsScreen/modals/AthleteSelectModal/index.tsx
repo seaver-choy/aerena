@@ -38,6 +38,7 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
     const [hasSelected, setHasSelected] = useState<boolean>(false);
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [searchName, setSearchName] = useState<string>("");
+    
     const handleTeamSelect = async() => {
         if(hasSelected){
             const newLineup = [...dreamTeamLineup];
@@ -107,10 +108,11 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
     }, [searchName]);
     
     useEffect(() => {
+        console.log(dreamTeam);
+        console.log(dreamTeam.teamProfile);
         setShowAthlete(false);
         fetchAthletes();
         document.body.style.overflow = "hidden";
-
         return () => {
             document.body.style.overflow = "auto";
         };
@@ -186,11 +188,11 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
                                                     /> */}
     
                                                     <AthleteCard
-                                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
+                                                        color={dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
                                                         ign={athlete.displayName}
                                                         role={athlete.position[0]}
                                                         opacity={{
-                                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
+                                                            wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
                                                         }}
                                                     />
                                                 </motion.div>
@@ -211,11 +213,11 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
                                                     /> */}
     
                                                     <AthleteCard
-                                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
+                                                        color={dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
                                                         ign={athlete.displayName}
                                                         role={athlete.position[0]}
                                                         opacity={{
-                                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
+                                                            wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
                                                         }}
                                                     />
                                                 </motion.div>

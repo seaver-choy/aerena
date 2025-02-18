@@ -8,7 +8,7 @@ import { FriendsSection } from "./components/FriendsSection";
 // import Upgrading from "../../assets/others/upgrading.svg";
 
 export const FriendsScreen = () => {
-    const [friendsTab, setFriendsTab] = useState("Favorites");
+    const [friendsTab, setFriendsTab] = useState("Friends");
 
     return (
         <Layout>
@@ -16,7 +16,8 @@ export const FriendsScreen = () => {
             <Tabs
                 options={friendsOptions}
                 onToggle={(selected) => {
-                    setFriendsTab(selected);
+                    if(selected !== "Favorites") //temporary in disabling Favorites; comment together with the line in Tabs to enable
+                        setFriendsTab(selected);
                 }}
                 selectedTab={friendsTab}
             />

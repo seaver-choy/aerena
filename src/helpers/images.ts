@@ -11,11 +11,11 @@ export function getStickerImage(leagueType: string) {
     switch (leagueType) {
         case "SPS6 APAC CF":
             return SPS6Sticker;
-        case "ph14":
+        case "PH14":
             return PH14Sticker;
-        case "msc2024":
+        case "MSC2024":
             return MSC2024Sticker;
-        case "m6":
+        case "M6":
             return M6Sticker;
         case "PH15":
             return PH15Sticker;

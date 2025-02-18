@@ -895,6 +895,7 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                             weeklyReferralCount: 1,
                         },
                         $set: {
+                            [`friends.${index2}.isReferred`]: true,
                             pointsUpdatedAt: currentDate,
                         },
                     },
