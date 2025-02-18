@@ -32,7 +32,7 @@ export const DreamTeamTitle = ({dreamTeam, handleDreamTeam}: DreamTeamTitleProps
                     className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                     {...slideRightTextAnimation}
                 >
-                    {dreamTeam.teamProfile.key != undefined ? dreamTeam.teamProfile.key : "My Dream Team"}
+                    {dreamTeam.teamProfile != null && dreamTeam.teamProfile.key != undefined ? dreamTeam.teamProfile.key : "My Dream Team"}
                 </motion.p>
             </div>
             <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">

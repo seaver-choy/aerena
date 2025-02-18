@@ -33,7 +33,7 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
                     }`}
                     onClick={() => handleToggle(option)}
                 >
-                    {option === "Play Free" && (
+                    {option === "Play Basic" && (
                         <img
                             className="mr-[1.5vw] mt-[0.5vw] h-[3.5vw]"
                             src={BattlePointsIcon}

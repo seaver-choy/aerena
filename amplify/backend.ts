@@ -17,7 +17,6 @@ import { friendsFunction } from "./functions/friends/resource";
 import { countersFunction } from "./functions/counters/resource";
 import { statsFunction } from "./functions/stats/resource";
 import { upgradeFunction } from "./functions/upgrade/resource";
-import { packInfoFunction } from "./functions/packinfo/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
 import { mlTournamentFunction } from './functions/mltournaments/resource';
 import * as dotenv from "dotenv";
@@ -36,7 +35,6 @@ const backend = defineBackend({
     countersFunction,
     statsFunction,
     upgradeFunction,
-    packInfoFunction,
     telegramstarsFunction,
     mlTournamentFunction,
 });
@@ -141,9 +139,6 @@ const countersIntegration = new LambdaIntegration(
 const statsIntegration = new LambdaIntegration(
     backend.statsFunction.resources.lambda
 );
-const packInfoIntegration = new LambdaIntegration(
-    backend.packInfoFunction.resources.lambda
-);
 const upgradeIntegration = new LambdaIntegration(
     backend.upgradeFunction.resources.lambda
 );
@@ -163,15 +158,13 @@ const schedulerPath = api.root.addResource("recharge", {});
 const friendsPath = api.root.addResource("friends", {});
 const joinTgChannelPath = userPath.addResource("joinTgChannel", {});
 const loginPath = userPath.addResource("login", {});
-const battlePassPath = userPath.addResource("battlepass", {});
 const countersPath = api.root.addResource("counters", {});
 const statsPath = api.root.addResource("stats", {});
-const packInfoPath = api.root.addResource("packinfos", {});
 const upgradePath = api.root.addResource("upgrade", {});
 const telegramstarsPath = api.root.addResource("telegramstars", {});
 const invoicelinkPath = api.root.addResource("invoice", {});
 const mlTournamentPath = api.root.addResource("mltournaments", {});
-const joinFreePath = api.root.addResource("joinfree", {});
+const joinBasicPath = api.root.addResource("joinbasic", {});
 
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
@@ -231,13 +224,6 @@ loginPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
-battlePassPath.addMethod("PUT", userIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
-packInfoPath.addMethod("GET", packInfoIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
-
 upgradePath.addMethod("PUT", upgradeIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
@@ -257,7 +243,7 @@ mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
-joinFreePath.addMethod("PUT", userIntegration, {
+joinBasicPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
@@ -270,11 +256,6 @@ userPath.addProxy({
 tournamentsPath.addProxy({
     anyMethod: true,
     defaultIntegration: tournamentsIntegration,
-});
-
-packInfoPath.addProxy({
-    anyMethod: true,
-    defaultIntegration: packInfoIntegration,
 });
 
 portfolioPath.addProxy({

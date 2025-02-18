@@ -40,7 +40,6 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
     const [searchName, setSearchName] = useState<string>("");
     const handleTeamSelect = async() => {
         if(hasSelected){
-            console.log(filteredAthletes[selectedIndex]);
             const newLineup = [...dreamTeamLineup];
             newLineup[positionIndex] = {...newLineup[positionIndex], athlete: filteredAthletes[selectedIndex]};
             const athletes = newLineup.map(position => position.athlete);

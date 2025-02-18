@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
     appearModalAnimation,
@@ -9,10 +9,22 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface AddModalProps {
+    handleSubmit: (code: string) => void;
     onClose: () => void;
 }
 
-export const AddModal = ({ onClose }: AddModalProps) => {
+export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
+    const [searchReferral, setSearchReferral] = useState<string>("");
+
+    const handleCheckReferralCode = async () => {
+        handleSubmit(searchReferral);
+        onClose();
+    }
+
+    const handleCodeChange = (e) => {
+        setSearchReferral(e.target.value);
+    };
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -52,6 +64,7 @@ export const AddModal = ({ onClose }: AddModalProps) => {
                                         type="text"
                                         placeholder="Enter Referral Code"
                                         maxLength={12}
+                                        onChange={handleCodeChange}
                                     ></input>
                                 </div>
                             </div>
@@ -64,7 +77,7 @@ export const AddModal = ({ onClose }: AddModalProps) => {
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onClose}
+                                onClick={handleCheckReferralCode}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />

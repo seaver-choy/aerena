@@ -53,12 +53,12 @@ export const TournamentBanner = ({
         seconds: 0,
     });
     const [currentTournamentType, setCurrentTournamentType] =
-        useState<string>("Free");
+        useState<string>("basic");
 
     const fetchOngoingTournament = async () => {
         try {
             const result = await getOngoingTournaments(
-                playTab.split(" ")[1], //current strings are Play Free & Play Premium, hence the split
+                playTab.split(" ")[1], //current strings are Play Basic & Play Premium, hence the split
                 user.initDataRaw
             );
             setOngoingTournaments(result);
@@ -91,7 +91,7 @@ export const TournamentBanner = ({
         const formattedHours = hours > 12 ? hours - 12 : hours;
         return (
             <p
-                className={`font-montserrat text-[3vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                className={`font-montserrat text-[3vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
             >
                 {month}
                 <span className="font-montagu">{" / "}</span>
@@ -134,7 +134,7 @@ export const TournamentBanner = ({
 
     useEffect(() => {
         setOngoingTournaments(null);
-        setCurrentTournamentType(playTab.split(" ")[1]);
+        setCurrentTournamentType(playTab.split(" ")[1].toLowerCase());
         fetchOngoingTournament();
     }, [playTab]);
 
@@ -157,13 +157,13 @@ export const TournamentBanner = ({
         <div>
             {ongoingTournament != null && showTournament ? (
                 <div
-                    className={`mt-[4vw] h-[58.4vw] ${currentTournamentType == "Free" ? "" : "bg-graydark"}`}
+                    className={`mt-[4vw] h-[58.4vw] ${currentTournamentType == "basic" ? "" : "bg-graydark"}`}
                 >
                     <div className="relative flex justify-center">
                         <img
                             className="h-full w-full"
                             src={
-                                currentTournamentType == "Free"
+                                currentTournamentType == "basic"
                                     ? FreeTournamentBackground
                                     : PremiumTournamentBackground
                             }
@@ -186,7 +186,7 @@ export const TournamentBanner = ({
                                     <div className="relative flex">
                                         <img
                                             src={
-                                                currentTournamentType == "Free"
+                                                currentTournamentType == "basic"
                                                     ? ChangeGoldIcon
                                                     : ChangeIcon
                                             }
@@ -215,7 +215,7 @@ export const TournamentBanner = ({
                             className="absolute top-[23vw] flex"
                             {...appearTextAnimation}
                         >
-                            {currentTournamentType === "Free" ? (
+                            {currentTournamentType === "basic" ? (
                                 <img
                                     src={BattlePointsIcon}
                                     className="mr-[2vw] mt-[2.8vw] h-[7vw]"
@@ -238,17 +238,23 @@ export const TournamentBanner = ({
                                 </p>
                             )}
                             <p
-                                className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                                className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                             >
                                 {ongoingTournament.prizePool.toLocaleString()}
                             </p>
                         </motion.div>
-                        <motion.div
-                            className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
-                            {...slideRightTextAnimation}
-                        >
-                            <img className="h-full w-full" src={Closed} />
-                        </motion.div>
+                        {
+                            ongoingTournament != null &&
+                            isTournamentClosed(ongoingTournament) &&
+                            (
+                                <motion.div
+                                    className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                                    {...slideRightTextAnimation}
+                                >
+                                    <img className="h-full w-full" src={Closed} />
+                                </motion.div>
+                            )
+                        }
                         <div className="absolute bottom-[8vw] flex h-[10vw] w-[70%]">
                             <motion.div
                                 className="flex h-full w-[60%] flex-col items-start justify-center"
@@ -262,13 +268,13 @@ export const TournamentBanner = ({
                                 {ongoingTournament != null &&
                                 isTournamentClosed(ongoingTournament) ? (
                                     <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                     >
                                         {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
                                     </p>
                                 ) : (
                                     <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                     >
                                         Closes in{" "}
                                         {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}

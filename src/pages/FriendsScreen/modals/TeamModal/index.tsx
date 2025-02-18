@@ -40,22 +40,20 @@ export const TeamModal = ({  dreamTeam, onSelect, onClose }: TeamModalProps) => 
     const handleCountryChange = (newIndex) => {
         const matchingTeams = teams.filter(team => team.country === countries[newIndex]).sort((a, b) => a.key.localeCompare(b.key));
         setFilteredTeams(matchingTeams);
-        if(dreamTeam.teamProfile.teamId !== undefined && countries[newIndex] === dreamTeam.teamProfile.country){
+        if(dreamTeam.teamProfile !== undefined && countries[newIndex] === dreamTeam.teamProfile.country){
             const currentTeamIndex = matchingTeams.findIndex(team => team.teamId === dreamTeam.teamProfile.teamId);
             setTeamIndex(currentTeamIndex);
-            console.log(currentTeamIndex);
         }
         else
             setTeamIndex(0);
     }
     
-    const handleContent = () => {
+    const handleContent = async () => {
         const uniqueCountries = [...new Set(teams.map(team => team.country).filter(country => country !== undefined && country !== null))].sort();
         setCountries(uniqueCountries);
-        if(dreamTeam.teamProfile.teamId !== undefined){
+        if(dreamTeam.teamProfile !== undefined){
             const matchingTeams = teams.filter(team => team.country === dreamTeam.teamProfile.country).sort((a, b) => a.key.localeCompare(b.key));
             setFilteredTeams(matchingTeams);
-            console.log(matchingTeams);
             const currentCountryIndex = uniqueCountries.findIndex(country => country === dreamTeam.teamProfile.country);
             setCountryIndex(currentCountryIndex);
             const currentTeamIndex = matchingTeams.findIndex(team => team.teamId === dreamTeam.teamProfile.teamId);
@@ -159,18 +157,37 @@ export const TeamModal = ({  dreamTeam, onSelect, onClose }: TeamModalProps) => 
                             </div>
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                onClick={handleTeamSelect}
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Select
-                                    </p>
-                                </div>
-                            </motion.button>
+                            {
+                                filteredTeams != null &&
+                                (
+                                    dreamTeam.teamProfile == undefined || (teamIndex != -1 && dreamTeam.teamProfile.key !== filteredTeams[teamIndex].key) ? 
+                                    (
+                                        <motion.button
+                                            className="relative flex h-full w-full justify-center"
+                                            onClick={handleTeamSelect}
+                                            {...appearTextAnimation}
+                                        >
+                                            <img className="h-full" src={GoldButton} />
+                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                                    Select
+                                                </p>
+                                            </div>
+                                        </motion.button>
+                                    )
+                                    :
+                                    <motion.div
+                                        className="relative flex h-full w-full justify-center"
+                                        {...appearTextAnimation}
+                                    >
+                                        <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                            <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-gold">
+                                                Selected
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                )
+                            }
                         </div>
                     </div>
                 </div>

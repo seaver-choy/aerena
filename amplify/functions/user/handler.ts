@@ -3,18 +3,15 @@ import mongoose, { Connection } from "mongoose";
 import {
     userSchema,
     questSchema,
-    battlePassSchema,
-    packInfoSchema,
 } from "../../schema";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
 
-type InventoryItem = {
-    key: string;
-    type: string;
-    isClaimed?: boolean;
-    stock?: number;
+type Referral = {
+    userID: number;
+    username: string;
+    _id: string;
 };
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
@@ -29,8 +26,6 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             .asPromise();
         conn.model("User", userSchema);
         conn.model("Quest", questSchema);
-        conn.model("Battlepass", battlePassSchema);
-        conn.model("PackInfo", packInfoSchema);
     }
 
     if (event.path.includes("quests")) {
@@ -58,14 +53,16 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return joinTgChannel(event);
     } else if (event.path.includes("login")) {
         return login(event);
-    } else if (event.path.includes("battlepass")) {
-        return claimBattlepassReward(event);
     } else if (event.path.includes("templineup")) {
         return updateTempLineup(event);
-    } else if (event.path.includes("joinfree")) {
+    } else if (event.path.includes("joinbasic")) {
         return subtractBP(event);
-    }  else if (event.path.includes("savedreamteam")) {
+    } else if (event.path.includes("savedreamteam")) {
         return saveDreamTeam(event);
+    } else if (event.path.includes("checkreferralcode")) {
+        return checkReferralCode(event);
+    } else if (event.path.includes("addnewreferral")) {
+        return addNewReferral(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -137,60 +134,20 @@ async function createUser(event: APIGatewayProxyEvent) {
             userID: payload.userID,
         });
         if (!checkUser) {
-            //for getting packInfo for inventory
-            const packInfoModel = conn!.model("PackInfo");
-            const packinfoResult = await packInfoModel.aggregate([
-                {
-                    $addFields: {
-                        packTypeOrder: {
-                            $switch: {
-                                branches: [
-                                    {
-                                        case: {
-                                            $eq: ["$packType", "starter"],
-                                        },
-                                        then: 1,
-                                    },
-                                    {
-                                        case: {
-                                            $eq: ["$packType", "mythic"],
-                                        },
-                                        then: 2,
-                                    },
-                                    {
-                                        case: {
-                                            $eq: ["$packType", "epic"],
-                                        },
-                                        then: 3,
-                                    },
-                                    {
-                                        case: {
-                                            $eq: ["$packType", "warrior"],
-                                        },
-                                        then: 4,
-                                    },
-                                ],
-                                default: 5,
-                            },
-                        },
-                    },
-                },
-                { $sort: { packTypeOrder: 1 } },
-                { $project: { packTypeOrder: 0 } },
-            ]);
-
-            const inventory: InventoryItem[] = [];
-            packinfoResult.forEach((packInfo) => {
-                const packType = packInfo.packType;
-
-                inventory.push({
-                    key: packInfo.packId,
-                    type: packType === "starter" ? "starter-pack" : packType,
-                    ...(packType === "starter"
-                        ? { isClaimed: false }
-                        : { stock: 0 }),
+            
+            let referralCode = "AER";
+            let isUnique = false;
+            
+            while (!isUnique) {
+                referralCode = generateCode(8);
+                const existingCode = await userModel.findOne({
+                    referralCode: referralCode
                 });
-            });
+                if (!existingCode) {
+                    isUnique = true;
+                }
+            }
+                
             const userData = {
                 username: payload.username,
                 userID: payload.userID,
@@ -210,84 +167,11 @@ async function createUser(event: APIGatewayProxyEvent) {
                         isClaimed: false,
                     },
                 ],
-                inventory: inventory,
+                inventory: null,
                 seasonalLogins: 1,
                 points: 20000, //TODO: temporary hardcoded to give 20k BP to new users for Aerena free tournament
+                referralCode: referralCode,
             };
-
-            if (payload.isReferred && payload.referredBy !== payload.username) {
-                const referralCheck = await userModel.findOne({
-                    $and: [
-                        { username: payload.referredBy },
-                        { "friends.userID": payload.userID },
-                    ],
-                });
-
-                if (referralCheck) {
-                    console.error(
-                        `[ERROR][CREATEUSER] User ${payload.userID} is already referred by ${payload.referredBy}`
-                    );
-
-                    //check if new user used a different username
-
-                    type Referral = {
-                        userID: number;
-                        username: string;
-                        _id: string;
-                    };
-                    const index = referralCheck.friends.findIndex(
-                        (obj: Referral) => obj.userID === payload.userID
-                    );
-
-                    if (
-                        referralCheck.friends[index].username !==
-                        payload.username
-                    ) {
-                        console.info(
-                            `[CREATEUSER] Updating referral username for ${payload.userID} in ${payload.referredBy}'s referral list`
-                        );
-
-                        await userModel.findOneAndUpdate(
-                            { username: payload.referredBy },
-                            {
-                                $set: {
-                                    [`friends.${index}.username`]:
-                                        payload.username,
-                                    referralDate: new Date(),
-                                },
-                            }
-                        );
-                    }
-                } else {
-                    await userModel.findOneAndUpdate(
-                        {
-                            username: payload.referredBy,
-                        },
-                        {
-                            $push: {
-                                friends: {
-                                    userID: payload.userID,
-                                    username: payload.username,
-                                    isReferred: true,
-                                    referralDate: new Date(),
-                                },
-                            },
-                            $inc: {
-                                referralCount: 1,
-                                points: 5000,
-                                weeklyReferralCount: 1,
-                            },
-                            $set: {
-                                pointsUpdatedAt: new Date(),
-                            },
-                        }
-                    );
-                }
-
-                console.info(
-                    `[CREATEUSER] User ${payload.username} is referred by ${payload.referredBy}`
-                );
-            }
             const newUser = new userModel(userData);
             await newUser.save();
             console.info(
@@ -670,267 +554,6 @@ async function login(event: APIGatewayProxyEvent) {
     }
 }
 
-async function claimBattlepassReward(event: APIGatewayProxyEvent) {
-    const userModel = conn!.model("User");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    const userID = payload.userID;
-    const userResult = await userModel.findOne({ userID });
-    try {
-        const bpLevel = parseInt(payload.bpLevel);
-
-        if (!userResult) {
-            return {
-                statusCode: 404,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({ message: "User ID not found" }),
-            };
-        }
-        //TODO: rename seasonalLogins to battlepass level?
-        if (userResult.seasonalLogins < bpLevel) {
-            return {
-                statusCode: 400,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({
-                    message: "The user's battlepass level is too low",
-                }),
-            };
-        }
-
-        if (payload.isPremium) {
-            if (!userResult.premiumMember) {
-                console.error(
-                    `[BATTLEPASS] User ${userID} is not a premium member`
-                );
-                return {
-                    statusCode: 400,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify({
-                        message: "The user is not a premium member",
-                    }),
-                };
-            }
-            if (userResult.battlepass[bpLevel - 1].premClaimed) {
-                console.error(
-                    `[BATTLEPASS] User ${userID} has already claimed the premium reward for level ${bpLevel}`
-                );
-                return {
-                    statusCode: 400,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify({
-                        message: `The user has already claimed the premium reward for level ${bpLevel}`,
-                    }),
-                };
-            }
-            if (
-                typeof userResult.battlepass[bpLevel - 1].premReward ===
-                "number"
-            ) {
-                const updateResult = await userModel.findOneAndUpdate(
-                    { userID },
-                    {
-                        $set: {
-                            [`battlepass.${bpLevel - 1}.premClaimed`]: true,
-                        },
-                        $inc: {
-                            points: parseInt(
-                                userResult.battlepass[bpLevel - 1].premReward
-                            ),
-                        },
-                    },
-                    { new: true }
-                );
-                console.info(
-                    `[BATTLEPASS] User ${userID} has claimed the premium reward for level ${bpLevel}`
-                );
-                return {
-                    statusCode: 200,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify({
-                        userUpdate: updateResult,
-                        claim: "prem",
-                        type: "points",
-                    }),
-                };
-            } else {
-                const packModel = conn!.model("PackInfo");
-                const pack = await packModel.findOne({
-                    packId: userResult.battlepass[bpLevel - 1].premReward,
-                });
-
-                if (!pack) {
-                    console.error(
-                        `[BATTLEPASS] Pack ${userResult.battlepass[bpLevel - 1].premReward} not found`
-                    );
-                    return {
-                        statusCode: 400,
-                        headers: {
-                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                        },
-                        body: JSON.stringify({
-                            message: `Pack ${userResult.battlepass[bpLevel - 1].premReward} not found`,
-                        }),
-                    };
-                }
-                const inventoryIndex = userResult.inventory.findIndex(
-                    (item: InventoryItem) =>
-                        item.key ===
-                        userResult.battlepass[bpLevel - 1].premReward
-                );
-
-                if (inventoryIndex === -1) {
-                    const newItem = {
-                        key: userResult.battlepass[bpLevel - 1].premReward,
-                        type: "pack", //TODO: don't hardcode
-                        stock: 1,
-                    };
-                    const updateResult = await userModel.findOneAndUpdate(
-                        { userID },
-                        {
-                            $set: {
-                                [`battlepass.${bpLevel - 1}.premClaimed`]: true,
-                            },
-                            $push: {
-                                inventory: newItem,
-                            },
-                        }
-                    );
-                    console.info(
-                        `[BATTLEPASS] User ${userID} has created a new inventory listing for pack ${userResult.battlepass[bpLevel - 1].premReward}`
-                    );
-                    console.info(
-                        `[BATTLEPASS] User ${userID} has claimed the premium reward for level ${bpLevel}`
-                    );
-                    return {
-                        statusCode: 200,
-                        headers: {
-                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                        },
-                        body: JSON.stringify({
-                            userUpdate: updateResult,
-                            claim: "prem",
-                            type: "pack",
-                        }),
-                    };
-                } else {
-                    const updateResult = await userModel.findOneAndUpdate(
-                        { userID },
-                        {
-                            $set: {
-                                [`battlepass.${bpLevel - 1}.premClaimed`]: true,
-                            },
-                            $inc: {
-                                [`inventory.${inventoryIndex}.stock`]: 1,
-                            },
-                        },
-                        { new: true }
-                    );
-                    console.info(
-                        `[BATTLEPASS] User ${userID} has claimed the premium reward for level ${bpLevel}`
-                    );
-                    return {
-                        statusCode: 200,
-                        headers: {
-                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                        },
-                        body: JSON.stringify({
-                            userUpdate: updateResult,
-                            claim: "prem",
-                            type: "pack",
-                        }),
-                    };
-                }
-            }
-        } else {
-            if (userResult.battlepass[bpLevel - 1].basicClaimed) {
-                console.error(
-                    `[BATTLEPASS] User ${userID} has already claimed the basic reward for level ${bpLevel}`
-                );
-                return {
-                    statusCode: 400,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify({
-                        message: `The user has already claimed the basic reward for level ${bpLevel}`,
-                    }),
-                };
-            }
-            const updateResult = await userModel.findOneAndUpdate(
-                { userID },
-                {
-                    $set: {
-                        [`battlepass.${bpLevel - 1}.basicClaimed`]: true,
-                    },
-                    $inc: {
-                        points: parseInt(
-                            userResult.battlepass[bpLevel - 1].basicReward
-                        ),
-                    },
-                },
-                { new: true }
-            );
-            console.info(
-                `[BATTLEPASS] User ${userID} has claimed the basic reward for level ${bpLevel}`
-            );
-            return {
-                statusCode: 200,
-                headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                },
-                body: JSON.stringify({
-                    userUpdate: updateResult,
-                    claim: "basic",
-                    type: "points",
-                }),
-            };
-        }
-    } catch (e) {
-        await userModel.findOneAndReplace({ userID: userID }, userResult);
-        console.error(
-            `[BATTLEPASS] ${userID} has encountered an error while claiming a battlepass reward. User state will be reset back to before the transaction happened.`
-        );
-        console.error(
-            `[BATTLEPASS] ${userID} was trying to claim ${payload.isPremium ? "premium" : "basic"} reward for level ${payload.bpLevel}.`
-        );
-        console.error(
-            `[BATTLEPASS] ${userID} encountered the following error: ${e}`
-        );
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({ message: "Failed to claim reward " + e }),
-        };
-    }
-    // check battlepass level req
-    // check if user is a premium member
-    //if yes, check if basic reward is already claimed (for the event that the user bought the premium after)
-    // if yes for ^, claim only premium reward for that tier. if not, claim both
-    // if not, just claim basic reward
-}
-
 async function updateTempLineup(event: APIGatewayProxyEvent) {
     const userModel = conn!.model("User");
 
@@ -945,14 +568,14 @@ async function updateTempLineup(event: APIGatewayProxyEvent) {
 
     const index = payload.index;
 
-    if (type === "free") {
+    if (type === "basic") {
         try {
             const updateResult = await userModel.findOneAndUpdate(
                 { userID },
                 {
                     $set: {
-                        [`freeTempLineup.${index}.lineup`]: payload.tempLineup,
-                        [`freeTempLineup.${index}.teague`]: payload.league,
+                        [`basicTempLineup.${index}.lineup`]: payload.tempLineup,
+                        [`basicTempLineup.${index}.teague`]: payload.league,
                     },
                 },
                 {
@@ -1124,4 +747,205 @@ async function saveDreamTeam(event: APIGatewayProxyEvent) {
             }),
         };
     }
+}
+
+async function checkReferralCode(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    try {
+        const referralCode = event.queryStringParameters?.referralCode;
+        const userResult = await userModel.findOne({ referralCode });
+        if (!userResult) {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "DNE" }),
+            };
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "EXISTS",
+            }),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "DNE",
+            }),
+        };
+    }
+}
+
+async function addNewReferral(event: APIGatewayProxyEvent) {
+    try {
+        const userModel = conn!.model("User");
+
+        const payload = JSON.parse(JSON.parse(event.body!));
+        const userID = payload.userId;
+        const referralCode = payload.referralCode;
+        const referrer = await userModel.findOne({referralCode: referralCode});
+        if(referrer) {
+            const currentDate = new Date();
+            const referee = await userModel.findOne({userID: userID});
+            const index = referee.friends.findIndex(
+                (obj: Referral) => obj.userID === referrer.userID
+            );
+            let updatedReferee;
+            if(index === -1) {
+                updatedReferee = await userModel.findOneAndUpdate(
+                    {
+                        userID: userID,
+                    },
+                    {
+                        $push: {
+                            friends: {
+                                userID: referrer.userID,
+                                username: referrer.username,
+                                isReferred: false,
+                                addedDate: currentDate,
+                            },
+                        },
+                        $set: {
+                            referredBy: {
+                                userID: referrer.userID,
+                                referralCode: referralCode,
+                                referralDate: currentDate,
+                            }
+                        }
+                    },
+                    {
+                        new: true,
+                    }
+                );
+            }
+            else {
+                updatedReferee = await userModel.findOneAndUpdate(
+                    {
+                        userID: userID,
+                    },
+                    {
+                        $set: {
+                            referredBy: {
+                                userID: referrer.userID,
+                                referralCode: referralCode,
+                                referralDate: currentDate,
+                            }
+                        }
+                    },
+                    {
+                        new: true,
+                    }
+                );
+            }
+            const index2 = referrer.friends.findIndex(
+                (obj: Referral) => obj.userID === updatedReferee.userID
+            );
+            let updatedReferrer;
+            
+            if(index2 === -1) {
+                updatedReferrer = await userModel.findOneAndUpdate(
+                    {
+                        referralCode: referralCode,
+                    },
+                    {
+                        $push: {
+                            friends: {
+                                userID: referee.userID,
+                                username: referee.username,
+                                isReferred: true,
+                                addedDate: currentDate,
+                            },
+                        },
+                        $inc: {
+                            referralCount: 1,
+                            points: 5000,
+                            weeklyReferralCount: 1,
+                        },
+                        $set: {
+                            pointsUpdatedAt: currentDate,
+                        },
+                    },
+                    {
+                        new: true,
+                    }
+                );
+            }
+            else {
+                updatedReferrer = await userModel.findOneAndUpdate(
+                    {
+                        referralCode: referralCode,
+                    },
+                    {
+                        $inc: {
+                            referralCount: 1,
+                            points: 5000,
+                            weeklyReferralCount: 1,
+                        },
+                        $set: {
+                            pointsUpdatedAt: currentDate,
+                        },
+                    },
+                    {
+                        new: true,
+                    }
+                );
+            }
+            console.info(
+                `[REFERRAL] User ${updatedReferee.username} is referred by ${updatedReferrer.username}`
+            );
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify(updatedReferee),
+            };
+        } else {
+            console.error(
+                `[ERROR][REFERRAL] User with referral code ${referralCode} does not exists`
+            );
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: `User with referral code ${referralCode} does not exists` }),
+            };
+        }
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to add referral relation to users: " + e,
+            }),
+        };
+    }
+}
+
+function generateCode(length = 8) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = 'AER';
+    for (let i = code.length; i < length; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
 }

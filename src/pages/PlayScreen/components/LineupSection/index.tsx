@@ -7,7 +7,7 @@ import {
     getLuckyPicks,
     getInvoiceLinkForPremiumTournament,
     saveStarsTransaction,
-    joinFree,
+    joinBasic,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
 import { isTournamentClosed } from "../../../../hooks/dates";
@@ -226,7 +226,7 @@ export const LineupSection = ({
                             });
                     }
                 } else if (user.points >= ongoingTournament.joinCost) {
-                    const result = await joinFree(
+                    const result = await joinBasic(
                         user.id,
                         ongoingTournament.joinCost,
                         user.initDataRaw
@@ -340,7 +340,7 @@ export const LineupSection = ({
                                         src={LockedIcon}
                                     ></img>
                                 </div>
-                            ) : ongoingTournament.type === "free" ? (
+                            ) : ongoingTournament.type === "basic" ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
                                         JOIN FOR&nbsp;

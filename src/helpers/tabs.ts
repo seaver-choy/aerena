@@ -1,5 +1,5 @@
 export const friendsOptions = ["Friends", "Favorites"];
-export const tournamentOptions = ["Play Free", "Play Premium"];
+export const tournamentOptions = ["Play Basic", "Play Premium"];
 export const collectionOptions = ["Collection", "Catalog"];
 export const winnersOptions = ["Winners", "My Lineups"];
 export const athleteOptions = [

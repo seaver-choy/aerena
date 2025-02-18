@@ -26,7 +26,6 @@ export const Winners = ({rankings = null, tournament = null}: WinnersProps) => {
             const userEntries = tournament.usersJoined.filter(entry => 
                 entry.username === user.username
             ).sort((a, b) => b.score - a.score);
-            console.log(userEntries);
             setUserLineups(userEntries);
         } else {
             setUserLineups([]);

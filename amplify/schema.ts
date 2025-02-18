@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
-import { Schema } from "mongoose";
 
 export const tokenSchema = new mongoose.Schema({
     tokenId: String,
@@ -115,7 +114,7 @@ export const userSchema = new mongoose.Schema(
                 userID: Number,
                 username: String,
                 isReferred: { type: Boolean, default: false },
-                referralDate: Date,
+                addedDate: Date,
             },
         ],
         referralCount: { type: Number, default: 0 },
@@ -139,15 +138,6 @@ export const userSchema = new mongoose.Schema(
             default: new Date(),
         },
         seasonalLogins: { type: Number, default: 0 },
-        battlepass: [
-            {
-                level: Number,
-                basicReward: Number,
-                premReward: Schema.Types.Mixed,
-                basicClaimed: { type: Boolean, default: false },
-                premClaimed: { type: Boolean, default: false },
-            },
-        ],
         inventory: [
             {
                 key: { type: String, required: true },
@@ -173,7 +163,7 @@ export const userSchema = new mongoose.Schema(
                 }),
             },
         ],
-        freeTempLineup: [
+        basicTempLineup: [
             {
                 league: String,
                 lineup: [tokenSchema],
@@ -194,6 +184,15 @@ export const userSchema = new mongoose.Schema(
                 team: {},
                 lineup: [],
             })
+        },
+        referralCode: String,
+        referredBy: {
+            type: new mongoose.Schema({
+                userID: Number,
+                referralCode: String,
+                referralDate: Date,
+            }),
+            default: null,
         },
         hasBeenReset: { type: Boolean },
     },
@@ -262,25 +261,6 @@ export const counterSchema = new mongoose.Schema(
     }
 );
 
-export const battlePassSchema = new mongoose.Schema(
-    {
-        season: Number,
-        startDate: Date,
-        endDate: Date,
-        levels: [
-            {
-                level: { type: Number, required: true },
-                basicReward: { type: Number, required: true },
-                premReward: { type: Schema.Types.Mixed, required: true },
-                //extraReward: { packTier: String }
-            },
-        ],
-    },
-    {
-        collection: "battlepass",
-    }
-);
-
 // old athleteStatsSchema
 // export const athleteStatsSchema = new mongoose.Schema(
 //     {
@@ -323,19 +303,6 @@ export const athleteStatsSchema = new mongoose.Schema(
     },
     {
         collection: "matchstats",
-    }
-);
-
-export const packInfoSchema = new mongoose.Schema(
-    {
-        packId: String,
-        competitionType: String,
-        packType: String,
-        leagueType: String,
-        isActive: Boolean,
-    },
-    {
-        collection: "packinfos",
     }
 );
 

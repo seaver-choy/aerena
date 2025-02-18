@@ -26,8 +26,6 @@ export const CommunityLineupsScreen = () => {
     // const [hasMore, setHasMore] = useState<boolean>(true);
     const [currentIndex, setCurrentIndex] = useState<number>(5);
     const fetchMoreData = () => {
-        console.log("test");
-        console.log(currentIndex);
         setTimeout(() => {
             if (currentIndex >= reversedUsersJoined.length) {
                 // setHasMore(false);

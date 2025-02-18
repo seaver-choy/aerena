@@ -132,10 +132,6 @@ const UsernameModal: React.FC = () => {
                     payload: { seasonalLogins: data["seasonalLogins"] },
                 });
                 user.dispatch({
-                    type: "SET_BATTLEPASS",
-                    payload: { battlepass: data["battlepass"] },
-                });
-                user.dispatch({
                     type: "SET_PREMIUM_MEMBER",
                     payload: { premiumMember: data["premiumMember"] },
                 });
@@ -150,6 +146,18 @@ const UsernameModal: React.FC = () => {
                 user.dispatch({
                     type: "SET_DREAM_TEAM",
                     payload: { dreamTeam: data["dreamTeam"] },
+                });
+                user.dispatch({
+                    type: "SET_REFERRAL_CODE",
+                    payload: {
+                        referralCode: data["referralCode"],
+                    },
+                });
+                user.dispatch({
+                    type: "SET_REFERRED_BY",
+                    payload: {
+                        referredBy: data["referredBy"],
+                    },
                 });
 
                 user.dispatch({
