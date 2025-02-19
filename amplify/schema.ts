@@ -361,6 +361,8 @@ export const mlTournamentSchema = new mongoose.Schema(
         startDate: Date,
         endDate: Date,
         teams: [teamSchema],
+        accredited: Boolean,
+        isActiveFilter: { type: Boolean, default: false },
     },
     {
         collection: "ml_tournaments",

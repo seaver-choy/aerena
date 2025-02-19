@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import CloseIcon from "../../../../assets/icon/close.svg";
 import { getStickerImage } from "../../../../helpers/images";
 import { ImageSlider } from "../../../../components/ImageSlider";
 
@@ -26,9 +27,7 @@ export const LeagueModal = ({
     chosenLeagueType,
     setChosenLeagueType,
 }: LeagueModalProps) => {
-    const [leagueSlide, setLeagueSlide] = useState<number>(
-        leagueTypes.findIndex((item) => item === chosenLeagueType)
-    );
+    const [leagueSlide, setLeagueSlide] = useState<number>(0);
     const [images, setImages] = useState<string[]>([]);
 
     const handleSelect = () => {
@@ -45,6 +44,8 @@ export const LeagueModal = ({
 
     useEffect(() => {
         fetchImages();
+        if(chosenLeagueType != null)
+            setLeagueSlide(leagueTypes.findIndex((item) => item === chosenLeagueType));
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
@@ -71,6 +72,13 @@ export const LeagueModal = ({
                                 Catalog Filter
                             </p>
                         </motion.div>
+                        <motion.button
+                            className="absolute right-0 top-0 h-[5vw] w-[5vw]"
+                            onClick={onClose}
+                            {...appearAnimation}
+                        >
+                            <img className="h-full w-full" src={CloseIcon} />
+                        </motion.button>
                         <motion.div
                             className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
                             {...appearAnimation}
@@ -80,18 +88,37 @@ export const LeagueModal = ({
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
                         <div className="flex h-full w-full">
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                onClick={handleSelect}
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Select
-                                    </p>
-                                </div>
-                            </motion.button>
+                            
+                        {
+                            chosenLeagueType != null && leagueTypes[leagueSlide] === chosenLeagueType ?
+                            (
+                                <motion.div
+                                    className="relative flex h-full w-full justify-center"
+                                    {...appearTextAnimation}
+                                >
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-gold">
+                                            Selected
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )
+                            :
+                            (
+                                <motion.button
+                                    className="relative flex h-full w-full justify-center"
+                                    onClick={handleSelect}
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                            Select
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            )
+                        }
                         </div>
                     </div>
                 </div>

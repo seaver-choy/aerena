@@ -303,6 +303,21 @@ async function submitLineupToTournament(event: APIGatewayProxyEvent) {
                 },
                 { new: true }
             );
+
+            if (user?.referredBy && tournament.type == "premium") {
+                const referrer = await userModel.findOneAndUpdate(
+                    {
+                        userID: user.referredBy.userID,
+                    },
+                    {
+                        $inc: { referralPurchases: 1 },
+                    },
+                    { new: true }
+                );
+                console.info(
+                    `[TOURNAMENT] User ${referrer.userID}'s referral purchases increased to ${referrer.referralPurchases}`
+                );
+            }
             console.info(
                 `[TOURNAMENT] User ${payload.userID} has successfully submitted lineup for tournament ${id} \n ${JSON.stringify(payload)}`
             );

@@ -73,18 +73,24 @@ export const Catalog = () => {
             obj.position.includes(position)
         );
 
-        const sorted = filteredPosition.sort((a, b) => {
-            const teamA = a.team.toUpperCase();
-            const teamB = b.team.toUpperCase();
+        const uniqueAthletesMap = new Map(
+            filteredPosition.map(player => [player.player, player])
+        );
+        
+        const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
+            // const teamA = a.team.toUpperCase();
+            // const teamB = b.team.toUpperCase();
 
             const nameA = a.displayName;
             const nameB = b.displayName;
 
-            const teamOrder = teamA.localeCompare(teamB);
+            // const teamOrder = teamA.localeCompare(teamB);
             const nameOrder = nameA.localeCompare(nameB);
 
-            return teamOrder || nameOrder;
+            // return teamOrder || nameOrder;
+            return nameOrder;
         });
+        console.log(sorted);
         setCurrentAthletes(sorted);
     }
 
@@ -101,7 +107,6 @@ export const Catalog = () => {
     }, [positionIndex, leagueAthletes]);
 
     useEffect(() => {
-        console.log(chosenLeagueType);
         if (allAthletes !== null && chosenLeagueType != null) {
             const tempAthletes = allAthletes.filter((obj) =>
                 obj.league.includes(chosenLeagueType)
@@ -113,13 +118,11 @@ export const Catalog = () => {
     const getAllAthletes = async () => {
         const allAthletes = await getAthletes(user.initDataRaw);
         const allLeagueTypes = await getLeagues(user.initDataRaw);
-        const initialLeagueType = allLeagueTypes[0];
-        setChosenLeagueType(initialLeagueType);
-        const tempAthletes = allAthletes.filter((obj) =>
-            obj.league.includes(initialLeagueType)
-        );
         setAllAthletes(allAthletes);
         setLeagueTypes(allLeagueTypes);
+        const tempAthletes = allAthletes.filter((obj) =>
+            allLeagueTypes.includes(obj.league)
+        );
         setLeagueAthletes(tempAthletes);
     };
 
@@ -150,7 +153,7 @@ export const Catalog = () => {
                             className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                             {...slideRightTextAnimation}
                         >
-                            Player Catalog
+                            {chosenLeagueType == null ? "Player Catalog" : chosenLeagueType}
                         </motion.p>
                     </div>
                     <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
