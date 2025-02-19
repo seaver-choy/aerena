@@ -93,7 +93,7 @@ export const Lineup = ({
                         {loadLuckyPick && (
                             <div className="h-[36.4vw] w-[28vw]">
                                 <motion.div
-                                    className="relative flex"
+                                    className="relative flex h-[36.4vw] w-[28vw]"
                                     {...pulseAnimation}
                                 >
                                     <img
@@ -106,86 +106,79 @@ export const Lineup = ({
                         {!loadLuckyPick &&
                             tournamentLineup !== null &&
                             tournamentLineup[index].athlete === null && (
-                                <div>
-                                    <motion.div
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        onClick={() => handleSetLineup(index)}
-                                        {...appearCardAnimation}
-                                    >
-                                        <img
-                                            className="h-full w-full"
-                                            src={getEmptyAthleteCard(position)}
-                                        ></img>
-                                    </motion.div>
-                                </div>
+                                <motion.div
+                                    className="relative flex h-[36.4vw] w-[28vw]"
+                                    onClick={() => handleSetLineup(index)}
+                                    {...appearCardAnimation}
+                                >
+                                    <img
+                                        className="h-[36.4vw] w-[28vw]"
+                                        src={getEmptyAthleteCard(position)}
+                                    ></img>
+                                </motion.div>
                             )}
                         {!loadLuckyPick &&
                             tournamentLineup !== null &&
                             tournamentLineup[index].athlete !== null && (
-                                <div className="bg-red">
-                                    <motion.div
-                                        className={`relative flex h-[36.4vw] w-[28vw] ${currentPositionIndex === index ? "hidden" : ""}`}
-                                        onClick={() => handleSetLineup(index)}
-                                        {...(currentPositionIndex === -1 &&
-                                        !usedLP
-                                            ? appearCardAnimation
-                                            : appearTextLuckyPickAnimation({
-                                                  delay: index,
-                                              }))}
-                                    >
-                                        {/* <img
+                                <motion.div
+                                    className={`relative flex h-[36.4vw] w-[28vw] ${currentPositionIndex === index ? "hidden" : ""}`}
+                                    onClick={() => handleSetLineup(index)}
+                                    {...(currentPositionIndex === -1 && !usedLP
+                                        ? appearCardAnimation
+                                        : appearTextLuckyPickAnimation({
+                                              delay: index,
+                                          }))}
+                                >
+                                    {/* <img
                                                 className="h-full w-full"
                                                 src={tournamentLineup[index].athlete.img}
                                             ></img> */}
-                                        <AthleteCard
-                                            color={baseColor}
-                                            ign={
-                                                tournamentLineup[index].athlete
-                                                    .displayName
-                                            }
-                                            role={
-                                                tournamentLineup[index].athlete
-                                                    .position[0]
-                                            }
-                                            opacity={{ wave: baseColor.wave }}
-                                        />
-                                    </motion.div>
-                                </div>
+                                    <AthleteCard
+                                        color={baseColor}
+                                        ign={
+                                            tournamentLineup[index].athlete
+                                                .displayName
+                                        }
+                                        role={
+                                            tournamentLineup[index].athlete
+                                                .position[0]
+                                        }
+                                        opacity={{ wave: baseColor.wave }}
+                                    />
+                                </motion.div>
                             )}
                         {!loadLuckyPick &&
                             newSelected &&
                             currentPositionIndex === index &&
                             tournamentLineup !== null &&
                             tournamentLineup[index].athlete !== null && (
-                                <div>
-                                    <motion.div
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        onClick={() => handleSetLineup(index)}
-                                        {...appearCardAnimation}
-                                    >
-                                        <AthleteCard
-                                            color={baseColor}
-                                            ign={
-                                                tournamentLineup[index].athlete
-                                                    .displayName
-                                            }
-                                            role={
-                                                tournamentLineup[index].athlete
-                                                    .position[0]
-                                            }
-                                            opacity={{
-                                                wave: baseColor.wave,
-                                            }}
-                                        />
+                                <motion.div
+                                    className="relative flex h-[36.4vw] w-[28vw]"
+                                    onClick={() => handleSetLineup(index)}
+                                    {...appearCardAnimation}
+                                >
+                                    <AthleteCard
+                                        color={baseColor}
+                                        ign={
+                                            tournamentLineup[index].athlete
+                                                .displayName
+                                        }
+                                        role={
+                                            tournamentLineup[index].athlete
+                                                .position[0]
+                                        }
+                                        opacity={{
+                                            wave: baseColor.wave,
+                                        }}
+                                    />
 
-                                        {/* <img
+                                    {/* <img
                                         className="h-full w-full"
                                         src={
                                             tournamentLineup[index].athlete.img
                                         }
                                     ></img> */}
-                                    </motion.div>
-                                </div>
+                                </motion.div>
                             )}
                     </div>
                 ))}
