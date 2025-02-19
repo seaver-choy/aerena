@@ -6,5 +6,6 @@ export const userFunction = defineFunction({
     environment: {
         MONGODB_URI: secret("MONGODB_URI"),
         BOT_TOKEN: secret("BOT_TOKEN"),
+        BOT_WEBHOOK_URL: secret("BOT_WEBHOOK_URL"),
     },
 });
