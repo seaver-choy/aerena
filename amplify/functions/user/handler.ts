@@ -4,6 +4,7 @@ import {
     userSchema,
     questSchema,
 } from "../../schema";
+import axios from "axios";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -904,9 +905,25 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                     }
                 );
             }
+
             console.info(
                 `[REFERRAL] User ${updatedReferee.username} is referred by ${updatedReferrer.username}`
             );
+            
+            const response = await axios.post(process.env.BOT_WEBHOOK_URL!, {
+                update_id: 1,
+                message: {
+                    chat: {
+                        id: updatedReferrer.userID,
+                    },
+                    text: "/notifyreferral " + updatedReferrer.userID + " " + updatedReferee.username,
+                },
+            });
+
+            if(!response)
+                console.error(`[ERROR][REFERRAL] Error in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`);
+            else
+                console.info(`[REFERRAL] Success in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`);
             return {
                 statusCode: 200,
                 headers: {
