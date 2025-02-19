@@ -110,6 +110,7 @@ export const Slider = ({ athlete, teamColor }: Props) => {
                                 opacity={{ wave: card.opacity.wave }}
                                 role={card.role}
                                 type={card.type}
+                                id={index}
                             />
                         </motion.div>
                     );

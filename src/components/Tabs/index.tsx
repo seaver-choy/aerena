@@ -14,8 +14,10 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
     const [selectedOption, setSelectedOption] = useState(selectedTab);
 
     const handleToggle = (option) => {
+        if(option !== "Favorites") //temporary in disabling Favorites; comment together with the line in FriendsScreen/index.tsx to enable
         setSelectedOption(option);
-        if (onToggle) onToggle(option);
+        if (onToggle)
+            onToggle(option);
     };
 
     return (
@@ -33,7 +35,7 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
                     }`}
                     onClick={() => handleToggle(option)}
                 >
-                    {option === "Play Free" && (
+                    {option === "Play Basic" && (
                         <img
                             className="mr-[1.5vw] mt-[0.5vw] h-[3.5vw]"
                             src={BattlePointsIcon}

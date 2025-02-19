@@ -16,6 +16,7 @@ import {
     dateFormat,
     dateRangeFormat,
     isTournamentClosed,
+    isTournamentUpcoming,
 } from "../../../../hooks/dates";
 import { Layout } from "../../../../components/Layout";
 import { PointsSystem } from "../../components/PointsSystem";
@@ -82,8 +83,11 @@ export const TournamentScreen = () => {
             const calculateTimeLeft = () => {
                 const now = new Date();
                 const difference =
-                    new Date(tournament.tournamentEndSubmissionDate).getTime() -
-                    now.getTime();
+                    new Date(
+                        isTournamentUpcoming(tournament)
+                            ? tournament.tournamentStartSubmissionDate
+                            : tournament.tournamentEndSubmissionDate
+                    ).getTime() - now.getTime();
                 if (difference > 0) {
                     setTimeLeft({
                         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -125,13 +129,13 @@ export const TournamentScreen = () => {
                 <div>
                     {showTournament ? (
                         <div
-                            className={`h-[58.4vw] ${tournament.type == "free" ? "" : "bg-graydark"}`}
+                            className={`h-[58.4vw] ${tournament.type == "basic" ? "" : "bg-graydark"}`}
                         >
                             <div className="relative flex justify-center">
                                 <img
                                     className="h-full w-full"
                                     src={
-                                        tournament.type == "free"
+                                        tournament.type == "basic"
                                             ? FreeTournamentBackground
                                             : PremiumTournamentBackground
                                     }
@@ -148,7 +152,7 @@ export const TournamentScreen = () => {
                                     className="absolute top-[23vw] flex"
                                     {...appearTextAnimation}
                                 >
-                                    {tournament.type === "free" ? (
+                                    {tournament.type === "basic" ? (
                                         <img
                                             src={BattlePointsIcon}
                                             className="mr-[2vw] mt-[2.5vw] h-[7vw]"
@@ -171,22 +175,27 @@ export const TournamentScreen = () => {
                                         </p>
                                     )}
                                     <p
-                                        className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                                        className={`text-nowrap font-russoone text-[9vw] font-normal ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                                     >
                                         {tournament.prizePool.toLocaleString()}
                                     </p>
                                 </motion.div>
+                                {classification != undefined &&
+                                    classification == "" &&
+                                    (isTournamentClosed(tournament) ||
+                                        isTournamentUpcoming(tournament)) && (
+                                        <motion.div
+                                            className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                                            {...slideRightTextAnimation}
+                                        >
+                                            <img
+                                                className="h-full w-full"
+                                                src={Closed}
+                                            />
+                                        </motion.div>
+                                    )}
                                 <motion.div
-                                    className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
-                                    {...slideRightTextAnimation}
-                                >
-                                    <img
-                                        className="h-full w-full"
-                                        src={Closed}
-                                    />
-                                </motion.div>
-                                <motion.div
-                                    className="absolute bottom-[8vw] flex h-[10vw] w-[70%]"
+                                    className="absolute bottom-[7vw] flex h-[10vw] w-[70%]"
                                     {...appearTextAnimation}
                                 >
                                     <div className="flex h-full w-[100%] flex-col items-center justify-center">
@@ -202,7 +211,11 @@ export const TournamentScreen = () => {
                                                 <div className="flex flex-col items-center">
                                                     <div>
                                                         {dateFormat(
-                                                            tournament.tournamentEndSubmissionDate,
+                                                            isTournamentUpcoming(
+                                                                tournament
+                                                            )
+                                                                ? tournament.tournamentStartSubmissionDate
+                                                                : tournament.tournamentEndSubmissionDate,
                                                             tournament.type
                                                         )}
                                                     </div>
@@ -211,15 +224,21 @@ export const TournamentScreen = () => {
                                                         tournament
                                                     ) ? (
                                                         <p
-                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                                            className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                                         >
-                                                            {tournament.resultsTallied ? "" : "Calculating Results"}
+                                                            {tournament.resultsTallied
+                                                                ? ""
+                                                                : "Calculating Results"}
                                                         </p>
                                                     ) : (
                                                         <p
-                                                            className={`font-montserrat text-[2vw] ${tournament.type == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                                            className={`font-montserrat text-[2.8vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                                         >
-                                                            Closes in{" "}
+                                                            {isTournamentUpcoming(
+                                                                tournament
+                                                            )
+                                                                ? "Opens in "
+                                                                : "Closes in "}
                                                             {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                                         </p>
                                                     )}

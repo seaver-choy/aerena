@@ -46,13 +46,13 @@ export const TournamentListBanner = ({
         <div>
             {showTournament ? (
                 <div
-                    className={`mx-[4vw] mt-[4vw] h-[30.6vw] ${tournament.type == "free" ? "" : "bg-graydark"}`}
+                    className={`mx-[4vw] mt-[4vw] h-[30.6vw] ${tournament.type == "basic" ? "" : "bg-graydark"}`}
                 >
                     <div className="relative flex justify-center">
                         <img
                             className="h-full w-full"
                             src={
-                                tournament.type == "free"
+                                tournament.type == "basic"
                                     ? FreeTournamentListBackground
                                     : PremiumTournamentListBackground
                             }

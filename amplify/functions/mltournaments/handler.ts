@@ -46,7 +46,7 @@ async function getLeagues() {
 
     try {
         const result = await mlTournamentModel
-            .find().select('code');
+            .find({isActiveFilter: true}).sort({endDate: -1}).select('code'); //TODO: currently is used for league filter in Catalog
 
         if (!result) {
             return {

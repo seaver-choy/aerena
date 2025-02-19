@@ -303,6 +303,21 @@ async function submitLineupToTournament(event: APIGatewayProxyEvent) {
                 },
                 { new: true }
             );
+
+            if (user?.referredBy && tournament.type == "premium") {
+                const referrer = await userModel.findOneAndUpdate(
+                    {
+                        userID: user.referredBy.userID,
+                    },
+                    {
+                        $inc: { referralPurchases: 1 },
+                    },
+                    { new: true }
+                );
+                console.info(
+                    `[TOURNAMENT] User ${referrer.userID}'s referral purchases increased to ${referrer.referralPurchases}`
+                );
+            }
             console.info(
                 `[TOURNAMENT] User ${payload.userID} has successfully submitted lineup for tournament ${id} \n ${JSON.stringify(payload)}`
             );
@@ -430,13 +445,19 @@ async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        const result = await tournamentModel.find({
+        let result = await tournamentModel.find({
             type: type,
-            tournamentEndSubmissionDate: { $lt: currentDate },
-            resultsTallied: true,
-        })
-        .sort({ tournamentEndSubmissionDate: -1 })
-        .limit(1);
+            tournamentStartSubmissionDate: { $gt: currentDate },
+        }).sort({ tournamentStartSubmissionDate: 1 }).limit(1);
+        if(result.length < 1) {
+            result = await tournamentModel.find({
+                type: type,
+                tournamentEndSubmissionDate: { $lt: currentDate },
+                resultsTallied: true,
+            })
+            .sort({ tournamentEndSubmissionDate: -1 })
+            .limit(1);
+        }
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Previous latest tournament not found in database.`

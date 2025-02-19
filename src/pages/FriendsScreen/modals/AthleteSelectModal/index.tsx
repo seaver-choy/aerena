@@ -38,9 +38,9 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
     const [hasSelected, setHasSelected] = useState<boolean>(false);
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [searchName, setSearchName] = useState<string>("");
+    
     const handleTeamSelect = async() => {
         if(hasSelected){
-            console.log(filteredAthletes[selectedIndex]);
             const newLineup = [...dreamTeamLineup];
             newLineup[positionIndex] = {...newLineup[positionIndex], athlete: filteredAthletes[selectedIndex]};
             const athletes = newLineup.map(position => position.athlete);
@@ -56,11 +56,16 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
     };
     
     const fetchAthletes = async () => {
-        const result = await getAthletePositionFilter(
+        const result = (await getAthletePositionFilter(
             position,
             "",
             user.initDataRaw
-        );
+        )).sort((a, b) => {
+            const nameA = a.displayName;
+            const nameB = b.displayName;
+            const nameOrder = nameA.localeCompare(nameB);
+            return nameOrder;
+        });
         setDisplayAthletes(result);
         setFilteredAthletes(result);
         let foundIndex = -1;
@@ -111,7 +116,6 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
         setShowAthlete(false);
         fetchAthletes();
         document.body.style.overflow = "hidden";
-
         return () => {
             document.body.style.overflow = "auto";
         };
@@ -170,58 +174,30 @@ export const AthleteSelectModal = ({ dreamTeam, dreamTeamLineup, position, posit
                             filteredAthletes?.map((athlete, index) => (
                                 <div>
                                     {showAthlete && (
-                                        <div>
-                                            {index !== selectedIndex && (
-                                                <motion.div
-                                                    className="relative flex h-[27.95vw] w-[21.5vw] opacity-50"
-                                                    key={index}
-                                                    onClick={() =>
-                                                        handleAthleteSelect(index)
-                                                    }
-                                                    {...appearCardEmptyAnimation}
-                                                >
-                                                    {/* <img
-                                                        className="h-full w-full"
-                                                        src={athlete.img}
-                                                        alt={athlete.displayName}
-                                                    /> */}
-    
-                                                    <AthleteCard
-                                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
-                                                        ign={athlete.displayName}
-                                                        role={athlete.position[0]}
-                                                        opacity={{
-                                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
-                                                        }}
-                                                    />
-                                                </motion.div>
-                                            )}
-                                            {index === selectedIndex && (
-                                                <motion.div
-                                                    className="relative flex h-[27.95vw] w-[21.5vw] opacity-100"
-                                                    key={index}
-                                                    onClick={() =>
-                                                        handleAthleteSelect(index)
-                                                    }
-                                                    {...appearCardAnimation}
-                                                >
-                                                    {/* <img
-                                                        className="h-full w-full"
-                                                        src={athlete.img}
-                                                        alt={athlete.displayName}
-                                                    /> */}
-    
-                                                    <AthleteCard
-                                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
-                                                        ign={athlete.displayName}
-                                                        role={athlete.position[0]}
-                                                        opacity={{
-                                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
-                                                        }}
-                                                    />
-                                                </motion.div>
-                                            )}
-                                        </div>
+                                        <motion.div
+                                            className="relative flex h-[27.95vw] w-[21.5vw]"
+                                            key={index}
+                                            onClick={() =>
+                                                handleAthleteSelect(index)
+                                            }
+                                            {...(index !== selectedIndex ? appearCardEmptyAnimation: appearCardAnimation)}
+                                        >
+                                            {/* <img
+                                                className="h-full w-full"
+                                                src={athlete.img}
+                                                alt={athlete.displayName}
+                                            /> */}
+
+                                            <AthleteCard
+                                                color={dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors : baseColor}
+                                                ign={athlete.displayName}
+                                                role={athlete.position[0]}
+                                                opacity={{
+                                                    wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave : baseColor.wave,
+                                                }}
+                                                id={index}
+                                            />
+                                        </motion.div>
                                     )}
                                     {!showAthlete && (
                                         <motion.div

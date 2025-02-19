@@ -125,6 +125,7 @@ export const PersonalLineup = ({
                                                     opacity={{
                                                         wave: baseColor.wave,
                                                     }}
+                                                    id={index}
                                                 />
                                             </div>
                                         ))}

@@ -1,6 +1,6 @@
 import { get, put, post } from "aws-amplify/api";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
-import { DreamTeam, PackInfo } from "./interfaces";
+import { DreamTeam } from "./interfaces";
 
 export const submitLineup = async (
     tournamentId,
@@ -37,44 +37,44 @@ export const submitLineup = async (
     }
 };
 
-export const mintApiPoints = async (
-    userId,
-    packInfo: PackInfo,
-    cost: number,
-    numPacks: number,
-    paymentType: string,
-    initDataRaw: string
-) => {
-    try {
-        const newMint = {
-            userID: userId,
-            packType: packInfo.packType,
-            league: packInfo.leagueType,
-            type: packInfo.competitionType,
-            packId: packInfo.packId,
-            cost: cost,
-            numPacks: numPacks,
-            paymentType: paymentType,
-        };
+// export const mintApiPoints = async (
+//     userId,
+//     packInfo: PackInfo,
+//     cost: number,
+//     numPacks: number,
+//     paymentType: string,
+//     initDataRaw: string
+// ) => {
+//     try {
+//         const newMint = {
+//             userID: userId,
+//             packType: packInfo.packType,
+//             league: packInfo.leagueType,
+//             type: packInfo.competitionType,
+//             packId: packInfo.packId,
+//             cost: cost,
+//             numPacks: numPacks,
+//             paymentType: paymentType,
+//         };
 
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: `mint`,
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(newMint),
-            },
-        });
-        const { body } = await restOperation.response;
+//         const restOperation = put({
+//             apiName: "playibleApi",
+//             path: `mint`,
+//             options: {
+//                 headers: {
+//                     "X-Telegram-Auth": `tma ${initDataRaw}`,
+//                 },
+//                 body: JSON.stringify(newMint),
+//             },
+//         });
+//         const { body } = await restOperation.response;
 
-        const response = await body.text();
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(`PUT call failed ${e}`);
-    }
-};
+//         const response = await body.text();
+//         return JSON.parse(response);
+//     } catch (e) {
+//         console.log(`PUT call failed ${e}`);
+//     }
+// };
 
 export const getTournament = async (tournamentId, initDataRaw) => {
     try {
@@ -405,34 +405,6 @@ export const login = async (userID, initDataRaw) => {
     }
 };
 
-export const claimReward = async (userID, bpLevel, isPremium, initDataRaw) => {
-    try {
-        const payload = {
-            userID: userID,
-            bpLevel: bpLevel,
-            isPremium: isPremium,
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "user/battlepass",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(payload),
-            },
-        });
-
-        const { body } = await restOperation.response;
-
-        const response = await body.text();
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
 export const getTeamInfo = async (
     teamKey: string,
     league: string,
@@ -514,26 +486,26 @@ export const getAthleteStats = async (
     }
 };
 
-export const getPackInfos = async (initDataRaw) => {
-    try {
-        const restOperation = get({
-            apiName: "playibleApi",
-            path: "packinfos/all",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-            },
-        });
+// export const getPackInfos = async (initDataRaw) => {
+//     try {
+//         const restOperation = get({
+//             apiName: "playibleApi",
+//             path: "packinfos/all",
+//             options: {
+//                 headers: {
+//                     "X-Telegram-Auth": `tma ${initDataRaw}`,
+//                 },
+//             },
+//         });
 
-        const { body } = await restOperation.response;
+//         const { body } = await restOperation.response;
 
-        const response = await body.text();
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(`Encountered error during GET of packinfos ${e}`);
-    }
-};
+//         const response = await body.text();
+//         return JSON.parse(response);
+//     } catch (e) {
+//         console.log(`Encountered error during GET of packinfos ${e}`);
+//     }
+// };
 
 export const getLeagues = async (initDataRaw) => {
     try {
@@ -832,7 +804,7 @@ export const updateTempLineup = async (
     }
 };
 
-export const joinFree = async (userId, bpCost, initDataRaw) => {
+export const joinBasic = async (userId, bpCost, initDataRaw) => {
     try {
         const payload = {
             userID: userId,
@@ -841,7 +813,7 @@ export const joinFree = async (userId, bpCost, initDataRaw) => {
 
         const restOperation = put({
             apiName: "playibleApi",
-            path: "user/joinfree",
+            path: "user/joinbasic",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
@@ -927,6 +899,59 @@ export const saveDreamTeam = async (
         console.log(response)
         return JSON.parse(response);
     } catch (e) {
-        console.log(`POST call failed ${e}`);
+        console.log(`saveDreamTeam call failed ${e}`);
+    }
+};
+
+export const checkReferralCode = async (referralCode, initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `user/checkreferralcode?referralCode=${referralCode}`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+        const response = await restOperation.response;
+
+        const data = await response.body.text();
+        return JSON.parse(data);
+    } catch (e) {
+        console.log(`Check Referral Code failed ${e}`);
+        const data = { message: "DNE" };
+        return data;
+    }
+};
+
+export const addNewReferral = async (
+    userId,
+    referralCode,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            referralCode: referralCode,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/addnewreferral`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response)
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`addNewReferral call failed ${e}`);
     }
 };

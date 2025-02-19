@@ -73,7 +73,7 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                     {...appearCardAnimation}
                                 >
                                     <AthleteCard
-                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors: baseColor}
+                                        color={dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors: baseColor}
                                         ign={
                                             dreamTeamLineup[index].athlete
                                                 .displayName
@@ -83,8 +83,9 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                                 .position[0]
                                         }
                                         opacity={{
-                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
+                                            wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
                                         }}
+                                        id={index}
                                     />
                                 </motion.div>
                             )}
@@ -99,7 +100,7 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                     {...appearCardAnimation}
                                 >
                                     <AthleteCard
-                                        color={dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors: baseColor}
+                                        color={dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors: baseColor}
                                         ign={
                                             dreamTeamLineup[index].athlete
                                                 .displayName
@@ -109,8 +110,9 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                                 .position[0]
                                         }
                                         opacity={{
-                                            wave: dreamTeam.teamProfile.teamId != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
+                                            wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
                                         }}
+                                        id={index}
                                     />
                                 </motion.div>
                             )}

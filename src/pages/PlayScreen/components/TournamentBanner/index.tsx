@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
-import { isTournamentClosed } from "../../../../hooks/dates";
+import {
+    isTournamentClosed,
+    isTournamentUpcoming,
+} from "../../../../hooks/dates";
 import { Tournament } from "../../../../helpers/interfaces";
-import { getOngoingTournaments, getLatestPreviousTournament } from "../../../../helpers/lambda.helper";
+import {
+    getOngoingTournaments,
+    getLatestPreviousTournament,
+} from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
 import {
     appearAnimation,
@@ -53,22 +59,22 @@ export const TournamentBanner = ({
         seconds: 0,
     });
     const [currentTournamentType, setCurrentTournamentType] =
-        useState<string>("Free");
+        useState<string>("basic");
 
     const fetchOngoingTournament = async () => {
         try {
             const result = await getOngoingTournaments(
-                playTab.split(" ")[1], //current strings are Play Free & Play Premium, hence the split
+                playTab.split(" ")[1], //current strings are Play Basic & Play Premium, hence the split
                 user.initDataRaw
             );
             setOngoingTournaments(result);
-            if (result.length > 0)
-                setOngoingTournament(result[0]);
+            if (result.length > 0) setOngoingTournament(result[0]);
             else {
-                const previousTournamentResult = await getLatestPreviousTournament(
-                    playTab.split(" ")[1],
-                    user.initDataRaw
-                );
+                const previousTournamentResult =
+                    await getLatestPreviousTournament(
+                        playTab.split(" ")[1],
+                        user.initDataRaw
+                    );
                 setOngoingTournaments(previousTournamentResult);
                 setOngoingTournament(previousTournamentResult[0]);
             }
@@ -91,7 +97,7 @@ export const TournamentBanner = ({
         const formattedHours = hours > 12 ? hours - 12 : hours;
         return (
             <p
-                className={`font-montserrat text-[3vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                className={`font-montserrat text-[3vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
             >
                 {month}
                 <span className="font-montagu">{" / "}</span>
@@ -109,7 +115,9 @@ export const TournamentBanner = ({
         if (ongoingTournament != null) {
             const difference =
                 new Date(
-                    ongoingTournament.tournamentEndSubmissionDate
+                    isTournamentUpcoming(ongoingTournament)
+                        ? ongoingTournament.tournamentStartSubmissionDate
+                        : ongoingTournament.tournamentEndSubmissionDate
                 ).getTime() - now.getTime();
             if (difference > 0) {
                 setTimeLeft({
@@ -134,7 +142,7 @@ export const TournamentBanner = ({
 
     useEffect(() => {
         setOngoingTournaments(null);
-        setCurrentTournamentType(playTab.split(" ")[1]);
+        setCurrentTournamentType(playTab.split(" ")[1].toLowerCase());
         fetchOngoingTournament();
     }, [playTab]);
 
@@ -157,13 +165,13 @@ export const TournamentBanner = ({
         <div>
             {ongoingTournament != null && showTournament ? (
                 <div
-                    className={`mt-[4vw] h-[58.4vw] ${currentTournamentType == "Free" ? "" : "bg-graydark"}`}
+                    className={`mt-[4vw] h-[58.4vw] ${currentTournamentType == "basic" ? "" : "bg-graydark"}`}
                 >
                     <div className="relative flex justify-center">
                         <img
                             className="h-full w-full"
                             src={
-                                currentTournamentType == "Free"
+                                currentTournamentType == "basic"
                                     ? FreeTournamentBackground
                                     : PremiumTournamentBackground
                             }
@@ -186,7 +194,7 @@ export const TournamentBanner = ({
                                     <div className="relative flex">
                                         <img
                                             src={
-                                                currentTournamentType == "Free"
+                                                currentTournamentType == "basic"
                                                     ? ChangeGoldIcon
                                                     : ChangeIcon
                                             }
@@ -215,7 +223,7 @@ export const TournamentBanner = ({
                             className="absolute top-[23vw] flex"
                             {...appearTextAnimation}
                         >
-                            {currentTournamentType === "Free" ? (
+                            {currentTournamentType === "basic" ? (
                                 <img
                                     src={BattlePointsIcon}
                                     className="mr-[2vw] mt-[2.8vw] h-[7vw]"
@@ -238,39 +246,52 @@ export const TournamentBanner = ({
                                 </p>
                             )}
                             <p
-                                className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
+                                className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                             >
                                 {ongoingTournament.prizePool.toLocaleString()}
                             </p>
                         </motion.div>
-                        <motion.div
-                            className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
-                            {...slideRightTextAnimation}
-                        >
-                            <img className="h-full w-full" src={Closed} />
-                        </motion.div>
-                        <div className="absolute bottom-[8vw] flex h-[10vw] w-[70%]">
+                        {ongoingTournament != null &&
+                            (isTournamentClosed(ongoingTournament) ||
+                                isTournamentUpcoming(ongoingTournament)) && (
+                                <motion.div
+                                    className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
+                                    {...slideRightTextAnimation}
+                                >
+                                    <img
+                                        className="h-full w-full"
+                                        src={Closed}
+                                    />
+                                </motion.div>
+                            )}
+                        <div className="absolute bottom-[7vw] flex h-[10vw] w-[70%]">
                             <motion.div
                                 className="flex h-full w-[60%] flex-col items-start justify-center"
                                 {...appearTextAnimation}
                             >
                                 <div>
                                     {formatDate(
-                                        ongoingTournament.tournamentEndSubmissionDate
+                                        isTournamentUpcoming(ongoingTournament)
+                                            ? ongoingTournament.tournamentStartSubmissionDate
+                                            : ongoingTournament.tournamentEndSubmissionDate
                                     )}
                                 </div>
                                 {ongoingTournament != null &&
                                 isTournamentClosed(ongoingTournament) ? (
                                     <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                     >
-                                        {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
+                                        {ongoingTournament.resultsTallied
+                                            ? ""
+                                            : "Calculating Results"}
                                     </p>
                                 ) : (
                                     <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "Free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                        className={`font-montserrat text-[2.8vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
                                     >
-                                        Closes in{" "}
+                                        {isTournamentUpcoming(ongoingTournament)
+                                            ? "Opens in "
+                                            : "Closes in "}
                                         {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
                                     </p>
                                 )}
@@ -296,10 +317,7 @@ export const TournamentBanner = ({
                 </div>
             ) : (
                 <div className="mt-[4vw] h-[58.4vw] bg-loading">
-                    <motion.div
-                        className="relative flex animate-pulse"
-                        {...pulseAnimation}
-                    >
+                    <motion.div className="relative flex" {...pulseAnimation}>
                         <img className="h-full w-full" src={TournamentSonner} />
                     </motion.div>
                 </div>

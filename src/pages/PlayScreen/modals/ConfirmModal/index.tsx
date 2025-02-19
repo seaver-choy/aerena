@@ -48,7 +48,7 @@ export const ConfirmModal = ({
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
                                 You will join this tournament using your
                                 selected lineup.{" "}
-                                {tournamentType === "free" ? (
+                                {tournamentType === "basic" ? (
                                     <p>
                                         {"Entry to the tournament costs " +
                                             joinCost +

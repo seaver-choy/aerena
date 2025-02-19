@@ -17,6 +17,7 @@ export interface Friend {
     userID: number;
     username: string;
     isReferred: boolean;
+    addedDate: Date;
 }
 
 export interface Quest {
@@ -70,33 +71,11 @@ export interface TournamentLineup {
     athlete: Token | null;
 }
 
-export interface BattlePass {
-    level: number;
-    basicReward: number;
-    premReward: number;
-    basicClaimed: false;
-    premClaimed: false;
-}
-
-export interface PackInfo {
-    packId: string;
-    competitionType: string;
-    packType: string;
-    leagueType: string;
-    isActive: boolean;
-}
-
 export interface InventoryItem {
     key: string;
     type: string;
     isClaimed?: boolean;
     stock?: number;
-}
-
-export interface Referral {
-    userID: number;
-    username: string;
-    referralDate: Date;
 }
 
 export interface Team {
@@ -160,4 +139,9 @@ export interface TeamProfile {
 export interface DreamTeam {
     teamProfile: TeamProfile;
     lineup: Token[];
+}
+export interface Referrer {
+    userID: number;
+    referralCode: string;
+    referralDate: Date;
 }

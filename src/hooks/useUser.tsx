@@ -13,9 +13,9 @@ import {
     Token,
     Friend,
     Quest,
-    BattlePass,
     InventoryItem,
     DreamTeam,
+    Referrer,
 } from "../helpers/interfaces";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
 
@@ -37,12 +37,13 @@ interface State {
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
-    battlepass: BattlePass[];
     premiumMember: boolean;
     inventory: InventoryItem[];
     referralPurchases: number;
     initDataRaw: string;
     dreamTeam: DreamTeam;
+    referralCode: string;
+    referredBy: Referrer;
 }
 
 interface Action {
@@ -64,11 +65,12 @@ interface Action {
         | "SET_QUESTS"
         | "SET_REFERRAL_CHECK"
         | "SET_SEASONAL_LOGINS"
-        | "SET_BATTLEPASS"
         | "SET_PREMIUM_MEMBER"
         | "SET_INVENTORY"
         | "SET_REFERRAL_PURCHASES"
-        | "SET_DREAM_TEAM";
+        | "SET_DREAM_TEAM"
+        | "SET_REFERRAL_CODE"
+        | "SET_REFERRED_BY";
     payload?: Partial<State>;
 }
 
@@ -90,11 +92,12 @@ export interface UserContextValue {
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
-    battlepass: BattlePass[];
     premiumMember: boolean;
     inventory: InventoryItem[];
     referralPurchases: number;
     dreamTeam: DreamTeam;
+    referralCode: string;
+    referredBy: Referrer;
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -116,19 +119,12 @@ const initialState: State = {
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
-    battlepass: [
-        {
-            level: 1,
-            basicReward: 2500,
-            premReward: 5000,
-            basicClaimed: false,
-            premClaimed: false,
-        },
-    ],
     inventory: [],
     premiumMember: false,
     referralPurchases: 0,
     dreamTeam: null,
+    referralCode: "",
+    referredBy: null,
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -221,11 +217,6 @@ function reducer(state: State, action: Action): State {
                 seasonalLogins:
                     action.payload?.seasonalLogins ?? state.seasonalLogins,
             };
-        case "SET_BATTLEPASS":
-            return {
-                ...state,
-                battlepass: action.payload?.battlepass ?? state.battlepass,
-            };
         case "SET_PREMIUM_MEMBER":
             return {
                 ...state,
@@ -251,6 +242,20 @@ function reducer(state: State, action: Action): State {
                     action.payload?.dreamTeam ??
                     state.dreamTeam,
             };
+        case "SET_REFERRAL_CODE":
+            return {
+                ...state,
+                referralCode:
+                    action.payload?.referralCode ??
+                    state.referralCode,
+            };
+        case "SET_REFERRED_BY":
+            return {
+                ...state,
+                referredBy:
+                    action.payload?.referredBy ??
+                    state.referredBy,
+            };
         default:
             return state;
     }
@@ -273,11 +278,12 @@ export const UserContext = createContext<UserContextValue>({
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
-    battlepass: [],
     premiumMember: false,
     inventory: [],
     referralPurchases: 0,
     dreamTeam: null,
+    referralCode: "",
+    referredBy: null,
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -371,10 +377,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         payload: { seasonalLogins: data["seasonalLogins"] },
                     });
                     dispatch({
-                        type: "SET_BATTLEPASS",
-                        payload: { battlepass: data["battlepass"] },
-                    });
-                    dispatch({
                         type: "SET_PREMIUM_MEMBER",
                         payload: { premiumMember: data["premiumMember"] },
                     });
@@ -392,6 +394,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_DREAM_TEAM",
                         payload: {
                             dreamTeam: data["dreamTeam"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_REFERRAL_CODE",
+                        payload: {
+                            referralCode: data["referralCode"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_REFERRED_BY",
+                        payload: {
+                            referredBy: data["referredBy"],
                         },
                     });
                 } catch (e) {

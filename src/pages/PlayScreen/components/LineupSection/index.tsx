@@ -7,10 +7,10 @@ import {
     getLuckyPicks,
     getInvoiceLinkForPremiumTournament,
     saveStarsTransaction,
-    joinFree,
+    joinBasic,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
-import { isTournamentClosed } from "../../../../hooks/dates";
+import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
@@ -226,7 +226,7 @@ export const LineupSection = ({
                             });
                     }
                 } else if (user.points >= ongoingTournament.joinCost) {
-                    const result = await joinFree(
+                    const result = await joinBasic(
                         user.id,
                         ongoingTournament.joinCost,
                         user.initDataRaw
@@ -331,16 +331,16 @@ export const LineupSection = ({
                                     ? () => {}
                                     : () => setShowConfirmModal(true)
                             }
-                            disabled={isTournamentClosed(ongoingTournament)}
+                            disabled={isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)}
                         >
-                            {isTournamentClosed(ongoingTournament) ? (
+                            {isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament) ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <img
                                         className="mt-[0.1vw] h-[4vw]"
                                         src={LockedIcon}
                                     ></img>
                                 </div>
-                            ) : ongoingTournament.type === "free" ? (
+                            ) : ongoingTournament.type === "basic" ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
                                         JOIN FOR&nbsp;

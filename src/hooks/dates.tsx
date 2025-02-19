@@ -9,7 +9,7 @@ export function dateFormat(dateString, tournamentType = null) {
 
     const formattedHours = hours > 12 ? hours - 12 : hours;
     return (
-        <p className={`font-montserrat text-[3vw] ${tournamentType != null && tournamentType == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+        <p className={`font-montserrat text-[3vw] ${tournamentType != null && tournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
             {month}
             <span className="font-montagu">{" / "}</span>
             {day}
@@ -32,7 +32,7 @@ export function dateRangeFormat(date1, date2, tournamentType = null) {
     const endYear = endDate.getFullYear();
 
     return (
-        <p className={`font-montserrat text-[3vw] ${tournamentType != null && tournamentType == "free" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
+        <p className={`font-montserrat text-[3vw] ${tournamentType != null && tournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}>
             {startMonth}
             <span className="font-montagu">{" / "}</span>
             {startDay}
@@ -64,3 +64,21 @@ export function isTournamentClosed(tournament){
         return true;
     }
 };
+
+export function isTournamentUpcoming(tournament){
+    if (tournament !== null) {
+        if (
+            Date.now() <
+            new Date(
+                tournament.tournamentStartSubmissionDate
+            ).getTime()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+};
+

@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import CloseIcon from "../../../../assets/icon/close.svg";
 import { getStickerImage } from "../../../../helpers/images";
+import { ImageSlider } from "../../../../components/ImageSlider";
 
 interface LeagueModalProps {
     onClose: () => void;
@@ -26,32 +27,29 @@ export const LeagueModal = ({
     chosenLeagueType,
     setChosenLeagueType,
 }: LeagueModalProps) => {
-    const sliderRef = useRef(null);
-    const [leagueSlide, setLeagueSlide] = useState<number>(
-        leagueTypes.findIndex((item) => item === chosenLeagueType)
-    );
-
-    const settings = {
-        centerMode: true,
-        centerPadding: "20%",
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        afterChange: (index: number) => {
-            setLeagueSlide(index);
-        },
-        initialSlide: leagueSlide,
-    };
+    const [leagueSlide, setLeagueSlide] = useState<number>(0);
+    const [images, setImages] = useState<string[]>([]);
 
     const handleSelect = () => {
         setChosenLeagueType(leagueTypes[leagueSlide]);
         onClose();
     };
 
+    const fetchImages = async () => {
+        const leagueImages = await Promise.all(
+            leagueTypes.map(async (league) => {
+                return getStickerImage(league);
+            })
+        );
+        setImages(leagueImages);
+    };
+
     useEffect(() => {
+        fetchImages();
+        if (chosenLeagueType != null)
+            setLeagueSlide(
+                leagueTypes.findIndex((item) => item === chosenLeagueType)
+            );
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
@@ -78,45 +76,52 @@ export const LeagueModal = ({
                                 Catalog Filter
                             </p>
                         </motion.div>
+                        <motion.button
+                            className="absolute right-0 top-0 h-[5vw] w-[5vw]"
+                            onClick={onClose}
+                            {...appearAnimation}
+                        >
+                            <img className="h-full w-full" src={CloseIcon} />
+                        </motion.button>
                         <motion.div
                             className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
                             {...appearAnimation}
                         >
-                            <Slider
-                                ref={(slider) => (sliderRef.current = slider)}
-                                className="w-full"
-                                {...settings}
-                            >
-                                {leagueTypes.map((league, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="mt-[7vw] h-full px-[2vw]"
-                                        >
-                                            <img
-                                                className="w-full"
-                                                src={getStickerImage(league)}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
+                            <ImageSlider
+                                images={images}
+                                imageIndex={leagueSlide}
+                                setImageIndex={setLeagueSlide}
+                            />
                         </motion.div>
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
                         <div className="flex h-full w-full">
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                onClick={handleSelect}
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Select
-                                    </p>
-                                </div>
-                            </motion.button>
+                            {chosenLeagueType != null &&
+                            leagueTypes[leagueSlide] === chosenLeagueType ? (
+                                <motion.div
+                                    className="relative flex h-full w-full justify-center"
+                                    {...appearTextAnimation}
+                                >
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
+                                            Selected
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.button
+                                    className="relative flex h-full w-full justify-center"
+                                    onClick={handleSelect}
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                            Select
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            )}
                         </div>
                     </div>
                 </div>
