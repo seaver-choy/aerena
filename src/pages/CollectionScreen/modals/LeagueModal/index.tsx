@@ -36,16 +36,20 @@ export const LeagueModal = ({
     };
 
     const fetchImages = async () => {
-        const leagueImages = await Promise.all(leagueTypes.map(async (league) => {
-            return getStickerImage(league);
-            }));
+        const leagueImages = await Promise.all(
+            leagueTypes.map(async (league) => {
+                return getStickerImage(league);
+            })
+        );
         setImages(leagueImages);
     };
 
     useEffect(() => {
         fetchImages();
-        if(chosenLeagueType != null)
-            setLeagueSlide(leagueTypes.findIndex((item) => item === chosenLeagueType));
+        if (chosenLeagueType != null)
+            setLeagueSlide(
+                leagueTypes.findIndex((item) => item === chosenLeagueType)
+            );
         document.body.style.overflow = "hidden";
         return () => {
             document.body.style.overflow = "auto";
@@ -83,28 +87,28 @@ export const LeagueModal = ({
                             className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
                             {...appearAnimation}
                         >
-                            <ImageSlider images={images} imageIndex={leagueSlide} setImageIndex={setLeagueSlide}/>
+                            <ImageSlider
+                                images={images}
+                                imageIndex={leagueSlide}
+                                setImageIndex={setLeagueSlide}
+                            />
                         </motion.div>
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
                         <div className="flex h-full w-full">
-                            
-                        {
-                            chosenLeagueType != null && leagueTypes[leagueSlide] === chosenLeagueType ?
-                            (
+                            {chosenLeagueType != null &&
+                            leagueTypes[leagueSlide] === chosenLeagueType ? (
                                 <motion.div
                                     className="relative flex h-full w-full justify-center"
                                     {...appearTextAnimation}
                                 >
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-gold">
+                                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
                                             Selected
                                         </p>
                                     </div>
                                 </motion.div>
-                            )
-                            :
-                            (
+                            ) : (
                                 <motion.button
                                     className="relative flex h-full w-full justify-center"
                                     onClick={handleSelect}
@@ -117,8 +121,7 @@ export const LeagueModal = ({
                                         </p>
                                     </div>
                                 </motion.button>
-                            )
-                        }
+                            )}
                         </div>
                     </div>
                 </div>

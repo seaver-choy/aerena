@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
-import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
+import {
+    isTournamentClosed,
+    isTournamentUpcoming,
+} from "../../../../hooks/dates";
 import { Tournament } from "../../../../helpers/interfaces";
-import { getOngoingTournaments, getLatestPreviousTournament } from "../../../../helpers/lambda.helper";
+import {
+    getOngoingTournaments,
+    getLatestPreviousTournament,
+} from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
 import {
     appearAnimation,
@@ -62,13 +68,13 @@ export const TournamentBanner = ({
                 user.initDataRaw
             );
             setOngoingTournaments(result);
-            if (result.length > 0)
-                setOngoingTournament(result[0]);
+            if (result.length > 0) setOngoingTournament(result[0]);
             else {
-                const previousTournamentResult = await getLatestPreviousTournament(
-                    playTab.split(" ")[1],
-                    user.initDataRaw
-                );
+                const previousTournamentResult =
+                    await getLatestPreviousTournament(
+                        playTab.split(" ")[1],
+                        user.initDataRaw
+                    );
                 setOngoingTournaments(previousTournamentResult);
                 setOngoingTournament(previousTournamentResult[0]);
             }
@@ -109,10 +115,9 @@ export const TournamentBanner = ({
         if (ongoingTournament != null) {
             const difference =
                 new Date(
-                    isTournamentUpcoming(ongoingTournament) ?
-                        ongoingTournament.tournamentStartSubmissionDate
-                        :
-                        ongoingTournament.tournamentEndSubmissionDate
+                    isTournamentUpcoming(ongoingTournament)
+                        ? ongoingTournament.tournamentStartSubmissionDate
+                        : ongoingTournament.tournamentEndSubmissionDate
                 ).getTime() - now.getTime();
             if (difference > 0) {
                 setTimeLeft({
@@ -246,46 +251,50 @@ export const TournamentBanner = ({
                                 {ongoingTournament.prizePool.toLocaleString()}
                             </p>
                         </motion.div>
-                        {
-                            ongoingTournament != null &&
-                            (isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)) &&
-                            (
+                        {ongoingTournament != null &&
+                            (isTournamentClosed(ongoingTournament) ||
+                                isTournamentUpcoming(ongoingTournament)) && (
                                 <motion.div
                                     className="absolute left-[11.8vw] top-[32vw] h-[10vw] w-[20vw]"
                                     {...slideRightTextAnimation}
                                 >
-                                    <img className="h-full w-full" src={Closed} />
+                                    <img
+                                        className="h-full w-full"
+                                        src={Closed}
+                                    />
                                 </motion.div>
-                            )
-                        }
-                        <div className="absolute bottom-[8vw] flex h-[10vw] w-[70%]">
+                            )}
+                        <div className="absolute bottom-[7vw] flex h-[10vw] w-[70%]">
                             <motion.div
                                 className="flex h-full w-[60%] flex-col items-start justify-center"
                                 {...appearTextAnimation}
                             >
                                 <div>
-                                    {formatDate(isTournamentUpcoming(ongoingTournament) ? ongoingTournament.tournamentStartSubmissionDate : ongoingTournament.tournamentEndSubmissionDate)}
+                                    {formatDate(
+                                        isTournamentUpcoming(ongoingTournament)
+                                            ? ongoingTournament.tournamentStartSubmissionDate
+                                            : ongoingTournament.tournamentEndSubmissionDate
+                                    )}
                                 </div>
-                                {
-                                    ongoingTournament != null &&
-                                    isTournamentClosed(ongoingTournament) ?
-                                    (
-                                        <p
-                                            className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
-                                        >
-                                            {ongoingTournament.resultsTallied ? "" : "Calculating Results"}
-                                        </p>
-                                    )
-                                    :
-                                    (
-                                        <p
-                                            className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                        >
-                                            {isTournamentUpcoming(ongoingTournament) ? "Opens in " : "Closes in "}
-                                            {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                        </p>
-                                    )
-                                }
+                                {ongoingTournament != null &&
+                                isTournamentClosed(ongoingTournament) ? (
+                                    <p
+                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                    >
+                                        {ongoingTournament.resultsTallied
+                                            ? ""
+                                            : "Calculating Results"}
+                                    </p>
+                                ) : (
+                                    <p
+                                        className={`font-montserrat text-[2.8vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
+                                    >
+                                        {isTournamentUpcoming(ongoingTournament)
+                                            ? "Opens in "
+                                            : "Closes in "}
+                                        {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                    </p>
+                                )}
                             </motion.div>
                             <motion.div
                                 className="flex h-full w-[40%] items-center justify-end"
@@ -308,10 +317,7 @@ export const TournamentBanner = ({
                 </div>
             ) : (
                 <div className="mt-[4vw] h-[58.4vw] bg-loading">
-                    <motion.div
-                        className="relative flex animate-pulse"
-                        {...pulseAnimation}
-                    >
+                    <motion.div className="relative flex" {...pulseAnimation}>
                         <img className="h-full w-full" src={TournamentSonner} />
                     </motion.div>
                 </div>

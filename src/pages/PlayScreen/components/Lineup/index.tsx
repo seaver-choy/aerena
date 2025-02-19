@@ -91,15 +91,17 @@ export const Lineup = ({
                 {positionList.map((position, index) => (
                     <div key={index}>
                         {loadLuckyPick && (
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...pulseAnimation}
-                            >
-                                <img
-                                    className="h-full w-full"
-                                    src={AthleteSonnerGold}
-                                />
-                            </motion.div>
+                            <div className="h-[36.4vw] w-[28vw]">
+                                <motion.div
+                                    className="relative flex"
+                                    {...pulseAnimation}
+                                >
+                                    <img
+                                        className="h-full w-full"
+                                        src={AthleteSonnerGold}
+                                    />
+                                </motion.div>
+                            </div>
                         )}
                         {!loadLuckyPick &&
                             tournamentLineup !== null &&
