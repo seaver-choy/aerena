@@ -74,9 +74,9 @@ export const Catalog = () => {
         );
 
         const uniqueAthletesMap = new Map(
-            filteredPosition.map(player => [player.player, player])
+            filteredPosition.map((player) => [player.player, player])
         );
-        
+
         const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
             // const teamA = a.team.toUpperCase();
             // const teamB = b.team.toUpperCase();
@@ -153,7 +153,9 @@ export const Catalog = () => {
                             className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                             {...slideRightTextAnimation}
                         >
-                            {chosenLeagueType == null ? "Player Catalog" : chosenLeagueType}
+                            {chosenLeagueType == null
+                                ? "Player Catalog"
+                                : chosenLeagueType}
                         </motion.p>
                     </div>
                     <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
@@ -221,7 +223,6 @@ export const Catalog = () => {
                                               displayAthleteModal(athlete);
                                           }}
                                           {...appearCardAnimation}
-                                          disabled
                                       >
                                           <AthleteCard
                                               color={baseColor}
