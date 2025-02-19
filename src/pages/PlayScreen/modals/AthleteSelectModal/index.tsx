@@ -176,61 +176,27 @@ export const AthleteSelectModal = ({
                         </motion.div>
                     </div>
                     <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        {displayAthletes?.map((athlete, index) => (
-                            <div>
+                        {displayAthletes != null && displayAthletes?.map((athlete, index) => (
+                            <div key={index}>
                                 {showAthlete && (
-                                    <div>
-                                        {index !== selectedIndex && (
-                                            <motion.div
-                                                className="relative flex h-[27.95vw] w-[21.5vw] opacity-50"
-                                                key={index}
-                                                onClick={() =>
-                                                    handleAthleteSelect(index)
-                                                }
-                                                {...appearCardEmptyAnimation}
-                                            >
-                                                {/* <img
-                                                    className="h-full w-full"
-                                                    src={athlete.img}
-                                                    alt={athlete.displayName}
-                                                /> */}
-
-                                                <AthleteCard
-                                                    color={baseColor}
-                                                    ign={athlete.displayName}
-                                                    role={athlete.position[0]}
-                                                    opacity={{
-                                                        wave: baseColor.wave,
-                                                    }}
-                                                />
-                                            </motion.div>
-                                        )}
-                                        {index === selectedIndex && (
-                                            <motion.div
-                                                className="relative flex h-[27.95vw] w-[21.5vw] opacity-100"
-                                                key={index}
-                                                onClick={() =>
-                                                    handleAthleteSelect(index)
-                                                }
-                                                {...appearCardAnimation}
-                                            >
-                                                {/* <img
-                                                    className="h-full w-full"
-                                                    src={athlete.img}
-                                                    alt={athlete.displayName}
-                                                /> */}
-
-                                                <AthleteCard
-                                                    color={baseColor}
-                                                    ign={athlete.displayName}
-                                                    role={athlete.position[0]}
-                                                    opacity={{
-                                                        wave: baseColor.wave,
-                                                    }}
-                                                />
-                                            </motion.div>
-                                        )}
-                                    </div>
+                                    <motion.div
+                                        className={`relative flex h-[27.95vw] w-[21.5vw]`}
+                                        key={index}
+                                        onClick={() =>
+                                            handleAthleteSelect(index)
+                                        }
+                                        {...(index === selectedIndex && selectedIndex !== -1 ? appearCardAnimation : appearCardEmptyAnimation)}
+                                    >
+                                        <AthleteCard
+                                            color={baseColor}
+                                            ign={athlete.displayName}
+                                            role={athlete.position[0]}
+                                            opacity={{
+                                                wave: baseColor.wave,
+                                            }}
+                                            id={index}
+                                        />
+                                    </motion.div>
                                 )}
                                 {!showAthlete && (
                                     <motion.div

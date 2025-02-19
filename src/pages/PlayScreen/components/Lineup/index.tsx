@@ -119,9 +119,10 @@ export const Lineup = ({
                             )}
                         {!loadLuckyPick &&
                             tournamentLineup !== null &&
+                            currentPositionIndex !== index &&
                             tournamentLineup[index].athlete !== null && (
                                 <motion.div
-                                    className={`relative flex h-[36.4vw] w-[28vw] ${currentPositionIndex === index ? "hidden" : ""}`}
+                                    className="relative flex h-[36.4vw] w-[28vw]"
                                     onClick={() => handleSetLineup(index)}
                                     {...(currentPositionIndex === -1 && !usedLP
                                         ? appearCardAnimation
@@ -144,6 +145,7 @@ export const Lineup = ({
                                                 .position[0]
                                         }
                                         opacity={{ wave: baseColor.wave }}
+                                        id={index}
                                     />
                                 </motion.div>
                             )}
@@ -170,6 +172,7 @@ export const Lineup = ({
                                         opacity={{
                                             wave: baseColor.wave,
                                         }}
+                                        id={index}
                                     />
 
                                     {/* <img

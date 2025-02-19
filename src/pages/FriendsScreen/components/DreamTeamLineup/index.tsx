@@ -85,6 +85,7 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                         opacity={{
                                             wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
                                         }}
+                                        id={index}
                                     />
                                 </motion.div>
                             )}
@@ -111,6 +112,7 @@ export const DreamTeamLineup = ({dreamTeam, handleDreamTeam, dreamTeamLineup, cu
                                         opacity={{
                                             wave: dreamTeam.teamProfile != undefined ? dreamTeam.teamProfile.baseTeamColors.wave: baseColor.wave,
                                         }}
+                                        id={index}
                                     />
                                 </motion.div>
                             )}

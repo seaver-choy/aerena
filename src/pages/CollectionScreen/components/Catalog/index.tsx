@@ -221,6 +221,7 @@ export const Catalog = () => {
                                               displayAthleteModal(athlete);
                                           }}
                                           {...appearCardAnimation}
+                                          disabled
                                       >
                                           <AthleteCard
                                               color={baseColor}
@@ -229,6 +230,7 @@ export const Catalog = () => {
                                               opacity={{
                                                   wave: baseColor.wave,
                                               }}
+                                              id={index}
                                           />
                                       </motion.button>
                                   ) : (

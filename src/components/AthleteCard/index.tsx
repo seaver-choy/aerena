@@ -30,28 +30,29 @@ interface Props {
     opacity: { wave: string };
     role: string;
     type?: string;
+    id?: number;
 }
-export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
+export const AthleteCard = ({ color, ign, opacity, role, type, id = -1 }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
                 {type !== undefined && type === "basic" ? (
-                    <GlowBasic />
+                    <GlowBasic id={id} />
                 ) : (
-                    <Glow />
+                    <Glow id={id} />
                 )}
             </div>
             <div className="absolute h-full w-full">
-                <Back color={color} />
+                <Back color={color} id={id} />
             </div>
             <div className="absolute h-full w-full">
-                <BigDiamond color={color} />
+                <BigDiamond color={color} id={id} />
             </div>
             <div className="absolute h-full w-full">
-                <Base color={color} />
+                <Base color={color}/>
             </div>
             <div className="absolute h-full w-full">
-                <Wave opacity={opacity} />
+                <Wave opacity={opacity} id={id} />
             </div>
             <div className="absolute h-full w-full">
                 <Dust color={color} />
@@ -87,10 +88,10 @@ export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
                 <IGN color={color} ign={ign} />
             </div>
             <div className="absolute h-full w-full">
-                <BottomDiamond color={color} />
+                <BottomDiamond color={color} id={id} />
             </div>
             <div className="absolute h-full w-full">
-                <Outline color={color} />
+                <Outline color={color} id={id} />
             </div>
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
@@ -98,10 +99,10 @@ export const AthleteCard = ({ color, ign, opacity, role, type }: Props) => {
             {type !== undefined && type === "basic" && (
                 <>
                     <div className="absolute h-full w-full">
-                        <BorderBasic />
+                        <BorderBasic id={id} />
                     </div>
                     <div className="absolute h-full w-full">
-                        <Sticker />
+                        <Sticker id={id} />
                     </div>
                 </>
             )}

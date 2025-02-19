@@ -108,8 +108,8 @@ export const Winners = ({rankings = null, tournament = null}: WinnersProps) => {
                                                                 </p>
                                                             </div>
                                                             <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                                                {user.lineup.map((athlete) => (
-                                                                    <div className="relative flex h-[36.4vw] w-[28vw]">
+                                                                {user.lineup.map((athlete, index) => (
+                                                                    <div key={index} className="relative flex h-[36.4vw] w-[28vw]">
                                                                         {/* <img
                                                                             className="h-full"
                                                                             src={athlete.img}
@@ -121,6 +121,7 @@ export const Winners = ({rankings = null, tournament = null}: WinnersProps) => {
                                                                             opacity={{
                                                                                 wave: baseColor.wave,
                                                                             }}
+                                                                            id={index}
                                                                         />
                                                                     </div>
                                                                 ))}
@@ -170,8 +171,8 @@ export const Winners = ({rankings = null, tournament = null}: WinnersProps) => {
                                                     </p>
                                                 </div>
                                                 <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                                    {user.lineup.map((athlete) => (
-                                                        <div className="relative flex h-[36.4vw] w-[28vw]">
+                                                    {user.lineup.map((athlete, index) => (
+                                                        <div key={index} className="relative flex h-[36.4vw] w-[28vw]">
                                                             {/* <img
                                                                 className="h-full"
                                                                 src={athlete.img}
@@ -183,6 +184,7 @@ export const Winners = ({rankings = null, tournament = null}: WinnersProps) => {
                                                                 opacity={{
                                                                     wave: baseColor.wave,
                                                                 }}
+                                                                id={index}
                                                             />
                                                         </div>
                                                     ))}
