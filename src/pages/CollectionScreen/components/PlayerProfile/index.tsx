@@ -4,18 +4,35 @@ import {
     pulseAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
-
+import { useUsers } from "../../../../hooks/useUser";
+import { Athlete, AthleteProfile } from "../../../../helpers/interfaces";
 import AthleteDetailsSonner from "../../../../assets/sonner/athlete-details.svg";
 import AthleteDetailsBackground from "../../../../assets/background/athlete-details.svg";
-
-export const PlayerProfile = () => {
+import { getAthleteProfile } from "../../../../helpers/lambda.helper";
+import dobToAge from "dob-to-age";
+interface Props {
+    athlete: Athlete;
+}
+export const PlayerProfile = ({ athlete }: Props) => {
+    const user = useUsers();
     const [showAthleteDetails, setShowAthleteDetails] = useState(false);
-
+    const [athleteProfile, setAthleteProfile] = useState<AthleteProfile>();
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowAthleteDetails(true);
         }, 1000);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        async function fetchAthleteProfile() {
+            const res = await getAthleteProfile(
+                athlete.athleteId,
+                user.initDataRaw
+            );
+            setAthleteProfile(res.profile);
+        }
+        fetchAthleteProfile();
     }, []);
 
     return (
@@ -38,7 +55,10 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    Grant Duane Pillas
+                                    {athleteProfile.name === undefined ||
+                                    athleteProfile?.name === "N/A"
+                                        ? "-"
+                                        : athleteProfile.name}
                                 </p>
                             </motion.div>
                         </div>
@@ -72,7 +92,10 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    Philippines
+                                    {athleteProfile.country === undefined ||
+                                    athleteProfile.country === "N/A"
+                                        ? "-"
+                                        : athleteProfile.country}
                                 </p>
                             </motion.div>
                         </div>
@@ -106,7 +129,48 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    March 26, 2005
+                                    {athleteProfile.birthday === undefined ||
+                                    athleteProfile.birthday === "N/A"
+                                        ? "-"
+                                        : athleteProfile.birthday}
+                                </p>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="h-[15.2vw] bg-loading">
+                    <motion.div className="relative" {...pulseAnimation}>
+                        <img
+                            className="h-full w-full"
+                            src={AthleteDetailsSonner}
+                        />
+                    </motion.div>
+                </div>
+            )}
+            {showAthleteDetails ? (
+                <div className="h-[15.2vw]">
+                    <div className="relative">
+                        <img
+                            className="h-full w-full"
+                            src={AthleteDetailsBackground}
+                        />
+                        <div className="absolute left-[6vw] top-[2vw] flex h-[11.2vw] w-[80vw] flex-col justify-center">
+                            <motion.div {...slideRightTextAnimation}>
+                                <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
+                                    Age
+                                </p>
+                            </motion.div>
+                            <motion.div
+                                className="-mt-[1vw]"
+                                {...slideRightTextAnimation}
+                            >
+                                <p className="font-russoone text-[4.5vw] font-normal text-white">
+                                    {athleteProfile.birthday === undefined ||
+                                    athleteProfile.birthday === "N/A"
+                                        ? "-"
+                                        : dobToAge(athleteProfile.birthday)
+                                              .count}
                                 </p>
                             </motion.div>
                         </div>
@@ -140,7 +204,7 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    Active
+                                    -
                                 </p>
                             </motion.div>
                         </div>
@@ -174,7 +238,7 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    Gold Laner
+                                    {athlete.position[0]}
                                 </p>
                             </motion.div>
                         </div>
@@ -208,7 +272,7 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    KELRAAA
+                                    {athleteProfile?.alternateIgns[0]}
                                 </p>
                             </motion.div>
                         </div>
@@ -242,7 +306,7 @@ export const PlayerProfile = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    7 Seasons
+                                    -
                                 </p>
                             </motion.div>
                         </div>
