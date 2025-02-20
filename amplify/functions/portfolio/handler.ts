@@ -38,6 +38,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return getTeamInfo(event);
     } else if (event.path.includes("profile")) {
         return getAthleteProfile(event);
+    } else if (event.path.includes("sameathletes")) {
+        return getSameAthletes(event);
     } else {
         return getAthletePositionFilter(event);
     }
@@ -357,51 +359,178 @@ async function getAthletePositionFilter(event: APIGatewayProxyEvent) {
     }
 }
 
-async function getPlayers(event: APIGatewayProxyEvent) {
-    const userId = parseInt(event.queryStringParameters!.userId!);
-    const position = event.queryStringParameters!.position;
-    const userModel = conn!.model("Users");
+async function getSameAthletes(event: APIGatewayProxyEvent) {
+    const athleteModel = conn!.model("Athletes");
+
+    const athleteId = parseInt(event.queryStringParameters!.athleteId!);
+
     try {
-        const result = await userModel.aggregate([
+        // const res = await athleteModel.find({
+        //     athleteId: athleteId,
+        // });
+
+        const res = await athleteModel.aggregate([
             {
                 $match: {
-                    userID: userId,
+                    athleteId: athleteId,
                 },
             },
             {
-                $unwind: "$tokens",
-            },
-            {
-                $match: {
-                    "tokens.position": { $regex: position },
+                $lookup: {
+                    from: "teams",
+                    let: {
+                        team: "$team",
+                        league: "$league",
+                        type: "$type",
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$key", "$$team"] },
+                                        { $eq: ["$league", "$$league"] },
+                                        { $eq: ["$type", "$$type"] },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "teamData",
                 },
             },
             {
-                $group: {
-                    _id: "$_id",
-                    userID: { $first: "$userID" },
-                    tokens: { $push: "$tokens" },
+                $unwind: "$teamData",
+            },
+            {
+                $lookup: {
+                    from: "ml_tournaments",
+                    let: {
+                        league: "$league",
+                        type: "$type",
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$code", "$$league"] },
+                                        { $eq: ["$type", "$$type"] },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "tournamentData",
+                },
+            },
+            {
+                $unwind: "$tournamentData",
+            },
+            {
+                $project: {
+                    _id: 1,
+                    athleteId: 1,
+                    player: 1,
+                    displayName: 1,
+                    team: 1,
+                    position: 1,
+                    img: 1,
+                    league: 1,
+                    type: 1,
+                    "teamData.colors": 1,
+                    "tournamentData.endDate": 1,
+                },
+            },
+            {
+                $sort: {
+                    "tournamentData.endDate": -1,
                 },
             },
         ]);
-        if (result.length > 0) {
+
+        if (res.length > 0) {
             return {
                 statusCode: 200,
                 headers: {
-                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
                 },
-                body: JSON.stringify(result[0]),
+                body: JSON.stringify({ athletes: res[0] }),
             };
-        } else throw new Error("More than one user");
-    } catch (err) {
+        } else {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Same athletes not found",
+                }),
+            };
+        }
+    } catch (e) {
+        console.log(e);
         return {
             statusCode: 500,
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
             },
-            body: JSON.stringify(`${err}`),
+            body: JSON.stringify({
+                message: "An unexpected error has occured",
+                error: e,
+            }),
         };
     }
 }
+
+// async function getPlayers(event: APIGatewayProxyEvent) {
+//     const userId = parseInt(event.queryStringParameters!.userId!);
+//     const position = event.queryStringParameters!.position;
+//     const userModel = conn!.model("Users");
+//     try {
+//         const result = await userModel.aggregate([
+//             {
+//                 $match: {
+//                     userID: userId,
+//                 },
+//             },
+//             {
+//                 $unwind: "$tokens",
+//             },
+//             {
+//                 $match: {
+//                     "tokens.position": { $regex: position },
+//                 },
+//             },
+//             {
+//                 $group: {
+//                     _id: "$_id",
+//                     userID: { $first: "$userID" },
+//                     tokens: { $push: "$tokens" },
+//                 },
+//             },
+//         ]);
+//         if (result.length > 0) {
+//             return {
+//                 statusCode: 200,
+//                 headers: {
+//                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+//                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+//                 },
+//                 body: JSON.stringify(result[0]),
+//             };
+//         } else throw new Error("More than one user");
+//     } catch (err) {
+//         return {
+//             statusCode: 500,
+//             headers: {
+//                 "Access-Control-Allow-Origin": "*",
+//                 "Access-Control-Allow-Credentials": true,
+//             },
+//             body: JSON.stringify(`${err}`),
+//         };
+//     }
+// }
