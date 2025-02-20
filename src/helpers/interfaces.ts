@@ -30,7 +30,7 @@ export interface Athlete {
     player: string;
     displayName: string;
     team: string;
-    teamName: string,
+    teamName: string;
     totalKills: number;
     avgKills: number;
     totalDeaths: number;
@@ -125,6 +125,20 @@ export interface AverageStats {
     averageKills: number;
     averageDeaths: number;
     averageAssists: number;
+    averagePoints: number;
+}
+
+export interface AthleteProfile {
+    athleteId: number;
+    name: string;
+    ign: string;
+    country: string;
+    birthday: string;
+    alternateIgns: string[];
+    recentTournament?: {
+        code: string;
+        endDate: Date;
+    };
 }
 
 export interface TeamProfile {

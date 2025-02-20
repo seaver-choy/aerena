@@ -438,6 +438,32 @@ export const getTeamInfo = async (
     }
 };
 
+export const getAthleteProfile = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "portfolio/profile",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getAthleteAverageStats = async (
     athleteId: number,
     initDataRaw: string
@@ -896,7 +922,7 @@ export const saveDreamTeam = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(response)
+        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`saveDreamTeam call failed ${e}`);
@@ -925,11 +951,7 @@ export const checkReferralCode = async (referralCode, initDataRaw) => {
     }
 };
 
-export const addNewReferral = async (
-    userId,
-    referralCode,
-    initDataRaw
-) => {
+export const addNewReferral = async (userId, referralCode, initDataRaw) => {
     try {
         const data = {
             userId: userId,
@@ -949,7 +971,7 @@ export const addNewReferral = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(response)
+        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`addNewReferral call failed ${e}`);
