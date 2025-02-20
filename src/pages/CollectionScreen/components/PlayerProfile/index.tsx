@@ -10,6 +10,7 @@ import AthleteDetailsSonner from "../../../../assets/sonner/athlete-details.svg"
 import AthleteDetailsBackground from "../../../../assets/background/athlete-details.svg";
 import { getAthleteProfile } from "../../../../helpers/lambda.helper";
 import dobToAge from "dob-to-age";
+import { DateTime } from "luxon";
 interface Props {
     athlete: Athlete;
 }
@@ -129,15 +130,26 @@ export const PlayerProfile = ({ athlete }: Props) => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    {athleteProfile.birthday === undefined || athleteProfile.birthday === "N/A" ? "-" : athleteProfile.birthday}
-                                    <span className="font-montagu">
-                                        {" • "}
-                                    </span>
                                     {athleteProfile.birthday === undefined ||
                                     athleteProfile.birthday === "N/A"
                                         ? "-"
-                                        : `${dobToAge(athleteProfile.birthday)
-                                              .count} years old}`
+                                        : DateTime.fromJSDate(
+                                              new Date(athleteProfile.birthday)
+                                          ).toLocaleString(DateTime.DATE_MED)}
+                                    <span className="font-montagu">
+                                        {athleteProfile.birthday ===
+                                            undefined ||
+                                        athleteProfile.birthday === "N/A"
+                                            ? ""
+                                            : " • "}
+                                    </span>
+                                    {athleteProfile.birthday === undefined ||
+                                    athleteProfile.birthday === "N/A"
+                                        ? ""
+                                        : `${
+                                              dobToAge(athleteProfile.birthday)
+                                                  .count
+                                          } years old`}
                                 </p>
                             </motion.div>
                         </div>
