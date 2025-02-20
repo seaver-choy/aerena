@@ -190,25 +190,17 @@ async function getAthleteAllStats(event: APIGatewayProxyEvent) {
       params[0] = athleteId
     */
 
-    const athleteModel = conn!.model("Athletes");
+    //const athleteModel = conn!.model("Athletes");
 
     if (params !== undefined) {
         const athleteId = params[0];
 
-        /*
-            Temporary code to get the name of the athlete using athleteId
-            Remove when athleteId exists in matchstats
-        */
-
         try {
-            const athlete = await athleteModel.findOne({
-                athleteId: parseInt(athleteId),
-            });
             const average = await statsModel.aggregate(
                 [
                     {
                         $match: {
-                            player: athlete.player,
+                            athleteId: parseInt(athleteId),
                         },
                     },
                     {
