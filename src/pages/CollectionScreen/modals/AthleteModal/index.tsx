@@ -34,7 +34,12 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     const assistStat = useTransform(() => assistMV.get().toFixed(2));
     const [averageStats, setAverageStats] = useState<AverageStats>();
     const handleViewPlayerProfile = () => {
-        navigate(`/athlete`);
+        navigate(`/athlete`, {
+            state: {
+                athlete,
+                averageStats,
+            },
+        });
     };
     const [teamInfo, setTeamInfo] = useState<Team>();
 

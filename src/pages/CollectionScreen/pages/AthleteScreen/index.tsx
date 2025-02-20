@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { athleteOptions } from "../../../../helpers/tabs";
+import { useLocation } from "react-router-dom";
 import { Layout } from "../../../../components/Layout";
 import { Tabs } from "../../../../components/Tabs";
 import { AthleteHeader } from "../../components/AthleteHeader";
@@ -10,10 +11,13 @@ import { CardSkins } from "../../components/CardSkins";
 
 export const AthleteScreen = () => {
     const [athleteTab, setAthleteTab] = useState("Player Profile");
+    const location = useLocation();
+    const averageStats = location.state?.averageStats;
+    const athlete = location.state?.athlete;
 
     return (
         <Layout>
-            <AthleteHeader />
+            <AthleteHeader athlete={athlete} averageStats={averageStats} />
             <Tabs
                 options={athleteOptions}
                 onToggle={(selected) => {
@@ -21,7 +25,9 @@ export const AthleteScreen = () => {
                 }}
                 selectedTab={athleteTab}
             />
-            {athleteTab === "Player Profile" && <PlayerProfile />}
+            {athleteTab === "Player Profile" && (
+                <PlayerProfile athlete={athlete} />
+            )}
             {athleteTab === "Local Stats" && <LocalStats />}
             {athleteTab === "Global Stats" && <GlobalStats />}
             {athleteTab === "Card Skins" && <CardSkins />}
