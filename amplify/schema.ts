@@ -45,10 +45,11 @@ export const athleteProfileSchema = new mongoose.Schema(
         country: String,
         birthday: String,
         alternateIgns: [String],
-        recentTournament: {
+        latestTournament: {
             code: String,
             endDate: Date,
         },
+        latestPosition: String,
     },
     {
         collection: "athleteprofiles",
@@ -90,7 +91,7 @@ export const teamProfileSchema = new mongoose.Schema(
             details: String,
             wave: String,
         },
-        recentTournament: {
+        latestTournament: {
             code: String,
             endDate: Date,
         },
