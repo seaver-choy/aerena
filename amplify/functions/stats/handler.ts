@@ -223,6 +223,9 @@ async function getAthleteAllStats(event: APIGatewayProxyEvent) {
                             averageAssists: {
                                 $avg: "$assists",
                             },
+                            averagePoints: {
+                                $avg: "$points",
+                            },
                         },
                     },
                 ],
