@@ -238,7 +238,11 @@ export const PlayerProfile = ({ athlete }: Props) => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    {athlete.position[0]}
+                                    {athleteProfile.latestPosition ===
+                                        undefined ||
+                                    athleteProfile.latestPosition === "N/A"
+                                        ? "-"
+                                        : athleteProfile.latestPosition}
                                 </p>
                             </motion.div>
                         </div>
@@ -272,7 +276,13 @@ export const PlayerProfile = ({ athlete }: Props) => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    {athleteProfile?.alternateIgns[0]}
+                                    {athleteProfile.alternateIgns.length > 0
+                                        ? (() => {
+                                              return athleteProfile.alternateIgns.join(
+                                                  ", "
+                                              );
+                                          })()
+                                        : "-"}
                                 </p>
                             </motion.div>
                         </div>
