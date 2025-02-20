@@ -44,6 +44,14 @@ export interface Athlete {
     league: string;
     type: string;
 }
+export interface SameAthlete extends Athlete {
+    teamData: {
+        colors: TeamColor;
+    };
+    tournamentData: {
+        endDate: Date;
+    };
+}
 
 export interface Tournament {
     tournamentId: number;
@@ -135,10 +143,11 @@ export interface AthleteProfile {
     country: string;
     birthday: string;
     alternateIgns: string[];
-    recentTournament?: {
+    latestTournament?: {
         code: string;
         endDate: Date;
     };
+    latestPosition: string;
 }
 
 export interface TeamProfile {
