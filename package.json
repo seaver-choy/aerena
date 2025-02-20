@@ -20,6 +20,7 @@
         "aws-amplify": "^6.6.2",
         "axios": "^1.7.9",
         "body-scroll-lock": "^4.0.0-beta.0",
+        "dob-to-age": "^4.0.0",
         "dotenv": "^16.4.5",
         "eruda": "^3.3.0",
         "mongoose": "^8.6.3",
