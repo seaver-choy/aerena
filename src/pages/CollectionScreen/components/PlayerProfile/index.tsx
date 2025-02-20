@@ -129,48 +129,15 @@ export const PlayerProfile = ({ athlete }: Props) => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
+                                    {athleteProfile.birthday === undefined || athleteProfile.birthday === "N/A" ? "-" : athleteProfile.birthday}
+                                    <span className="font-montagu">
+                                        {" • "}
+                                    </span>
                                     {athleteProfile.birthday === undefined ||
                                     athleteProfile.birthday === "N/A"
                                         ? "-"
-                                        : athleteProfile.birthday}
-                                </p>
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <div className="h-[15.2vw] bg-loading">
-                    <motion.div className="relative" {...pulseAnimation}>
-                        <img
-                            className="h-full w-full"
-                            src={AthleteDetailsSonner}
-                        />
-                    </motion.div>
-                </div>
-            )}
-            {showAthleteDetails ? (
-                <div className="h-[15.2vw]">
-                    <div className="relative">
-                        <img
-                            className="h-full w-full"
-                            src={AthleteDetailsBackground}
-                        />
-                        <div className="absolute left-[6vw] top-[2vw] flex h-[11.2vw] w-[80vw] flex-col justify-center">
-                            <motion.div {...slideRightTextAnimation}>
-                                <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                                    Age
-                                </p>
-                            </motion.div>
-                            <motion.div
-                                className="-mt-[1vw]"
-                                {...slideRightTextAnimation}
-                            >
-                                <p className="font-russoone text-[4.5vw] font-normal text-white">
-                                    {athleteProfile.birthday === undefined ||
-                                    athleteProfile.birthday === "N/A"
-                                        ? "-"
-                                        : dobToAge(athleteProfile.birthday)
-                                              .count}
+                                        : `${dobToAge(athleteProfile.birthday)
+                                              .count} years old}`
                                 </p>
                             </motion.div>
                         </div>

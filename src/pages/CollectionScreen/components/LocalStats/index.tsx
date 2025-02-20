@@ -162,18 +162,25 @@ export const LocalStats = () => {
                                 </motion.div>
                             </div>
                         </div>
-                        <div className="mt-[2vw] flex items-start justify-end">
-                            <motion.button
-                                className="relative flex h-[8vw] justify-center"
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full items-center">
-                                    <p className="font-russoone text-[3vw] text-white">
-                                        Full Stats
-                                    </p>
-                                </div>
-                            </motion.button>
+                        <div className="mt-[2vw] flex">
+                            <div className="ml-[2vw] flex h-full w-[40%] items-center">
+                                <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
+                                    GEEK PH
+                                </p>
+                            </div>
+                            <div className="flex h-full w-[60%] justify-end">
+                                <motion.button
+                                    className="relative flex h-[7vw] justify-center"
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full items-center">
+                                        <p className="font-russoone text-[3vw] text-white">
+                                            Full Stats
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            </div>
                         </div>
                     </div>
                 </div>
