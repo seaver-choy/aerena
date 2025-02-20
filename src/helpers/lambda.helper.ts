@@ -512,6 +512,32 @@ export const getAthleteStats = async (
     }
 };
 
+export const getSameAthletes = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `portfolio/sameathletes`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 // export const getPackInfos = async (initDataRaw) => {
 //     try {
 //         const restOperation = get({
