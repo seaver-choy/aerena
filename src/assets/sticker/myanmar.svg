@@ -1,0 +1,38 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="myanmar" clip-path="url(#clip0_2005_81)">
+<g id="Frame 1">
+<path id="Union" d="M87.4259 11.7963H14.3704C7.42593 11.7963 1.79631 17.4259 1.79631 24.3704V78.2594C1.79631 85.2039 7.42591 90.8335 14.3704 90.8335H87.4259C94.3704 90.8335 100 85.2039 100 78.2594V24.3704C100 17.426 94.3704 11.7963 87.4259 11.7963Z" fill="#605F5E" fill-opacity="0.3"/>
+<path id="Union_2" d="M85.6296 10H12.5741C5.62962 10 0 15.6296 0 22.5741V76.4631C0 83.4076 5.6296 89.0372 12.5741 89.0372H85.6296C92.5741 89.0372 98.2037 83.4076 98.2037 76.4631V22.5741C98.2037 15.6296 92.5741 10 85.6296 10Z" fill="#F5F1EE"/>
+<g id="flag-container">
+<g clip-path="url(#clip1_2005_81)">
+<g id="Myanmar (MM)" clip-path="url(#clip2_2005_81)">
+<path id="Vector" d="M9 20H89V80H9V20Z" fill="#FECB00"/>
+<path id="Vector_2" d="M9 40H89V80H9V40Z" fill="#34B233"/>
+<path id="Vector_3" d="M9 60H89V80H9V60Z" fill="#EA2839"/>
+<g id="Group">
+<path id="a" d="M49 30.0025L55.633 52.1125H42.367L49 30.0025Z" fill="white"/>
+<path id="a_2" d="M36.0041 69.9998L43.6338 48.2137L54.3662 56.0113L36.0041 69.9998Z" fill="white"/>
+<path id="a_3" d="M27.9721 45.2801L51.0497 45.8042L46.9503 58.4209L27.9721 45.2801Z" fill="white"/>
+<path id="a_4" d="M70.0279 45.2802L51.0497 58.4209L46.9503 45.8042L70.0279 45.2802Z" fill="white"/>
+<path id="a_5" d="M61.9959 69.9999L43.6338 56.0113L54.3662 48.2137L61.9959 69.9999Z" fill="white"/>
+</g>
+</g>
+<g id="filter" style="mix-blend-mode:screen">
+<rect x="10.7778" y="20.7778" width="76.6481" height="57.4816" fill="#414141"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_2005_81">
+<rect width="100" height="100" fill="white"/>
+</clipPath>
+<clipPath id="clip1_2005_81">
+<rect x="10.7778" y="20.7778" width="76.6421" height="57.4816" rx="4" fill="white"/>
+</clipPath>
+<clipPath id="clip2_2005_81">
+<rect width="80" height="60" fill="white" transform="translate(9 20)"/>
+</clipPath>
+</defs>
+</svg>

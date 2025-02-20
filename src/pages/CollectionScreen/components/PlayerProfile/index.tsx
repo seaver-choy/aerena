@@ -107,6 +107,10 @@ export const PlayerProfile = () => {
                             >
                                 <p className="font-russoone text-[4.5vw] font-normal text-white">
                                     March 26, 2005
+                                    <span className="font-montagu">
+                                        {" • "}
+                                    </span>
+                                    20 years old
                                 </p>
                             </motion.div>
                         </div>
