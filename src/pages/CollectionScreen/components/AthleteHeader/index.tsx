@@ -7,18 +7,29 @@ import {
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import { AthleteCard } from "../../../../components/AthleteCard";
-
+import { Athlete, AverageStats } from "../../../../helpers/interfaces";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 
-export const AthleteHeader = () => {
+interface Props {
+    athlete: Athlete;
+    averageStats: AverageStats;
+}
+export const AthleteHeader = ({ athlete, averageStats }: Props) => {
     const [showAthleteHeader, setShowAthleteHeader] = useState(false);
-
-    const athlete = {
-        ign: "KELRA",
-        role: "Gold",
-    };
+    const killMV = useMotionValue(0);
+    const deathMV = useMotionValue(0);
+    const assistMV = useMotionValue(0);
+    const pointsMV = useMotionValue(0);
+    const killStat = useTransform(() => killMV.get().toFixed(2));
+    const deathStat = useTransform(() => deathMV.get().toFixed(2));
+    const assistStat = useTransform(() => assistMV.get().toFixed(2));
+    const pointsStat = useTransform(() => pointsMV.get().toFixed(2));
+    // const athlete = {
+    //     ign: "KELRA",
+    //     role: "Gold",
+    // };
 
     const team = {
         main: "#333",
@@ -29,9 +40,9 @@ export const AthleteHeader = () => {
         details: "#fff",
         wave: "0.15",
     };
-
-    const ign = athlete.ign;
-    const role = athlete.role;
+    console.log(athlete);
+    const ign = athlete.player;
+    const role = athlete.position[0];
 
     const color = {
         main: team.main,
@@ -47,13 +58,43 @@ export const AthleteHeader = () => {
         wave: team.wave,
     };
 
-    const count = useMotionValue(0);
-    const stats = useTransform(() => count.get().toFixed(2));
+    // const count = useMotionValue(0);
+    // const stats = useTransform(() => count.get().toFixed(2));
 
+    // useEffect(() => {
+    //     const controls = animate(count, 10, { duration: 2 });
+    //     return () => controls.stop();
+    // });
     useEffect(() => {
-        const controls = animate(count, 10, { duration: 2 });
-        return () => controls.stop();
-    });
+        if (averageStats !== undefined) {
+            const killControl = animate(killMV, averageStats.averageKills, {
+                duration: 2,
+            });
+            const deathControl = animate(deathMV, averageStats.averageDeaths, {
+                duration: 2,
+            });
+            const assistControl = animate(
+                assistMV,
+                averageStats.averageAssists,
+                {
+                    duration: 2,
+                }
+            );
+            const pointsControl = animate(
+                pointsMV,
+                averageStats.averagePoints,
+                {
+                    duration: 2,
+                }
+            );
+            return () => {
+                killControl.stop();
+                deathControl.stop();
+                assistControl.stop();
+                pointsControl.stop();
+            };
+        }
+    }, [killMV, deathMV, assistMV, averageStats]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -85,7 +126,7 @@ export const AthleteHeader = () => {
                         <div className="absolute left-[36.62vw] top-[4vw] h-[32vw] w-[55.38vw] flex-col pt-[4vw]">
                             <motion.div {...slideRightTextAnimation}>
                                 <p className="font-montserrat text-[3.5vw] font-semibold text-white">
-                                    ONIC PH
+                                    {athlete.team}
                                 </p>
                             </motion.div>
                             <motion.div
@@ -93,7 +134,7 @@ export const AthleteHeader = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-russoone text-[6.5vw] text-white">
-                                    KELRA
+                                    {athlete.player}
                                 </p>
                             </motion.div>
                             <motion.div
@@ -102,7 +143,7 @@ export const AthleteHeader = () => {
                                 {...slideRightTextAnimation}
                             >
                                 <p className="font-montserrat text-[3vw] font-semibold text-white">
-                                    GOLD
+                                    {athlete.position[0]}
                                 </p>
                             </motion.div>
                         </div>
@@ -121,7 +162,7 @@ export const AthleteHeader = () => {
                                             KILLS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                            {stats}
+                                            {killStat}
                                         </motion.pre>
                                     </div>
                                 </div>
@@ -140,7 +181,7 @@ export const AthleteHeader = () => {
                                             DEATHS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                            {stats}
+                                            {deathStat}
                                         </motion.pre>
                                     </div>
                                 </div>
@@ -159,7 +200,7 @@ export const AthleteHeader = () => {
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                            {stats}
+                                            {assistStat}
                                         </motion.pre>
                                     </div>
                                 </div>
@@ -178,7 +219,7 @@ export const AthleteHeader = () => {
                                             POINTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                            {stats}
+                                            {pointsStat}
                                         </motion.pre>
                                     </div>
                                 </div>
