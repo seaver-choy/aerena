@@ -1,7 +1,12 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import paginate from "mongoose-paginate-v2";
-import { userSchema, athleteSchema, teamSchema } from "../../schema";
+import {
+    userSchema,
+    athleteSchema,
+    teamSchema,
+    athleteProfileSchema,
+} from "../../schema";
 import { AthleteDocument } from "../../interface";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -25,11 +30,14 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             athleteSchema,
             "athletes"
         );
+        conn.model("AthleteProfile", athleteProfileSchema);
     }
     if (event.path.includes("paginated")) {
         return getPaginatedAthletes(event);
     } else if (event.path.includes("teams")) {
         return getTeamInfo(event);
+    } else if (event.path.includes("profile")) {
+        return getAthleteProfile(event);
     } else {
         return getAthletePositionFilter(event);
     }
@@ -64,6 +72,53 @@ async function getTeamInfo(event: APIGatewayProxyEvent) {
                 },
                 body: JSON.stringify({
                     message: "Team not found",
+                }),
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An unexpected error occured",
+                error: e,
+            }),
+        };
+    }
+}
+
+async function getAthleteProfile(event: APIGatewayProxyEvent) {
+    const profileModel = conn!.model("AthleteProfile");
+
+    const athleteId = parseInt(event.queryStringParameters!.athleteId!);
+
+    try {
+        const res = await profileModel.findOne({
+            athleteId: athleteId,
+        });
+
+        if (res) {
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({ profile: res }),
+            };
+        } else {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Profile not found",
                 }),
             };
         }
@@ -196,7 +251,7 @@ async function getAthletePositionFilter(event: APIGatewayProxyEvent) {
     //     .distinct("athleteId");
     let res;
 
-    if(league == ""){
+    if (league == "") {
         res = await athleteModel.aggregate([
             {
                 $match: {
@@ -233,8 +288,7 @@ async function getAthletePositionFilter(event: APIGatewayProxyEvent) {
                 },
             },
         ]);
-    }
-    else {
+    } else {
         res = await athleteModel.aggregate([
             {
                 $match: {
