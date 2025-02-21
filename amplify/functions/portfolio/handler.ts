@@ -456,7 +456,7 @@ async function getSameAthletes(event: APIGatewayProxyEvent) {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": true,
                 },
-                body: JSON.stringify({ athletes: res[0] }),
+                body: JSON.stringify({ athletes: res }),
             };
         } else {
             return {
