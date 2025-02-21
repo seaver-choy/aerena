@@ -44,6 +44,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
         navigate(`/athlete`, {
             state: {
                 athlete,
+                sameAthletes,
                 averageStats,
             },
         });
@@ -221,7 +222,10 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                             ></img>
                         </motion.button>
                     </div>
-                    <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
+                    <div
+                        key={sameAthletes.length}
+                        className="mb-[4vw] flex h-[55vw] flex-col items-center"
+                    >
                         {teamInfo !== undefined && (
                             <Slider athletes={sameAthletes} />
                         )}
