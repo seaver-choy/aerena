@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUsers } from "../../../../hooks/useUser";
 import { useLocation } from "react-router-dom";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { getStickerImage } from "../../../../helpers/images";
