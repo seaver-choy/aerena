@@ -22,6 +22,7 @@ import {
     Wave,
 } from "./assets";
 
+import { getAthleteSticker } from "../../helpers/athletes";
 import PH15Card from "../../assets/card/ph15.svg";
 
 import { TeamColor } from "../../helpers/interfaces";
@@ -30,6 +31,7 @@ interface Props {
     ign: string;
     opacity: { wave: string };
     role: string;
+    league?: string;
     type?: string;
     id?: number;
 }
@@ -39,6 +41,7 @@ export const AthleteCard = ({
     opacity,
     role,
     type,
+    league,
     id = -1,
 }: Props) => {
     return (
@@ -110,7 +113,15 @@ export const AthleteCard = ({
                         <BorderBasic id={id} />
                     </div>
                     <div className="absolute h-full w-full">
-                        <img className="h-full w-full" src={PH15Card} />
+                        <img
+                            className="h-full w-full"
+                            src={
+                                league !== undefined
+                                    ? getAthleteSticker(league)
+                                    : PH15Card
+                            }
+                            draggable={false}
+                        />
                     </div>
                 </>
             )}
