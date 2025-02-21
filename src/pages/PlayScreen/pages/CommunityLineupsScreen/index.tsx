@@ -13,7 +13,6 @@ import BasicBoardBackground from "../../../../assets/background/board-basic.svg"
 import GoldButton from "../../../../assets/button/gold.svg";
 
 export const CommunityLineupsScreen = () => {
-    const user = useUsers();
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
