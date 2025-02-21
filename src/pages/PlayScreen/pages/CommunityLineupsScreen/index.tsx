@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUsers } from "../../../../hooks/useUser";
 import { useLocation } from "react-router-dom";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { getStickerImage } from "../../../../helpers/images";
@@ -13,7 +12,6 @@ import BasicBoardBackground from "../../../../assets/background/board-basic.svg"
 import GoldButton from "../../../../assets/button/gold.svg";
 
 export const CommunityLineupsScreen = () => {
-    const user = useUsers();
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
