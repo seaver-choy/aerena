@@ -17,7 +17,7 @@ export const CommunityLineupsScreen = () => {
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
-    const reversedUsersJoined = ongoingTournament.usersJoined.filter(entry => entry.username !== user.username).reverse();
+    const reversedUsersJoined = ongoingTournament.usersJoined.reverse();
     // const playTab = location.state?.playTab;
 
     const [displayLineup, setDisplayLineup] = useState(

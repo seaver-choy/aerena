@@ -17,11 +17,12 @@ import {
     Outline,
     Role,
     SmallDiamond,
-    Sticker,
     TopWings,
     TopWingsAccent,
     Wave,
 } from "./assets";
+
+import PH15Card from "../../assets/card/ph15.svg";
 
 import { TeamColor } from "../../helpers/interfaces";
 interface Props {
@@ -32,7 +33,14 @@ interface Props {
     type?: string;
     id?: number;
 }
-export const AthleteCard = ({ color, ign, opacity, role, type, id = -1 }: Props) => {
+export const AthleteCard = ({
+    color,
+    ign,
+    opacity,
+    role,
+    type,
+    id = -1,
+}: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
@@ -49,7 +57,7 @@ export const AthleteCard = ({ color, ign, opacity, role, type, id = -1 }: Props)
                 <BigDiamond color={color} id={id} />
             </div>
             <div className="absolute h-full w-full">
-                <Base color={color}/>
+                <Base color={color} />
             </div>
             <div className="absolute h-full w-full">
                 <Wave opacity={opacity} id={id} />
@@ -102,7 +110,7 @@ export const AthleteCard = ({ color, ign, opacity, role, type, id = -1 }: Props)
                         <BorderBasic id={id} />
                     </div>
                     <div className="absolute h-full w-full">
-                        <Sticker id={id} />
+                        <img className="h-full w-full" src={PH15Card} />
                     </div>
                 </>
             )}
