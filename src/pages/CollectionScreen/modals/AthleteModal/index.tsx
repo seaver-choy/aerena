@@ -10,13 +10,19 @@ import { Slider } from "../../../../components/Slider";
 import {
     getAthleteAverageStats,
     getTeamInfo,
+    getSameAthletes,
 } from "../../../../helpers/lambda.helper";
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { Athlete, AverageStats, Team } from "../../../../helpers/interfaces";
+import {
+    Athlete,
+    AverageStats,
+    Team,
+    SameAthlete,
+} from "../../../../helpers/interfaces";
 import { useUsers } from "../../../../hooks/useUser";
 interface AthleteModalProps {
     athlete: Athlete;
@@ -32,6 +38,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     const killStat = useTransform(() => killMV.get().toFixed(2));
     const deathStat = useTransform(() => deathMV.get().toFixed(2));
     const assistStat = useTransform(() => assistMV.get().toFixed(2));
+    const [sameAthletes, setSameAthletes] = useState<SameAthlete[]>([]);
     const [averageStats, setAverageStats] = useState<AverageStats>();
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`, {
@@ -75,7 +82,6 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                 user.initDataRaw
             );
 
-            console.log(res);
             setTeamInfo(res);
         }
         fetchTeamInfo();
@@ -98,6 +104,18 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
             setAverageStats(res.average[0]);
         }
         fetchAthleteAverageStats();
+    }, []);
+
+    useEffect(() => {
+        async function fetchSameAthletes() {
+            const res = await getSameAthletes(
+                athlete.athleteId,
+                user.initDataRaw
+            );
+            console.log(res.athletes);
+            setSameAthletes(res.athletes);
+        }
+        fetchSameAthletes();
     }, []);
 
     return (
@@ -205,10 +223,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                     </div>
                     <div className="mb-[4vw] flex h-[55vw] flex-col items-center">
                         {teamInfo !== undefined && (
-                            <Slider
-                                athlete={athlete}
-                                teamColor={teamInfo.colors}
-                            />
+                            <Slider athletes={sameAthletes} />
                         )}
                         {/* <Slider
                             athlete={athlete}

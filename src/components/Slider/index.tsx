@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, useMotionValue } from "motion/react";
 import { appearAnimation } from "../../helpers/animation";
-import { Athlete, TeamColor } from "../../helpers/interfaces";
+import { SameAthlete, TeamColor } from "../../helpers/interfaces";
 import { getBaseTeamColor } from "../../helpers/athletes";
 import { AthleteCard } from "../AthleteCard";
 
@@ -14,8 +14,7 @@ const transition = {
 };
 
 interface Props {
-    athlete: Athlete;
-    teamColor: TeamColor;
+    athletes: SameAthlete[];
 }
 
 interface Cards {
@@ -25,28 +24,14 @@ interface Cards {
         wave: string;
     };
     role: string;
+    league: string;
     type: string;
 }
 
-export const Slider = ({ athlete, teamColor }: Props) => {
+export const Slider = ({ athletes }: Props) => {
     //const [imageIndex, setImageIndex] = useState(0);
     const [cardIndex, setCardIndex] = useState<number>(0);
-    const [cards] = useState<Cards[]>([
-        {
-            color: getBaseTeamColor(),
-            ign: athlete.player,
-            opacity: { wave: getBaseTeamColor().wave },
-            role: athlete.position[0],
-            type: "default",
-        },
-        {
-            color: teamColor,
-            ign: athlete.player,
-            opacity: { wave: teamColor.wave },
-            role: athlete.position[0],
-            type: "basic",
-        },
-    ]);
+    const [cards, setCards] = useState<Cards[]>([]);
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
@@ -58,6 +43,30 @@ export const Slider = ({ athlete, teamColor }: Props) => {
             setCardIndex((pv) => pv - 1);
         }
     };
+
+    useEffect(() => {
+        if (athletes !== undefined && athletes.length > 0) {
+            const baseCard = {
+                color: getBaseTeamColor(),
+                ign: athletes[0].player,
+                opacity: { wave: getBaseTeamColor().wave },
+                role: athletes[0].position[0],
+                league: athletes[0].league,
+                type: "default",
+            };
+            const skinCards = athletes.map((athlete) => {
+                return {
+                    color: athlete.teamData.colors,
+                    ign: athlete.player,
+                    opacity: { wave: athlete.teamData.colors.wave },
+                    role: athlete.position[0],
+                    league: athlete.league,
+                    type: "basic",
+                };
+            });
+            setCards([baseCard, ...skinCards]);
+        }
+    }, []);
 
     return (
         <motion.div
@@ -109,6 +118,7 @@ export const Slider = ({ athlete, teamColor }: Props) => {
                                 ign={card.ign}
                                 opacity={{ wave: card.opacity.wave }}
                                 role={card.role}
+                                league={card.league}
                                 type={card.type}
                                 id={index}
                             />
