@@ -57,7 +57,7 @@ export const CommunityLineupsScreen = () => {
             <div className="mt-[6vw] flex flex-col gap-[4vw]">
                 {displayLineup !== null &&
                     displayLineup.map((userInfo) =>
-                        userInfo.username != user.username ? (
+                        (
                             <div className="relative h-[109.5vw] w-full">
                                 <img
                                     className="h-full w-full"
@@ -109,8 +109,6 @@ export const CommunityLineupsScreen = () => {
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            ""
                         )
                     )}
             </div>
