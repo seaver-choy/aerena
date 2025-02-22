@@ -113,6 +113,21 @@ export const disappearAnimation: MotionProps = {
     },
 };
 
+export const flipBackAnimation: MotionProps = {
+    animate: {
+        opacity: [1, 1, 1, 1],
+        scale: [1, 0.3, 0.825, 1],
+        rotate: [0, -10, 0, 0],
+        rotateY: [0, 0, 90, 180],
+        translateX: [0, -50, 0, 0],
+        translateY: [0, -100, 0, 0],
+    },
+    transition: {
+        duration: 1,
+        times: [0, 0.5, 0.95, 1],
+    },
+};
+
 export const flipLeftAnimation: MotionProps = {
     animate: {
         opacity: [1, 1, 1],
@@ -120,21 +135,6 @@ export const flipLeftAnimation: MotionProps = {
     },
     transition: {
         times: [0, 0.5, 1],
-    },
-};
-
-export const flipTopLeftAnimation: MotionProps = {
-    animate: {
-        opacity: [1, 1, 1, 1],
-        scale: [1, 0.3, 0.825, 1],
-        rotate: [0, -4, 0, 0],
-        rotateY: [0, 0, 90, 180],
-        translateX: [0, 0, 0, 0],
-        translateY: [0, -100, 0, 0],
-    },
-    transition: {
-        duration: 2,
-        times: [0, 0.8, 0.95, 1],
     },
 };
 
@@ -150,19 +150,6 @@ export const jiggleAnimation: MotionProps = {
         ease: "easeInOut",
     },
 };
-// export const jiggleAnimation: Variants = {
-//     jiggle: {
-//       initial: { scale: 1 }, // initial is *outside* animate
-//       transition: { duration: 1, repeat: Infinity, ease: "easeInOut" },
-//       "0%": { scale: 1 },    // Keyframes are directly at the top level
-//       "30%": { scale: 1.25 },
-//       "40%": { scale: 0.75 },
-//       "50%": { scale: 1.15 },
-//       "65%": { scale: 0.95 },
-//       "75%": { scale: 1.05 },
-//       "100%": { scale: 1 },
-//     },
-//   };
 
 export const pulseAnimation: MotionProps = {
     animate: { opacity: [1, 0.5, 1] },
@@ -175,11 +162,29 @@ export const pulseAnimation: MotionProps = {
 };
 
 export const radiateAnimation: MotionProps = {
-    animate: { opacity: [1, 1, 1], scale: [2, 2.2 ,2] },
+    animate: { opacity: [1, 1, 1], scale: [2, 2.2, 2] },
     transition: {
-        duration: 1,
+        duration: 3,
         repeat: Infinity,
         times: [0, 0.5, 1],
+    },
+};
+
+export const scaleDownAnimation: MotionProps = {
+    initial: { scale: 1 },
+    animate: { scale: 0.9 },
+    transition: {
+        duration: 0.5,
+        type: "spring",
+    },
+};
+
+export const scaleUpAnimation: MotionProps = {
+    initial: { scale: 1 },
+    animate: { scale: 1.1 },
+    transition: {
+        duration: 0.5,
+        type: "spring",
     },
 };
 
@@ -230,7 +235,7 @@ export const slideUpAnimation: MotionProps = {
 export const sparkleAnimation: MotionProps = {
     animate: { opacity: [1, 1, 1], scale: [1, 1.005, 1] },
     transition: {
-        duration: 1,
+        duration: 3,
         repeat: Infinity,
         times: [0, 0.5, 1],
     },
