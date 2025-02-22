@@ -25,7 +25,7 @@ import FreeTournamentBackground from "../../../../assets/background/tournament-f
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import ChangeIcon from "../../../../assets/icon/change-white.svg";
 import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
-import TGStar from "../../../../assets/icon/tg-star-white.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import Closed from "../../../../assets/others/closed.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
@@ -230,7 +230,7 @@ export const TournamentBanner = ({
                                 />
                             ) : ongoingTournament.prizeCurrency === "stars" ? (
                                 <img
-                                    src={TGStar}
+                                    src={TGStarIcon}
                                     className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                 />
                             ) : (

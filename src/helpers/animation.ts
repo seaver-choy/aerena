@@ -1,4 +1,4 @@
-import { MotionProps } from "motion/react";
+import { MotionProps, Variants } from "motion/react";
 
 export const appearAnimation: MotionProps = {
     initial: { opacity: 0, scale: 0.5 },
@@ -41,7 +41,6 @@ export const appearCardEmptyAnimation: MotionProps = {
         opacity: { duration: 0.2 },
     },
 };
-
 
 export const appearModalAnimation: MotionProps = {
     initial: { opacity: 0, scale: 0.8 },
@@ -87,6 +86,59 @@ export const bobbleAnimation: MotionProps = {
         ease: "easeInOut",
     },
 };
+
+export const burstSmallAnimation: MotionProps = {
+    animate: { opacity: [0, 1, 1], scale: [0, 2, 1] },
+    transition: {
+        duration: 2,
+        times: [0, 0.5, 1],
+    },
+};
+
+export const burstLargeAnimation: MotionProps = {
+    animate: { opacity: [0, 1, 1], scale: [0, 3, 1] },
+    transition: {
+        duration: 2,
+        times: [0, 0.5, 1],
+    },
+};
+
+export const disappearAnimation: MotionProps = {
+    initial: { opacity: 1, scale: 1 },
+    animate: { opacity: 0, scale: 0.5 },
+    transition: {
+        scale: {
+            duration: 0.5,
+        },
+    },
+};
+
+export const jiggleAnimation: MotionProps = {
+    initial: { opacity: 1, scale: 1 },
+    animate: {
+        scaleX: [1, 1.25, 0.75, 1.15, 0.95, 1.05, 1],
+        scaleY: [1, 0.75, 1.25, 0.85, 1.05, 0.95, 1],
+    },
+    transition: {
+        duration: 1,
+        times: [0, 0.3, 0.4, 0.5, 0.65, 0.75, 1],
+        ease: "easeInOut",
+    },
+};
+
+// export const jiggleAnimation: Variants = {
+//     jiggle: {
+//       initial: { scale: 1 }, // initial is *outside* animate
+//       transition: { duration: 1, repeat: Infinity, ease: "easeInOut" },
+//       "0%": { scale: 1 },    // Keyframes are directly at the top level
+//       "30%": { scale: 1.25 },
+//       "40%": { scale: 0.75 },
+//       "50%": { scale: 1.15 },
+//       "65%": { scale: 0.95 },
+//       "75%": { scale: 1.05 },
+//       "100%": { scale: 1 },
+//     },
+//   };
 
 export const pulseAnimation: MotionProps = {
     animate: { opacity: [1, 0.5, 1] },

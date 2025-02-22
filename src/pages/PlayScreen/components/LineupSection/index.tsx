@@ -10,7 +10,10 @@ import {
     joinBasic,
 } from "../../../../helpers/lambda.helper";
 import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
-import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
+import {
+    isTournamentClosed,
+    isTournamentUpcoming,
+} from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
@@ -22,7 +25,7 @@ import { LoadingModal } from "../../modals/LoadingModal";
 import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
-import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
 
@@ -331,9 +334,13 @@ export const LineupSection = ({
                                     ? () => {}
                                     : () => setShowConfirmModal(true)
                             }
-                            disabled={isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)}
+                            disabled={
+                                isTournamentClosed(ongoingTournament) ||
+                                isTournamentUpcoming(ongoingTournament)
+                            }
                         >
-                            {isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament) ? (
+                            {isTournamentClosed(ongoingTournament) ||
+                            isTournamentUpcoming(ongoingTournament) ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <img
                                         className="mt-[0.1vw] h-[4vw]"
@@ -360,7 +367,7 @@ export const LineupSection = ({
                                     </p>
                                     <img
                                         className="mt-[0.1vw] h-[2.5vw]"
-                                        src={TGStarWhite}
+                                        src={TGStarIcon}
                                     ></img>
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}
