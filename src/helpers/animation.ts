@@ -113,6 +113,31 @@ export const disappearAnimation: MotionProps = {
     },
 };
 
+export const flipLeftAnimation: MotionProps = {
+    animate: {
+        opacity: [1, 1, 1],
+        rotateY: [-180, -90, 0],
+    },
+    transition: {
+        times: [0, 0.5, 1],
+    },
+};
+
+export const flipTopLeftAnimation: MotionProps = {
+    animate: {
+        opacity: [1, 1, 1, 1],
+        scale: [1, 0.3, 0.825, 1],
+        rotate: [0, -4, 0, 0],
+        rotateY: [0, 0, 90, 180],
+        translateX: [0, 0, 0, 0],
+        translateY: [0, -100, 0, 0],
+    },
+    transition: {
+        duration: 2,
+        times: [0, 0.8, 0.95, 1],
+    },
+};
+
 export const jiggleAnimation: MotionProps = {
     initial: { opacity: 1, scale: 1 },
     animate: {
@@ -125,7 +150,6 @@ export const jiggleAnimation: MotionProps = {
         ease: "easeInOut",
     },
 };
-
 // export const jiggleAnimation: Variants = {
 //     jiggle: {
 //       initial: { scale: 1 }, // initial is *outside* animate
@@ -147,6 +171,15 @@ export const pulseAnimation: MotionProps = {
         ease: "easeInOut",
         repeat: Infinity,
         repeatType: "loop",
+    },
+};
+
+export const radiateAnimation: MotionProps = {
+    animate: { opacity: [1, 1, 1], scale: [2, 2.2 ,2] },
+    transition: {
+        duration: 1,
+        repeat: Infinity,
+        times: [0, 0.5, 1],
     },
 };
 
@@ -191,5 +224,14 @@ export const slideUpAnimation: MotionProps = {
         stiffness: 300,
         damping: 15,
         opacity: { duration: 0.2 },
+    },
+};
+
+export const sparkleAnimation: MotionProps = {
+    animate: { opacity: [1, 1, 1], scale: [1, 1.005, 1] },
+    transition: {
+        duration: 1,
+        repeat: Infinity,
+        times: [0, 0.5, 1],
     },
 };

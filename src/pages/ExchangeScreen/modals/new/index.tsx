@@ -3,10 +3,15 @@ import { motion } from "motion/react";
 import {
     appearAnimation,
     appearTextAnimation,
+    bobbleAnimation,
     burstLargeAnimation,
     burstSmallAnimation,
     disappearAnimation,
+    flipLeftAnimation,
+    flipTopLeftAnimation,
     jiggleAnimation,
+    radiateAnimation,
+    sparkleAnimation,
 } from "../../../../helpers/animation";
 
 import Dust from "../../../../assets/others/dust-gold.svg";
@@ -22,6 +27,13 @@ interface NewModalProps {
 
 export const NewModal = ({ onEnd }: NewModalProps) => {
     const [animationStage, setAnimationStage] = useState(0);
+    const [doneWithDust, setDoneWithDust] = useState(false);
+    const [doneWithGlow, setDoneWithGlow] = useState(false);
+    const [doneWithBack, setDoneWithBack] = useState(false);
+    const [flipBack, setFlipBack] = useState(false);
+    const [flipAthlete, setFlipAthlete] = useState(false);
+    const [numberOfTimes, setNumberOfTimes] = useState<number>(1);
+
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -36,9 +48,22 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
         } else if (animationStage === 1) {
             setAnimationStage(2);
         } else if (animationStage === 2) {
-            setAnimationStage(3);
+            setFlipBack(true);
+            setDoneWithBack(false);
+            setTimeout(() => {
+                setFlipBack(false);
+                setAnimationStage(3);
+                setFlipAthlete(true);
+            }, 2000);
         } else if (animationStage === 3) {
-            onEnd();
+            if(numberOfTimes < 2) {
+                setNumberOfTimes(numberOfTimes + 1);
+                setAnimationStage(2);
+            }
+            else {
+                setNumberOfTimes(1);
+                onEnd();
+            }
         }
     };
 
@@ -52,14 +77,18 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                 <div className="h-full w-full bg-graydark opacity-95" />
                 {animationStage >= 1 && (
                     <div className="absolute z-40 flex h-full w-full items-center justify-center">
-                        <motion.div {...burstSmallAnimation}>
+                        <motion.div
+                        {...(!doneWithDust ? burstSmallAnimation : sparkleAnimation)}
+                        onAnimationComplete={() => setDoneWithDust(true)}>
                             <img className="h-[200vw]" src={Dust} alt="Dust" />
                         </motion.div>
                     </div>
                 )}
                 {animationStage >= 1 && (
                     <div className="absolute z-40 flex h-full w-full items-center justify-center">
-                        <motion.div {...burstLargeAnimation}>
+                        <motion.div
+                        {...(!doneWithGlow ? burstLargeAnimation : radiateAnimation)}
+                        onAnimationComplete={() => setDoneWithGlow(true)}>
                             <img className="h-[400vw]" src={Glow} alt="Dust" />
                         </motion.div>
                     </div>
@@ -83,23 +112,28 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                         </motion.div>
                     )}
                     {animationStage === 2 && (
-                        <div className="mb-[4vw] flex h-[101vw] animate-appear items-center justify-center">
+                        <motion.div 
+                            className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
+                            {...(flipBack ? flipTopLeftAnimation : !doneWithBack ? appearAnimation : bobbleAnimation)}
+                            onAnimationComplete={() => setDoneWithBack(true)}>
                             <img
                                 className="h-[80vw]"
                                 src={BackCard}
                                 alt="Back Card"
                                 onClick={handleButtonClick}
                             />
-                        </div>
+                        </motion.div>
                     )}
                     {animationStage === 3 && (
-                        <div className="mb-[4vw] flex h-[101vw] animate-appear items-center justify-center">
+                        <motion.div className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
+                            {...(flipAthlete ? flipLeftAnimation : bobbleAnimation)}
+                            onAnimationComplete={() => setFlipAthlete(false)}>
                             <img
                                 className="h-[80vw]"
                                 src={Sample}
                                 alt="Athlete"
                             />
-                        </div>
+                        </motion.div>
                     )}
                     <div className="flex h-[10vw] items-center justify-center">
                         {animationStage === 0 && (
@@ -141,6 +175,7 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                                 className="relative flex h-full w-full justify-center"
                                 onClick={handleButtonClick}
                                 {...appearTextAnimation}
+                                disabled={flipAthlete}
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
