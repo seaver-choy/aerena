@@ -60,7 +60,7 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                 {animationStage >= 1 && (
                     <div className="absolute z-40 flex h-full w-full items-center justify-center">
                         <motion.div {...burstLargeAnimation}>
-                            <img className="h-[200vw]" src={Glow} alt="Dust" />
+                            <img className="h-[400vw]" src={Glow} alt="Dust" />
                         </motion.div>
                     </div>
                 )}

@@ -1,4 +1,4 @@
-import { MotionProps, Variants } from "motion/react";
+import { MotionProps } from "motion/react";
 
 export const appearAnimation: MotionProps = {
     initial: { opacity: 0, scale: 0.5 },
@@ -96,7 +96,7 @@ export const burstSmallAnimation: MotionProps = {
 };
 
 export const burstLargeAnimation: MotionProps = {
-    animate: { opacity: [0, 1, 1], scale: [0, 3, 1] },
+    animate: { opacity: [0, 1, 1], scale: [0, 3, 2] },
     transition: {
         duration: 2,
         times: [0, 0.5, 1],
