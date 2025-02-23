@@ -23,6 +23,7 @@ import Back from "../../../../assets/card/back.svg";
 import SampleOne from "../../../../assets/card/sample-one.svg";
 import SampleTwo from "../../../../assets/card/sample-two.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import WhiteButton from "../../../../assets/button/white.svg";
 
 interface NewModalProps {
     onEnd: () => void;
@@ -41,6 +42,7 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
     const [animationState, setAnimationState] = useState("appear");
     const [firstState, setFirstState] = useState("default");
     const [secondState, setSecondState] = useState("default");
+    const [selectedSample, setSelectedSample] = useState(null);
 
     const handleButtonClick = () => {
         if (animationStage === 0) {
@@ -64,6 +66,8 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                 setAnimationStage(4);
             }
         } else if (animationStage === 4) {
+            setAnimationStage(5);
+        } else if (animationStage === 5) {
             onEnd();
         }
     };
@@ -184,44 +188,69 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                         </motion.div>
                     )}
                     {animationStage === 4 && (
-                        <div className="relative mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden">
+                        <div className="relative mb-[4vw] flex h-[101vw] flex-col items-center justify-center">
+                            <div className="flex h-[81vw] flex-row items-center">
+                                <motion.div
+                                    className="flex h-[50vw] items-center justify-start"
+                                    {...(animationState === "appear"
+                                        ? appearAnimation
+                                        : animationState === "bobble"
+                                          ? bobbleAnimation
+                                          : firstState === "scaleUp"
+                                            ? scaleUpAnimation
+                                            : scaleDownAnimation)}
+                                    onClick={() => {
+                                        handleFirstSelection();
+                                        setSelectedSample(SampleOne); // Store the selected sample
+                                    }}
+                                    onAnimationComplete={() => {
+                                        if (animationState === "appear") {
+                                            setAnimationState("bobble");
+                                        }
+                                    }}
+                                >
+                                    <img className="h-full" src={SampleOne} />
+                                </motion.div>
+                                <motion.div
+                                    className="flex h-[50vw] items-start justify-end"
+                                    {...(animationState === "appear"
+                                        ? appearAnimation
+                                        : animationState === "bobble"
+                                          ? bobbleAnimation
+                                          : secondState === "scaleUp"
+                                            ? scaleUpAnimation
+                                            : scaleDownAnimation)}
+                                    onClick={() => {
+                                        handleSecondSelection();
+                                        setSelectedSample(SampleTwo); // Store the selected sample
+                                    }}
+                                    onAnimationComplete={() => {
+                                        if (animationState === "appear") {
+                                            setAnimationState("bobble");
+                                        }
+                                    }}
+                                >
+                                    <img className="h-full" src={SampleTwo} />
+                                </motion.div>
+                            </div>
                             <motion.div
-                                className="flex h-[50vw] items-center justify-start"
-                                {...(animationState === "appear"
-                                    ? appearAnimation
-                                    : animationState === "bobble"
-                                      ? bobbleAnimation
-                                      : firstState === "scaleUp"
-                                        ? scaleUpAnimation
-                                        : scaleDownAnimation)}
-                                onClick={handleFirstSelection}
-                                onAnimationComplete={() => {
-                                    if (animationState === "appear") {
-                                        setAnimationState("bobble");
-                                    }
-                                }}
+                                className="flex h-[20vw] items-center px-[4vw] text-center"
+                                {...appearTextAnimation}
                             >
-                                <img className="h-full" src={SampleOne} />
-                            </motion.div>
-                            <motion.div
-                                className="flex h-[50vw] items-start justify-end"
-                                {...(animationState === "appear"
-                                    ? appearAnimation
-                                    : animationState === "bobble"
-                                      ? bobbleAnimation
-                                      : secondState === "scaleUp"
-                                        ? scaleUpAnimation
-                                        : scaleDownAnimation)}
-                                onClick={handleSecondSelection}
-                                onAnimationComplete={() => {
-                                    if (animationState === "appear") {
-                                        setAnimationState("bobble");
-                                    }
-                                }}
-                            >
-                                <img className="h-full" src={SampleTwo} />
+                                <p className="font-russoone text-[4vw] font-normal text-white">
+                                    Tap the skin you wish to select. Only one
+                                    can be chosen.
+                                </p>
                             </motion.div>
                         </div>
+                    )}
+                    {animationStage === 5 && (
+                        <motion.div
+                            className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
+                            {...appearAnimation}
+                        >
+                            <img className="h-[80vw]" src={selectedSample} />
+                        </motion.div>
                     )}
                     {/* Button Functions */}
                     <div className="flex h-[10vw] items-center justify-center">
@@ -283,10 +312,38 @@ export const NewModal = ({ onEnd }: NewModalProps) => {
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
                                     <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
-                                        Select Skin
+                                        Select
                                     </p>
                                 </div>
                             </motion.button>
+                        )}
+                        {animationStage === 5 && (
+                            <div className="flex flex-row gap-[4vw]">
+                                <motion.button
+                                    className="relative flex h-full w-full justify-center"
+                                    onClick={() => setAnimationStage(4)}
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={WhiteButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            Back
+                                        </p>
+                                    </div>
+                                </motion.button>
+                                <motion.button
+                                    className="relative flex h-full w-full justify-center"
+                                    onClick={handleButtonClick}
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            Confirm
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            </div>
                         )}
                     </div>
                 </div>

@@ -18,7 +18,7 @@ interface PurchaseModalProps {
 }
 
 export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
-    const packCost = 10000;
+    const packCost = 200000;
     const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
 
     const handleIncrement = () => {
