@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, animate, useMotionValue, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
@@ -12,9 +12,9 @@ import {
     getTeamInfo,
     getSameAthletes,
 } from "../../../../helpers/lambda.helper";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
-import StatsBackground from "../../../../assets/background/stats.svg";
 import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import {
@@ -32,14 +32,14 @@ interface AthleteModalProps {
 export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     const user = useUsers();
     const navigate = useNavigate();
-    const killMV = useMotionValue(0);
-    const deathMV = useMotionValue(0);
-    const assistMV = useMotionValue(0);
-    const killStat = useTransform(() => killMV.get().toFixed(2));
-    const deathStat = useTransform(() => deathMV.get().toFixed(2));
-    const assistStat = useTransform(() => assistMV.get().toFixed(2));
+
     const [sameAthletes, setSameAthletes] = useState<SameAthlete[]>([]);
-    const [averageStats, setAverageStats] = useState<AverageStats>();
+    const [averageStats, setAverageStats] = useState<AverageStats>({
+        averageKills: 0,
+        averageDeaths: 0,
+        averageAssists: 0,
+        averagePoints: 0,
+    });
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`, {
             state: {
@@ -50,29 +50,6 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
         });
     };
     const [teamInfo, setTeamInfo] = useState<Team>();
-
-    useEffect(() => {
-        if (averageStats !== undefined) {
-            const killControl = animate(killMV, averageStats.averageKills, {
-                duration: 2,
-            });
-            const deathControl = animate(deathMV, averageStats.averageDeaths, {
-                duration: 2,
-            });
-            const assistControl = animate(
-                assistMV,
-                averageStats.averageAssists,
-                {
-                    duration: 2,
-                }
-            );
-            return () => {
-                killControl.stop();
-                deathControl.stop();
-                assistControl.stop();
-            };
-        }
-    }, [killMV, deathMV, assistMV, averageStats]);
 
     useEffect(() => {
         async function fetchTeamInfo() {
@@ -102,7 +79,9 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                 user.initDataRaw
             );
 
-            setAverageStats(res.average[0]);
+            if (res.average[0] !== undefined) {
+                setAverageStats(res.average[0]);
+            }
         }
         fetchAthleteAverageStats();
     }, []);
@@ -153,57 +132,18 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                         </motion.button>
                     </div>
                     <div className="mb-[2vw] flex h-[11.5vw] gap-[2vw]">
-                        <motion.div
-                            className="relative flex h-full w-[20.67vw]"
-                            {...appearTextAnimation}
-                        >
-                            <img
-                                className="h-full w-full"
-                                src={StatsBackground}
-                            />
-                            <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                                <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent">
-                                    KILLS
-                                </p>
-                                <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {killStat}
-                                </motion.pre>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            className="relative flex h-full w-[20.67vw]"
-                            {...appearTextAnimation}
-                        >
-                            <img
-                                className="h-full w-full"
-                                src={StatsBackground}
-                            />
-                            <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                                <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent">
-                                    DEATHS
-                                </p>
-                                <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {deathStat}
-                                </motion.pre>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            className="relative flex h-full w-[20.67vw]"
-                            {...appearTextAnimation}
-                        >
-                            <img
-                                className="h-full w-full"
-                                src={StatsBackground}
-                            />
-                            <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                                <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent">
-                                    ASSISTS
-                                </p>
-                                <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                    {assistStat}
-                                </motion.pre>
-                            </div>
-                        </motion.div>
+                        <StatsDisplay
+                            text={"KILLS"}
+                            value={averageStats.averageKills}
+                        />
+                        <StatsDisplay
+                            text={"DEATHS"}
+                            value={averageStats.averageDeaths}
+                        />
+                        <StatsDisplay
+                            text={"ASSISTS"}
+                            value={averageStats.averageAssists}
+                        />
                     </div>
                     <div className="mb-[2vw] flex h-[6vw] justify-center">
                         <motion.button
