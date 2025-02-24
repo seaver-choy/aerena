@@ -9,7 +9,7 @@ interface Props {
     text: string;
     value: number;
 }
-export const StatsDisplay = ({ text, value }: Props) => {
+export const StatsDisplay = ({ text = "", value = 0 }: Props) => {
     const mv = useMotionValue(0);
 
     const stat = useTransform(() => mv.get().toFixed(2));
@@ -22,7 +22,7 @@ export const StatsDisplay = ({ text, value }: Props) => {
         return () => {
             control.stop();
         };
-    }, []);
+    }, [mv, value]);
 
     return (
         <motion.div className="h-full w-[21.5vw]" {...appearAnimation}>
