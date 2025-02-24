@@ -22,7 +22,7 @@ export const NavBar = () => {
         user.id != 0 && (
             <>
                 <Outlet />
-                <div className="disable-select fixed bottom-0 z-30 flex h-[20vw] w-full justify-center rounded-t-[3vw] bg-gradient-to-b from-gold to-light px-[0.5vh] pt-[0.5vh]">
+                <div className="disable-select fixed bottom-0 z-10 flex h-[20vw] w-full justify-center rounded-t-[3vw] bg-gradient-to-b from-gold to-light px-[0.5vh] pt-[0.5vh]">
                     <div className="flex h-full w-screen items-center justify-center gap-[2vw] rounded-t-[2.4vw] bg-light p-[2vw]">
                         {tabs.map((tab) => {
                             const isActive = location.pathname === tab.id;

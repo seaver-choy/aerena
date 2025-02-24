@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUsers } from "../../../../hooks/useUser";
 import { useLocation } from "react-router-dom";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { getStickerImage } from "../../../../helpers/images";
@@ -13,11 +12,10 @@ import BasicBoardBackground from "../../../../assets/background/board-basic.svg"
 import GoldButton from "../../../../assets/button/gold.svg";
 
 export const CommunityLineupsScreen = () => {
-    const user = useUsers();
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
-    const reversedUsersJoined = ongoingTournament.usersJoined.filter(entry => entry.username !== user.username).reverse();
+    const reversedUsersJoined = ongoingTournament.usersJoined.reverse();
     // const playTab = location.state?.playTab;
 
     const [displayLineup, setDisplayLineup] = useState(
@@ -57,7 +55,7 @@ export const CommunityLineupsScreen = () => {
             <div className="mt-[6vw] flex flex-col gap-[4vw]">
                 {displayLineup !== null &&
                     displayLineup.map((userInfo) =>
-                        userInfo.username != user.username ? (
+                        (
                             <div className="relative h-[109.5vw] w-full">
                                 <img
                                     className="h-full w-full"
@@ -109,8 +107,6 @@ export const CommunityLineupsScreen = () => {
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            ""
                         )
                     )}
             </div>

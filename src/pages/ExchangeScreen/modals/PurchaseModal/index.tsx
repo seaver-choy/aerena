@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import {
     appearTextAnimation,
@@ -9,23 +9,28 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
-import TGStarIcon from "../../../../assets/icon/tg-star-gold.svg";
+import AddIcon from "../../../../assets/icon/add.svg";
+import MinusIcon from "../../../../assets/icon/minus.svg";
 
-interface ConfirmModalProps {
+interface PurchaseModalProps {
     onCancel: () => void;
     onConfirm: () => void;
-    loading: boolean;
-    tournamentType?: string;
-    joinCost?: number;
 }
 
-export const ConfirmModal = ({
-    onCancel,
-    onConfirm,
-    loading,
-    tournamentType = null,
-    joinCost = 0,
-}: ConfirmModalProps) => {
+export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
+    const packCost = 200000;
+    const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
+
+    const handleIncrement = () => {
+        if (boosterQuantity < 10) setBoosterQuantity(boosterQuantity + 1);
+    };
+
+    const handleDecrement = () => {
+        if (boosterQuantity > 1) {
+            setBoosterQuantity(boosterQuantity - 1);
+        }
+    };
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -45,39 +50,44 @@ export const ConfirmModal = ({
                     <img className="h-full w-full" src={SmallModal} />
                 </motion.div>
                 <div className="absolute z-50 flex h-[66.5vw] w-[66vw] flex-col justify-center">
-                    <div className="mb-[4vw] flex h-[55vw] flex-col items-center justify-center px-[4vw]">
-                        <motion.div {...appearTextAnimation}>
+                    <div className="mb-[4vw] h-[55vw] px-[4vw]">
+                        <motion.div
+                            className="flex h-full flex-col items-center justify-center"
+                            {...appearTextAnimation}
+                        >
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                You will join this tournament using your
-                                selected lineup.
+                                Claim your Basic Pack.
                             </p>
-                            <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                Entry to the tournament costs
-                            </p>
-                            {tournamentType === "basic" ? (
-                                <div className="my-[1.5vw] flex justify-center gap-[2vw]">
-                                    <img
-                                        className="mt-[2.5vw] h-[7.2vw]"
-                                        src={BattlePointsIcon}
-                                    />
-                                    <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
-                                        {joinCost}
-                                    </p>
+                            <div className="my-[1.5vw] flex justify-center gap-[2vw]">
+                                <img
+                                    className="mt-[2.8vw] h-[7.2vw]"
+                                    src={BattlePointsIcon}
+                                />
+                                <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
+                                    {(
+                                        packCost * boosterQuantity
+                                    ).toLocaleString()}
+                                </p>
+                            </div>
+                            <div className="mt-[6vw] flex flex-row items-center gap-[2vw]">
+                                <img
+                                    className={`h-[8vw] ${boosterQuantity > 1 ? "" : "opacity-50"}`}
+                                    src={MinusIcon}
+                                    onClick={handleDecrement}
+                                />
+                                <div className="flex h-[8vw] w-[15vw] rounded-[2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark p-[0.5vw]">
+                                    <div className="flex h-full w-full items-center justify-center rounded-[1.5vw] bg-light">
+                                        <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-extrabold text-transparent">
+                                            {boosterQuantity}
+                                        </p>
+                                    </div>
                                 </div>
-                            ) : (
-                                <div className="my-[2vw] flex justify-center gap-[2vw]">
-                                    <img
-                                        className="mt-[2.5vw] h-[7.2vw]"
-                                        src={TGStarIcon}
-                                    />
-                                    <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
-                                        {joinCost}
-                                    </p>
-                                </div>
-                            )}
-                            <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                Do you wish to continue?
-                            </p>
+                                <img
+                                    className={`h-[8vw] ${boosterQuantity < 10 ? "" : "opacity-50"}`}
+                                    src={AddIcon}
+                                    onClick={handleIncrement}
+                                />
+                            </div>
                         </motion.div>
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
@@ -97,13 +107,12 @@ export const ConfirmModal = ({
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
                                 onClick={onConfirm}
-                                disabled={loading}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
                                     <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Confirm
+                                        Purchase
                                     </p>
                                 </div>
                             </motion.button>

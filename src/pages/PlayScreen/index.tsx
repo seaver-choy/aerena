@@ -13,7 +13,7 @@ import { PersonalLineup } from "./components/PersonalLineup";
 
 export const PlayScreen = () => {
     const user = useUsers();
-    const [playTab, setPlayTab] = useState("Play Basic");
+    const [playTab, setPlayTab] = useState("Play Premium");
     const [showTournament, setShowTournament] = useState<boolean>(false);
     const [keyRemount, setKeyRemount] = useState<number>(0);
     const [ongoingTournament, setOngoingTournament] =
