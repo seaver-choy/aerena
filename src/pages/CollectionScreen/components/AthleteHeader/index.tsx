@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion, animate, useMotionValue, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import {
-    appearAnimation,
     appearCardAnimation,
     pulseAnimation,
     slideRightTextAnimation,
@@ -11,7 +10,6 @@ import { Athlete, AverageStats } from "../../../../helpers/interfaces";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
-import StatsBackground from "../../../../assets/background/stats.svg";
 
 interface Props {
     athlete: Athlete;
