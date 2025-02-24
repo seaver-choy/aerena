@@ -98,20 +98,20 @@ export const AthleteHeader = ({ athlete, averageStats }: Props) => {
                         </div>
                         <div className="absolute -bottom-[6vw] left-[4vw] flex h-[12vw] w-[92vw] gap-[2vw]">
                             <StatsDisplay
-                                statText={"KILLS"}
-                                statValue={averageStats.averageKills}
+                                text={"KILLS"}
+                                value={averageStats.averageKills}
                             />
                             <StatsDisplay
-                                statText={"DEATHS"}
-                                statValue={averageStats.averageDeaths}
+                                text={"DEATHS"}
+                                value={averageStats.averageDeaths}
                             />
                             <StatsDisplay
-                                statText={"ASSISTS"}
-                                statValue={averageStats.averageAssists}
+                                text={"ASSISTS"}
+                                value={averageStats.averageAssists}
                             />
                             <StatsDisplay
-                                statText={"POINTS"}
-                                statValue={averageStats.averagePoints}
+                                text={"POINTS"}
+                                value={averageStats.averagePoints}
                             />
                         </div>
                     </div>
