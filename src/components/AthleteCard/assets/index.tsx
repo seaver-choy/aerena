@@ -435,23 +435,11 @@ export const Glow = ({ id }) => {
         >
             <g filter={`url(#a-glow-${id})`}>
                 <path
-                    fill={`url(#b-glow-${id})`}
+                    fill="#5C5C5C"
                     d="m17 8 28.442 7.529L51 6l5.558 9.529L85 8l-1.194 3.98L96 9l-5 11 4-1s-4 2.5-4 9v78l-.467.198L91 109l-35 17v-5l-5 2-5-2v5l-35-17 .467-2.802L11 106V28c0-6.5-4-9-4-9l4 1L6 9l12.194 2.98L17 8Z"
                 />
             </g>
             <defs>
-                <linearGradient
-                    id={`b-glow-${id}`}
-                    x1={51}
-                    x2={51}
-                    y1={6}
-                    y2={126}
-                    gradientUnits="userSpaceOnUse"
-                >
-                    <stop stopColor="#AB750F" />
-                    <stop offset={0.516} stopColor="#D8A956" />
-                    <stop offset={1} stopColor="#AB750F" />
-                </linearGradient>
                 <filter
                     id={`a-glow-${id}`}
                     width={102}
@@ -468,7 +456,7 @@ export const Glow = ({ id }) => {
                         result="shape"
                     />
                     <feGaussianBlur
-                        result="effect1_foregroundBlur_2368_933"
+                        result="effect1_foregroundBlur_199_14653"
                         stdDeviation={3}
                     />
                 </filter>

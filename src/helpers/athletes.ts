@@ -63,12 +63,12 @@ export function getEmptyAthleteCard(position: string) {
 
 export function getBaseTeamColor() {
     return {
-        main: "#333",
-        light: "#D8A956",
-        dark: "#AB750F",
-        wings: "#D8A956",
-        accent: "#fff",
-        details: "#fff",
+        main: "#333333",
+        light: "#5C5C5C",
+        dark: "#212121",
+        wings: "#212121",
+        accent: "#5C5C5C",
+        details: "#F5F1EE",
         wave: "0.15",
     };
 }
