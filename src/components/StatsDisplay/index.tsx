@@ -1,12 +1,7 @@
 import { useEffect } from "react";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 
-import {
-    appearAnimation,
-    appearCardAnimation,
-    pulseAnimation,
-    slideRightTextAnimation,
-} from "../../helpers/animation";
+import { appearAnimation } from "../../helpers/animation";
 
 import StatsBackground from "../../assets/background/stats.svg";
 
