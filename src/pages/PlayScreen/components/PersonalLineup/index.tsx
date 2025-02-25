@@ -33,9 +33,9 @@ export const PersonalLineup = ({
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const fetchUserLineups = () => {
         if (ongoingTournament.usersJoined.length > 0) {
-            const filteredUserLineups = ongoingTournament.usersJoined.filter(
-                (currentUser) => currentUser.username === user.username
-            ).reverse();
+            const filteredUserLineups = ongoingTournament.usersJoined
+                .filter((currentUser) => currentUser.username === user.username)
+                .reverse();
             setUserLineups(filteredUserLineups);
         } else setUserLineups([]);
     };
@@ -88,7 +88,10 @@ export const PersonalLineup = ({
                     ongoingTournament.usersJoined.map(
                         (userInfo, index) =>
                             userInfo.username === user.username && (
-                                <div key={index} className="relative h-[109.5vw] w-full">
+                                <div
+                                    key={index}
+                                    className="relative h-[109.5vw] w-full"
+                                >
                                     <img
                                         className="h-full w-full"
                                         src={BasicBoardBackground}
@@ -108,27 +111,32 @@ export const PersonalLineup = ({
                                     </div>
                                     <div className="absolute left-[6vw] top-[11.3vw] flex h-[6.5vw] w-[60vw] items-center">
                                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
-                                            {ongoingTournament.tournamentName}
+                                            My Fantasy Lineup Team
                                         </p>
                                     </div>
                                     <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                        {userInfo.lineup.map((athlete, index) => (
-                                            <div key={index} className="relative flex h-[36.4vw] w-[28vw]">
-                                                {/* <img
-                                                    className="h-full"
-                                                    src={athlete.img}
-                                                /> */}
-                                                <AthleteCard
-                                                    color={baseColor}
-                                                    ign={athlete.displayName}
-                                                    role={athlete.position[0]}
-                                                    opacity={{
-                                                        wave: baseColor.wave,
-                                                    }}
-                                                    id={index}
-                                                />
-                                            </div>
-                                        ))}
+                                        {userInfo.lineup.map(
+                                            (athlete, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative flex h-[36.4vw] w-[28vw]"
+                                                >
+                                                    <AthleteCard
+                                                        color={baseColor}
+                                                        ign={
+                                                            athlete.displayName
+                                                        }
+                                                        role={
+                                                            athlete.position[0]
+                                                        }
+                                                        opacity={{
+                                                            wave: baseColor.wave,
+                                                        }}
+                                                        id={index}
+                                                    />
+                                                </div>
+                                            )
+                                        )}
                                     </div>
                                     <div className="absolute bottom-[1.4vw] left-[1.8vw] h-[12vw] w-[12vw]">
                                         <img
@@ -137,6 +145,11 @@ export const PersonalLineup = ({
                                                 ongoingTournament.league
                                             )}
                                         />
+                                    </div>
+                                    <div className="absolute bottom-[2.5vw] left-[17vw] flex h-[6.5vw] w-[60vw] items-center">
+                                        <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                            {ongoingTournament.tournamentName}
+                                        </p>
                                     </div>
                                     <div className="absolute bottom-[2.1vw] right-[2vw] h-[8vw] w-[25vw]">
                                         <div className="relative flex h-full w-full">

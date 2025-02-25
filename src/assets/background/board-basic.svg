@@ -1,16 +1,15 @@
 <svg width="393" height="430" viewBox="0 0 393 430" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="board-basic">
 <path id="base" fill-rule="evenodd" clip-rule="evenodd" d="M393 50V96V141V430H294.75H196.5H0V96V51V28.5V17L12 6H24.5625H49.125H98.25H196.5H245.625H272.111L296.556 50H393Z" fill="#EBE5DB"/>
-<path id="Subtract" d="M393 45L367.788 0H274L299.212 45H393Z" fill="url(#paint0_linear_1016_24864)"/>
+<path id="Subtract" d="M393 45L367.788 0H274L299.212 45H393Z" fill="url(#paint0_linear_1257_43392)"/>
 <path id="Subtract_2" d="M9 6H0V14.25L9 6Z" fill="#AB750F"/>
-<path id="Subtract_3" d="M0.103111 372V430L85 430L53.5142 372H0.103111Z" fill="#AB750F" fill-opacity="0.2"/>
 <g id="Prize pool">
 <path id="Union" d="M17 6.04199L26.4823 28.6341H136.5L146.233 6.04204L17 6.04199Z" fill="#6C4B0E"/>
 <path id="Union_2" d="M144.983 4L135.526 26.5923H27.2136L18 4.0002L144.983 4Z" fill="#AB750F"/>
 </g>
 </g>
 <defs>
-<linearGradient id="paint0_linear_1016_24864" x1="333.5" y1="0" x2="333.5" y2="45" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_1257_43392" x1="333.5" y1="0" x2="333.5" y2="45" gradientUnits="userSpaceOnUse">
 <stop stop-color="#AB750F"/>
 <stop offset="0.516" stop-color="#D8A956"/>
 <stop offset="1" stop-color="#AB750F"/>

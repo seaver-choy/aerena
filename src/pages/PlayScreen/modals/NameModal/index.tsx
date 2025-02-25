@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import {
     appearModalAnimation,
@@ -7,24 +7,13 @@ import {
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import WhiteButton from "../../../../assets/button/white.svg";
 
-interface AddModalProps {
-    handleSubmit: (code: string) => void;
+interface NameModalProps {
     onClose: () => void;
 }
 
-export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
-    const [searchReferral, setSearchReferral] = useState<string>("");
-
-    const handleCheckReferralCode = async () => {
-        handleSubmit(searchReferral);
-        onClose();
-    };
-
-    const handleCodeChange = (e) => {
-        setSearchReferral(e.target.value);
-    };
-
+export const NameModal = ({ onClose }: NameModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -50,7 +39,7 @@ export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
-                                Referral Code
+                                Fantasy Team Name
                             </p>
                         </motion.div>
                         <motion.div
@@ -62,14 +51,13 @@ export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
                                     <input
                                         className="flex w-full bg-transparent font-russoone text-[4.5vw] font-normal text-white focus:outline-none"
                                         type="text"
-                                        placeholder="Enter Referral Code"
+                                        placeholder="Enter Team Name"
                                         maxLength={12}
-                                        onChange={handleCodeChange}
                                     ></input>
                                 </div>
                             </div>
                             <p className="mx-[2vw] mt-[2vw] text-center font-montserrat text-[3.5vw] text-graydark">
-                                Enter the referral code from your friend.
+                                Give your fantasy team a name worthy of legend.
                             </p>
                         </motion.div>
                     </div>
@@ -77,7 +65,19 @@ export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={handleCheckReferralCode}
+                                onClick={onClose}
+                                {...appearTextAnimation}
+                            >
+                                <img className="h-full" src={WhiteButton} />
+                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                    <p className="mt-[0.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.8vw] font-normal text-transparent">
+                                        Back
+                                    </p>
+                                </div>
+                            </motion.button>
+                            <motion.button
+                                className="relative flex h-full w-full justify-center"
+                                onClick={onClose}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />
