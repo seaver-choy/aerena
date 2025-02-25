@@ -7,7 +7,6 @@ import { AthleteHeader } from "../../components/AthleteHeader";
 import { PlayerProfile } from "../../components/PlayerProfile";
 import { Stats } from "../../components/Stats";
 import { CardSkins } from "../../components/CardSkins";
-import { LocalStats } from "../../components/LocalStats";
 
 export const AthleteScreen = () => {
     const [athleteTab, setAthleteTab] = useState("Player Profile");
