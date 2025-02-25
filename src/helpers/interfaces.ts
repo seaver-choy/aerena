@@ -30,7 +30,7 @@ export interface Athlete {
     player: string;
     displayName: string;
     team: string;
-    teamName: string,
+    teamName: string;
     totalKills: number;
     avgKills: number;
     totalDeaths: number;
@@ -43,6 +43,14 @@ export interface Athlete {
     numSeasonsPlayed: number;
     league: string;
     type: string;
+}
+export interface SameAthlete extends Athlete {
+    teamData: {
+        colors: TeamColor;
+    };
+    tournamentData: {
+        endDate: Date;
+    };
 }
 
 export interface Tournament {
@@ -122,9 +130,25 @@ export interface Stats {
     competitionType: string;
 }
 export interface AverageStats {
+    league?: string;
     averageKills: number;
     averageDeaths: number;
     averageAssists: number;
+    averagePoints: number;
+}
+
+export interface AthleteProfile {
+    athleteId: number;
+    name: string;
+    ign: string;
+    country: string;
+    birthday: string;
+    alternateIgns: string[];
+    latestTournament?: {
+        code: string;
+        endDate: Date;
+    };
+    latestPosition: string;
 }
 
 export interface TeamProfile {

@@ -37,6 +37,25 @@ export const athleteSchema = new mongoose.Schema(
     }
 );
 
+export const athleteProfileSchema = new mongoose.Schema(
+    {
+        athleteId: Number,
+        name: String,
+        ign: String,
+        country: String,
+        birthday: String,
+        alternateIgns: [String],
+        latestTournament: {
+            code: String,
+            endDate: Date,
+        },
+        latestPosition: String,
+    },
+    {
+        collection: "athleteprofiles",
+    }
+);
+
 export const teamSchema = new mongoose.Schema(
     {
         teamId: Number,
@@ -52,7 +71,7 @@ export const teamSchema = new mongoose.Schema(
         },
         league: String,
         type: String,
-        players: [athleteSchema]
+        players: [athleteSchema],
     },
     {
         collection: "teams",
@@ -72,7 +91,7 @@ export const teamProfileSchema = new mongoose.Schema(
             details: String,
             wave: String,
         },
-        recentTournament: {
+        latestTournament: {
             code: String,
             endDate: Date,
         },
@@ -82,7 +101,6 @@ export const teamProfileSchema = new mongoose.Schema(
         collection: "teamprofiles",
     }
 );
-
 
 export const userSchema = new mongoose.Schema(
     {
@@ -178,12 +196,12 @@ export const userSchema = new mongoose.Schema(
         dreamTeam: {
             type: {
                 teamProfile: teamProfileSchema,
-                lineup: [tokenSchema]
+                lineup: [tokenSchema],
             },
             default: () => ({
                 team: {},
                 lineup: [],
-            })
+            }),
         },
         referralCode: String,
         referredBy: {
