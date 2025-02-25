@@ -15,6 +15,7 @@ const transition = {
 
 interface Props {
     athletes: SameAthlete[];
+    onCardIndexChange: (title: string) => void;
 }
 
 interface Cards {
@@ -25,10 +26,11 @@ interface Cards {
     };
     role: string;
     league: string;
+    title: string;
     type: string;
 }
 
-export const Slider = ({ athletes }: Props) => {
+export const Slider = ({ athletes, onCardIndexChange }: Props) => {
     //const [imageIndex, setImageIndex] = useState(0);
     const [cardIndex, setCardIndex] = useState<number>(0);
     const [cards, setCards] = useState<Cards[]>([]);
@@ -36,11 +38,12 @@ export const Slider = ({ athletes }: Props) => {
 
     const onDragEnd = () => {
         const x = dragX.get();
-
         if (x <= -buffer && cardIndex < cards.length - 1) {
             setCardIndex((pv) => pv + 1);
+            onCardIndexChange(cards[cardIndex + 1].title);
         } else if (x >= buffer && cardIndex > 0) {
             setCardIndex((pv) => pv - 1);
+            onCardIndexChange(cards[cardIndex - 1].title);
         }
     };
 
@@ -52,6 +55,7 @@ export const Slider = ({ athletes }: Props) => {
                 opacity: { wave: getBaseTeamColor().wave },
                 role: athletes[0].position[0],
                 league: athletes[0].league,
+                title: "BASIC SKIN",
                 type: "default",
             };
             const skinCards = athletes.map((athlete) => {
@@ -61,6 +65,7 @@ export const Slider = ({ athletes }: Props) => {
                     opacity: { wave: athlete.teamData.colors.wave },
                     role: athlete.position[0],
                     league: athlete.league,
+                    title: athlete.team,
                     type: "basic",
                 };
             });
