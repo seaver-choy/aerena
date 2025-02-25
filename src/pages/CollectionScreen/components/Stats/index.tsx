@@ -70,7 +70,9 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                 user.initDataRaw
             );
             console.log(res);
-            setLeagueStats(res.leagueStats);
+            if (res.results) {
+                setLeagueStats(res.leagueStats);
+            }
         }
         fetchLeagueStats();
     }, []);
@@ -78,13 +80,17 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
             {sameAthletes?.map((athlete) => {
+                console.log("test");
                 let noStats = false;
-                const stats = leagueStats.find(
-                    (x) => x.league === athlete.league
-                );
-                if (stats === undefined) {
+                let stats: AverageStats | undefined;
+                if (leagueStats.length > 0) {
+                    stats = leagueStats.find(
+                        (x) => x.league === athlete.league
+                    );
+                } else {
                     noStats = true;
                 }
+
                 // const displayAthlete = sameAthletes.find(
                 //     (x) => x.league === stats.league
                 // );
@@ -161,7 +167,7 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                     <div className="mt-[2vw] flex">
                                         <div className="ml-[2vw] flex h-full w-[40%] items-center">
                                             <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
-                                                GEEK PH
+                                                {athlete.team}
                                             </p>
                                         </div>
                                         <div className="flex h-full w-[60%] justify-end">
