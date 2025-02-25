@@ -31,14 +31,18 @@ export const AthleteScreen = () => {
             {athleteTab === "Local Stats" && (
                 <Stats
                     athlete={athlete}
-                    sameAthletes={sameAthletes}
+                    sameAthletes={sameAthletes.filter(
+                        (athlete) => athlete.type === "regional"
+                    )}
                     competitionType={"regional"}
                 />
             )}
             {athleteTab === "Global Stats" && (
                 <Stats
                     athlete={athlete}
-                    sameAthletes={sameAthletes}
+                    sameAthletes={sameAthletes.filter(
+                        (athlete) => athlete.type === "international"
+                    )}
                     competitionType={"international"}
                 />
             )}

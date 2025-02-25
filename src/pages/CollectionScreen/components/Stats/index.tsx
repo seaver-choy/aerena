@@ -26,6 +26,7 @@ interface Props {
 export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
     const [showStatsBanner, setShowStatsBanner] = useState(false);
     const user = useUsers();
+
     const [leagueStats, setLeagueStats] = useState<AverageStats[]>([]);
     // const team = {
     //     main: "#333",
@@ -76,10 +77,17 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
 
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
-            {leagueStats?.map((stats) => {
-                const displayAthlete = sameAthletes.find(
-                    (x) => x.league === stats.league
+            {sameAthletes?.map((athlete) => {
+                let noStats = false;
+                const stats = leagueStats.find(
+                    (x) => x.league === athlete.league
                 );
+                if (stats === undefined) {
+                    noStats = true;
+                }
+                // const displayAthlete = sameAthletes.find(
+                //     (x) => x.league === stats.league
+                // );
                 return (
                     <>
                         {showStatsBanner ? (
@@ -90,17 +98,15 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                         {...appearCardAnimation}
                                     >
                                         <AthleteCard
-                                            color={
-                                                displayAthlete.teamData.colors
-                                            }
-                                            ign={displayAthlete.player}
+                                            color={athlete.teamData.colors}
+                                            ign={athlete.player}
                                             opacity={{
-                                                wave: displayAthlete.teamData
-                                                    .colors.wave,
+                                                wave: athlete.teamData.colors
+                                                    .wave,
                                             }}
-                                            role={displayAthlete.position[0]}
+                                            role={athlete.position[0]}
                                             type={"basic"}
-                                            league={displayAthlete.league}
+                                            league={athlete.league}
                                         />
                                     </motion.div>
                                 </div>
@@ -109,26 +115,46 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                         <div className="flex gap-[2vw]">
                                             <StatsDisplay
                                                 text={"KILLS"}
-                                                value={stats.averageKills}
+                                                value={
+                                                    stats !== undefined
+                                                        ? stats.averageKills
+                                                        : 0
+                                                }
                                                 fromStats={true}
+                                                noStats={noStats}
                                             />
 
                                             <StatsDisplay
                                                 text={"ASSISTS"}
-                                                value={stats.averageAssists}
+                                                value={
+                                                    stats !== undefined
+                                                        ? stats.averageAssists
+                                                        : 0
+                                                }
                                                 fromStats={true}
+                                                noStats={noStats}
                                             />
                                         </div>
                                         <div className="flex gap-[2vw]">
                                             <StatsDisplay
                                                 text={"DEATHS"}
-                                                value={stats.averageDeaths}
+                                                value={
+                                                    stats !== undefined
+                                                        ? stats.averageDeaths
+                                                        : 0
+                                                }
                                                 fromStats={true}
+                                                noStats={noStats}
                                             />
                                             <StatsDisplay
                                                 text={"POINTS"}
-                                                value={stats.averagePoints}
+                                                value={
+                                                    stats !== undefined
+                                                        ? stats.averagePoints
+                                                        : 0
+                                                }
                                                 fromStats={true}
+                                                noStats={noStats}
                                             />
                                         </div>
                                     </div>

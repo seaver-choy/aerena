@@ -9,8 +9,14 @@ interface Props {
     text: string;
     value: number;
     fromStats?: boolean;
+    noStats?: boolean;
 }
-export const StatsDisplay = ({ text = "", value = 0, fromStats }: Props) => {
+export const StatsDisplay = ({
+    text = "",
+    value = 0,
+    fromStats,
+    noStats,
+}: Props) => {
     const mv = useMotionValue(0);
 
     const stat = useTransform(() => mv.get().toFixed(2));
@@ -37,7 +43,7 @@ export const StatsDisplay = ({ text = "", value = 0, fromStats }: Props) => {
                         {text}
                     </p>
                     <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                        {stat}
+                        {noStats ? "-" : stat}
                     </motion.pre>
                 </div>
             </div>
