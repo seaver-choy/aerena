@@ -40,6 +40,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
         averageAssists: 0,
         averagePoints: 0,
     });
+    const [skinTitle, setSkinTitle] = useState<string>("BASIC SKIN");
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`, {
             state: {
@@ -51,6 +52,9 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     };
     const [teamInfo, setTeamInfo] = useState<Team>();
 
+    const onCardIndexChange = (title: string) => {
+        setSkinTitle(title);
+    };
     useEffect(() => {
         async function fetchTeamInfo() {
             const res = await getTeamInfo(
@@ -167,14 +171,17 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                         className="mb-[4vw] flex h-[55vw] flex-col items-center"
                     >
                         {teamInfo !== undefined && (
-                            <Slider athletes={sameAthletes} />
+                            <Slider
+                                athletes={sameAthletes}
+                                onCardIndexChange={onCardIndexChange}
+                            />
                         )}
                         {/* <Slider
                             athlete={athlete}
                             teamColor={teamInfo.colors}
                         /> */}
                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                            Basic Skin
+                            {skinTitle}
                         </p>
                     </div>
                     <div className="flex h-[7.5vw] justify-center">
