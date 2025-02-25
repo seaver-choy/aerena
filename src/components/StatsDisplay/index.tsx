@@ -8,8 +8,9 @@ import StatsBackground from "../../assets/background/stats.svg";
 interface Props {
     text: string;
     value: number;
+    fromStats?: boolean;
 }
-export const StatsDisplay = ({ text = "", value = 0 }: Props) => {
+export const StatsDisplay = ({ text = "", value = 0, fromStats }: Props) => {
     const mv = useMotionValue(0);
 
     const stat = useTransform(() => mv.get().toFixed(2));
@@ -25,7 +26,10 @@ export const StatsDisplay = ({ text = "", value = 0 }: Props) => {
     }, [mv, value]);
 
     return (
-        <motion.div className="h-full w-[21.5vw]" {...appearAnimation}>
+        <motion.div
+            className={`${fromStats ? "h-[13.14vw] w-[24vw]" : "h-full w-[21.5vw]"}`}
+            {...appearAnimation}
+        >
             <div className="relative flex h-full w-full">
                 <img className="h-full w-full" src={StatsBackground} />
                 <div className="absolute flex h-full w-full flex-col items-center justify-center">
