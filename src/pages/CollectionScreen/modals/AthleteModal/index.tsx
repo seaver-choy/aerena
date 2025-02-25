@@ -40,7 +40,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
         averageAssists: 0,
         averagePoints: 0,
     });
-    const [skinTitle, setSkinTitle] = useState<string>("BASIC SKIN");
+    const [skinTitle, setSkinTitle] = useState<string>("Default Card");
     const handleViewPlayerProfile = () => {
         navigate(`/athlete`, {
             state: {
