@@ -46,7 +46,9 @@ export const AthleteScreen = () => {
                     competitionType={"international"}
                 />
             )}
-            {athleteTab === "Card Skins" && <CardSkins />}
+            {athleteTab === "Card Skins" && (
+                <CardSkins sameAthletes={sameAthletes} />
+            )}
         </Layout>
     );
 };

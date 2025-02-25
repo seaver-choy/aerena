@@ -6,12 +6,15 @@ import {
     pulseAnimation,
 } from "../../../../helpers/animation";
 import { AthleteCard } from "../../../../components/AthleteCard";
-
+import { SameAthlete } from "../../../../helpers/interfaces";
 import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
 
-export const CardSkins = () => {
+interface Props {
+    sameAthletes: SameAthlete[];
+}
+export const CardSkins = ({ sameAthletes }: Props) => {
     const [showCard, setShowCard] = useState(false);
-
+    console.log(sameAthletes);
     const athlete = {
         ign: "KELRA",
         role: "Gold",
@@ -53,7 +56,42 @@ export const CardSkins = () => {
 
     return (
         <div className="disable-scrollbar mx-[4vw] mt-[8vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-            {showCard ? (
+            {sameAthletes?.map((athlete) => {
+                return (
+                    <>
+                        {showCard ? (
+                            <motion.div
+                                className="h-[36.4vw] w-[28vw]"
+                                {...appearCardEmptyAnimation} //TODO: Add differentiation between owned and unowned cards
+                            >
+                                <AthleteCard
+                                    color={athlete.teamData.colors}
+                                    ign={athlete.player}
+                                    opacity={{
+                                        wave: athlete.teamData.colors.wave,
+                                    }}
+                                    role={athlete.position[0]}
+                                    type={"basic"}
+                                    league={athlete.league}
+                                />
+                            </motion.div>
+                        ) : (
+                            <div className="h-[36.4vw] w-[28vw]">
+                                <motion.div
+                                    className="relative"
+                                    {...pulseAnimation}
+                                >
+                                    <img
+                                        className="h-full w-full"
+                                        src={AthleteSonner}
+                                    ></img>
+                                </motion.div>
+                            </div>
+                        )}
+                    </>
+                );
+            })}
+            {/* {showCard ? (
                 <motion.div
                     className="h-[36.4vw] w-[28vw]"
                     {...appearCardEmptyAnimation}
@@ -109,7 +147,7 @@ export const CardSkins = () => {
                         <img className="h-full w-full" src={AthleteSonner} />
                     </motion.div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
