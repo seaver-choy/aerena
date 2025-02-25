@@ -130,6 +130,7 @@ export interface Stats {
     competitionType: string;
 }
 export interface AverageStats {
+    league?: string;
     averageKills: number;
     averageDeaths: number;
     averageAssists: number;

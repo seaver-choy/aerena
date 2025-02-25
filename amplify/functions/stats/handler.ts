@@ -35,6 +35,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             */
             if (params?.[1] === "average") {
                 return await getAthleteAllStats(event);
+            } else if (params?.[0] === "league") {
+                return await getAthleteLeagueStats(event);
             } else {
                 return await getAthleteWeeklyStats(event);
             }
@@ -78,6 +80,104 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
     }
 };
 
+async function getAthleteLeagueStats(event: APIGatewayProxyEvent) {
+    const statsModel = conn!.model("AthleteStats");
+
+    const athleteId = parseInt(event.queryStringParameters!.athleteId!);
+    const params = event.pathParameters?.proxy?.split("/");
+    /*
+        params[0] = type
+    */
+
+    if (params !== undefined) {
+        try {
+            //check first if matches for that league exists for the player
+
+            const result = await statsModel.find({
+                athleteId: athleteId,
+                competitionType: params[1],
+            });
+
+            if (result.length > 0) {
+                const leagueStats = await statsModel.aggregate(
+                    [
+                        {
+                            $match: {
+                                athleteId: athleteId,
+                                competitionType: params[1],
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: "$league",
+                                league: {
+                                    $first: "$league",
+                                },
+                                averageKills: {
+                                    $avg: "$kills",
+                                },
+                                averageDeaths: {
+                                    $avg: "$deaths",
+                                },
+                                averageAssists: {
+                                    $avg: "$assists",
+                                },
+                                averagePoints: {
+                                    $avg: "$points",
+                                },
+                            },
+                        },
+                    ],
+                    { allowDiskUse: true, maxTimeMS: 60000 }
+                );
+
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Credentials": true,
+                    },
+                    body: JSON.stringify({
+                        leagueStats: leagueStats,
+                        results: true,
+                    }),
+                };
+            } else {
+                return {
+                    statusCode: 400,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Credentials": true,
+                    },
+                    body: JSON.stringify({ results: false }),
+                };
+            }
+        } catch (e) {
+            console.log(e);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "An error has occured while getting league stats",
+                }),
+            };
+        }
+    } else {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An error has occured while getting league stats",
+            }),
+        };
+    }
+}
 async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
     const statsModel = conn!.model("AthleteStats");
 
