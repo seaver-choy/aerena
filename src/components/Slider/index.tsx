@@ -55,7 +55,7 @@ export const Slider = ({ athletes, onCardIndexChange }: Props) => {
                 opacity: { wave: getBaseTeamColor().wave },
                 role: athletes[0].position[0],
                 league: athletes[0].league,
-                title: "DEFAULT CARD",
+                title: "Default Card",
                 type: "default",
             };
             const skinCards = athletes.map((athlete) => {
