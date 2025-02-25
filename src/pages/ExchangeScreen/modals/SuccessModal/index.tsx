@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import {
+    appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
 
 import LargeModal from "../../../../assets/modal/large.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import Sample from "../../../../assets/card/sample-one.svg";
 
 interface SuccessModalProps {
     onClose: () => void;
@@ -39,8 +41,20 @@ export const SuccessModal = ({ onClose }: SuccessModalProps) => {
                             </p>
                         </motion.div>
                     </div>
-                    <div className="mb-[4vw] flex h-[6.5vw]"></div>
-                    <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
+                    <div className="mb-[4vw] flex h-[76.5vw] flex-col items-center justify-center gap-[4vw]">
+                        <motion.div className="h-[46vw]" {...appearAnimation}>
+                            <img className="h-full" src={Sample} />
+                        </motion.div>
+                        <motion.div
+                            className="px-[8vw]"
+                            {...appearTextAnimation}
+                        >
+                            <p className="text-center font-montserrat text-[3.5vw] text-graydark">
+                                You have unlocked the K1NGKONG Skin! Equip it
+                                now in your Collection.
+                            </p>
+                        </motion.div>
+                    </div>
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
                             <motion.button
