@@ -3,22 +3,11 @@ import { PurchaseModal } from "../../modals/PurchaseModal";
 import { ConfirmModal } from "../../modals/ConfirmModal";
 import { AnimationModal } from "../../modals/AnimationModal";
 
-import { NewModal } from "../../modals/new";
-
 export const BasicBanner = () => {
     const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [showAnimationModal, setShowAnimationModal] =
         useState<boolean>(false);
-
-    const [showNewModal, setShowNewModal] = useState<boolean>(false);
-
-    const displayNewModal = () => {
-        setShowNewModal(true);
-    };
-    const closeNewModal = () => {
-        setShowNewModal(false);
-    };
 
     const displayPurchaseModal = () => {
         setShowPurchaseModal(true);
@@ -64,12 +53,6 @@ export const BasicBanner = () => {
             >
                 <p className="text-white">Animation </p>
             </button>
-            <button
-                className="h-[10vw] w-[30vw] bg-graylight"
-                onClick={displayNewModal}
-            >
-                <p className="text-white">New </p>
-            </button>
             {showPurchaseModal && (
                 <PurchaseModal
                     onCancel={closePurchaseModal}
@@ -85,7 +68,6 @@ export const BasicBanner = () => {
             {showAnimationModal && (
                 <AnimationModal onEnd={closeAnimationModal} />
             )}
-            {showNewModal && <NewModal onEnd={closeNewModal} />}
         </div>
     );
 };
