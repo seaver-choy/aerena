@@ -22,7 +22,7 @@ export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
     const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
 
     const handleIncrement = () => {
-        if (boosterQuantity < 10) setBoosterQuantity(boosterQuantity + 1);
+        if (boosterQuantity < 2) setBoosterQuantity(boosterQuantity + 1);
     };
 
     const handleDecrement = () => {

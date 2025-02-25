@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearTextAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
+import { PurchaseModal } from "../../modals/PurchaseModal";
 
 import ChoicePackBackground from "../../../../assets/background/pack-choice.svg";
 import Basic from "../../../../assets/pack/basic.svg";
@@ -15,8 +17,17 @@ import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 
 export const ChoiceBanner = () => {
+    const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
+
+    const displayPurchaseModal = () => {
+        setShowPurchaseModal(true);
+    };
+
+    const closePurchaseModal = () => {
+        setShowPurchaseModal(false);
+    };
     return (
-        <div className="relative mt-[4vw] h-[74.8vw]">
+        <div className="relative mt-[6vw] h-[74.8vw]">
             <img className="h-full w-full" src={ChoicePackBackground} />
             <motion.div
                 className="absolute -left-[6vw] top-[7vw] h-[64vw] -rotate-[5deg]"
@@ -64,31 +75,39 @@ export const ChoiceBanner = () => {
                     </motion.p>
                 </div>
             </div>
-            <div className="absolute bottom-[8vw] right-[12vw] flex flex-col gap-[2vw]">
+            <div className="absolute bottom-[8vw] right-[10vw] flex flex-col gap-[2vw]">
                 <motion.button
-                    className="relative h-[8vw] w-[38vw]"
+                    className="relative h-[10vw] w-[42vw]"
+                    onClick={displayPurchaseModal}
                     {...appearTextAnimation}
                 >
                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                        <img className="h-[3vw]" src={TGStarIcon}></img>
-                        <p className="pt-[0.5vw] font-russoone text-[3.2vw] text-white">
+                        <img className="h-[3.5vw]" src={TGStarIcon}></img>
+                        <p className="font-russoone text-[4.2vw] text-white">
                             30
                         </p>
                     </div>
                     <img className="h-full w-full" src={GoldButton} />
                 </motion.button>
                 <motion.button
-                    className="relative h-[8vw] w-[38vw]"
+                    className="relative h-[10vw] w-[42vw]"
+                    onClick={displayPurchaseModal}
                     {...appearTextAnimation}
                 >
                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                        <img className="h-[3vw]" src={BattlePointsIcon}></img>
-                        <p className="font-russoone text-[3.2vw] text-white">
+                        <img className="h-[3.5vw]" src={BattlePointsIcon}></img>
+                        <p className="font-russoone text-[3.5vw] text-white">
                             200,000
                         </p>
                     </div>
                     <img className="h-full w-full" src={BlackButton} />
                 </motion.button>
+                {showPurchaseModal && (
+                    <PurchaseModal
+                        onCancel={closePurchaseModal}
+                        onConfirm={closePurchaseModal}
+                    />
+                )}
             </div>
         </div>
     );

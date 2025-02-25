@@ -1,21 +1,13 @@
 import { useState } from "react";
-import { PurchaseModal } from "../../modals/PurchaseModal";
 import { ConfirmModal } from "../../modals/ConfirmModal";
 import { AnimationModal } from "../../modals/AnimationModal";
+import { SuccessModal } from "../../modals/SuccessModal";
 
 export const BasicBanner = () => {
-    const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [showAnimationModal, setShowAnimationModal] =
         useState<boolean>(false);
-
-    const displayPurchaseModal = () => {
-        setShowPurchaseModal(true);
-    };
-
-    const closePurchaseModal = () => {
-        setShowPurchaseModal(false);
-    };
+    const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
     const displayConfirmModal = () => {
         setShowConfirmModal(true);
@@ -33,32 +25,34 @@ export const BasicBanner = () => {
         setShowAnimationModal(false);
     };
 
+    const displaySuccessModal = () => {
+        setShowSuccessModal(true);
+    };
+
+    const closeSuccessModal = () => {
+        setShowSuccessModal(false);
+    };
+
     return (
         <div className="mt-[4vw] flex h-[50vw] flex-col items-center justify-center gap-[2vw] bg-graydark">
             <button
                 className="h-[10vw] w-[30vw] bg-graylight"
-                onClick={displayPurchaseModal}
-            >
-                <p className="text-white">Purchase </p>
-            </button>
-            <button
-                className="h-[10vw] w-[30vw] bg-graylight"
                 onClick={displayConfirmModal}
             >
-                <p className="text-white">Confirm </p>
+                <p className="text-white">Confirm</p>
             </button>
             <button
                 className="h-[10vw] w-[30vw] bg-graylight"
                 onClick={displayAnimationModal}
             >
-                <p className="text-white">Animation </p>
+                <p className="text-white">Animation</p>
             </button>
-            {showPurchaseModal && (
-                <PurchaseModal
-                    onCancel={closePurchaseModal}
-                    onConfirm={closePurchaseModal}
-                />
-            )}
+            <button
+                className="h-[10vw] w-[30vw] bg-graylight"
+                onClick={displaySuccessModal}
+            >
+                <p className="text-white">Success</p>
+            </button>
             {showConfirmModal && (
                 <ConfirmModal
                     onCancel={closeConfirmModal}
@@ -68,6 +62,7 @@ export const BasicBanner = () => {
             {showAnimationModal && (
                 <AnimationModal onEnd={closeAnimationModal} />
             )}
+            {showSuccessModal && <SuccessModal onClose={closeSuccessModal} />}
         </div>
     );
 };
