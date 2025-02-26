@@ -18,7 +18,10 @@ import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import { PackInfo, Skin } from "../../../../helpers/interfaces";
 import { useUsers } from "../../../../hooks/useUser";
-import { getAthleteChoices, getPackInfos } from "../../../../helpers/lambda.helper";
+import {
+    getAthleteChoices,
+    getPackInfos,
+} from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
 import { LoadingModal } from "../../modals/LoadingModal";
 import { ConfirmModal } from "../../modals/ConfirmModal";
@@ -29,7 +32,8 @@ export const ChoiceBanner = () => {
     const user = useUsers();
     const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
-    const [showAnimationModal, setShowAnimationModal] = useState<boolean>(false);
+    const [showAnimationModal, setShowAnimationModal] =
+        useState<boolean>(false);
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [packInfos, setPackInfos] = useState<PackInfo[]>(null);
     const [selectedPackInfo, setSelectedPackInfo] = useState<PackInfo>(null);
@@ -42,25 +46,31 @@ export const ChoiceBanner = () => {
 
     const getPackInfosData = async () => {
         const result = await getPackInfos(user.initDataRaw);
-        setPackInfos(result.filter((packInfo) => packInfo.packType === 'choice'));
+        setPackInfos(
+            result.filter((packInfo) => packInfo.packType === "choice")
+        );
     };
 
     const fetchAthleteChoices = async () => {
-        const result = await getAthleteChoices(selectedPackInfo.league, boosterQuantity, user.initDataRaw);
+        const result = await getAthleteChoices(
+            selectedPackInfo.league,
+            boosterQuantity,
+            user.initDataRaw
+        );
         setAthleteChoices(result);
         setChoicesIndex(0);
         isLoading(false);
-    }
+    };
 
     const handleAthleteChoice = async (athleteChoice: Skin) => {
         setAthleteChoice(athleteChoice);
         setShowSuccessModal(true);
-    }
+    };
 
     const closeSuccessModal = () => {
         setShowSuccessModal(false);
         goNext();
-    }
+    };
 
     const displayPurchaseModal = () => {
         setShowPurchaseModal(true);
@@ -74,7 +84,7 @@ export const ChoiceBanner = () => {
     const goNext = () => {
         setShowAnimationModal(false);
         const nextChoicesIndex = choicesIndex + 1;
-        if(nextChoicesIndex < athleteChoices.length){
+        if (nextChoicesIndex < athleteChoices.length) {
             setChoicesIndex(nextChoicesIndex);
             setShowAnimationModal(true);
         } else {
@@ -83,11 +93,10 @@ export const ChoiceBanner = () => {
             setAthleteChoice(null);
             setChoicesIndex(-1);
         }
-    }
+    };
 
     useEffect(() => {
-        if(choicesIndex != -1)
-            setShowAnimationModal(true);
+        if (choicesIndex != -1) setShowAnimationModal(true);
     }, [choicesIndex]);
 
     useEffect(() => {
@@ -98,97 +107,109 @@ export const ChoiceBanner = () => {
         <div className="mt-[6vw]">
             {packInfos != null ? (
                 packInfos?.map((packInfo) => (
-                <div key={packInfo.packId} className="relative h-[74.8vw]">
-                    <img className="h-full w-full" src={ChoicePackBackground} />
-                    <motion.div
-                        className="absolute -left-[6vw] top-[7vw] h-[64vw] -rotate-[5deg]"
-                        initial={{ opacity: 1, scale: 0.8, rotate: 0 }}
-                        animate={{ opacity: 1, scale: 1, rotate: -5 }}
-                        transition={{
-                            scale: {
-                                duration: 0.5,
-                                type: "spring",
-                                stiffness: 300,
-                                damping: 20,
-                            },
-                        }}
-                    >
-                        <img className="h-full" src={PH15ChoicePack} />
-                    </motion.div>
-                    <motion.div
-                        className="absolute right-[3vw] top-[2vw] h-[15vw] w-[15vw]"
-                        {...appearAnimation}
-                    >
-                        <img className="h-full w-full" src={getStickerImage(packInfo.league)} />
-                    </motion.div>
-                    <div className="absolute right-[4vw] top-[10vw] flex w-[50vw] flex-col">
+                    <div key={packInfo.packId} className="relative h-[74.8vw]">
+                        <img
+                            className="h-full w-full"
+                            src={ChoicePackBackground}
+                        />
                         <motion.div
-                            className="h-[5vw] w-full"
-                            {...slideRightTextAnimation}
+                            className="absolute -left-[6vw] top-[7vw] h-[64vw] -rotate-[5deg]"
+                            initial={{ opacity: 1, scale: 0.8, rotate: 0 }}
+                            animate={{ opacity: 1, scale: 1, rotate: -5 }}
+                            transition={{
+                                scale: {
+                                    duration: 0.5,
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 20,
+                                },
+                            }}
                         >
-                            <img className="h-full" src={AerenaTextLogo} />
+                            <img className="h-full" src={PH15ChoicePack} />
                         </motion.div>
-                        <div className="mt-[1vw] flex w-full">
-                            <motion.p
-                                className="text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[6vw] font-normal text-transparent"
+                        <motion.div
+                            className="absolute right-[3vw] top-[2vw] h-[15vw] w-[15vw]"
+                            {...appearAnimation}
+                        >
+                            <img
+                                className="h-full w-full"
+                                src={getStickerImage(packInfo.league)}
+                            />
+                        </motion.div>
+                        <div className="absolute right-[4vw] top-[10vw] flex w-[50vw] flex-col">
+                            <motion.div
+                                className="h-[5vw] w-full"
                                 {...slideRightTextAnimation}
                             >
-                                Choice Pack
-                            </motion.p>
+                                <img className="h-full" src={AerenaTextLogo} />
+                            </motion.div>
+                            <div className="mt-[1vw] flex w-full">
+                                <motion.p
+                                    className="text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[6vw] font-normal text-transparent"
+                                    {...slideRightTextAnimation}
+                                >
+                                    Choice Pack
+                                </motion.p>
+                            </div>
+                            <div className="flex w-full">
+                                <motion.p
+                                    className="font-montserrat text-[3.5vw] text-graydark"
+                                    {...slideRightTextAnimation}
+                                >
+                                    Choose a skin with the Choice Pack. One
+                                    pick, two possibilities.
+                                </motion.p>
+                            </div>
                         </div>
-                        <div className="flex w-full">
-                            <motion.p
-                                className="font-montserrat text-[3.5vw] text-graydark"
-                                {...slideRightTextAnimation}
+                        <div className="absolute bottom-[6vw] right-[10vw] flex flex-col gap-[2vw]">
+                            <motion.button
+                                className="relative h-[10vw] w-[42vw]"
+                                onClick={() => {
+                                    setSelectedPackInfo(packInfo);
+                                    setCostType("star");
+                                    displayPurchaseModal();
+                                }}
+                                {...appearTextAnimation}
                             >
-                                Choose a skin with the Choice Pack. One pick,
-                                two possibilities.
-                            </motion.p>
+                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                    <img
+                                        className="h-[3.5vw]"
+                                        src={TGStarIcon}
+                                    ></img>
+                                    <p className="mt-[0.6vw] font-russoone text-[4.2vw] text-white">
+                                        {packInfo.starCost.toLocaleString()}
+                                    </p>
+                                </div>
+                                <img
+                                    className="h-full w-full"
+                                    src={GoldButton}
+                                />
+                            </motion.button>
+                            <motion.button
+                                className="relative h-[10vw] w-[42vw]"
+                                onClick={() => {
+                                    setSelectedPackInfo(packInfo);
+                                    setCostType("bp");
+                                    displayPurchaseModal();
+                                }}
+                                {...appearTextAnimation}
+                            >
+                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                    <img
+                                        className="h-[3.5vw]"
+                                        src={BattlePointsIcon}
+                                    ></img>
+                                    <p className="font-russoone text-[3.5vw] text-white">
+                                        {packInfo.bpCost.toLocaleString()}
+                                    </p>
+                                </div>
+                                <img
+                                    className="h-full w-full"
+                                    src={BlackButton}
+                                />
+                            </motion.button>
                         </div>
                     </div>
-                    <div className="absolute bottom-[6vw] right-[10vw] flex flex-col gap-[2vw]">
-                        <motion.button
-                            className="relative h-[10vw] w-[42vw]"
-                            onClick={() => {
-                                setSelectedPackInfo(packInfo);
-                                setCostType('star');
-                                displayPurchaseModal();
-                            }}
-                            {...appearTextAnimation}
-                        >
-                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                <img
-                                    className="h-[3.5vw]"
-                                    src={TGStarIcon}
-                                ></img>
-                                <p className="mt-[0.4vw] font-russoone text-[4.2vw] text-white">
-                                    {packInfo.starCost.toLocaleString()}
-                                </p>
-                            </div>
-                            <img className="h-full w-full" src={GoldButton} />
-                        </motion.button>
-                        <motion.button
-                            className="relative h-[10vw] w-[42vw]"
-                            onClick={() => {
-                                setSelectedPackInfo(packInfo);
-                                setCostType('bp');
-                                displayPurchaseModal();
-                            }}
-                            {...appearTextAnimation}
-                        >
-                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                <img
-                                    className="h-[3.5vw]"
-                                    src={BattlePointsIcon}
-                                ></img>
-                                <p className="font-russoone text-[3.5vw] text-white">
-                                    {packInfo.bpCost.toLocaleString()}
-                                </p>
-                            </div>
-                            <img className="h-full w-full" src={BlackButton} />
-                        </motion.button>
-                    </div>
-                </div>
                 ))
             ) : (
                 <div className="h-[74.8vw]">
@@ -228,10 +249,18 @@ export const ChoiceBanner = () => {
                     }}
                 />
             )}
-             {showAnimationModal && (
-                <AnimationModal athleteChoices={athleteChoices[choicesIndex]} handleAthleteChoice={handleAthleteChoice}/>
-             )}
-             {showSuccessModal && <SuccessModal athleteChoice={athleteChoice} onClose={closeSuccessModal} />}
+            {showAnimationModal && (
+                <AnimationModal
+                    athleteChoices={athleteChoices[choicesIndex]}
+                    handleAthleteChoice={handleAthleteChoice}
+                />
+            )}
+            {showSuccessModal && (
+                <SuccessModal
+                    athleteChoice={athleteChoice}
+                    onClose={closeSuccessModal}
+                />
+            )}
             {loading && <LoadingModal />}
         </div>
     );
