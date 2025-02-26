@@ -661,6 +661,7 @@ async function transformToSkin(athlete: Athlete) {
             main: 1,
             light: 1,
             dark: 1,
+            wings: 1,
             accent: 1,
             details: 1,
             wave: 1
