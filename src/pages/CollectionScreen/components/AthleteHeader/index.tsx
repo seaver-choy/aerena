@@ -10,39 +10,29 @@ import { Athlete, AverageStats } from "../../../../helpers/interfaces";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
-
+import { getBaseTeamColor } from "../../../../helpers/athletes";
 interface Props {
     athlete: Athlete;
     averageStats: AverageStats;
 }
 export const AthleteHeader = ({ athlete, averageStats }: Props) => {
     const [showAthleteHeader, setShowAthleteHeader] = useState(false);
-
-    const team = {
-        main: "#333",
-        light: "#D8A956",
-        dark: "#AB750F",
-        wings: "#D8A956",
-        accent: "#fff",
-        details: "#fff",
-        wave: "0.15",
-    };
     console.log(athlete);
     const ign = athlete.player;
     const role = athlete.position[0];
 
     const color = {
-        main: team.main,
-        light: team.light,
-        dark: team.dark,
-        wings: team.wings,
-        accent: team.accent,
-        details: team.details,
-        wave: team.wave,
+        main: getBaseTeamColor().main,
+        light: getBaseTeamColor().light,
+        dark: getBaseTeamColor().dark,
+        wings: getBaseTeamColor().wings,
+        accent: getBaseTeamColor().accent,
+        details: getBaseTeamColor().details,
+        wave: getBaseTeamColor().wave,
     };
 
     const opacity = {
-        wave: team.wave,
+        wave: getBaseTeamColor().wave,
     };
 
     useEffect(() => {
