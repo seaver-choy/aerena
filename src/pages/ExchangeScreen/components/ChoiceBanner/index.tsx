@@ -11,36 +11,94 @@ import { PurchaseModal } from "../../modals/PurchaseModal";
 import ChoicePackSonner from "../../../../assets/sonner/pack-choice.svg";
 import ChoicePackBackground from "../../../../assets/background/pack-choice.svg";
 import PH15ChoicePack from "../../../../assets/pack/choice-ph15.svg";
-import PH15Sticker from "../../../../assets/sticker/ph15.svg";
 import AerenaTextLogo from "../../../../assets/logo/aerena-text.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import BlackButton from "../../../../assets/button/black.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import { PackInfo, Skin } from "../../../../helpers/interfaces";
+import { useUsers } from "../../../../hooks/useUser";
+import { getAthleteChoices, getPackInfos } from "../../../../helpers/lambda.helper";
+import { getStickerImage } from "../../../../helpers/images";
+import { LoadingModal } from "../../modals/LoadingModal";
+import { ConfirmModal } from "../../modals/ConfirmModal";
+import { AnimationModal } from "../../modals/AnimationModal";
+import { SuccessModal } from "../../modals/SuccessModal";
 
 export const ChoiceBanner = () => {
-    const [showChoicePack, setShowChoicePack] = useState(false);
+    const user = useUsers();
     const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
+    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+    const [showAnimationModal, setShowAnimationModal] = useState<boolean>(false);
+    const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+    const [packInfos, setPackInfos] = useState<PackInfo[]>(null);
+    const [selectedPackInfo, setSelectedPackInfo] = useState<PackInfo>(null);
+    const [costType, setCostType] = useState<string>(null);
+    const [boosterQuantity, setBoosterQuantity] = useState<number>(null);
+    const [loading, isLoading] = useState<boolean>(false);
+    const [athleteChoices, setAthleteChoices] = useState<Skin[][]>(null);
+    const [choicesIndex, setChoicesIndex] = useState<number>(-1);
+    const [athleteChoice, setAthleteChoice] = useState<Skin>(null);
+
+    const getPackInfosData = async () => {
+        const result = await getPackInfos(user.initDataRaw);
+        setPackInfos(result.filter((packInfo) => packInfo.packType === 'choice'));
+    };
+
+    const fetchAthleteChoices = async () => {
+        const result = await getAthleteChoices(selectedPackInfo.league, boosterQuantity, user.initDataRaw);
+        setAthleteChoices(result);
+        setChoicesIndex(0);
+        isLoading(false);
+    }
+
+    const handleAthleteChoice = async (athleteChoice: Skin) => {
+        setAthleteChoice(athleteChoice);
+        setShowSuccessModal(true);
+    }
+
+    const closeSuccessModal = () => {
+        setShowSuccessModal(false);
+        goNext();
+    }
 
     const displayPurchaseModal = () => {
         setShowPurchaseModal(true);
     };
 
-    const closePurchaseModal = () => {
-        setShowPurchaseModal(false);
+    const reset = () => {
+        setSelectedPackInfo(null);
+        setCostType(null);
     };
 
+    const goNext = () => {
+        setShowAnimationModal(false);
+        const nextChoicesIndex = choicesIndex + 1;
+        if(nextChoicesIndex < athleteChoices.length){
+            setChoicesIndex(nextChoicesIndex);
+            setShowAnimationModal(true);
+        } else {
+            reset();
+            setAthleteChoices(null);
+            setAthleteChoice(null);
+            setChoicesIndex(-1);
+        }
+    }
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowChoicePack(true);
-        }, 1000);
-        return () => clearTimeout(timer);
+        if(choicesIndex != -1)
+            setShowAnimationModal(true);
+    }, [choicesIndex]);
+
+    useEffect(() => {
+        getPackInfosData();
     }, []);
 
     return (
         <div className="mt-[6vw]">
-            {showChoicePack ? (
-                <div className="relative h-[74.8vw]">
+            {packInfos != null ? (
+                packInfos?.map((packInfo) => (
+                <div key={packInfo.packId} className="relative h-[74.8vw]">
                     <img className="h-full w-full" src={ChoicePackBackground} />
                     <motion.div
                         className="absolute -left-[6vw] top-[7vw] h-[64vw] -rotate-[5deg]"
@@ -61,7 +119,7 @@ export const ChoiceBanner = () => {
                         className="absolute right-[3vw] top-[2vw] h-[15vw] w-[15vw]"
                         {...appearAnimation}
                     >
-                        <img className="h-full w-full" src={PH15Sticker} />
+                        <img className="h-full w-full" src={getStickerImage(packInfo.league)} />
                     </motion.div>
                     <div className="absolute right-[4vw] top-[10vw] flex w-[50vw] flex-col">
                         <motion.div
@@ -91,7 +149,11 @@ export const ChoiceBanner = () => {
                     <div className="absolute bottom-[6vw] right-[10vw] flex flex-col gap-[2vw]">
                         <motion.button
                             className="relative h-[10vw] w-[42vw]"
-                            onClick={displayPurchaseModal}
+                            onClick={() => {
+                                setSelectedPackInfo(packInfo);
+                                setCostType('star');
+                                displayPurchaseModal();
+                            }}
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
@@ -100,14 +162,18 @@ export const ChoiceBanner = () => {
                                     src={TGStarIcon}
                                 ></img>
                                 <p className="mt-[0.4vw] font-russoone text-[4.2vw] text-white">
-                                    30
+                                    {packInfo.starCost.toLocaleString()}
                                 </p>
                             </div>
                             <img className="h-full w-full" src={GoldButton} />
                         </motion.button>
                         <motion.button
                             className="relative h-[10vw] w-[42vw]"
-                            onClick={displayPurchaseModal}
+                            onClick={() => {
+                                setSelectedPackInfo(packInfo);
+                                setCostType('bp');
+                                displayPurchaseModal();
+                            }}
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
@@ -116,19 +182,14 @@ export const ChoiceBanner = () => {
                                     src={BattlePointsIcon}
                                 ></img>
                                 <p className="font-russoone text-[3.5vw] text-white">
-                                    200,000
+                                    {packInfo.bpCost.toLocaleString()}
                                 </p>
                             </div>
                             <img className="h-full w-full" src={BlackButton} />
                         </motion.button>
-                        {showPurchaseModal && (
-                            <PurchaseModal
-                                onCancel={closePurchaseModal}
-                                onConfirm={closePurchaseModal}
-                            />
-                        )}
                     </div>
                 </div>
+                ))
             ) : (
                 <div className="h-[74.8vw]">
                     <motion.div className="relative" {...pulseAnimation}>
@@ -136,6 +197,42 @@ export const ChoiceBanner = () => {
                     </motion.div>
                 </div>
             )}
+            {showPurchaseModal && (
+                <PurchaseModal
+                    packInfo={selectedPackInfo}
+                    costType={costType}
+                    onCancel={() => {
+                        setShowPurchaseModal(false);
+                        reset();
+                    }}
+                    onConfirm={(boosterQuantity) => {
+                        setShowPurchaseModal(false);
+                        setShowConfirmModal(true);
+                        setBoosterQuantity(boosterQuantity);
+                    }}
+                />
+            )}
+            {showConfirmModal && (
+                <ConfirmModal
+                    packInfo={selectedPackInfo}
+                    costType={costType}
+                    boosterQuantity={boosterQuantity}
+                    onCancel={() => {
+                        setShowConfirmModal(false);
+                        reset();
+                    }}
+                    onConfirm={() => {
+                        setShowConfirmModal(false);
+                        isLoading(true);
+                        fetchAthleteChoices();
+                    }}
+                />
+            )}
+             {showAnimationModal && (
+                <AnimationModal athleteChoices={athleteChoices[choicesIndex]} handleAthleteChoice={handleAthleteChoice}/>
+             )}
+             {showSuccessModal && <SuccessModal athleteChoice={athleteChoice} onClose={closeSuccessModal} />}
+            {loading && <LoadingModal />}
         </div>
     );
 };

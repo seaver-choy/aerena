@@ -45,7 +45,7 @@ export const AthleteCard = ({
     id = -1,
 }: Props) => {
     return (
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full backface-hidden">
             <div className="absolute h-full w-full">
                 {type !== undefined && type === "basic" ? (
                     <GlowBasic id={id} />
