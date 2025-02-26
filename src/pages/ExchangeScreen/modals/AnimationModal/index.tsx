@@ -180,7 +180,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                     {animationStage === 3 && (
                         <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
                             <motion.div
-                                className="relative h-[80vw] backface-hidden"
+                                className="relative h-[80vw] w-[62vw] backface-hidden"
                                 {...(flipAthlete
                                     ? flipLeftAnimation
                                     : bobbleAnimation)}
@@ -203,7 +203,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                         <div className="relative mb-[4vw] flex h-[101vw] flex-col items-center justify-center">
                             <div className="flex h-[81vw] flex-row items-center">
                                 <motion.div
-                                    className="flex h-[50vw] items-center justify-start"
+                                    className="flex h-[50vw] w-[38vw] items-center justify-start"
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -224,7 +224,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                                     <img className="h-full" src={SampleOne} />
                                 </motion.div>
                                 <motion.div
-                                    className="flex h-[50vw] items-start justify-end"
+                                    className="flex h-[50vw] w-[38vw] items-start justify-end"
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -257,12 +257,14 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                         </div>
                     )}
                     {animationStage === 5 && (
-                        <motion.div
-                            className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
-                            {...appearAnimation}
-                        >
-                            <img className="h-[80vw]" src={selectedSample} />
-                        </motion.div>
+                        <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            <motion.div
+                                className="relative h-[80vw] w-[62vw] backface-hidden"
+                                {...appearAnimation}
+                            >
+                                <img className="h-full" src={selectedSample} />
+                            </motion.div>
+                        </div>
                     )}
                     {/* Button Functions */}
                     <div className="flex h-[10vw] items-center justify-center">
