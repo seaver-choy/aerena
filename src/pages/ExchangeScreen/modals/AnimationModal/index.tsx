@@ -22,6 +22,7 @@ import Basic from "../../../../assets/pack/basic.svg";
 import Back from "../../../../assets/card/back.svg";
 import SampleOne from "../../../../assets/card/sample-one.svg";
 import SampleTwo from "../../../../assets/card/sample-two.svg";
+import OwnedCard from "../../../../assets/card/owned.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 
@@ -177,21 +178,32 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                         </motion.div>
                     )}
                     {animationStage === 3 && (
-                        <motion.div
-                            className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
-                            {...(flipAthlete
-                                ? flipLeftAnimation
-                                : bobbleAnimation)}
-                            onAnimationComplete={() => setFlipAthlete(false)}
-                        >
-                            <img className="h-[80vw]" src={getAthleteCard()} />
-                        </motion.div>
+                        <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            <motion.div
+                                className="relative h-[80vw] w-[62vw] backface-hidden"
+                                {...(flipAthlete
+                                    ? flipLeftAnimation
+                                    : bobbleAnimation)}
+                                onAnimationComplete={() =>
+                                    setFlipAthlete(false)
+                                }
+                            >
+                                <img
+                                    className="absolute h-full"
+                                    src={OwnedCard}
+                                />
+                                <img
+                                    className="h-full"
+                                    src={getAthleteCard()}
+                                />
+                            </motion.div>
+                        </div>
                     )}
                     {animationStage === 4 && (
                         <div className="relative mb-[4vw] flex h-[101vw] flex-col items-center justify-center">
                             <div className="flex h-[81vw] flex-row items-center">
                                 <motion.div
-                                    className="flex h-[50vw] items-center justify-start"
+                                    className="flex h-[50vw] w-[38vw] items-center justify-start"
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -212,7 +224,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                                     <img className="h-full" src={SampleOne} />
                                 </motion.div>
                                 <motion.div
-                                    className="flex h-[50vw] items-start justify-end"
+                                    className="flex h-[50vw] w-[38vw] items-start justify-end"
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -245,12 +257,14 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                         </div>
                     )}
                     {animationStage === 5 && (
-                        <motion.div
-                            className="mb-[4vw] flex h-[101vw] items-center justify-center backface-hidden"
-                            {...appearAnimation}
-                        >
-                            <img className="h-[80vw]" src={selectedSample} />
-                        </motion.div>
+                        <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            <motion.div
+                                className="relative h-[80vw] w-[62vw] backface-hidden"
+                                {...appearAnimation}
+                            >
+                                <img className="h-full" src={selectedSample} />
+                            </motion.div>
+                        </div>
                     )}
                     {/* Button Functions */}
                     <div className="flex h-[10vw] items-center justify-center">

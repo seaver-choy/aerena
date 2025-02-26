@@ -42,7 +42,7 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
     });
     const [skinTitle, setSkinTitle] = useState<string>("Default Card");
     const handleViewPlayerProfile = () => {
-        navigate(`/athlete`, {
+        navigate(`athlete`, {
             state: {
                 athlete,
                 sameAthletes,
