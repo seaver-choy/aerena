@@ -20,17 +20,18 @@ import Dust from "../../../../assets/others/dust-gold.svg";
 import Glow from "../../../../assets/others/glow-radial.svg";
 import Basic from "../../../../assets/pack/basic.svg";
 import Back from "../../../../assets/card/back.svg";
-import SampleOne from "../../../../assets/card/sample-one.svg";
-import SampleTwo from "../../../../assets/card/sample-two.svg";
-import OwnedCard from "../../../../assets/card/owned.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
+import { Skin } from "../../../../helpers/interfaces";
+import { AthleteCard } from "../../../../components/AthleteCard";
+// import OwnedCard from "../../../../assets/card/owned.svg";
 
 interface AnimationModalProps {
-    onEnd: () => void;
+    athleteChoices: Skin[];
+    handleAthleteChoice: (athleteChoice: Skin) => void;
 }
 
-export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
+export const AnimationModal = ({ athleteChoices, handleAthleteChoice }: AnimationModalProps) => {
     // 0: Initial, 1: Open Pack, 2: Back Card, 3: Athlete Card, 4: Card Selection, 5: Confirm Selection
     const [animationStage, setAnimationStage] = useState(0);
     const [animationDust, setAnimationDust] = useState(false);
@@ -43,7 +44,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
     const [animationState, setAnimationState] = useState("appear");
     const [firstState, setFirstState] = useState("default");
     const [secondState, setSecondState] = useState("default");
-    const [selectedSample, setSelectedSample] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(null);
 
     const handleButtonClick = () => {
         if (animationStage === 0) {
@@ -69,20 +70,12 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
         } else if (animationStage === 4) {
             setAnimationStage(5);
         } else if (animationStage === 5) {
-            onEnd();
+            handleAthleteChoice(athleteChoices[selectedIndex]);
         }
     };
 
     const handlePackOpening = () => {
         setAnimationStage(2);
-    };
-
-    const getAthleteCard = () => {
-        if (numberOfTimes === 1) {
-            return SampleOne;
-        } else {
-            return SampleTwo;
-        }
     };
 
     const getButtonText = () => {
@@ -112,7 +105,23 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
         };
     }, []);
 
-    return (
+    useEffect(() => {
+        if(athleteChoices != null) {
+            setAnimationStage(0);
+            setAnimationDust(false);
+            setAnimationGlow(false);
+            setAnimationBack(false);
+            setFlipBack(false);
+            setFlipAthlete(false);
+            setNumberOfTimes(1);
+            setAnimationState("appear");
+            setFirstState("default");
+            setSecondState("default");
+            setSelectedIndex(null);
+        }
+    }, [athleteChoices]);
+
+    return athleteChoices != null && (
         <div className="fixed inset-0 z-20">
             <div className="relative flex h-full w-full items-center justify-center">
                 <div className="h-full w-full bg-graydark opacity-95" />
@@ -181,21 +190,22 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                         <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
                             <motion.div
                                 className="relative h-[80vw] w-[62vw] backface-hidden"
-                                {...(flipAthlete
-                                    ? flipLeftAnimation
-                                    : bobbleAnimation)}
-                                onAnimationComplete={() =>
-                                    setFlipAthlete(false)
-                                }
-                            >
-                                <img
-                                    className="absolute h-full"
-                                    src={OwnedCard}
-                                />
-                                <img
-                                    className="h-full"
-                                    src={getAthleteCard()}
-                                />
+                            {...(flipAthlete
+                                ? flipLeftAnimation
+                                : bobbleAnimation)}
+                            onAnimationComplete={() => setFlipAthlete(false)}
+                        >
+                            {/* <img className="h-[80vw]" src={getAthleteCard()} /> */}
+                            <AthleteCard
+                                color={athleteChoices[numberOfTimes-1].teamData.colors}
+                                ign={athleteChoices[numberOfTimes-1].player}
+                                opacity={{
+                                    wave: athleteChoices[numberOfTimes-1].teamData.colors.wave,
+                                }}
+                                role={athleteChoices[numberOfTimes-1].position[0]}
+                                type={"basic"}
+                                league={athleteChoices[numberOfTimes-1].league}
+                            />
                             </motion.div>
                         </div>
                     )}
@@ -204,6 +214,10 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                             <div className="flex h-[81vw] flex-row items-center">
                                 <motion.div
                                     className="flex h-[50vw] w-[38vw] items-center justify-start"
+                                    onClick={() => {
+                                        handleFirstSelection();
+                                        setSelectedIndex(0); // Store the selected sample
+                                    }}
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -211,20 +225,34 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                                           : firstState === "scaleUp"
                                             ? scaleUpAnimation
                                             : scaleDownAnimation)}
-                                    onClick={() => {
-                                        handleFirstSelection();
-                                        setSelectedSample(SampleOne); // Store the selected sample
-                                    }}
                                     onAnimationComplete={() => {
                                         if (animationState === "appear") {
                                             setAnimationState("bobble");
                                         }
                                     }}
                                 >
-                                    <img className="h-full" src={SampleOne} />
+                                    {/* <img
+                                        className="absolute h-full"
+                                        src={OwnedCard}
+                                    /> */}
+                                    <AthleteCard
+                                        color={athleteChoices[0].teamData.colors}
+                                        ign={athleteChoices[0].player}
+                                        opacity={{
+                                            wave: athleteChoices[0].teamData.colors.wave,
+                                        }}
+                                        role={athleteChoices[0].position[0]}
+                                        type={"basic"}
+                                        league={athleteChoices[0].league}
+                                        id={0}
+                                    />
                                 </motion.div>
                                 <motion.div
                                     className="flex h-[50vw] w-[38vw] items-start justify-end"
+                                    onClick={() => {
+                                        handleSecondSelection();
+                                        setSelectedIndex(1); // Store the selected sample
+                                    }}
                                     {...(animationState === "appear"
                                         ? appearAnimation
                                         : animationState === "bobble"
@@ -232,28 +260,25 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                                           : secondState === "scaleUp"
                                             ? scaleUpAnimation
                                             : scaleDownAnimation)}
-                                    onClick={() => {
-                                        handleSecondSelection();
-                                        setSelectedSample(SampleTwo); // Store the selected sample
-                                    }}
                                     onAnimationComplete={() => {
                                         if (animationState === "appear") {
                                             setAnimationState("bobble");
                                         }
                                     }}
                                 >
-                                    <img className="h-full" src={SampleTwo} />
+                                    <AthleteCard
+                                        color={athleteChoices[1].teamData.colors}
+                                        ign={athleteChoices[1].player}
+                                        opacity={{
+                                            wave: athleteChoices[1].teamData.colors.wave,
+                                        }}
+                                        role={athleteChoices[1].position[0]}
+                                        type={"basic"}
+                                        league={athleteChoices[1].league}
+                                        id={1}
+                                    />
                                 </motion.div>
                             </div>
-                            <motion.div
-                                className="flex h-[20vw] items-center px-[4vw] text-center"
-                                {...appearTextAnimation}
-                            >
-                                <p className="font-russoone text-[4vw] font-normal text-white">
-                                    Tap the skin you wish to select. Only one
-                                    can be chosen.
-                                </p>
-                            </motion.div>
                         </div>
                     )}
                     {animationStage === 5 && (
@@ -262,7 +287,17 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                                 className="relative h-[80vw] w-[62vw] backface-hidden"
                                 {...appearAnimation}
                             >
-                                <img className="h-full" src={selectedSample} />
+                                <AthleteCard
+                                    color={athleteChoices[selectedIndex].teamData.colors}
+                                    ign={athleteChoices[selectedIndex].player}
+                                    opacity={{
+                                        wave: athleteChoices[selectedIndex].teamData.colors.wave,
+                                    }}
+                                    role={athleteChoices[selectedIndex].position[0]}
+                                    type={"basic"}
+                                    league={athleteChoices[selectedIndex].league}
+                                    id={2}
+                                />
                             </motion.div>
                         </div>
                     )}
@@ -318,18 +353,32 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                             </motion.button>
                         )}
                         {animationStage === 4 && (
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                onClick={handleButtonClick}
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
-                                        Select
+                            selectedIndex == null ? (
+                                <motion.div
+                                    className="flex h-[20vw] items-center px-[4vw] text-center"
+                                    {...appearTextAnimation}
+                                >
+                                    <p className="font-russoone text-[4vw] font-normal text-white">
+                                        Tap the skin you wish to select. Only one
+                                        can be chosen.
                                     </p>
-                                </div>
-                            </motion.button>
+                                </motion.div>
+                            ) 
+                            :
+                            (
+                                <motion.button
+                                    className="relative flex h-full w-full justify-center"
+                                    onClick={handleButtonClick}
+                                    {...appearTextAnimation}
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                        <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            Select
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            )
                         )}
                         {animationStage === 5 && (
                             <div className="flex flex-row gap-[4vw]">

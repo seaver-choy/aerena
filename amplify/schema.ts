@@ -15,6 +15,7 @@ export const tokenSchema = new mongoose.Schema({
 
 export const athleteSchema = new mongoose.Schema(
     {
+        athleteId: Number,
         player: String,
         displayName: String,
         team: String,
@@ -99,6 +100,28 @@ export const teamProfileSchema = new mongoose.Schema(
     },
     {
         collection: "teamprofiles",
+    }
+);
+
+export const skinSchema = new mongoose.Schema(
+    {
+    skinId: { type: String, default: "0" },
+    athleteId: Number,
+    player: String,
+    position: [String],
+    league: String,
+    type: String,
+    teamData: {
+        colors: {
+            main: String,
+            light: String,
+            dark: String,
+            accent: String,
+            details: String,
+            wave: String,
+        },
+    },
+    isEquipped: { type: Boolean, default: false },
     }
 );
 
@@ -213,6 +236,7 @@ export const userSchema = new mongoose.Schema(
             default: null,
         },
         hasBeenReset: { type: Boolean },
+        skins: [skinSchema],
     },
     {
         timestamps: true,

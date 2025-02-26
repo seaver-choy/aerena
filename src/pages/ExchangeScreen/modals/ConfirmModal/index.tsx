@@ -9,13 +9,18 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import StarsIcon from "../../../../assets/icon/tg-star-gold.svg";
+import { PackInfo } from "../../../../helpers/interfaces";
 
 interface ConfirmModalProps {
+    packInfo: PackInfo;
+    costType: string;
+    boosterQuantity: number;
     onCancel: () => void;
     onConfirm: () => void;
 }
 
-export const ConfirmModal = ({ onCancel, onConfirm }: ConfirmModalProps) => {
+export const ConfirmModal = ({ packInfo, costType, boosterQuantity, onCancel, onConfirm }: ConfirmModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -38,15 +43,15 @@ export const ConfirmModal = ({ onCancel, onConfirm }: ConfirmModalProps) => {
                     <div className="mb-[4vw] flex h-[55vw] flex-col items-center justify-center px-[4vw]">
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                You are about to purchase 5 Basic Packs for
+                                You are about to purchase {boosterQuantity} Basic Packs for
                             </p>
                             <div className="my-[1.5vw] flex justify-center gap-[2vw]">
                                 <img
                                     className="mt-[2.5vw] h-[7.2vw]"
-                                    src={BattlePointsIcon}
+                                    src={costType === 'star' ? StarsIcon : BattlePointsIcon}
                                 />
                                 <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
-                                    5000
+                                    {(costType === 'star' ? packInfo.starCost * boosterQuantity : packInfo.bpCost * boosterQuantity).toLocaleString()}
                                 </p>
                             </div>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">

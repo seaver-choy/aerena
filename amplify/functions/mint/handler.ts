@@ -1,9 +1,10 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import { athleteSchema, counterSchema, userSchema } from "../../schema";
+import { athleteSchema, counterSchema, teamSchema, userSchema } from "../../schema";
 import { InventoryItem } from "../../interface";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
+
 
 interface Token {
     tokenId: number;
@@ -13,6 +14,35 @@ interface Token {
     position: string[];
     img: string;
     packId: string;
+}
+
+interface Skin {
+    skinId: string;
+    athleteId: number;
+    player: string;
+    position: string[];
+    league: string;
+    type: string;
+    teamData: {
+        colors: {
+            main: string;
+            light: string;
+            dark: string;
+            accent: string;
+            details: string;
+            wave: string;
+        };
+    };
+    isEquipped: boolean;
+}
+
+interface Athlete {
+    athleteId: number;
+    player: string;
+    team: string;
+    position: [string];
+    league: string;
+    type: string;
 }
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
@@ -27,11 +57,14 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 .asPromise();
             conn.model("Athletes", athleteSchema);
             conn.model("Users", userSchema);
+            conn.model("Teams", teamSchema);
             conn.model("Counter", counterSchema);
         }
         switch (event.httpMethod) {
             case "GET":
                 return await getAthletes();
+            case "POST":
+                return await getAthleteChoices(event);
             case "PUT":
                 return await mintPlayers(event);
             default:
@@ -618,6 +651,33 @@ async function mintPlayers(event: APIGatewayProxyEvent) {
     }
 }
 
+async function transformToSkin(athlete: Athlete) {
+    const teamModel = conn!.model("Teams");
+    const tournament = await teamModel.findOne({
+        key: athlete.team,
+        league: athlete.league
+    }, {
+        colors: {
+            main: 1,
+            light: 1,
+            dark: 1,
+            accent: 1,
+            details: 1,
+            wave: 1
+        }
+    });
+    return {
+        skinId: "0",
+        athleteId: athlete.athleteId,
+        player: athlete.player,
+        position: athlete.position,
+        league: athlete.league,
+        type: athlete.type,
+        teamData: {colors: tournament?.colors},
+        isEquipped: false
+    };
+};
+
 //for getting mintable dream athletes (not user's dream athletes)
 async function getAthletes() {
     const athleteModel = conn!.model("Athletes");
@@ -642,5 +702,50 @@ async function getAthletes() {
             "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
         },
         body: JSON.stringify(result),
+    };
+}
+
+async function getAthleteChoices(event: APIGatewayProxyEvent) {
+    const athleteModel = conn!.model("Athletes");
+
+    const payload = JSON.parse(JSON.parse(event.body!));
+    const allResult = await athleteModel.find({league: payload.league});
+
+    if (!allResult) {
+        return {
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify("No athletes found"),
+        };
+    }
+    const selectedPairs: Skin[][] = [];
+
+    for (let i = 0; i < payload.boosterQuantity; i++) {
+        const availableAthletes = [...allResult];
+        
+        const index1 = Math.floor(Math.random() * availableAthletes.length);
+        const firstAthlete = availableAthletes.splice(index1, 1)[0];
+        
+        const index2 = Math.floor(Math.random() * availableAthletes.length);
+        const secondAthlete = availableAthletes.splice(index2, 1)[0];
+        
+        const [skin1, skin2] = await Promise.all([
+            transformToSkin(firstAthlete),
+            transformToSkin(secondAthlete)
+        ]);
+        
+        selectedPairs.push([skin1, skin2]);
+    }
+
+    return {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+        },
+        body: JSON.stringify(selectedPairs),
     };
 }

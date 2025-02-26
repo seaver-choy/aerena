@@ -203,6 +203,9 @@ tournamentsPath.addMethod("PUT", tournamentsIntegration, {
 mintPath.addMethod("GET", mintIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
+mintPath.addMethod("POST", mintIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
 mintPath.addMethod("PUT", mintIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });

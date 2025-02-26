@@ -9,16 +9,20 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import StarsIcon from "../../../../assets/icon/tg-star-gold.svg";
 import AddIcon from "../../../../assets/icon/add.svg";
 import MinusIcon from "../../../../assets/icon/minus.svg";
+import { PackInfo } from "../../../../helpers/interfaces";
 
 interface PurchaseModalProps {
+    packInfo: PackInfo;
+    costType: string;
     onCancel: () => void;
-    onConfirm: () => void;
+    onConfirm: (boosterQuantity: number) => void;
 }
 
-export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
-    const packCost = 200000;
+export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: PurchaseModalProps) => {
+    const packCost = costType === 'star' ? packInfo.starCost : packInfo.bpCost;
     const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
 
     const handleIncrement = () => {
@@ -61,7 +65,7 @@ export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
                             <div className="my-[1.5vw] flex justify-center gap-[2vw]">
                                 <img
                                     className="mt-[2.8vw] h-[7.2vw]"
-                                    src={BattlePointsIcon}
+                                    src={costType === 'star' ? StarsIcon : BattlePointsIcon}
                                 />
                                 <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
                                     {(
@@ -106,7 +110,7 @@ export const PurchaseModal = ({ onCancel, onConfirm }: PurchaseModalProps) => {
                             </motion.button>
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onConfirm}
+                                onClick={() => {onConfirm(boosterQuantity)}}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />

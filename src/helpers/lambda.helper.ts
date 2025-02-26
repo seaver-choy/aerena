@@ -630,6 +630,32 @@ export const getAthletes = async (initDataRaw) => {
     }
 };
 
+export const getAthleteChoices = async (league, boosterQuantity, initDataRaw) => {
+    try {
+        const payload = {
+            league: league,
+            boosterQuantity: boosterQuantity,
+        };
+        const restOperation = post({
+            apiName: "playibleApi",
+            path: "mint",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(payload),
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`GET athlete choices fail ${e}`);
+    }
+};
+
 export const getAthletePositionFilter = async (
     position: string,
     league: string = "",

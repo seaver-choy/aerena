@@ -181,3 +181,15 @@ export interface PackInfo {
     starCost: number;
     isActive: boolean;
 }
+
+export interface Skin {
+    athleteId: number;
+    player: string;
+    position: [string];
+    league: string;
+    type: string;
+    teamData: {
+        colors: TeamColor;
+    };
+    isEquipped: boolean;
+}
