@@ -131,136 +131,201 @@ export const Catalog = () => {
     }, []);
 
     return (
-        <div className="mt-[10vw] h-[193vw]">
-            {showLeagueModal && (
-                <LeagueModal
-                    onClose={closeLeagueModal}
-                    leagueTypes={leagueTypes}
-                    chosenLeagueType={chosenLeagueType}
-                    setChosenLeagueType={setChosenLeagueType}
-                />
-            )}
-            <div className="relative flex">
-                <img
-                    className="h-full w-full"
-                    src={getAthletePositionBackground(
-                        positionList[positionIndex]
-                    )}
-                />
-                <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[11vw]">
-                    <div className="flex h-full w-[50%] items-center pl-[4vw]">
-                        <motion.p
-                            className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
-                            {...slideRightTextAnimation}
-                        >
-                            {chosenLeagueType == null
-                                ? "Player Catalog"
-                                : chosenLeagueType}
-                        </motion.p>
-                    </div>
-                    <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
-                        <motion.button
-                            className="relative flex h-[7vw] items-center justify-center"
-                            onClick={displayLeagueModal}
-                            {...appearTextAnimation}
-                            disabled={
-                                leagueTypes === null || currentAthletes === null
-                            }
-                        >
-                            <div className="absolute flex">
-                                <p className="font-russoone text-[2.4vw] font-normal tracking-wide text-white">
-                                    Filter
-                                </p>
-                            </div>
-                            <img
-                                className="h-[100%]"
-                                src={FunctionButton}
-                            ></img>
-                        </motion.button>
-                    </div>
+        <div>
+            <motion.div
+                className="mx-[4vw] mt-[4vw] h-[12vw] rounded-[3vw] bg-gradient-to-b from-graylight to-graydark px-[0.5vh] pt-[0.5vh]"
+                {...appearTextAnimation}
+            >
+                <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw]">
+                    <input
+                        className="flex w-full bg-transparent font-russoone text-[3.5vw] font-normal text-white focus:outline-none"
+                        type="text"
+                        placeholder="Search Player..."
+                        maxLength={12}
+                    ></input>
+                </div>
+            </motion.div>
+            <div className="mt-[4vw] h-[193vw]">
+                {showLeagueModal && (
+                    <LeagueModal
+                        onClose={closeLeagueModal}
+                        leagueTypes={leagueTypes}
+                        chosenLeagueType={chosenLeagueType}
+                        setChosenLeagueType={setChosenLeagueType}
+                    />
+                )}
+                <div className="relative flex">
                     <img
-                        className="absolute bottom-0 left-0 w-full"
-                        src={GoldLine}
-                    ></img>
-                </div>
-                <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center px-[4vw]">
-                    <button
-                        onClick={handlePreviousCategory}
-                        className="flex w-[8%] items-center justify-end"
-                    >
-                        <img
-                            className={`h-[6vw] ${positionIndex === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
-                            src={LeftIcon}
-                        />
-                    </button>
-                    <div className="flex w-[84%] items-center justify-center">
-                        <img
-                            className="h-[10vw]"
-                            src={getAthletePositionLogo(
-                                positionList[positionIndex]
-                            )}
-                        />
-                    </div>
-                    <button
-                        onClick={handleNextCategory}
-                        className="flex w-[8%] items-center justify-end"
-                    >
-                        <img
-                            className={`h-[6vw] ${positionIndex === positionList.length - 1 ? "cursor-default opacity-50" : "opacity-100"}`}
-                            src={RightIcon}
-                        />
-                    </button>
-                </div>
-                <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
-                    <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                        {currentAthletes != null && currentAthletes?.length > 0
-                            ? currentAthletes?.map((athlete, index) =>
-                                  showAthlete ? (
-                                      <motion.button
-                                          className="relative flex h-[36.4vw] w-[28vw]"
-                                          key={index}
-                                          onClick={() => {
-                                              displayAthleteModal(athlete);
-                                          }}
-                                          {...appearCardAnimation}
-                                      >
-                                          <AthleteCard
-                                              color={baseColor}
-                                              ign={athlete.displayName}
-                                              role={athlete.position[0]}
-                                              opacity={{
-                                                  wave: baseColor.wave,
-                                              }}
-                                              id={index}
-                                          />
-                                      </motion.button>
-                                  ) : (
-                                      <motion.div
-                                          className="relative flex h-[36.4vw] w-[28vw]"
-                                          {...pulseAnimation}
-                                      >
-                                          <img
-                                              className="h-full w-full"
-                                              src={AthleteSonner}
-                                          />
-                                      </motion.div>
-                                  )
-                              )
-                            : currentAthletes != null && (
-                                  <div className="mt-[2vw] px-[5vw]">
-                                      <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
-                                          There are currently no athletes for{" "}
-                                          {positionList[positionIndex]}. Please
-                                          check again later.
-                                      </p>
-                                  </div>
-                              )}
-                        {showAthleteModal && (
-                            <AthleteModal
-                                athlete={selectedAthlete}
-                                onClose={closeAthleteModal}
-                            />
+                        className="h-full w-full"
+                        src={getAthletePositionBackground(
+                            positionList[positionIndex]
                         )}
+                    />
+                    <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[11vw]">
+                        <div className="flex h-full w-[50%] items-center pl-[4vw]">
+                            <motion.p
+                                className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
+                                {...slideRightTextAnimation}
+                            >
+                                {chosenLeagueType == null
+                                    ? "Player Catalog"
+                                    : chosenLeagueType}
+                            </motion.p>
+                        </div>
+                        <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
+                            <motion.button
+                                className="relative flex h-[7vw] items-center justify-center"
+                                onClick={displayLeagueModal}
+                                {...appearTextAnimation}
+                                disabled={
+                                    leagueTypes === null ||
+                                    currentAthletes === null
+                                }
+                            >
+                                <div className="absolute flex">
+                                    <p className="font-russoone text-[2.4vw] font-normal tracking-wide text-white">
+                                        Filter
+                                    </p>
+                                </div>
+                                <img
+                                    className="h-[100%]"
+                                    src={FunctionButton}
+                                ></img>
+                            </motion.button>
+                        </div>
+                        <img
+                            className="absolute bottom-0 left-0 w-full"
+                            src={GoldLine}
+                        ></img>
+                    </div>
+                    <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center gap-[5vw] px-[4vw]">
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        <button className="flex items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </button>
+                        {/* <button
+                            onClick={handlePreviousCategory}
+                            className="flex w-[8%] items-center justify-end"
+                        >
+                            <img
+                                className={`h-[6vw] ${positionIndex === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
+                                src={LeftIcon}
+                            />
+                        </button>
+                        <div className="flex w-[84%] items-center justify-center">
+                            <img
+                                className="h-[10vw]"
+                                src={getAthletePositionLogo(
+                                    positionList[positionIndex]
+                                )}
+                            />
+                        </div>
+                        <button
+                            onClick={handleNextCategory}
+                            className="flex w-[8%] items-center justify-end"
+                        >
+                            <img
+                                className={`h-[6vw] ${positionIndex === positionList.length - 1 ? "cursor-default opacity-50" : "opacity-100"}`}
+                                src={RightIcon}
+                            />
+                        </button> */}
+                    </div>
+                    <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
+                        <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
+                            {currentAthletes != null &&
+                            currentAthletes?.length > 0
+                                ? currentAthletes?.map((athlete, index) =>
+                                      showAthlete ? (
+                                          <motion.button
+                                              className="relative flex h-[36.4vw] w-[28vw]"
+                                              key={index}
+                                              onClick={() => {
+                                                  displayAthleteModal(athlete);
+                                              }}
+                                              {...appearCardAnimation}
+                                          >
+                                              <AthleteCard
+                                                  color={baseColor}
+                                                  ign={athlete.displayName}
+                                                  role={athlete.position[0]}
+                                                  opacity={{
+                                                      wave: baseColor.wave,
+                                                  }}
+                                                  id={index}
+                                              />
+                                          </motion.button>
+                                      ) : (
+                                          <motion.div
+                                              className="relative flex h-[36.4vw] w-[28vw]"
+                                              {...pulseAnimation}
+                                          >
+                                              <img
+                                                  className="h-full w-full"
+                                                  src={AthleteSonner}
+                                              />
+                                          </motion.div>
+                                      )
+                                  )
+                                : currentAthletes != null && (
+                                      <div className="mt-[2vw] px-[5vw]">
+                                          <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
+                                              There are currently no athletes
+                                              for {positionList[positionIndex]}.
+                                              Please check again later.
+                                          </p>
+                                      </div>
+                                  )}
+                            {showAthleteModal && (
+                                <AthleteModal
+                                    athlete={selectedAthlete}
+                                    onClose={closeAthleteModal}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
