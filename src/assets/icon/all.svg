@@ -1,0 +1,23 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon-all">
+<g id="logo" clip-path="url(#clip0_3055_18226)">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M10.8481 0.000244141H12.6401L12.6401 0.000253906H20.2561L27.2001 19.2643L20.2561 22.4003L18.8962 16.6207L18.8962 16.6207L17.792 11.9282L17.7921 11.9281L16.6721 7.16825L14.5252 13.2699L16.9527 12.2729L18.0567 16.9649L4.86982 22.3715L4.80009 22.4003L4.80014 22.4001L4.80005 22.4001L4.80028 22.3997L10.3086 6.66158L14.9921 3.24822L11.1873 4.15105L12.22 1.20063L10.8481 0.000244141ZM26.1304 13.6547L24.513 9.16774L27.2 8.06415L26.1304 13.6547Z" fill="url(#paint0_linear_3055_18226)"/>
+</g>
+<path id="ALL" d="M8.30792 31.5601L10.7271 26.1841H11.7102L14.137 31.5601H13.0926L11.0113 26.714H11.4106L9.33704 31.5601H8.30792ZM9.42152 30.3159L9.69032 29.5325H12.5934L12.8622 30.3159H9.42152ZM14.8207 31.5601V26.1841H15.8191V30.7153H18.63V31.5601H14.8207ZM19.4182 31.5601V26.1841H20.4166V30.7153H23.2275V31.5601H19.4182Z" fill="url(#paint1_linear_3055_18226)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_3055_18226" x1="3.75289" y1="11.2004" x2="27.6098" y2="11.2004" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3055_18226" x1="7.61885" y1="29.0601" x2="23.5945" y2="29.0601" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<clipPath id="clip0_3055_18226">
+<rect width="22.4" height="22.4" fill="white" transform="translate(4.80005)"/>
+</clipPath>
+</defs>
+</svg>

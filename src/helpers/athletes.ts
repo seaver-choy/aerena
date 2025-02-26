@@ -1,3 +1,4 @@
+import AllIcon from "../assets/icon/all.svg";
 import RoamIcon from "../assets/icon/roam.svg";
 import MidIcon from "../assets/icon/mid.svg";
 import JungleIcon from "../assets/icon/jungle.svg";
@@ -35,6 +36,8 @@ import SPS6 from "../assets/card/sps6.svg";
 
 export function getAthletePositionLogo(position: string) {
     switch (position) {
+        case "All":
+            return AllIcon;
         case "Roam":
             return RoamIcon;
         case "Mid":
