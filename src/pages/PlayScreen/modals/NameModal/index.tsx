@@ -10,10 +10,13 @@ import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 
 interface NameModalProps {
+    teamName: string;
+    setTeamName: (teamName: string) => void;
     onClose: () => void;
+    onConfirm: () => void;
 }
 
-export const NameModal = ({ onClose }: NameModalProps) => {
+export const NameModal = ({ teamName, setTeamName, onClose, onConfirm }: NameModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -21,6 +24,11 @@ export const NameModal = ({ onClose }: NameModalProps) => {
             document.body.style.overflow = "auto";
         };
     }, []);
+
+    const handleTeamNameChange = (e) => {
+        const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '');
+        setTeamName(value);
+    };
 
     return (
         <div className="fixed inset-0 z-40">
@@ -52,7 +60,10 @@ export const NameModal = ({ onClose }: NameModalProps) => {
                                         className="flex w-full bg-transparent font-russoone text-[4.5vw] font-normal text-white focus:outline-none"
                                         type="text"
                                         placeholder="Enter Team Name"
-                                        maxLength={12}
+                                        maxLength={25}
+                                        value={teamName}
+                                        onChange={handleTeamNameChange}
+                                        pattern="[a-zA-Z0-9\s]*"
                                     ></input>
                                 </div>
                             </div>
@@ -77,7 +88,7 @@ export const NameModal = ({ onClose }: NameModalProps) => {
                             </motion.button>
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onClose}
+                                onClick={onConfirm}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />

@@ -66,6 +66,7 @@ export interface Tournament {
         {
             username: string;
             lineup: Token[];
+            lineupName: string;
             score: number;
         },
     ];
@@ -108,6 +109,7 @@ export interface TeamColor {
 export interface UsersJoined {
     username: string;
     lineup: Token[];
+    lineupName: string;
     score: number;
 }
 export interface Ranking {
@@ -168,4 +170,14 @@ export interface Referrer {
     userID: number;
     referralCode: string;
     referralDate: Date;
+}
+
+export interface PackInfo {
+    packId: string;
+    packType: string;
+    league: string;
+    type: string;
+    bpCost: number;
+    starCost: number;
+    isActive: boolean;
 }

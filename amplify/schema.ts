@@ -250,6 +250,7 @@ export const tournamentSchema = new mongoose.Schema(
                 userID: Number,
                 username: String,
                 lineup: [tokenSchema],
+                lineupName: String,
                 score: Number,
             },
         ],
@@ -384,5 +385,20 @@ export const mlTournamentSchema = new mongoose.Schema(
     },
     {
         collection: "ml_tournaments",
+    }
+);
+
+export const packInfoSchema = new mongoose.Schema(
+    {
+        packId: String,
+        packType: String,
+        league: String,
+        type: String,
+        bpCost: Number,
+        starCost: Number,
+        isActive: Boolean,
+    },
+    {
+        collection: "packinfos",
     }
 );

@@ -96,7 +96,6 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                 athlete.athleteId,
                 user.initDataRaw
             );
-            console.log(res.athletes);
             setSameAthletes(res.athletes);
         }
         fetchSameAthletes();
@@ -166,24 +165,24 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                             ></img>
                         </motion.button>
                     </div>
-                    <div
-                        key={sameAthletes.length}
-                        className="mb-[4vw] flex h-[55vw] flex-col items-center"
-                    >
-                        {teamInfo !== undefined && (
-                            <Slider
-                                athletes={sameAthletes}
-                                onCardIndexChange={onCardIndexChange}
-                            />
-                        )}
-                        {/* <Slider
-                            athlete={athlete}
-                            teamColor={teamInfo.colors}
-                        /> */}
-                        <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                            {skinTitle}
-                        </p>
-                    </div>
+                        {teamInfo !== undefined ? (
+                            <div
+                                key={sameAthletes.length}
+                                className="mb-[4vw] flex h-[55vw] flex-col items-center"
+                            >
+                                <Slider
+                                    athletes={sameAthletes}
+                                    onCardIndexChange={onCardIndexChange}
+                                />
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
+                                    {skinTitle}
+                                </p>
+                            </div>
+                            )
+                            : (
+                                <div className="mb-[4vw] flex h-[55vw] flex-col items-center"/>
+                            )
+                        }
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
                             <motion.button

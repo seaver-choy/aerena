@@ -12,7 +12,7 @@ import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-gold.svg";
 
 interface ConfirmModalProps {
-    onCancel: () => void;
+    onClose: () => void;
     onConfirm: () => void;
     loading: boolean;
     tournamentType?: string;
@@ -20,7 +20,7 @@ interface ConfirmModalProps {
 }
 
 export const ConfirmModal = ({
-    onCancel,
+    onClose,
     onConfirm,
     loading,
     tournamentType = null,
@@ -84,7 +84,7 @@ export const ConfirmModal = ({
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onCancel}
+                                onClick={onClose}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={WhiteButton} />

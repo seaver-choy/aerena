@@ -7,6 +7,7 @@ export const submitLineup = async (
     userID,
     username,
     userLineup,
+    lineupName,
     initDataRaw
 ) => {
     try {
@@ -14,6 +15,7 @@ export const submitLineup = async (
             userID: userID,
             username: username,
             lineup: userLineup,
+            lineupName: lineupName,
             score: 0,
         };
 
@@ -1028,5 +1030,28 @@ export const addNewReferral = async (userId, referralCode, initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`addNewReferral call failed ${e}`);
+    }
+};
+
+export const getPackInfos = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "packinfos/all",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        // console.log(JSON.parse(response.toLocaleString()));
+        console.log(`Successful GET of packinfos`);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of packinfos ${e}`);
     }
 };

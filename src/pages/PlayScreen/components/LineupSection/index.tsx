@@ -28,6 +28,7 @@ import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
+import { NameModal } from "../../modals/NameModal";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
@@ -52,6 +53,9 @@ export const LineupSection = ({
         useState<boolean>(false);
     const [showInsufficientModal, setShowInsufficientModal] =
         useState<boolean>(false);
+    const [teamName, setTeamName] = useState<string>("");
+    const [showNameModal, setShowNameModal] =
+    useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
 
     const defaultLineup = [
@@ -164,6 +168,7 @@ export const LineupSection = ({
                 user.id,
                 user.username,
                 lineup,
+                teamName == "" ? `${user.username}'s Lineup` : teamName,
                 user.initDataRaw
             );
             if (result.userUpdate) {
@@ -251,6 +256,7 @@ export const LineupSection = ({
             setIsLoading(false);
             setShowErrorModal(true);
         }
+        setTeamName("");
     };
 
     useEffect(() => {
@@ -298,14 +304,28 @@ export const LineupSection = ({
                 )}
                 {showConfirmModal && (
                     <ConfirmModal
-                        onCancel={() => setShowConfirmModal(false)}
+                        onClose={() => setShowConfirmModal(false)}
                         onConfirm={() => {
+                            setShowNameModal(true);
                             setShowConfirmModal(false);
-                            handleEnterTournament();
                         }}
                         loading={isLoading}
                         tournamentType={ongoingTournament.type}
                         joinCost={ongoingTournament.joinCost}
+                    />
+                )}
+                {showNameModal && (
+                    <NameModal
+                        teamName={teamName}
+                        setTeamName={setTeamName}
+                        onClose={() => {
+                            setTeamName("");
+                            setShowNameModal(false)
+                        }}
+                        onConfirm={() => {
+                            setShowNameModal(false);
+                            handleEnterTournament();
+                        }}
                     />
                 )}
                 {isLoading && <LoadingModal />}
