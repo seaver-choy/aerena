@@ -10,7 +10,7 @@ import { PurchaseModal } from "../../modals/PurchaseModal";
 
 import ChoicePackSonner from "../../../../assets/sonner/pack-choice.svg";
 import ChoicePackBackground from "../../../../assets/background/pack-choice.svg";
-import Basic from "../../../../assets/pack/basic.svg";
+import PH15ChoicePack from "../../../../assets/pack/choice-ph15.svg";
 import PH15Sticker from "../../../../assets/sticker/ph15.svg";
 import AerenaTextLogo from "../../../../assets/logo/aerena-text.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
@@ -55,7 +55,7 @@ export const ChoiceBanner = () => {
                             },
                         }}
                     >
-                        <img className="h-full" src={Basic} />
+                        <img className="h-full" src={PH15ChoicePack} />
                     </motion.div>
                     <motion.div
                         className="absolute right-[3vw] top-[2vw] h-[15vw] w-[15vw]"

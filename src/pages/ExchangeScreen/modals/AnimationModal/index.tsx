@@ -18,7 +18,7 @@ import {
 
 import Dust from "../../../../assets/others/dust-gold.svg";
 import Glow from "../../../../assets/others/glow-radial.svg";
-import Basic from "../../../../assets/pack/basic.svg";
+import PH15ChoicePack from "../../../../assets/pack/choice-ph15.svg";
 import Back from "../../../../assets/card/back.svg";
 import SampleOne from "../../../../assets/card/sample-one.svg";
 import SampleTwo from "../../../../assets/card/sample-two.svg";
@@ -148,7 +148,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                             className="mb-[4vw] flex h-[101vw] items-center justify-center"
                             {...appearAnimation}
                         >
-                            <img className="h-[80vw]" src={Basic} />
+                            <img className="h-[80vw]" src={PH15ChoicePack} />
                         </motion.div>
                     )}
                     {animationStage === 1 && (
@@ -157,7 +157,7 @@ export const AnimationModal = ({ onEnd }: AnimationModalProps) => {
                             {...jiggleAnimation}
                             onAnimationComplete={handlePackOpening}
                         >
-                            <img className="h-[80vw]" src={Basic} />
+                            <img className="h-[80vw]" src={PH15ChoicePack} />
                         </motion.div>
                     )}
                     {animationStage === 2 && (
