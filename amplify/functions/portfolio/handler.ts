@@ -1,6 +1,6 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import paginate from "mongoose-paginate-v2";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import {
     userSchema,
     athleteSchema,
@@ -24,12 +24,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
         conn.model("Users", userSchema);
         conn.model("Teams", teamSchema);
-        athleteSchema.plugin(paginate);
-        conn.model<AthleteDocument, mongoose.PaginateModel<AthleteDocument>>(
-            "Athletes",
-            athleteSchema,
-            "athletes"
-        );
+        athleteSchema.plugin(aggregatePaginate);
         conn.model("AthleteProfile", athleteProfileSchema);
     }
     if (event.path.includes("paginated")) {
@@ -143,7 +138,7 @@ async function getAthleteProfile(event: APIGatewayProxyEvent) {
 async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const athleteModel = conn!.model<
         AthleteDocument,
-        mongoose.PaginateModel<AthleteDocument>
+        mongoose.AggregatePaginateModel<AthleteDocument>
     >("Athletes", athleteSchema, "athletes");
     const pageOffset = parseInt(event.queryStringParameters!.pageOffset!);
     const limit = parseInt(event.queryStringParameters!.limit!);
@@ -172,59 +167,134 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const options = {
         offset: pageOffset,
         limit: limit,
+        sort: { player: 1 },
     };
 
-    // const res = await athleteModel.paginate(
-    //     ...new PaginationParameters(search).get()
-    // );
-    if (position == "All") {
-        const res = await athleteModel.paginate(
-            {
+    const aggregate = athleteModel.aggregate([
+        {
+            $match: {
                 player: {
                     $regex: searchString,
                 },
                 league: {
                     $in: leagueTypes,
                 },
+                position: {
+                    $regex: position === "All" ? "" : position,
+                },
             },
-            options
-        );
-        console.log(JSON.stringify(res));
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify(res),
-        };
-    } else {
-        const res = await athleteModel.paginate(
-            {
-                $or: [
+        },
+        {
+            $lookup: {
+                from: "ml_tournaments",
+                let: {
+                    league: "$league",
+                    type: "$type",
+                },
+                pipeline: [
                     {
-                        player: {
-                            $regex: searchString,
-                        },
-                        position: position,
-                        league: {
-                            $in: leagueTypes,
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$code", "$$league"] },
+                                    { $eq: ["$type", "$$type"] },
+                                ],
+                            },
                         },
                     },
                 ],
+                as: "tournamentData",
             },
-            options
-        );
-        console.log(JSON.stringify(res));
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
+        },
+        {
+            $unwind: "$tournamentData",
+        },
+        {
+            $sort: {
+                "tournamentData.endDate": -1,
             },
-            body: JSON.stringify(res),
-        };
-    }
+        },
+        {
+            $group: {
+                _id: "$athleteId",
+                athleteId: { $first: "$athleteId" },
+                player: { $first: "$player" },
+                displayName: { $first: "$displayName" },
+                team: { $first: "$team" },
+                position: { $first: "$position" },
+                league: {
+                    $first: "$league",
+                },
+                type: {
+                    $first: "type",
+                },
+            },
+        },
+    ]);
+
+    const res = await athleteModel.aggregatePaginate(aggregate, options);
+
+    console.log(JSON.stringify(res));
+    return {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify(res),
+    };
+
+    // const res = await athleteModel.paginate(
+    //     ...new PaginationParameters(search).get()
+    // );
+    // if (position == "All") {
+    //     const res = await athleteModel.paginate(
+    //         {
+    //             player: {
+    //                 $regex: searchString,
+    //             },
+    //             league: {
+    //                 $in: leagueTypes,
+    //             },
+    //         },
+    //         options
+    //     );
+    //     console.log(JSON.stringify(res));
+    //     return {
+    //         statusCode: 200,
+    //         headers: {
+    //             "Access-Control-Allow-Origin": "*",
+    //             "Access-Control-Allow-Credentials": true,
+    //         },
+    //         body: JSON.stringify(res),
+    //     };
+    // } else {
+    //     const res = await athleteModel.paginate(
+    //         {
+    //             $or: [
+    //                 {
+    //                     player: {
+    //                         $regex: searchString,
+    //                     },
+    //                     position: position,
+    //                     league: {
+    //                         $in: leagueTypes,
+    //                     },
+    //                 },
+    //             ],
+    //         },
+    //         options
+    //     );
+    //     console.log(JSON.stringify(res));
+    //     return {
+    //         statusCode: 200,
+    //         headers: {
+    //             "Access-Control-Allow-Origin": "*",
+    //             "Access-Control-Allow-Credentials": true,
+    //         },
+    //         body: JSON.stringify(res),
+    //     };
+    // }
 
     // athleteModel
     //     .paginate(
