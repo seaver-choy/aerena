@@ -15,8 +15,7 @@ export const CommunityLineupsScreen = () => {
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
-
-    const reversedUsersJoined = ongoingTournament.usersJoined.reverse();
+    const [reversedUsersJoined, setReverseUsersJoined] = useState([]);
     // const playTab = location.state?.playTab;
     const [displayLineup, setDisplayLineup] = useState([]);
     // const [hasMore, setHasMore] = useState<boolean>(true);
@@ -43,6 +42,7 @@ export const CommunityLineupsScreen = () => {
         async function reverseData() {
             const reversedUsersJoined =
                 await ongoingTournament.usersJoined.reverse();
+            setReverseUsersJoined(reversedUsersJoined);
             setDisplayLineup(reversedUsersJoined.slice(0, 5));
         }
         reverseData();
