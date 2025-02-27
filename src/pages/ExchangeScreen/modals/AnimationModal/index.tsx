@@ -158,10 +158,10 @@ export const AnimationModal = ({
                             </motion.div>
                         </div>
                     )}
-                    {/* Pack Contents */}
                     <div className="absolute z-30 flex h-[115vw] w-[80vw] flex-col justify-center">
-                        {animationStage === 0 && (
-                            <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                        <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            {/* Pack Contents */}
+                            {animationStage === 0 && (
                                 <motion.div
                                     className="h-[80vw]"
                                     {...appearAnimation}
@@ -171,10 +171,8 @@ export const AnimationModal = ({
                                         src={PH15ChoicePack}
                                     />
                                 </motion.div>
-                            </div>
-                        )}
-                        {animationStage === 1 && (
-                            <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            )}
+                            {animationStage === 1 && (
                                 <motion.div
                                     className="h-[80vw]"
                                     {...jiggleAnimation}
@@ -185,10 +183,8 @@ export const AnimationModal = ({
                                         src={PH15ChoicePack}
                                     />
                                 </motion.div>
-                            </div>
-                        )}
-                        {animationStage === 2 && (
-                            <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            )}
+                            {animationStage === 2 && (
                                 <motion.div
                                     className="h-[80vw] w-[62vw] backface-hidden"
                                     {...(flipBack
@@ -206,12 +202,10 @@ export const AnimationModal = ({
                                         onClick={handleButtonClick}
                                     />
                                 </motion.div>
-                            </div>
-                        )}
-                        {animationStage === 3 && (
-                            <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                            )}
+                            {animationStage === 3 && (
                                 <motion.div
-                                    className="relative h-[80vw] w-[62vw] backface-hidden"
+                                    className="h-[80vw] w-[62vw] backface-hidden"
                                     {...(flipAthlete
                                         ? flipLeftAnimation
                                         : bobbleAnimation)}
@@ -219,7 +213,6 @@ export const AnimationModal = ({
                                         setFlipAthlete(false)
                                     }
                                 >
-                                    {/* <img className="h-[80vw]" src={getAthleteCard()} /> */}
                                     <AthleteCard
                                         color={
                                             athleteChoices[numberOfTimes - 1]
@@ -245,86 +238,82 @@ export const AnimationModal = ({
                                         }
                                     />
                                 </motion.div>
-                            </div>
-                        )}
-                        {animationStage === 4 && (
-                            <div className="relative mb-[4vw] flex h-[101vw] items-center justify-center">
-                                <motion.div
-                                    className="flex h-[50vw] w-[38vw] items-center justify-start"
-                                    onClick={() => {
-                                        handleFirstSelection();
-                                        setSelectedIndex(0); // Store the selected sample
-                                    }}
-                                    {...(animationState === "appear"
-                                        ? appearAnimation
-                                        : animationState === "bobble"
-                                          ? bobbleAnimation
-                                          : firstState === "scaleUp"
-                                            ? scaleUpAnimation
-                                            : scaleDownAnimation)}
-                                    onAnimationComplete={() => {
-                                        if (animationState === "appear") {
-                                            setAnimationState("bobble");
-                                        }
-                                    }}
-                                >
-                                    {/* <img
-                                        className="absolute h-full"
-                                        src={OwnedCard}
-                                    /> */}
-                                    <AthleteCard
-                                        color={
-                                            athleteChoices[0].teamData.colors
-                                        }
-                                        ign={athleteChoices[0].player}
-                                        opacity={{
-                                            wave: athleteChoices[0].teamData
-                                                .colors.wave,
+                            )}
+                            {animationStage === 4 && (
+                                <div className="flex">
+                                    <motion.div
+                                        className="flex h-[50vw] w-[38vw] items-center justify-start"
+                                        onClick={() => {
+                                            handleFirstSelection();
+                                            setSelectedIndex(0);
                                         }}
-                                        role={athleteChoices[0].position[0]}
-                                        type={"basic"}
-                                        league={athleteChoices[0].league}
-                                        id={0}
-                                    />
-                                </motion.div>
-                                <motion.div
-                                    className="flex h-[50vw] w-[38vw] items-start justify-end"
-                                    onClick={() => {
-                                        handleSecondSelection();
-                                        setSelectedIndex(1); // Store the selected sample
-                                    }}
-                                    {...(animationState === "appear"
-                                        ? appearAnimation
-                                        : animationState === "bobble"
-                                          ? bobbleAnimation
-                                          : secondState === "scaleUp"
-                                            ? scaleUpAnimation
-                                            : scaleDownAnimation)}
-                                    onAnimationComplete={() => {
-                                        if (animationState === "appear") {
-                                            setAnimationState("bobble");
-                                        }
-                                    }}
-                                >
-                                    <AthleteCard
-                                        color={
-                                            athleteChoices[1].teamData.colors
-                                        }
-                                        ign={athleteChoices[1].player}
-                                        opacity={{
-                                            wave: athleteChoices[1].teamData
-                                                .colors.wave,
+                                        {...(animationState === "appear"
+                                            ? appearAnimation
+                                            : animationState === "bobble"
+                                              ? bobbleAnimation
+                                              : firstState === "scaleUp"
+                                                ? scaleUpAnimation
+                                                : scaleDownAnimation)}
+                                        onAnimationComplete={() => {
+                                            if (animationState === "appear") {
+                                                setAnimationState("bobble");
+                                            }
                                         }}
-                                        role={athleteChoices[1].position[0]}
-                                        type={"basic"}
-                                        league={athleteChoices[1].league}
-                                        id={1}
-                                    />
-                                </motion.div>
-                            </div>
-                        )}
-                        {animationStage === 5 && (
-                            <div className="mb-[4vw] flex h-[101vw] items-center justify-center">
+                                    >
+                                        <AthleteCard
+                                            color={
+                                                athleteChoices[0].teamData
+                                                    .colors
+                                            }
+                                            ign={athleteChoices[0].player}
+                                            opacity={{
+                                                wave: athleteChoices[0].teamData
+                                                    .colors.wave,
+                                            }}
+                                            role={athleteChoices[0].position[0]}
+                                            type={"basic"}
+                                            league={athleteChoices[0].league}
+                                            id={0}
+                                        />
+                                    </motion.div>
+                                    <motion.div
+                                        className="flex h-[50vw] w-[38vw] items-start justify-end"
+                                        onClick={() => {
+                                            handleSecondSelection();
+                                            setSelectedIndex(1);
+                                        }}
+                                        {...(animationState === "appear"
+                                            ? appearAnimation
+                                            : animationState === "bobble"
+                                              ? bobbleAnimation
+                                              : secondState === "scaleUp"
+                                                ? scaleUpAnimation
+                                                : scaleDownAnimation)}
+                                        onAnimationComplete={() => {
+                                            if (animationState === "appear") {
+                                                setAnimationState("bobble");
+                                            }
+                                        }}
+                                    >
+                                        <AthleteCard
+                                            color={
+                                                athleteChoices[1].teamData
+                                                    .colors
+                                            }
+                                            ign={athleteChoices[1].player}
+                                            opacity={{
+                                                wave: athleteChoices[1].teamData
+                                                    .colors.wave,
+                                            }}
+                                            role={athleteChoices[1].position[0]}
+                                            type={"basic"}
+                                            league={athleteChoices[1].league}
+                                            id={1}
+                                        />
+                                    </motion.div>
+                                </div>
+                            )}
+                            {animationStage === 5 && (
                                 <motion.div
                                     className="relative h-[80vw] w-[62vw]"
                                     {...appearAnimation}
@@ -352,8 +341,8 @@ export const AnimationModal = ({
                                         id={2}
                                     />
                                 </motion.div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                         {/* Button Functions */}
                         <div className="flex h-[10vw] items-center justify-center">
                             {animationStage === 0 && (
