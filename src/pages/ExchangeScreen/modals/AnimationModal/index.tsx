@@ -344,6 +344,10 @@ export const AnimationModal = ({
                             {animationStage === 5 && (
                                 <motion.div
                                     className="relative h-[80vw] w-[62vw]"
+                                    style={{
+                                        willChange: "transform",
+                                        backfaceVisibility: "hidden",
+                                    }}
                                     {...appearAnimation}
                                 >
                                     <AthleteCard

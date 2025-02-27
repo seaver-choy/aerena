@@ -104,7 +104,7 @@ export const ChoiceBanner = () => {
     }, []);
 
     return (
-        <div className="mt-[6vw]">
+        <div className="mt-[6vw] bg-red">
             {packInfos != null ? (
                 packInfos?.map((packInfo) => (
                     <div key={packInfo.packId} className="relative h-[74.8vw]">
