@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { getStickerImage } from "../../../../helpers/images";
@@ -15,12 +15,10 @@ export const CommunityLineupsScreen = () => {
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
+
     const reversedUsersJoined = ongoingTournament.usersJoined.reverse();
     // const playTab = location.state?.playTab;
-
-    const [displayLineup, setDisplayLineup] = useState(
-        reversedUsersJoined.slice(0, 5)
-    );
+    const [displayLineup, setDisplayLineup] = useState([]);
     // const [hasMore, setHasMore] = useState<boolean>(true);
     const [currentIndex, setCurrentIndex] = useState<number>(5);
     const fetchMoreData = () => {
@@ -40,6 +38,15 @@ export const CommunityLineupsScreen = () => {
             }
         }, 1500);
     };
+
+    useEffect(() => {
+        async function reverseData() {
+            const reversedUsersJoined =
+                await ongoingTournament.usersJoined.reverse();
+            setDisplayLineup(reversedUsersJoined.slice(0, 5));
+        }
+        reverseData();
+    }, []);
 
     return (
         <Layout>
