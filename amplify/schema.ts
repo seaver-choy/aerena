@@ -279,6 +279,7 @@ export const tournamentSchema = new mongoose.Schema(
                 lineup: [tokenSchema],
                 lineupName: String,
                 score: Number,
+                submittedAt: Date,
             },
         ],
         resultsTallied: { type: Boolean, default: false },
