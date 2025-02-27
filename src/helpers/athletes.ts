@@ -5,6 +5,7 @@ import JungleIcon from "../assets/icon/jungle.svg";
 import GoldIcon from "../assets/icon/gold.svg";
 import EXPIcon from "../assets/icon/exp.svg";
 
+import AllBackground from "../assets/background/all.svg";
 import RoamBackground from "../assets/background/roam.svg";
 import MidBackground from "../assets/background/mid.svg";
 import JungleBackground from "../assets/background/jungle.svg";
@@ -53,6 +54,8 @@ export function getAthletePositionLogo(position: string) {
 
 export function getAthletePositionBackground(position: string) {
     switch (position) {
+        case "All":
+            return AllBackground;
         case "Roam":
             return RoamBackground;
         case "Mid":
