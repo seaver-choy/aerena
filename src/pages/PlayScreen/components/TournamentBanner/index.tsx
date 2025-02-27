@@ -186,8 +186,8 @@ export const TournamentBanner = ({
                             {...appearAnimation}
                         >
                             <img
+                                className="h-full w-full will-change-transform backface-hidden"
                                 src={getStickerImage(ongoingTournament.league)}
-                                className="h-full w-full"
                             />
                             {ongoingTournaments != null &&
                                 ongoingTournaments.length > 1 && (

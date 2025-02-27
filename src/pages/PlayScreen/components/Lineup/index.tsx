@@ -122,7 +122,7 @@ export const Lineup = ({
                             currentPositionIndex !== index &&
                             tournamentLineup[index].athlete !== null && (
                                 <motion.div
-                                    className="relative flex h-[36.4vw] w-[28vw]"
+                                    className="relative flex h-[36.4vw] w-[28vw] overflow-hidden"
                                     onClick={() => handleSetLineup(index)}
                                     {...(currentPositionIndex === -1 && !usedLP
                                         ? appearCardAnimation

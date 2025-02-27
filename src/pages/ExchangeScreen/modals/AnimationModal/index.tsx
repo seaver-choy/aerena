@@ -61,7 +61,7 @@ export const AnimationModal = ({
                 setFlipBack(false);
                 setAnimationStage(3);
                 setFlipAthlete(true);
-            }, 950);
+            }, 850);
         } else if (animationStage === 3) {
             if (numberOfTimes < 2) {
                 setNumberOfTimes(numberOfTimes + 1);
@@ -276,7 +276,7 @@ export const AnimationModal = ({
                                         />
                                     </motion.div>
                                     <motion.div
-                                        className="flex h-[50vw] w-[38vw] items-start justify-end"
+                                        className="flex h-[50vw] w-[38vw] items-start justify-end overflow-hidden"
                                         onClick={() => {
                                             handleSecondSelection();
                                             setSelectedIndex(1);
