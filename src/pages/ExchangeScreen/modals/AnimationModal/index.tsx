@@ -251,115 +251,81 @@ export const AnimationModal = ({
                             )}
                             {animationStage === 4 && (
                                 <div className="flex">
-                                    <div
-                                        className="flex h-[50vw] w-[38vw] items-center justify-start"
+                                    <motion.div
+                                        className="flex h-[50vw] w-[38vw] items-center justify-start will-change-transform backface-hidden"
                                         onClick={() => {
                                             handleFirstSelection();
                                             setSelectedIndex(0);
                                         }}
+                                        {...(animationState === "appear"
+                                            ? appearAnimation
+                                            : animationState === "bobble"
+                                              ? bobbleAnimation
+                                              : firstState === "scaleUp"
+                                                ? scaleUpAnimation
+                                                : scaleDownAnimation)}
+                                        onAnimationComplete={() => {
+                                            if (animationState === "appear") {
+                                                setAnimationState("bobble");
+                                            }
+                                        }}
                                     >
-                                        <motion.div
-                                            className="h-full w-full"
-                                            style={{
-                                                willChange: "transform",
-                                                backfaceVisibility: "hidden",
+                                        <AthleteCard
+                                            color={
+                                                athleteChoices[0].teamData
+                                                    .colors
+                                            }
+                                            ign={athleteChoices[0].player}
+                                            opacity={{
+                                                wave: athleteChoices[0].teamData
+                                                    .colors.wave,
                                             }}
-                                            {...(animationState === "appear"
-                                                ? appearAnimation
-                                                : animationState === "bobble"
-                                                  ? bobbleAnimation
-                                                  : firstState === "scaleUp"
-                                                    ? scaleUpAnimation
-                                                    : scaleDownAnimation)}
-                                            onAnimationComplete={() => {
-                                                if (
-                                                    animationState === "appear"
-                                                ) {
-                                                    setAnimationState("bobble");
-                                                }
-                                            }}
-                                        >
-                                            <AthleteCard
-                                                color={
-                                                    athleteChoices[0].teamData
-                                                        .colors
-                                                }
-                                                ign={athleteChoices[0].player}
-                                                opacity={{
-                                                    wave: athleteChoices[0]
-                                                        .teamData.colors.wave,
-                                                }}
-                                                role={
-                                                    athleteChoices[0]
-                                                        .position[0]
-                                                }
-                                                type={"basic"}
-                                                league={
-                                                    athleteChoices[0].league
-                                                }
-                                                id={0}
-                                            />
-                                        </motion.div>
-                                    </div>
-                                    <div
-                                        className="flex h-[50vw] w-[38vw] items-start justify-end"
+                                            role={athleteChoices[0].position[0]}
+                                            type={"basic"}
+                                            league={athleteChoices[0].league}
+                                            id={0}
+                                        />
+                                    </motion.div>
+                                    <motion.div
+                                        className="flex h-[50vw] w-[38vw] items-start justify-end will-change-transform backface-hidden"
                                         onClick={() => {
                                             handleSecondSelection();
                                             setSelectedIndex(1);
                                         }}
+                                        {...(animationState === "appear"
+                                            ? appearAnimation
+                                            : animationState === "bobble"
+                                              ? bobbleAnimation
+                                              : secondState === "scaleUp"
+                                                ? scaleUpAnimation
+                                                : scaleDownAnimation)}
+                                        onAnimationComplete={() => {
+                                            if (animationState === "appear") {
+                                                setAnimationState("bobble");
+                                            }
+                                        }}
                                     >
-                                        <motion.div
-                                            className="h-full w-full"
-                                            style={{
-                                                willChange: "transform",
-                                                backfaceVisibility: "hidden",
+                                        <AthleteCard
+                                            color={
+                                                athleteChoices[1].teamData
+                                                    .colors
+                                            }
+                                            ign={athleteChoices[1].player}
+                                            opacity={{
+                                                wave: athleteChoices[1].teamData
+                                                    .colors.wave,
                                             }}
-                                            {...(animationState === "appear"
-                                                ? appearAnimation
-                                                : animationState === "bobble"
-                                                  ? bobbleAnimation
-                                                  : secondState === "scaleUp"
-                                                    ? scaleUpAnimation
-                                                    : scaleDownAnimation)}
-                                            onAnimationComplete={() => {
-                                                if (
-                                                    animationState === "appear"
-                                                ) {
-                                                    setAnimationState("bobble");
-                                                }
-                                            }}
-                                        >
-                                            <AthleteCard
-                                                color={
-                                                    athleteChoices[1].teamData
-                                                        .colors
-                                                }
-                                                ign={athleteChoices[1].player}
-                                                opacity={{
-                                                    wave: athleteChoices[1]
-                                                        .teamData.colors.wave,
-                                                }}
-                                                role={
-                                                    athleteChoices[1]
-                                                        .position[0]
-                                                }
-                                                type={"basic"}
-                                                league={
-                                                    athleteChoices[1].league
-                                                }
-                                                id={1}
-                                            />
-                                        </motion.div>
-                                    </div>
+                                            role={athleteChoices[1].position[0]}
+                                            type={"basic"}
+                                            league={athleteChoices[1].league}
+                                            id={1}
+                                        />
+                                    </motion.div>
                                 </div>
                             )}
                             {animationStage === 5 && (
                                 <motion.div
-                                    className="relative h-[80vw] w-[62vw]"
-                                    style={{
-                                        willChange: "transform",
-                                        backfaceVisibility: "hidden",
-                                    }}
+                                    className="h-[80vw] w-[62vw] will-change-transform backface-hidden"
                                     {...appearAnimation}
                                 >
                                     <AthleteCard
