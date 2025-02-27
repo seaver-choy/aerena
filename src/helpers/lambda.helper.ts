@@ -767,6 +767,7 @@ export const getAthletePaginated = async (
     limit: number,
     searchString: string,
     position: string,
+    leagueTypes: string[],
     initDataRaw: string
 ) => {
     try {
@@ -774,11 +775,12 @@ export const getAthletePaginated = async (
             pageOffset: pageOffset.toString(),
             limit: limit.toString(),
             searchString: searchString,
+            leagueTypes: leagueTypes.toString(),
             position: position,
         };
         const restOperation = get({
             apiName: "playibleApi",
-            path: "portfolio",
+            path: "portfolio/paginated",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,

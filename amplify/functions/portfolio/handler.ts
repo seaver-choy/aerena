@@ -146,10 +146,10 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
         mongoose.PaginateModel<AthleteDocument>
     >("Athletes", athleteSchema, "athletes");
     const pageOffset = parseInt(event.queryStringParameters!.pageOffset!);
-    console.log(pageOffset);
     const limit = parseInt(event.queryStringParameters!.limit!);
     const searchString = event.queryStringParameters!.searchString!;
     const position = event.queryStringParameters!.position!;
+    const leagueTypes = event.queryStringParameters!.leagueTypes!.split(",");
 
     // const search = {
     //     offset: pageOffset,
@@ -177,34 +177,55 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     // const res = await athleteModel.paginate(
     //     ...new PaginationParameters(search).get()
     // );
-    const res = await athleteModel.paginate(
-        {
-            $or: [
-                {
-                    player: {
-                        $regex: searchString,
-                    },
-                    position: position,
+    if (position == "All") {
+        const res = await athleteModel.paginate(
+            {
+                player: {
+                    $regex: searchString,
                 },
-                {
-                    displayName: {
-                        $regex: searchString,
-                    },
-                    position: position,
+                league: {
+                    $in: leagueTypes,
                 },
-            ],
-        },
-        options
-    );
-    console.log(JSON.stringify(res));
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify(res),
-    };
+            },
+            options
+        );
+        console.log(JSON.stringify(res));
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(res),
+        };
+    } else {
+        const res = await athleteModel.paginate(
+            {
+                $or: [
+                    {
+                        player: {
+                            $regex: searchString,
+                        },
+                        position: position,
+                        league: {
+                            $in: leagueTypes,
+                        },
+                    },
+                ],
+            },
+            options
+        );
+        console.log(JSON.stringify(res));
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(res),
+        };
+    }
+
     // athleteModel
     //     .paginate(
     //         {

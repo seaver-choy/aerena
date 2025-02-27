@@ -14,10 +14,15 @@ import {
     getBaseTeamColor,
 } from "../../../../helpers/athletes";
 import { Athlete, TeamColor } from "../../../../helpers/interfaces";
-import { getAthletes, getLeagues } from "../../../../helpers/lambda.helper";
+import {
+    getAthletes,
+    getLeagues,
+    getAthletePaginated,
+} from "../../../../helpers/lambda.helper";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { AthleteModal } from "../../modals/AthleteModal";
 import { LeagueModal } from "../../modals/LeagueModal";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
@@ -27,30 +32,33 @@ import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
 export const Catalog = () => {
     const user = useUsers();
-    const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
+    const positionList = ["All", "Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const [positionIndex, setPositionIndex] = useState<number>(0);
     const [maxLength] = useState<number>(positionList.length - 1);
     const [showAthlete, setShowAthlete] = useState(false);
     const [allAthletes, setAllAthletes] = useState<Athlete[]>([]);
-    const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>(null);
+    const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>([]);
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
     const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
     const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
-    const handlePreviousCategory = () => {
-        if (positionIndex > 0) {
-            setPositionIndex(positionIndex - 1);
-        }
-    };
 
-    const handleNextCategory = () => {
-        if (positionIndex < maxLength) {
-            setPositionIndex(positionIndex + 1);
-        }
-    };
+    const [offset, setOffset] = useState<number>(0);
+    const [hasNextPage, setHasNextPage] = useState<boolean>();
+    // const handlePreviousCategory = () => {
+    //     if (positionIndex > 0) {
+    //         setPositionIndex(positionIndex - 1);
+    //     }
+    // };
+
+    // const handleNextCategory = () => {
+    //     if (positionIndex < maxLength) {
+    //         setPositionIndex(positionIndex + 1);
+    //     }
+    // };
 
     const displayLeagueModal = () => {
         setShowLeagueModal(true);
@@ -69,16 +77,16 @@ export const Catalog = () => {
         setShowAthleteModal(false);
     };
 
-    function compileAthletes(position: string) {
-        const filteredPosition = leagueAthletes.filter((obj) =>
-            obj.position.includes(position)
-        );
+    function compileAthletes() {
+        // const filteredPosition = leagueAthletes.filter((obj) =>
+        //     obj.position.includes(position)
+        // );
 
-        const uniqueAthletesMap = new Map(
-            filteredPosition.map((player) => [player.player, player])
-        );
+        // const uniqueAthletesMap = new Map(
+        //     filteredPosition.map((player) => [player.player, player])
+        // );
 
-        const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
+        const sorted = [...leagueAthletes.values()].sort((a, b) => {
             // const teamA = a.team.toUpperCase();
             // const teamB = b.team.toUpperCase();
 
@@ -95,9 +103,28 @@ export const Catalog = () => {
         setCurrentAthletes(sorted);
     }
 
+    async function fetchMoreData() {
+        console.log("fetching more data");
+        if (hasNextPage) {
+            const res = await getAthletePaginated(
+                offset + 6,
+                6,
+                "",
+                positionList[positionIndex],
+                leagueTypes,
+                user.initDataRaw
+            );
+            setLeagueAthletes([...leagueAthletes, ...res.docs]);
+            setOffset(offset + 6);
+            setHasNextPage(res.hasNextPage);
+        } else {
+            console.log("No more athletes left");
+        }
+    }
+
     useEffect(() => {
         if (allAthletes !== null && leagueAthletes != null) {
-            compileAthletes(positionList[positionIndex]);
+            compileAthletes();
             setShowAthlete(false);
 
             const timer = setTimeout(() => {
@@ -105,31 +132,60 @@ export const Catalog = () => {
             }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [positionIndex, leagueAthletes]);
+    }, [leagueAthletes]);
+
+    // useEffect(() => {
+    //     if (allAthletes !== null && chosenLeagueType != null) {
+    //         const tempAthletes = allAthletes.filter((obj) =>
+    //             obj.league.includes(chosenLeagueType)
+    //         );
+    //         setLeagueAthletes(tempAthletes);
+    //     }
+    // }, [chosenLeagueType]);
+
+    // const getAllAthletes = async () => {
+    //     const allAthletes = await getAthletes(user.initDataRaw);
+    //     const allLeagueTypes = await getLeagues(user.initDataRaw);
+    //     setAllAthletes(allAthletes);
+    //     setLeagueTypes(allLeagueTypes);
+    //     const tempAthletes = allAthletes.filter((obj) =>
+    //         allLeagueTypes.includes(obj.league)
+    //     );
+    //     setLeagueAthletes(tempAthletes);
+    // };
+
+    // useEffect(() => {
+    //     getAllAthletes();
+    // }, []);
 
     useEffect(() => {
-        if (allAthletes !== null && chosenLeagueType != null) {
-            const tempAthletes = allAthletes.filter((obj) =>
-                obj.league.includes(chosenLeagueType)
-            );
-            setLeagueAthletes(tempAthletes);
+        async function fetchAllLeagueTypes() {
+            const res = await getLeagues(user.initDataRaw);
+            setLeagueTypes(res);
         }
-    }, [chosenLeagueType]);
-
-    const getAllAthletes = async () => {
-        const allAthletes = await getAthletes(user.initDataRaw);
-        const allLeagueTypes = await getLeagues(user.initDataRaw);
-        setAllAthletes(allAthletes);
-        setLeagueTypes(allLeagueTypes);
-        const tempAthletes = allAthletes.filter((obj) =>
-            allLeagueTypes.includes(obj.league)
-        );
-        setLeagueAthletes(tempAthletes);
-    };
+        fetchAllLeagueTypes();
+    }, []);
 
     useEffect(() => {
-        getAllAthletes();
-    }, []);
+        // Fetches for the initial athletes with pagination.
+        // Occurs on initial page load and when positionIndex/leagueTypes changes
+        async function fetchInitialAthletes() {
+            const res = await getAthletePaginated(
+                0,
+                6,
+                "",
+                positionList[positionIndex],
+                leagueTypes,
+                user.initDataRaw
+            );
+            console.log(res);
+            setLeagueAthletes(res.docs);
+            setOffset(8);
+            setHasNextPage(res.hasNextPage);
+        }
+
+        fetchInitialAthletes();
+    }, [positionIndex, leagueTypes]);
 
     return (
         <div className="mt-[4vw]">
@@ -200,52 +256,58 @@ export const Catalog = () => {
                         ></img>
                     </div>
                     <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center gap-[5vw] px-[4vw]">
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(0)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 0 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("All")}
                             />
                         </button>
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(1)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 1 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("Roam")}
                             />
                         </button>
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(2)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 2 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("Mid")}
                             />
                         </button>
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(3)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 3 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("Jungle")}
                             />
                         </button>
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(4)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 4 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("Gold")}
                             />
                         </button>
-                        <button className="flex items-center justify-center">
+                        <button
+                            className="flex items-center justify-center"
+                            onClick={() => setPositionIndex(5)}
+                        >
                             <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
+                                className={`h-[10vw] ${positionIndex === 5 ? "opacity-1" : "opacity-50"}`}
+                                src={getAthletePositionLogo("EXP")}
                             />
                         </button>
                         {/* <button
@@ -276,56 +338,72 @@ export const Catalog = () => {
                         </button> */}
                     </div>
                     <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
-                        <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                            {currentAthletes != null &&
-                            currentAthletes?.length > 0
-                                ? currentAthletes?.map((athlete, index) =>
-                                      showAthlete ? (
-                                          <motion.button
-                                              className="relative flex h-[36.4vw] w-[28vw]"
-                                              key={index}
-                                              onClick={() => {
-                                                  displayAthleteModal(athlete);
-                                              }}
-                                              {...appearCardAnimation}
-                                          >
-                                              <AthleteCard
-                                                  color={baseColor}
-                                                  ign={athlete.displayName}
-                                                  role={athlete.position[0]}
-                                                  opacity={{
-                                                      wave: baseColor.wave,
+                        <div
+                            className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]"
+                            id="collection-id"
+                        >
+                            <InfiniteScroll
+                                dataLength={leagueAthletes.length}
+                                next={fetchMoreData}
+                                hasMore={hasNextPage}
+                                loader={<h4>Loading...</h4>}
+                                endMessage={<h4> No more athletes.</h4>}
+                                scrollableTarget={"collection-id"}
+                                className="disable-scrollbar flex flex-row flex-wrap gap-[2vw]"
+                            >
+                                {currentAthletes != null &&
+                                currentAthletes?.length > 0
+                                    ? currentAthletes?.map((athlete, index) =>
+                                          showAthlete ? (
+                                              <motion.button
+                                                  className="relative flex h-[36.4vw] w-[28vw]"
+                                                  key={index}
+                                                  onClick={() => {
+                                                      displayAthleteModal(
+                                                          athlete
+                                                      );
                                                   }}
-                                                  id={index}
-                                              />
-                                          </motion.button>
-                                      ) : (
-                                          <motion.div
-                                              className="relative flex h-[36.4vw] w-[28vw]"
-                                              {...pulseAnimation}
-                                          >
-                                              <img
-                                                  className="h-full w-full"
-                                                  src={AthleteSonner}
-                                              />
-                                          </motion.div>
+                                                  {...appearCardAnimation}
+                                              >
+                                                  <AthleteCard
+                                                      color={baseColor}
+                                                      ign={athlete.displayName}
+                                                      role={athlete.position[0]}
+                                                      opacity={{
+                                                          wave: baseColor.wave,
+                                                      }}
+                                                      id={index}
+                                                  />
+                                              </motion.button>
+                                          ) : (
+                                              <motion.div
+                                                  className="relative flex h-[36.4vw] w-[28vw]"
+                                                  {...pulseAnimation}
+                                              >
+                                                  <img
+                                                      className="h-full w-full"
+                                                      src={AthleteSonner}
+                                                  />
+                                              </motion.div>
+                                          )
                                       )
-                                  )
-                                : currentAthletes != null && (
-                                      <div className="mt-[2vw] px-[5vw]">
-                                          <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
-                                              There are currently no athletes
-                                              for {positionList[positionIndex]}.
-                                              Please check again later.
-                                          </p>
-                                      </div>
-                                  )}
-                            {showAthleteModal && (
-                                <AthleteModal
-                                    athlete={selectedAthlete}
-                                    onClose={closeAthleteModal}
-                                />
-                            )}
+                                    : currentAthletes != null && (
+                                          <div className="mt-[2vw] px-[5vw]">
+                                              <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
+                                                  There are currently no
+                                                  athletes for{" "}
+                                                  {positionList[positionIndex]}.
+                                                  Please check again later.
+                                              </p>
+                                          </div>
+                                      )}
+                                {showAthleteModal && (
+                                    <AthleteModal
+                                        athlete={selectedAthlete}
+                                        onClose={closeAthleteModal}
+                                    />
+                                )}
+                            </InfiniteScroll>
                         </div>
                     </div>
                 </div>
