@@ -82,11 +82,11 @@ export const Catalog = () => {
         //     obj.position.includes(position)
         // );
 
-        // const uniqueAthletesMap = new Map(
-        //     filteredPosition.map((player) => [player.player, player])
-        // );
+        const uniqueAthletesMap = new Map(
+            leagueAthletes.map((player) => [player.athleteId, player])
+        );
 
-        const sorted = [...leagueAthletes.values()].sort((a, b) => {
+        const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
             // const teamA = a.team.toUpperCase();
             // const teamB = b.team.toUpperCase();
 
