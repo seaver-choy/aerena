@@ -125,14 +125,17 @@ export const ChoiceBanner = () => {
                                 },
                             }}
                         >
-                            <img className="h-full" src={PH15ChoicePack} />
+                            <img
+                                className="h-full will-change-transform backface-hidden"
+                                src={PH15ChoicePack}
+                            />
                         </motion.div>
                         <motion.div
                             className="absolute right-[3vw] top-[2vw] h-[15vw] w-[15vw]"
                             {...appearAnimation}
                         >
                             <img
-                                className="h-full w-full"
+                                className="h-full w-full will-change-transform backface-hidden"
                                 src={getStickerImage(packInfo.league)}
                             />
                         </motion.div>
