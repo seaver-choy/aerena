@@ -348,7 +348,7 @@ export const Catalog = () => {
                                 hasMore={hasNextPage}
                                 loader={<h4>Loading...</h4>}
                                 endMessage={<h4> No more athletes.</h4>}
-                                scrollableTarget={"collection-id"}
+                                scrollableTarget={"layout-id"}
                                 className="disable-scrollbar flex flex-row flex-wrap gap-[2vw]"
                             >
                                 {currentAthletes != null &&
