@@ -207,10 +207,6 @@ export const AnimationModal = ({
                                 <div className="h-[80vw] w-[62vw]">
                                     <motion.div
                                         className="h-full w-full backface-hidden"
-                                        style={{
-                                            willChange: "transform",
-                                            backfaceVisibility: "hidden",
-                                        }}
                                         {...(flipAthlete
                                             ? flipLeftAnimation
                                             : bobbleAnimation)}
@@ -252,7 +248,7 @@ export const AnimationModal = ({
                             {animationStage === 4 && (
                                 <div className="flex">
                                     <motion.div
-                                        className="flex h-[50vw] w-[38vw] items-center justify-start will-change-transform backface-hidden"
+                                        className="flex h-[50vw] w-[38vw] items-center justify-start"
                                         onClick={() => {
                                             handleFirstSelection();
                                             setSelectedIndex(0);
@@ -287,7 +283,7 @@ export const AnimationModal = ({
                                         />
                                     </motion.div>
                                     <motion.div
-                                        className="flex h-[50vw] w-[38vw] items-start justify-end will-change-transform backface-hidden"
+                                        className="flex h-[50vw] w-[38vw] items-start justify-end"
                                         onClick={() => {
                                             handleSecondSelection();
                                             setSelectedIndex(1);
@@ -325,7 +321,7 @@ export const AnimationModal = ({
                             )}
                             {animationStage === 5 && (
                                 <motion.div
-                                    className="h-[80vw] w-[62vw] will-change-transform backface-hidden"
+                                    className="h-[80vw] w-[62vw]"
                                     {...appearAnimation}
                                 >
                                     <AthleteCard

@@ -46,7 +46,7 @@ export const AthleteCard = ({
 }: Props) => {
     return (
         <div
-            className="relative h-full w-full backface-hidden"
+            className="relative h-full w-full will-change-transform backface-hidden"
             style={{ transform: "none", transition: "none" }}
         >
             <div className="absolute h-full w-full">
