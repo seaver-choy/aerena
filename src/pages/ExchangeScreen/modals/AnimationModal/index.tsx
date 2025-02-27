@@ -186,7 +186,7 @@ export const AnimationModal = ({
                             )}
                             {animationStage === 2 && (
                                 <motion.div
-                                    className="h-[80vw] w-[62vw] backface-hidden"
+                                    className="h-[80vw] w-[62vw]"
                                     {...(flipBack
                                         ? flipBackAnimation
                                         : !animationBack
@@ -255,16 +255,9 @@ export const AnimationModal = ({
                                         }}
                                         {...(animationState === "appear"
                                             ? appearAnimation
-                                            : animationState === "bobble"
-                                              ? bobbleAnimation
-                                              : firstState === "scaleUp"
-                                                ? scaleUpAnimation
-                                                : scaleDownAnimation)}
-                                        onAnimationComplete={() => {
-                                            if (animationState === "appear") {
-                                                setAnimationState("bobble");
-                                            }
-                                        }}
+                                            : firstState === "scaleUp"
+                                              ? scaleUpAnimation
+                                              : scaleDownAnimation)}
                                     >
                                         <AthleteCard
                                             color={
@@ -290,16 +283,9 @@ export const AnimationModal = ({
                                         }}
                                         {...(animationState === "appear"
                                             ? appearAnimation
-                                            : animationState === "bobble"
-                                              ? bobbleAnimation
-                                              : secondState === "scaleUp"
-                                                ? scaleUpAnimation
-                                                : scaleDownAnimation)}
-                                        onAnimationComplete={() => {
-                                            if (animationState === "appear") {
-                                                setAnimationState("bobble");
-                                            }
-                                        }}
+                                            : secondState === "scaleUp"
+                                              ? scaleUpAnimation
+                                              : scaleDownAnimation)}
                                     >
                                         <AthleteCard
                                             color={
