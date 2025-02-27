@@ -248,7 +248,7 @@ export const AnimationModal = ({
                             {animationStage === 4 && (
                                 <div className="flex">
                                     <motion.div
-                                        className="flex h-[50vw] w-[38vw] items-center justify-start"
+                                        className="flex h-[50vw] w-[38vw] items-center justify-start overflow-hidden"
                                         onClick={() => {
                                             handleFirstSelection();
                                             setSelectedIndex(0);
