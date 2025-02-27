@@ -48,6 +48,7 @@ export const Catalog = () => {
     const [showAthleteOffset, setShowAthleteOffset] = useState<number>(-1);
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
+    const [hasFetchedInitial, setHasFetchedInitial] = useState<boolean>(false);
     const [hasFinishedLoading, setHasFinishedLoading] =
         useState<boolean>(false);
     // const handlePreviousCategory = () => {
@@ -189,6 +190,7 @@ export const Catalog = () => {
             );
             console.log(res);
             setLeagueAthletes(res.docs);
+            setHasFetchedInitial(true);
             setOffset(12);
             setShowAthleteOffset(-1);
             setHasNextPage(res.hasNextPage);
@@ -398,7 +400,8 @@ export const Catalog = () => {
                                               </motion.div>
                                           )
                                       )
-                                    : currentAthletes != null && (
+                                    : currentAthletes != null &&
+                                      hasFetchedInitial && (
                                           <div className="mt-[2vw] px-[5vw]">
                                               <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
                                                   There are currently no
