@@ -214,7 +214,7 @@ export const ChoiceBanner = () => {
             ) : (
                 <div className="h-[74.8vw]">
                     <motion.div className="relative" {...pulseAnimation}>
-                        <img className="h-full" src={ChoicePackSonner} />
+                        <img className="h-full w-full" src={ChoicePackSonner} />
                     </motion.div>
                 </div>
             )}
