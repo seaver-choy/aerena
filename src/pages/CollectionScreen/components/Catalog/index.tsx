@@ -45,7 +45,7 @@ export const Catalog = () => {
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
     const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
-
+    const [showAthleteOffset, setShowAthleteOffset] = useState<number>(-1);
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
     // const handlePreviousCategory = () => {
@@ -86,36 +86,36 @@ export const Catalog = () => {
             leagueAthletes.map((player) => [player.athleteId, player])
         );
 
-        const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
-            // const teamA = a.team.toUpperCase();
-            // const teamB = b.team.toUpperCase();
+        // const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
+        //     // const teamA = a.team.toUpperCase();
+        //     // const teamB = b.team.toUpperCase();
 
-            const nameA = a.displayName;
-            const nameB = b.displayName;
+        //     const nameA = a.displayName;
+        //     const nameB = b.displayName;
 
-            // const teamOrder = teamA.localeCompare(teamB);
-            const nameOrder = nameA.localeCompare(nameB);
+        //     // const teamOrder = teamA.localeCompare(teamB);
+        //     const nameOrder = nameA.localeCompare(nameB);
 
-            // return teamOrder || nameOrder;
-            return nameOrder;
-        });
-        console.log(sorted);
-        setCurrentAthletes(sorted);
+        //     // return teamOrder || nameOrder;
+        //     return nameOrder;
+        // });
+
+        setCurrentAthletes([...uniqueAthletesMap.values()]);
     }
 
     async function fetchMoreData() {
         console.log("fetching more data");
         if (hasNextPage) {
             const res = await getAthletePaginated(
-                offset + 6,
-                6,
+                offset + 12,
+                12,
                 "",
                 positionList[positionIndex],
                 leagueTypes,
                 user.initDataRaw
             );
             setLeagueAthletes([...leagueAthletes, ...res.docs]);
-            setOffset(offset + 6);
+            setOffset(offset + 12);
             setHasNextPage(res.hasNextPage);
         } else {
             console.log("No more athletes left");
@@ -125,10 +125,15 @@ export const Catalog = () => {
     useEffect(() => {
         if (allAthletes !== null && leagueAthletes != null) {
             compileAthletes();
-            setShowAthlete(false);
 
             const timer = setTimeout(() => {
-                setShowAthlete(true);
+                if (showAthleteOffset === -1) {
+                    //initial display, it's set to -1 so it doesn't show the first athlete only
+                    setShowAthleteOffset(12);
+                } else {
+                    console.log(showAthleteOffset);
+                    setShowAthleteOffset(showAthleteOffset + 12);
+                }
             }, 1000);
             return () => clearTimeout(timer);
         }
@@ -172,7 +177,7 @@ export const Catalog = () => {
         async function fetchInitialAthletes() {
             const res = await getAthletePaginated(
                 0,
-                6,
+                12,
                 "",
                 positionList[positionIndex],
                 leagueTypes,
@@ -180,10 +185,10 @@ export const Catalog = () => {
             );
             console.log(res);
             setLeagueAthletes(res.docs);
-            setOffset(8);
+            setOffset(12);
+            setShowAthleteOffset(-1);
             setHasNextPage(res.hasNextPage);
         }
-
         fetchInitialAthletes();
     }, [positionIndex, leagueTypes]);
 
@@ -337,7 +342,10 @@ export const Catalog = () => {
                             />
                         </button> */}
                     </div>
-                    <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
+                    <div
+                        className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]"
+                        id="test-id"
+                    >
                         <div
                             className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]"
                             id="collection-id"
@@ -348,13 +356,13 @@ export const Catalog = () => {
                                 hasMore={hasNextPage}
                                 loader={<h4>Loading...</h4>}
                                 endMessage={<h4> No more athletes.</h4>}
-                                scrollableTarget={"layout-id"}
+                                scrollableTarget="collection-id"
                                 className="disable-scrollbar flex flex-row flex-wrap gap-[2vw]"
                             >
                                 {currentAthletes != null &&
                                 currentAthletes?.length > 0
                                     ? currentAthletes?.map((athlete, index) =>
-                                          showAthlete ? (
+                                          index < showAthleteOffset ? (
                                               <motion.button
                                                   className="relative flex h-[36.4vw] w-[28vw]"
                                                   key={index}
