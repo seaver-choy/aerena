@@ -69,10 +69,9 @@ export const ConfirmModal = ({
                     </div>
                     <div className="flex h-[7.5vw] justify-center gap-[4vw]">
                         <div className="flex h-full w-full">
-                            <motion.button
+                            <button
                                 className="relative flex h-full w-full justify-center"
                                 onClick={onCancel}
-                                {...appearTextAnimation}
                             >
                                 <img className="h-full" src={WhiteButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
@@ -80,11 +79,10 @@ export const ConfirmModal = ({
                                         Cancel
                                     </p>
                                 </div>
-                            </motion.button>
-                            <motion.button
+                            </button>
+                            <button
                                 className="relative flex h-full w-full justify-center"
                                 onClick={onConfirm}
-                                {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
@@ -92,7 +90,7 @@ export const ConfirmModal = ({
                                         Confirm
                                     </p>
                                 </div>
-                            </motion.button>
+                            </button>
                         </div>
                     </div>
                 </div>

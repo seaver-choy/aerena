@@ -61,7 +61,7 @@ export const AnimationModal = ({
                 setFlipBack(false);
                 setAnimationStage(3);
                 setFlipAthlete(true);
-            }, 850);
+            }, 950);
         } else if (animationStage === 3) {
             if (numberOfTimes < 2) {
                 setNumberOfTimes(numberOfTimes + 1);
