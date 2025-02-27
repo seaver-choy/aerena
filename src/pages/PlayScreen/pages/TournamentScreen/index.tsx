@@ -23,7 +23,7 @@ import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
 
 import TournamentSonner from "../../../../assets/sonner/tournament.svg";
-import FreeTournamentBackground from "../../../../assets/background/tournament-free.svg";
+import BasicTournamentBackground from "../../../../assets/background/tournament-basic.svg";
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
@@ -136,7 +136,7 @@ export const TournamentScreen = () => {
                                     className="h-full w-full"
                                     src={
                                         tournament.type == "basic"
-                                            ? FreeTournamentBackground
+                                            ? BasicTournamentBackground
                                             : PremiumTournamentBackground
                                     }
                                 />

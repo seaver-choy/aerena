@@ -1,13 +1,1 @@
-<svg width="394" height="294" viewBox="0 0 394 294" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="pack-choice">
-<g id="Group 391">
-<rect id="Rectangle 415" x="181.029" y="39" width="77" height="20" fill="#D9D9D9"/>
-<rect id="Rectangle 420" x="322.029" y="12" width="59" height="50" fill="#D9D9D9"/>
-<path id="Rectangle 421" d="M0.0288086 42.9999L157.951 28.9999L177.968 257.796L0.0289001 273.5L0.0288086 42.9999Z" fill="#D9D9D9"/>
-<rect id="Rectangle 416" x="181.029" y="70" width="144" height="17" fill="#D9D9D9"/>
-<rect id="Rectangle 417" x="181.029" y="101" width="185" height="56" fill="#D9D9D9"/>
-<rect id="Rectangle 418" x="195.029" y="183" width="152" height="40" fill="#D9D9D9"/>
-<rect id="Rectangle 419" x="195.029" y="230" width="152" height="40" fill="#D9D9D9"/>
-</g>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="394" height="294" fill="#d9d9d9" xmlns:v="https://vecta.io/nano"><path d="M181.029 39h77v20h-77zm-181 4l157.922-14 20.017 228.796L.029 273.5V43zm181 27h144v17h-144zm0 31h185v56h-185zm14 82h152v40h-152zm0 47h152v40h-152z"/></svg>

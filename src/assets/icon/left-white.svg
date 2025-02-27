@@ -1,11 +1,1 @@
-<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="left-white" clip-path="url(#clip0_3385_69651)">
-<path id="arrow_forward_ios" d="M48.4486 100L60 88.0787L23.1028 50L60 11.9213L48.4486 0L-2.08616e-06 50L48.4486 100Z" fill="white"/>
-<rect id="Rectangle 141" width="36.3504" height="36.3504" transform="matrix(-0.692551 0.721369 0.692551 0.721369 74.8252 23.3301)" fill="white"/>
-</g>
-<defs>
-<clipPath id="clip0_3385_69651">
-<rect width="100" height="100" fill="white" transform="matrix(-1 0 0 1 100 0)"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" xmlns:v="https://vecta.io/nano"><g clip-path="url(#A)" fill="#fff"><path d="M48.449 100L60 88.079 23.103 50 60 11.921 48.449 0 0 50l48.449 50zm26.376-76.67L49.651 49.552l25.175 26.222L100 49.552z"/></g><defs><clipPath id="A"><path fill="#fff" transform="matrix(-1 0 0 1 100 0)" d="M0 0h100v100H0z"/></clipPath></defs></svg>

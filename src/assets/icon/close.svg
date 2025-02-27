@@ -1,5 +1,1 @@
-<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="close">
-<path id="Vector 310" d="M50 38L0 0L38 50L0 100L50 62L100 100L62 50L100 0L50 38Z" fill="#AB750F"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" xmlns:v="https://vecta.io/nano"><path d="M50 38L0 0l38 50-38 50 50-38 50 38-38-50 38-50-50 38z" fill="#ab750f"/></svg>
