@@ -59,6 +59,7 @@ export interface Tournament {
             username: string;
             lineup: Token[];
             score: number;
+            submittedAt: Date;
         },
     ];
     prizeCurrency: string;
@@ -101,6 +102,7 @@ export interface UsersJoined {
     username: string;
     lineup: Token[];
     score: number;
+    submittedAt: Date;
 }
 export interface Ranking {
     score: number;

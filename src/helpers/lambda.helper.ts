@@ -15,6 +15,7 @@ export const submitLineup = async (
             username: username,
             lineup: userLineup,
             score: 0,
+            submittedAt: new Date(),
         };
 
         const restOperation = put({
