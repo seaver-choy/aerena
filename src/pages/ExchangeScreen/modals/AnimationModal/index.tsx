@@ -207,6 +207,10 @@ export const AnimationModal = ({
                                 <div className="h-[80vw] w-[62vw]">
                                     <motion.div
                                         className="h-full w-full backface-hidden"
+                                        style={{
+                                            willChange: "transform",
+                                            backfaceVisibility: "hidden",
+                                        }}
                                         {...(flipAthlete
                                             ? flipLeftAnimation
                                             : bobbleAnimation)}
@@ -256,6 +260,10 @@ export const AnimationModal = ({
                                     >
                                         <motion.div
                                             className="h-full w-full"
+                                            style={{
+                                                willChange: "transform",
+                                                backfaceVisibility: "hidden",
+                                            }}
                                             {...(animationState === "appear"
                                                 ? appearAnimation
                                                 : animationState === "bobble"
@@ -302,6 +310,10 @@ export const AnimationModal = ({
                                     >
                                         <motion.div
                                             className="h-full w-full"
+                                            style={{
+                                                willChange: "transform",
+                                                backfaceVisibility: "hidden",
+                                            }}
                                             {...(animationState === "appear"
                                                 ? appearAnimation
                                                 : animationState === "bobble"
