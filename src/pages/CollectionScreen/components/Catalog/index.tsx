@@ -48,6 +48,8 @@ export const Catalog = () => {
     const [showAthleteOffset, setShowAthleteOffset] = useState<number>(-1);
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
+    const [hasFinishedLoading, setHasFinishedLoading] =
+        useState<boolean>(false);
     // const handlePreviousCategory = () => {
     //     if (positionIndex > 0) {
     //         setPositionIndex(positionIndex - 1);
@@ -101,11 +103,12 @@ export const Catalog = () => {
         // });
 
         setCurrentAthletes([...uniqueAthletesMap.values()]);
+        setHasFinishedLoading(true);
     }
 
     async function fetchMoreData() {
         console.log("fetching more data");
-        if (hasNextPage) {
+        if (hasNextPage && hasFinishedLoading) {
             const res = await getAthletePaginated(
                 offset + 12,
                 12,
@@ -114,6 +117,7 @@ export const Catalog = () => {
                 leagueTypes,
                 user.initDataRaw
             );
+            setHasFinishedLoading(false);
             setLeagueAthletes([...leagueAthletes, ...res.docs]);
             setOffset(offset + 12);
             setHasNextPage(res.hasNextPage);
@@ -134,7 +138,7 @@ export const Catalog = () => {
                     console.log(showAthleteOffset);
                     setShowAthleteOffset(showAthleteOffset + 12);
                 }
-            }, 1000);
+            }, 300);
             return () => clearTimeout(timer);
         }
     }, [leagueAthletes]);
@@ -355,7 +359,6 @@ export const Catalog = () => {
                                 next={fetchMoreData}
                                 hasMore={hasNextPage}
                                 loader={<h4>Loading...</h4>}
-                                endMessage={<h4> No more athletes.</h4>}
                                 scrollableTarget="collection-id"
                                 className="disable-scrollbar flex flex-row flex-wrap gap-[2vw]"
                             >
