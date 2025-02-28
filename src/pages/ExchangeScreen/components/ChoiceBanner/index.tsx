@@ -86,9 +86,9 @@ export const ChoiceBanner = () => {
                                     );
                                     setAthleteChoices(result);
                                     setChoicesIndex(0);
-                                    isLoading(false);
                                 }
                             }
+                            isLoading(false);
                         });
                 }
             } else {
@@ -107,15 +107,16 @@ export const ChoiceBanner = () => {
                     );
                     setAthleteChoices(result);
                     setChoicesIndex(0);
-                    isLoading(false);
                 } else {
                     setShowInsufficientModal(true);
                 }
+                isLoading(false);
             }
         }
         catch (e) {
             console.log(e);
             setShowErrorModal(true);
+            isLoading(false);
         }
     };
 
