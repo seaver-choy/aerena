@@ -124,7 +124,7 @@ export const LineupSection = ({
                 lineup.push(obj);
             }
             setTournamentLineup(lineup);
-            setAthleteSkins(user.skins.filter((skin) => skin.league == ongoingTournament.league && skin.isEquipped));
+            setAthleteSkins(user.skins.filter((skin) => skin.isEquipped));
         }
     };
 
