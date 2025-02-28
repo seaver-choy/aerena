@@ -386,19 +386,12 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
             type: type,
             $and: [
                 {
-                    $or: [
-                        {
-                            tournamentStartSubmissionDate: { $lte: currentDate },
-                            tournamentEndSubmissionDate: { $gt: currentDate }
-                        },
-                        {
-                            tournamentStartSubmissionDate: { $lte: currentDate },
-                            resultsTallied: false
-                        }
-                    ]
+                    tournamentStartSubmissionDate: { $lte: currentDate },
+                    tournamentEndSubmissionDate: { $gt: currentDate }
                 }
             ],
-        });
+        })
+        .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Ongoing tournaments not found in database.`
@@ -453,7 +446,6 @@ async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
             result = await tournamentModel.find({
                 type: type,
                 tournamentEndSubmissionDate: { $lt: currentDate },
-                resultsTallied: true,
             })
             .sort({ tournamentEndSubmissionDate: -1 })
             .limit(1);
@@ -507,7 +499,6 @@ async function getPreviousTournaments(event: APIGatewayProxyEvent) {
         const result = await tournamentModel.find({
             type: type,
             tournamentEndSubmissionDate: { $lt: currentDate },
-            resultsTallied: true,
         })
         .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
