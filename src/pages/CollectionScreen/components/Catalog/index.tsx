@@ -44,8 +44,7 @@ export const Catalog = () => {
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
     const [hasFetchedInitial, setHasFetchedInitial] = useState<boolean>(false);
-    const [hasFinishedLoading, setHasFinishedLoading] =
-        useState<boolean>(false);
+
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const [searchString, setSearchString] = useState<string>("");
@@ -74,7 +73,6 @@ export const Catalog = () => {
         );
 
         setCurrentAthletes([...uniqueAthletesMap.values()]);
-        setHasFinishedLoading(true);
     }
 
     function handleSetLeagueType(leagueType: string) {
