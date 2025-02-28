@@ -80,12 +80,13 @@ export const Catalog = () => {
     async function fetchMoreData() {
         if (hasNextPage && !isLoadingMore) {
             setIsLoadingMore(true); // Set loading flag
+            console.log(chosenLeagueType);
             const res = await getAthletePaginated(
                 offset, // Use the current offset
                 12,
                 searchString,
                 positionList[positionIndex],
-                leagueTypes,
+                chosenLeagueType !== null ? [chosenLeagueType] : leagueTypes,
                 user.initDataRaw
             );
 
@@ -138,7 +139,7 @@ export const Catalog = () => {
                 12,
                 searchString,
                 positionList[positionIndex],
-                leagueTypes,
+                chosenLeagueType !== null ? [chosenLeagueType] : leagueTypes,
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);
