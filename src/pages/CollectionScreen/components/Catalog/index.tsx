@@ -192,7 +192,6 @@ export const Catalog = () => {
                 leagueTypes,
                 user.initDataRaw
             );
-            console.log(res);
             setLeagueAthletes(res.docs);
             setHasFetchedInitial(true);
             setOffset(12);
@@ -200,7 +199,7 @@ export const Catalog = () => {
             setHasNextPage(res.hasNextPage);
         }
         fetchInitialAthletes();
-    }, [searchString, positionIndex, leagueTypes]);
+    }, [searchString, positionIndex, leagueTypes, chosenLeagueType]);
 
     return (
         <div className="mt-[4vw]">
