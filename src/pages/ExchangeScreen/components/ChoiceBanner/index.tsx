@@ -130,6 +130,7 @@ export const ChoiceBanner = () => {
                 },
             });
             setAthleteChoice(newSkin);
+            setShowAnimationModal(false);
             setShowSuccessModal(true);
         }
         else {
@@ -152,7 +153,6 @@ export const ChoiceBanner = () => {
     };
 
     const goNext = () => {
-        setShowAnimationModal(false);
         const nextChoicesIndex = choicesIndex + 1;
         if (nextChoicesIndex < athleteChoices.length) {
             setChoicesIndex(nextChoicesIndex);

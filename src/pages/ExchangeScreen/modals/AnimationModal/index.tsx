@@ -24,7 +24,7 @@ import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import { Skin } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
-// import OwnedCard from "../../../../assets/card/owned.svg";
+import { useUsers } from "../../../../hooks/useUser";
 
 interface AnimationModalProps {
     athleteChoices: Skin[];
@@ -36,6 +36,7 @@ export const AnimationModal = ({
     handleAthleteChoice,
 }: AnimationModalProps) => {
     // 0: Initial, 1: Open Pack, 2: Back Card, 3: Athlete Card, 4: Card Selection, 5: Confirm Selection
+    const user = useUsers();
     const [animationStage, setAnimationStage] = useState(0);
     const [animationDust, setAnimationDust] = useState(false);
     const [animationGlow, setAnimationGlow] = useState(false);
@@ -48,6 +49,8 @@ export const AnimationModal = ({
     const [firstState, setFirstState] = useState("default");
     const [secondState, setSecondState] = useState("default");
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [ownedStatus, setOwnedStatus] = useState<boolean[]>([false, false]);
+    const [disabledButtons, setDisabledButtons] = useState<boolean>(false);
 
     const handleButtonClick = () => {
         if (animationStage === 0) {
@@ -73,12 +76,20 @@ export const AnimationModal = ({
         } else if (animationStage === 4) {
             setAnimationStage(5);
         } else if (animationStage === 5) {
+            setDisabledButtons(true);
             handleAthleteChoice(athleteChoices[selectedIndex]);
         }
     };
 
     const handlePackOpening = () => {
         setAnimationStage(2);
+    };
+    
+    const updateOwnedStatus = () => {
+        const currentOwnedStatus = [false, false];
+        currentOwnedStatus[0] = user.skins.findIndex(skin => skin.athleteId === athleteChoices[0].athleteId && skin.team === athleteChoices[0].team && skin.league === athleteChoices[0].league) != -1;
+        currentOwnedStatus[1] = user.skins.findIndex(skin => skin.athleteId === athleteChoices[1].athleteId && skin.team === athleteChoices[1].team && skin.league === athleteChoices[1].league) != -1;
+        setOwnedStatus(currentOwnedStatus);
     };
 
     const getButtonText = () => {
@@ -121,6 +132,8 @@ export const AnimationModal = ({
             setFirstState("default");
             setSecondState("default");
             setSelectedIndex(null);
+            updateOwnedStatus();
+            setDisabledButtons(false);
         }
     }, [athleteChoices]);
 
@@ -186,7 +199,7 @@ export const AnimationModal = ({
                             )}
                             {animationStage === 2 && (
                                 <motion.div
-                                    className="h-[80vw] w-[62vw]"
+                                    className="h-[80vw] w-[62vw] [transform-style:preserve-3d] backface-hidden"
                                     {...(flipBack
                                         ? flipBackAnimation
                                         : !animationBack
@@ -206,7 +219,7 @@ export const AnimationModal = ({
                             {animationStage === 3 && (
                                 <div className="h-[80vw] w-[62vw]">
                                     <motion.div
-                                        className="h-full w-full backface-hidden"
+                                        className="h-full w-full [transform-style:preserve-3d] backface-hidden"
                                         {...(flipAthlete
                                             ? flipLeftAnimation
                                             : bobbleAnimation)}
@@ -241,6 +254,9 @@ export const AnimationModal = ({
                                                     numberOfTimes - 1
                                                 ].league
                                             }
+                                            owned={
+                                                ownedStatus[numberOfTimes - 1]
+                                            }
                                         />
                                     </motion.div>
                                 </div>
@@ -272,6 +288,9 @@ export const AnimationModal = ({
                                             role={athleteChoices[0].position[0]}
                                             type={"basic"}
                                             league={athleteChoices[0].league}
+                                            owned={
+                                                ownedStatus[0]
+                                            }
                                             id={0}
                                         />
                                     </motion.div>
@@ -300,6 +319,9 @@ export const AnimationModal = ({
                                             role={athleteChoices[1].position[0]}
                                             type={"basic"}
                                             league={athleteChoices[1].league}
+                                            owned={
+                                                ownedStatus[1]
+                                            }
                                             id={1}
                                         />
                                     </motion.div>
@@ -329,6 +351,9 @@ export const AnimationModal = ({
                                         type={"basic"}
                                         league={
                                             athleteChoices[selectedIndex].league
+                                        }
+                                        owned={
+                                            ownedStatus[selectedIndex]
                                         }
                                         id={2}
                                     />
@@ -420,6 +445,7 @@ export const AnimationModal = ({
                                         className="relative flex h-full w-full justify-center"
                                         onClick={() => setAnimationStage(4)}
                                         {...appearTextAnimation}
+                                        disabled={disabledButtons}
                                     >
                                         <img
                                             className="h-full"
@@ -435,6 +461,7 @@ export const AnimationModal = ({
                                         className="relative flex h-full w-full justify-center"
                                         onClick={handleButtonClick}
                                         {...appearTextAnimation}
+                                        disabled={disabledButtons}
                                     >
                                         <img
                                             className="h-full"

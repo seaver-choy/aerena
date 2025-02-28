@@ -26,6 +26,8 @@ import { getAthleteSticker } from "../../helpers/athletes";
 import PH15Card from "../../assets/card/ph15.svg";
 
 import { TeamColor } from "../../helpers/interfaces";
+import OwnedCard from "../../assets/card/owned.svg";
+
 interface Props {
     color: TeamColor;
     ign: string;
@@ -34,6 +36,7 @@ interface Props {
     league?: string;
     type?: string;
     id?: number;
+    owned? : boolean;
 }
 export const AthleteCard = ({
     color,
@@ -43,6 +46,7 @@ export const AthleteCard = ({
     type = null,
     league = null,
     id = -1,
+    owned = false,
 }: Props) => {
     return (
         <div
@@ -128,6 +132,16 @@ export const AthleteCard = ({
                     </div>
                 </>
             )}
+            {
+                owned && 
+                (
+                    <img
+                        className="absolute h-full"
+                        src={OwnedCard}
+                        draggable={false}
+                    />
+                )
+            }
         </div>
     );
 };
