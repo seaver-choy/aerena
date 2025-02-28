@@ -200,12 +200,29 @@ export const TournamentScreen = () => {
                                 >
                                     <div className="flex h-full w-[100%] flex-col items-center justify-center">
                                         {classification != undefined &&
-                                            classification != "" &&
-                                            dateRangeFormat(
-                                                tournament.tournamentStartSubmissionDate,
-                                                tournament.tournamentEndSubmissionDate,
-                                                tournament.type
-                                            )}
+                                            classification != "" && (
+                                                <div className="flex flex-col items-center">
+                                                    <div>
+                                                        {dateRangeFormat(
+                                                            tournament.tournamentStartSubmissionDate,
+                                                            tournament.tournamentEndSubmissionDate,
+                                                            tournament.type
+                                                        )}
+                                                    </div>
+                                                    {
+                                                        tournament != null &&
+                                                        isTournamentClosed(tournament) &&
+                                                        (
+                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                                {tournament.resultsTallied
+                                                                    ? ""
+                                                                    : "Calculating Results"}
+                                                            </p>
+                                                        )
+                                                    }
+                                                </div>
+                                            )
+                                        }
                                         {classification != undefined &&
                                             classification === "" && (
                                                 <div className="flex flex-col items-center">
@@ -219,29 +236,28 @@ export const TournamentScreen = () => {
                                                             tournament.type
                                                         )}
                                                     </div>
-                                                    {tournament != null &&
-                                                    isTournamentClosed(
-                                                        tournament
-                                                    ) ? (
-                                                        <p
-                                                            className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
-                                                        >
-                                                            {tournament.resultsTallied
-                                                                ? ""
-                                                                : "Calculating Results"}
-                                                        </p>
-                                                    ) : (
-                                                        <p
-                                                            className={`font-montserrat text-[2.8vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}
-                                                        >
-                                                            {isTournamentUpcoming(
-                                                                tournament
-                                                            )
-                                                                ? "Opens in "
-                                                                : "Closes in "}
-                                                            {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
-                                                        </p>
-                                                    )}
+                                                    {
+                                                        tournament != null &&
+                                                        isTournamentClosed(tournament) ? 
+                                                        (
+                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                                {tournament.resultsTallied
+                                                                    ? ""
+                                                                    : "Calculating Results"}
+                                                            </p>
+                                                        )
+                                                        :
+                                                        (
+                                                            <p className={`font-montserrat text-[2.8vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"} ${timeLeft.days + timeLeft.hours + timeLeft.minutes + timeLeft.seconds === 0 ? "hidden" : ""}`}>
+                                                                {isTournamentUpcoming(
+                                                                    tournament
+                                                                )
+                                                                    ? "Opens in "
+                                                                    : "Closes in "}
+                                                                {`${formatTime(timeLeft.days)} : ${formatTime(timeLeft.hours)} : ${formatTime(timeLeft.minutes)} : ${formatTime(timeLeft.seconds)}`}
+                                                            </p>
+                                                        )
+                                                        }
                                                 </div>
                                             )}
                                     </div>
@@ -261,18 +277,18 @@ export const TournamentScreen = () => {
                             </motion.div>
                         </div>
                     )}
-                    {classification != "PREVIOUS" &&
-                    !tournament.resultsTallied ? (
-                        <PointsSystem />
-                    ) : (
-                        ""
-                    )}
-                    {classification == "PREVIOUS" ||
-                    tournament.resultsTallied ? (
-                        <Winners rankings={rankings} tournament={tournament} />
-                    ) : (
-                        ""
-                    )}
+                    {
+                        !tournament.resultsTallied ? (
+                            <PointsSystem />
+                        ) : (
+                            ""
+                        )}
+                    {
+                        tournament.resultsTallied ? (
+                            <Winners rankings={rankings} tournament={tournament} />
+                        ) : (
+                            ""
+                        )}
                 </div>
             )}
         </Layout>
