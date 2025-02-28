@@ -14,11 +14,11 @@ import { mintFunction } from "./functions/mint/resource";
 import { portfolioFunction } from "./functions/portfolio/resource";
 import { schedulerFunction } from "./functions/scheduler/resource";
 import { friendsFunction } from "./functions/friends/resource";
-import { countersFunction } from "./functions/counters/resource";
 import { statsFunction } from "./functions/stats/resource";
 import { upgradeFunction } from "./functions/upgrade/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
 import { mlTournamentFunction } from './functions/mltournaments/resource';
+import { packInfoFunction } from './functions/packinfo/resource';
 import * as dotenv from "dotenv";
 import * as path from "path";
 /**
@@ -32,11 +32,11 @@ const backend = defineBackend({
     portfolioFunction,
     schedulerFunction,
     friendsFunction,
-    countersFunction,
     statsFunction,
     upgradeFunction,
     telegramstarsFunction,
     mlTournamentFunction,
+    packInfoFunction,
 });
 
 const __dirname = path.dirname("../.env");
@@ -133,9 +133,6 @@ const schedulerIntegration = new LambdaIntegration(
 const friendsIntegration = new LambdaIntegration(
     backend.friendsFunction.resources.lambda
 );
-const countersIntegration = new LambdaIntegration(
-    backend.countersFunction.resources.lambda
-);
 const statsIntegration = new LambdaIntegration(
     backend.statsFunction.resources.lambda
 );
@@ -148,6 +145,9 @@ const telegramstarsIntegration = new LambdaIntegration(
 const mlTournamentIntegration = new LambdaIntegration(
     backend.mlTournamentFunction.resources.lambda
 );
+const packInfoIntegration = new LambdaIntegration(
+    backend.packInfoFunction.resources.lambda
+);
 
 //addResource section
 const userPath = api.root.addResource("user", {});
@@ -158,12 +158,12 @@ const schedulerPath = api.root.addResource("recharge", {});
 const friendsPath = api.root.addResource("friends", {});
 const joinTgChannelPath = userPath.addResource("joinTgChannel", {});
 const loginPath = userPath.addResource("login", {});
-const countersPath = api.root.addResource("counters", {});
 const statsPath = api.root.addResource("stats", {});
 const upgradePath = api.root.addResource("upgrade", {});
 const telegramstarsPath = api.root.addResource("telegramstars", {});
 const invoicelinkPath = api.root.addResource("invoice", {});
 const mlTournamentPath = api.root.addResource("mltournaments", {});
+const packInfoPath = api.root.addResource("packinfos", {});
 const joinBasicPath = api.root.addResource("joinbasic", {});
 
 //addMethod section
@@ -197,6 +197,9 @@ tournamentsPath.addMethod("PUT", tournamentsIntegration, {
 mintPath.addMethod("GET", mintIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
+mintPath.addMethod("POST", mintIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
 mintPath.addMethod("PUT", mintIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
@@ -213,10 +216,6 @@ friendsPath.addMethod("GET", friendsIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 friendsPath.addMethod("PUT", friendsIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
-
-countersPath.addMethod("GET", countersIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
@@ -240,6 +239,10 @@ mlTournamentPath.addMethod("GET", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
+packInfoPath.addMethod("GET", packInfoIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
@@ -279,6 +282,11 @@ telegramstarsPath.addProxy({
 mlTournamentPath.addProxy({
     anyMethod: true,
     defaultIntegration: mlTournamentIntegration,
+});
+
+packInfoPath.addProxy({
+    anyMethod: true,
+    defaultIntegration: packInfoIntegration,
 });
 
 backend.addOutput({

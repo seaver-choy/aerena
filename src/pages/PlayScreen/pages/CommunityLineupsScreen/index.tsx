@@ -61,61 +61,65 @@ export const CommunityLineupsScreen = () => {
                 > */}
             <div className="mt-[6vw] flex flex-col gap-[4vw]">
                 {displayLineup !== null &&
-                    displayLineup.map((userInfo) =>
-                        (
-                            <div className="relative h-[109.5vw] w-full">
+                    displayLineup.map((userInfo) => (
+                        <div className="relative h-[109.5vw] w-full">
+                            <img
+                                className="h-full w-full"
+                                src={BasicBoardBackground}
+                            />
+                            <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
+                                <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">
+                                    @{userInfo.username}
+                                </p>
+                            </div>
+                            <div className="absolute right-[7.5vw] top-[1.4vw] flex h-[9vw] w-[15vw] flex-col items-center">
+                                <p className="font-russoone text-[2.5vw] text-white">
+                                    POINTS
+                                </p>
+                                <p className="-mt-[2vw] font-russoone text-[6vw] text-white">
+                                    {userInfo.score}
+                                </p>
+                            </div>
+                            <div className="absolute left-[6vw] top-[11.3vw] flex h-[6.5vw] w-[60vw] items-center">
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                    {userInfo.lineupName}
+                                </p>
+                            </div>
+                            <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
+                                {userInfo.lineup.map((athlete, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative flex h-[36.4vw] w-[28vw]"
+                                    >
+                                        <AthleteCard
+                                            color={athlete.skin?.teamData.colors ?? baseColor}
+                                            ign={athlete.displayName}
+                                            role={athlete.position[0]}
+                                            opacity={{
+                                                wave: athlete.skin?.teamData.colors.wave ?? baseColor.wave,
+                                            }}
+                                            type={athlete.skin ? "basic" : null}
+                                            league={athlete.skin ? athlete.league : null}
+                                            id={index}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="absolute bottom-[1.4vw] left-[1.8vw] h-[12vw] w-[12vw]">
                                 <img
                                     className="h-full w-full"
-                                    src={BasicBoardBackground}
+                                    src={getStickerImage(
+                                        ongoingTournament.league
+                                    )}
                                 />
-                                <div className="absolute left-[7.2vw] top-[1.2vw] flex h-[5.7vw] w-[27vw] items-center justify-center">
-                                    <p className="mt-[0.5vw] font-russoone text-[2.5vw] text-white">
-                                        @{userInfo.username}
-                                    </p>
-                                </div>
-                                <div className="absolute right-[7.5vw] top-[1.4vw] flex h-[9vw] w-[15vw] flex-col items-center">
-                                    <p className="font-russoone text-[2.5vw] text-white">
-                                        POINTS
-                                    </p>
-                                    <p className="-mt-[2vw] font-russoone text-[6vw] text-white">
-                                        {userInfo.score}
-                                    </p>
-                                </div>
-                                <div className="absolute left-[6vw] top-[11.3vw] flex h-[6.5vw] w-[60vw] items-center">
-                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
-                                        {ongoingTournament.tournamentName}
-                                    </p>
-                                </div>
-                                <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                    {userInfo.lineup.map((athlete, index) => (
-                                        <div key={index} className="relative flex h-[36.4vw] w-[28vw]">
-                                            {/* <img
-                                                className="h-full"
-                                                src={athlete.img}
-                                            /> */}
-                                            <AthleteCard
-                                                color={baseColor}
-                                                ign={athlete.displayName}
-                                                role={athlete.position[0]}
-                                                opacity={{
-                                                    wave: baseColor.wave,
-                                                }}
-                                                id={index}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="absolute bottom-[1.4vw] left-[1.8vw] h-[12vw] w-[12vw]">
-                                    <img
-                                        className="h-full w-full"
-                                        src={getStickerImage(
-                                            ongoingTournament.league
-                                        )}
-                                    />
-                                </div>
                             </div>
-                        )
-                    )}
+                            <div className="absolute bottom-[2.5vw] left-[17vw] flex h-[6.5vw] w-[60vw] items-center">
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                    {ongoingTournament.tournamentName}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
             </div>
             {reversedUsersJoined.length == 0 ? (
                 <div className="mt-[30vh]">

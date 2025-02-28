@@ -9,8 +9,11 @@ import {
     saveStarsTransaction,
     joinBasic,
 } from "../../../../helpers/lambda.helper";
-import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
-import { isTournamentClosed, isTournamentUpcoming } from "../../../../hooks/dates";
+import { Skin, Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import {
+    isTournamentClosed,
+    isTournamentUpcoming,
+} from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
@@ -22,9 +25,10 @@ import { LoadingModal } from "../../modals/LoadingModal";
 import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
-import TGStarWhite from "../../../../assets/icon/tg-star-white.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
+import { NameModal } from "../../modals/NameModal";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
@@ -41,6 +45,10 @@ export const LineupSection = ({
 }: LineupSectionProps) => {
     // const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
     const user = useUsers();
+    const positionList =
+        ongoingTournament !== null
+            ? ongoingTournament.positions
+            : ["Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
@@ -49,7 +57,11 @@ export const LineupSection = ({
         useState<boolean>(false);
     const [showInsufficientModal, setShowInsufficientModal] =
         useState<boolean>(false);
+    const [teamName, setTeamName] = useState<string>("");
+    const [showNameModal, setShowNameModal] =
+    useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
+    const [athleteSkins, setAthleteSkins] = useState<Skin[]>([]);
 
     const defaultLineup = [
         {
@@ -97,7 +109,7 @@ export const LineupSection = ({
             athlete: null,
         },
     ]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loading, isLoading] = useState<boolean>(false);
     const invoice = initInvoice();
 
     const setupTournamentLineup = () => {
@@ -111,30 +123,8 @@ export const LineupSection = ({
                 };
                 lineup.push(obj);
             }
-
-            // /* Code for single user lineup submission*/
-            // const userFilter = ongoingTournament.usersJoined.filter(
-            //     (x) => x.username === user.username
-            // );
-            // if (userFilter.length > 0) {
-            //     for (let i = 0; i < ongoingTournament.positions.length; i++) {
-            //         const obj = {
-            //             position: ongoingTournament.positions[i],
-            //             athlete: userFilter[0].lineup[i],
-            //         };
-            //         lineup.push(obj);
-            //     }
-            //     setHasJoinedTournament(true);
-            // } else {
-            //     for (const position of ongoingTournament.positions) {
-            //         const obj = {
-            //             position: position,
-            //             athlete: null,
-            //         };
-            //         lineup.push(obj);
-            //     }
-            // }
             setTournamentLineup(lineup);
+            setAthleteSkins(user.skins.filter((skin) => skin.isEquipped));
         }
     };
 
@@ -147,8 +137,14 @@ export const LineupSection = ({
                 user.initDataRaw
             );
 
+            
             const lineup = tournamentLineup.map((obj, i) => {
-                return { ...obj, athlete: luckyPicks[i] };
+                const skin = athleteSkins?.find(s => s.position[0] === positionList[i] && s.athleteId === (luckyPicks[i]?.athleteId ?? null));
+                
+                if(skin == undefined)
+                    return { ...obj, athlete: luckyPicks[i] };
+                else
+                    return { ...obj, athlete: {...luckyPicks[i], skin: { skinId: skin.skinId, teamData: skin.teamData }} };
             });
             setTournamentLineup(lineup);
         }
@@ -161,6 +157,7 @@ export const LineupSection = ({
                 user.id,
                 user.username,
                 lineup,
+                teamName == "" ? `${user.username}'s Lineup` : teamName,
                 user.initDataRaw
             );
             if (result.userUpdate) {
@@ -172,7 +169,7 @@ export const LineupSection = ({
                     },
                 });
                 //setHasJoinedTournament(true);
-                setIsLoading(false);
+                isLoading(false);
                 setShowSuccessModal(true);
                 setTournamentLineup(defaultLineup);
                 updateLineup(result.tournamentUpdate);
@@ -189,11 +186,11 @@ export const LineupSection = ({
         try {
             const check = tournamentLineup.every((obj) => obj.athlete !== null);
             if (check) {
-                setIsLoading(true);
+                isLoading(true);
                 const lineup = tournamentLineup.map((obj) => {
                     return obj.athlete;
                 });
-
+                console.log(lineup);
                 if (ongoingTournament.type === "premium") {
                     const invoiceLink =
                         await getInvoiceLinkForPremiumTournament(
@@ -203,7 +200,7 @@ export const LineupSection = ({
                             ongoingTournament.joinCost,
                             user.initDataRaw
                         );
-                    setIsLoading(false);
+                    isLoading(false);
                     if (invoiceLink != null && invoiceLink["link"] != null) {
                         invoice
                             .open(invoiceLink["link"], "url")
@@ -219,7 +216,7 @@ export const LineupSection = ({
                                             user.initDataRaw
                                         );
                                     if (transactionResult) {
-                                        setIsLoading(true);
+                                        isLoading(true);
                                         lineupSubmission(lineup);
                                     }
                                 }
@@ -237,7 +234,7 @@ export const LineupSection = ({
                     });
                     lineupSubmission(lineup);
                 } else {
-                    setIsLoading(false);
+                    isLoading(false);
                     setShowInsufficientModal(true);
                 }
             } else {
@@ -245,9 +242,10 @@ export const LineupSection = ({
             }
         } catch (e) {
             console.log(e);
-            setIsLoading(false);
+            isLoading(false);
             setShowErrorModal(true);
         }
+        setTeamName("");
     };
 
     useEffect(() => {
@@ -295,17 +293,31 @@ export const LineupSection = ({
                 )}
                 {showConfirmModal && (
                     <ConfirmModal
-                        onCancel={() => setShowConfirmModal(false)}
+                        onClose={() => setShowConfirmModal(false)}
                         onConfirm={() => {
+                            setShowNameModal(true);
                             setShowConfirmModal(false);
-                            handleEnterTournament();
                         }}
-                        loading={isLoading}
+                        loading={loading}
                         tournamentType={ongoingTournament.type}
                         joinCost={ongoingTournament.joinCost}
                     />
                 )}
-                {isLoading && <LoadingModal />}
+                {showNameModal && (
+                    <NameModal
+                        teamName={teamName}
+                        setTeamName={setTeamName}
+                        onClose={() => {
+                            setTeamName("");
+                            setShowNameModal(false)
+                        }}
+                        onConfirm={() => {
+                            setShowNameModal(false);
+                            handleEnterTournament();
+                        }}
+                    />
+                )}
+                {loading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
                     <LineupTitle />
@@ -316,7 +328,7 @@ export const LineupSection = ({
                                 : 0
                         }
                         // playTab={playTab}
-                        //athletes={user.tokens}
+                        athleteSkins={athleteSkins}
                         tournament={ongoingTournament}
                         tournamentLineup={tournamentLineup}
                         setTournamentLineup={setTournamentLineup}
@@ -327,13 +339,17 @@ export const LineupSection = ({
                         <button
                             className="relative w-full items-center justify-center"
                             onClick={
-                                isLoading
+                                loading
                                     ? () => {}
                                     : () => setShowConfirmModal(true)
                             }
-                            disabled={isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament)}
+                            disabled={
+                                isTournamentClosed(ongoingTournament) ||
+                                isTournamentUpcoming(ongoingTournament)
+                            }
                         >
-                            {isTournamentClosed(ongoingTournament) || isTournamentUpcoming(ongoingTournament) ? (
+                            {isTournamentClosed(ongoingTournament) ||
+                            isTournamentUpcoming(ongoingTournament) ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
                                     <img
                                         className="mt-[0.1vw] h-[4vw]"
@@ -360,7 +376,7 @@ export const LineupSection = ({
                                     </p>
                                     <img
                                         className="mt-[0.1vw] h-[2.5vw]"
-                                        src={TGStarWhite}
+                                        src={TGStarIcon}
                                     ></img>
                                     <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}

@@ -23,9 +23,9 @@ import { PointsSystem } from "../../components/PointsSystem";
 import { Winners } from "../../components/Winners";
 
 import TournamentSonner from "../../../../assets/sonner/tournament.svg";
-import FreeTournamentBackground from "../../../../assets/background/tournament-free.svg";
+import BasicTournamentBackground from "../../../../assets/background/tournament-basic.svg";
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
-import TGStar from "../../../../assets/icon/tg-star-white.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import Closed from "../../../../assets/others/closed.svg";
 
@@ -136,7 +136,7 @@ export const TournamentScreen = () => {
                                     className="h-full w-full"
                                     src={
                                         tournament.type == "basic"
-                                            ? FreeTournamentBackground
+                                            ? BasicTournamentBackground
                                             : PremiumTournamentBackground
                                     }
                                 />
@@ -159,7 +159,7 @@ export const TournamentScreen = () => {
                                         />
                                     ) : tournament.prizeCurrency === "stars" ? (
                                         <img
-                                            src={TGStar}
+                                            src={TGStarIcon}
                                             className="mr-[2vw] mt-[2.5vw] h-[7vw]"
                                         />
                                     ) : (

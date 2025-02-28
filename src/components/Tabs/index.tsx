@@ -14,15 +14,15 @@ export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
     const [selectedOption, setSelectedOption] = useState(selectedTab);
 
     const handleToggle = (option) => {
-        if(option !== "Favorites") //temporary in disabling Favorites; comment together with the line in FriendsScreen/index.tsx to enable
-        setSelectedOption(option);
-        if (onToggle)
-            onToggle(option);
+        if (option !== "Favorites")
+            //temporary in disabling Favorites; comment together with the line in FriendsScreen/index.tsx to enable
+            setSelectedOption(option);
+        if (onToggle) onToggle(option);
     };
 
     return (
         <motion.div
-            className="mx-[4vw] mt-[4vw] flex justify-center gap-[2vw] rounded-[2.5vw] bg-graydark p-[1.5vw]"
+            className="mx-[4vw] mt-[4vw] flex justify-center gap-[2vw] rounded-[2.5vw] bg-graydark p-[1.5vw] will-change-transform backface-hidden"
             {...slideLeftAnimation}
         >
             {options.map((option) => (

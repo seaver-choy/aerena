@@ -64,6 +64,10 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return checkReferralCode(event);
     } else if (event.path.includes("addnewreferral")) {
         return addNewReferral(event);
+    } else if (event.path.includes("paypacks")) {
+        return payPacks(event);
+    } else if (event.path.includes("equipskin")) {
+        return equipSkin(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -124,6 +128,15 @@ async function getUser(event: APIGatewayProxyEvent) {
             }),
         };
     }
+}
+
+function generateCode(length = 8) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = 'AER';
+    for (let i = code.length; i < length; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
 }
 
 async function createUser(event: APIGatewayProxyEvent) {
@@ -959,11 +972,166 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
     }
 }
 
-function generateCode(length = 8) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = 'AER';
-    for (let i = code.length; i < length; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
+async function payPacks(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+
+    const payload = JSON.parse(JSON.parse(event.body!));
+    const userID = payload.userId;
+    const packInfo = payload.packInfo;
+    const count = payload.count;
+    const amount = packInfo.bpCost * count;
+    const userResult = await userModel.findOne({
+        userID: userID,
+    });
+    
+    if (!userResult) {
+        console.error(`[ERROR] User ${userID} not found`);
+        return {
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({ message: "No user found" }),
+        };
     }
-    return code;
+
+    try {
+        if (userResult.points < amount) {
+            console.error(
+                `[ERROR] User ${userID} does not have ${amount} points to purchase pack, only has ${userResult.points}`
+            );
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message:
+                        "User does not have enough points to purchase this pack",
+                }),
+            };
+        }
+        
+        const userUpdate = await userModel.findOneAndUpdate(
+            { userID: userID },
+            {
+                $set: {
+                    pointsUpdatedAt: new Date(),
+                },
+                $inc: { points: -amount },
+            },
+            { new: true }
+        );
+
+        console.info(`[USER][PACKS] User ${userID} has paid ${amount} BP for ${count} ${payload.packId} pack${count > 1 ? "s" : ""}`);
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(userUpdate),
+        };
+    } catch (err) {
+        await userModel.findOneAndReplace(
+            { userID: userID },
+            userResult
+        );
+        
+        console.error(
+            `[ERROR][USER][PACKS] ${userID} has encountered an error \n ${err}`
+        );
+
+        console.info(
+            `User ${userID} initial state \n ${JSON.stringify(userResult)}`
+        );
+
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({ error: err }),
+        };
+    }
+}
+
+async function equipSkin(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+
+    const payload = JSON.parse(JSON.parse(event.body!));
+    const userID = payload.userId;
+    const oldIndex = payload.oldIndex;
+    const newIndex = payload.newIndex;
+
+    const userResult = await userModel.findOne({
+        userID: userID,
+    });
+    
+    if (!userResult) {
+        console.error(`[ERROR] User ${userID} not found`);
+        return {
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({ message: "No user found" }),
+        };
+    }
+
+    try {
+        const updateQuery: Record<string, boolean> = {};
+    
+        if (oldIndex >= 0) {
+            updateQuery[`skins.${oldIndex}.isEquipped`] = false;
+        }
+        
+        if (newIndex >= 0) {
+            updateQuery[`skins.${newIndex}.isEquipped`] = true;
+        }
+
+        const userUpdate = await userModel.findOneAndUpdate(
+            { userID: userID },
+            { $set: updateQuery },
+            { new: true }
+        );
+
+        console.info(`[USER][SKIN] User ${userID} equipped ${newIndex == -1 ? 'Default Skin' : 'skins[' + newIndex + ']'} for ${userUpdate.skins[oldIndex == -1 ? newIndex : oldIndex].player}`);
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify(userUpdate),
+        };
+    } catch (err) {
+        await userModel.findOneAndReplace(
+            { userID: userID },
+            userResult
+        );
+        
+        console.error(
+            `[ERROR][USER][SKIN] ${userID} has encountered an error \n ${err}`
+        );
+
+        console.info(
+            `User ${userID} initial state \n ${JSON.stringify(userResult)}`
+        );
+
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({ error: err }),
+        };
+    }
 }

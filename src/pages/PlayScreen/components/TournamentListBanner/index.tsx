@@ -11,7 +11,7 @@ import { getStickerImage } from "../../../../helpers/images";
 import { dateRangeFormat } from "../../../../hooks/dates";
 
 import TournamentListSonner from "../../../../assets/sonner/tournament-list.svg";
-import FreeTournamentListBackground from "../../../../assets/background/tournament-list-free.svg";
+import BasicTournamentListBackground from "../../../../assets/background/tournament-list-basic.svg";
 import PremiumTournamentListBackground from "../../../../assets/background/tournament-list-premium.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
@@ -46,14 +46,14 @@ export const TournamentListBanner = ({
         <div>
             {showTournament ? (
                 <div
-                    className={`mx-[4vw] mt-[4vw] h-[30.6vw] ${tournament.type == "basic" ? "" : "bg-graydark"}`}
+                    className={`mx-[4vw] mt-[4vw] h-[30.6vw] overflow-hidden ${tournament.type == "basic" ? "" : "bg-graydark"}`}
                 >
                     <div className="relative flex justify-center">
                         <img
                             className="h-full w-full"
                             src={
                                 tournament.type == "basic"
-                                    ? FreeTournamentListBackground
+                                    ? BasicTournamentListBackground
                                     : PremiumTournamentListBackground
                             }
                         />
@@ -66,7 +66,7 @@ export const TournamentListBanner = ({
                             </p>
                         </motion.div>
                         <motion.div
-                            className="absolute right-[1vw] top-[1vw] h-[15vw] w-[15vw]"
+                            className="absolute right-[1vw] top-[1vw] h-[15vw] w-[15vw] will-change-transform backface-hidden"
                             {...appearAnimation}
                         >
                             <img

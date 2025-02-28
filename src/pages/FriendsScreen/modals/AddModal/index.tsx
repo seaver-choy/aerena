@@ -19,7 +19,7 @@ export const AddModal = ({ handleSubmit, onClose }: AddModalProps) => {
     const handleCheckReferralCode = async () => {
         handleSubmit(searchReferral);
         onClose();
-    }
+    };
 
     const handleCodeChange = (e) => {
         setSearchReferral(e.target.value);

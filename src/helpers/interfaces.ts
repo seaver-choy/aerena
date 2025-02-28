@@ -7,6 +7,20 @@ export interface Token {
     img: string;
     athleteScore: number;
     league: string;
+    skin?: {
+        skinId: string;
+        teamData: {
+            colors: {
+                main: string;
+                light: string;
+                dark: string;
+                wings: string;
+                accent: string;
+                details: string;
+                wave: string;
+            },
+        },
+    }
 }
 
 export interface UpgradeToken extends Token {
@@ -30,7 +44,7 @@ export interface Athlete {
     player: string;
     displayName: string;
     team: string;
-    teamName: string,
+    teamName: string;
     totalKills: number;
     avgKills: number;
     totalDeaths: number;
@@ -43,6 +57,14 @@ export interface Athlete {
     numSeasonsPlayed: number;
     league: string;
     type: string;
+}
+export interface SameAthlete extends Athlete {
+    teamData: {
+        colors: TeamColor;
+    };
+    tournamentData: {
+        endDate: Date;
+    };
 }
 
 export interface Tournament {
@@ -58,6 +80,7 @@ export interface Tournament {
         {
             username: string;
             lineup: Token[];
+            lineupName: string;
             score: number;
             submittedAt: Date;
         },
@@ -101,6 +124,7 @@ export interface TeamColor {
 export interface UsersJoined {
     username: string;
     lineup: Token[];
+    lineupName: string;
     score: number;
     submittedAt: Date;
 }
@@ -124,9 +148,25 @@ export interface Stats {
     competitionType: string;
 }
 export interface AverageStats {
+    league?: string;
     averageKills: number;
     averageDeaths: number;
     averageAssists: number;
+    averagePoints: number;
+}
+
+export interface AthleteProfile {
+    athleteId: number;
+    name: string;
+    ign: string;
+    country: string;
+    birthday: string;
+    alternateIgns: string[];
+    latestTournament?: {
+        code: string;
+        endDate: Date;
+    };
+    latestPosition: string;
 }
 
 export interface TeamProfile {
@@ -146,4 +186,31 @@ export interface Referrer {
     userID: number;
     referralCode: string;
     referralDate: Date;
+}
+
+export interface PackInfo {
+    packId: string;
+    packType: string;
+    league: string;
+    type: string;
+    bpCost: number;
+    starCost: number;
+    isActive: boolean;
+}
+
+export interface Skin {
+    skinId: string;
+    athleteId: number;
+    player: string;
+    position: [string];
+    team: string;
+    league: string;
+    type: string;
+    teamData: {
+        colors: TeamColor;
+    };
+    isEquipped: boolean;
+    packId: string;
+    costType: string;
+    savedAt: Date;
 }

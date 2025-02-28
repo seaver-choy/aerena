@@ -8,9 +8,11 @@ import {
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-gold.svg";
 
 interface ConfirmModalProps {
-    onCancel: () => void;
+    onClose: () => void;
     onConfirm: () => void;
     loading: boolean;
     tournamentType?: string;
@@ -18,7 +20,7 @@ interface ConfirmModalProps {
 }
 
 export const ConfirmModal = ({
-    onCancel,
+    onClose,
     onConfirm,
     loading,
     tournamentType = null,
@@ -47,21 +49,34 @@ export const ConfirmModal = ({
                         <motion.div {...appearTextAnimation}>
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
                                 You will join this tournament using your
-                                selected lineup.{" "}
-                                {tournamentType === "basic" ? (
-                                    <p>
-                                        {"Entry to the tournament costs " +
-                                            joinCost +
-                                            " Battle Points."}
+                                selected lineup.
+                            </p>
+                            <p className="text-center font-montserrat text-[3.5vw] text-graydark">
+                                Entry to the tournament costs
+                            </p>
+                            {tournamentType === "basic" ? (
+                                <div className="my-[1.5vw] flex justify-center gap-[2vw]">
+                                    <img
+                                        className="mt-[2.5vw] h-[7.2vw]"
+                                        src={BattlePointsIcon}
+                                    />
+                                    <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
+                                        {joinCost}
                                     </p>
-                                ) : (
-                                    <p>
-                                        {"Entry to the tournament costs " +
-                                            joinCost +
-                                            " Telegram Stars."}
+                                </div>
+                            ) : (
+                                <div className="my-[2vw] flex justify-center gap-[2vw]">
+                                    <img
+                                        className="mt-[2.5vw] h-[7.2vw]"
+                                        src={TGStarIcon}
+                                    />
+                                    <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
+                                        {joinCost}
                                     </p>
-                                )}{" "}
-                                Do you want to continue?
+                                </div>
+                            )}
+                            <p className="text-center font-montserrat text-[3.5vw] text-graydark">
+                                Do you wish to continue?
                             </p>
                         </motion.div>
                     </div>
@@ -69,7 +84,7 @@ export const ConfirmModal = ({
                         <div className="flex h-full w-full">
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={onCancel}
+                                onClick={onClose}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={WhiteButton} />

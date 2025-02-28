@@ -14,12 +14,18 @@ import {
     initSwipeBehavior,
 } from "@telegram-apps/sdk-react";
 import { AppRoot } from "@telegram-apps/telegram-ui";
+import { CollectionScreen } from "./pages/CollectionScreen";
+import { AthleteScreen } from "./pages/CollectionScreen/pages/AthleteScreen";
+import { useBackButton } from "@telegram-apps/sdk-react";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 const App = () => {
     //const lp = useLaunchParams();
     // console.log(lp.startParam);
     const miniApp = useMiniApp();
-
+    const navigate = useNavigate();
+    const backButton = useBackButton();
+    backButton.show();
     const [swipeBehavior] = initSwipeBehavior();
     swipeBehavior.disableVerticalSwipe();
 
@@ -59,6 +65,8 @@ const App = () => {
     //     };
     // }, []);
 
+    backButton.on("click", () => navigate(-1));
+
     useEffect(() => {
         return bindMiniAppCSSVars(miniApp, themeParams);
     }, [miniApp, themeParams]);
@@ -77,6 +85,10 @@ const App = () => {
     );
 
     useEffect(() => {
+        backButton.show();
+    }, []);
+
+    useEffect(() => {
         appNavigator.attach();
         return () => appNavigator.detach();
     }, [appNavigator]);
@@ -88,6 +100,14 @@ const App = () => {
                     {routes.map((route) => (
                         <Route key={route.path} {...route} />
                     ))}
+                    <Route key={"collection"} path={"collection"}>
+                        <Route index Component={CollectionScreen} />
+                        <Route
+                            key={"athlete"}
+                            path={"athlete"}
+                            Component={AthleteScreen}
+                        />
+                    </Route>
                     <Route path="*" element={<Navigate to="/" />} />
                 </Route>
             </Routes>

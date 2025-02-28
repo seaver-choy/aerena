@@ -1,12 +1,13 @@
 import { get, put, post } from "aws-amplify/api";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
-import { DreamTeam } from "./interfaces";
+import { DreamTeam, PackInfo, Skin } from "./interfaces";
 
 export const submitLineup = async (
     tournamentId,
     userID,
     username,
     userLineup,
+    lineupName,
     initDataRaw
 ) => {
     try {
@@ -14,6 +15,7 @@ export const submitLineup = async (
             userID: userID,
             username: username,
             lineup: userLineup,
+            lineupName: lineupName,
             score: 0,
             submittedAt: new Date(),
         };
@@ -439,6 +441,32 @@ export const getTeamInfo = async (
     }
 };
 
+export const getAthleteProfile = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "portfolio/profile",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getAthleteAverageStats = async (
     athleteId: number,
     initDataRaw: string
@@ -475,6 +503,59 @@ export const getAthleteStats = async (
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getAthleteLeagueStats = async (
+    athleteId: number,
+    type: string,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `stats/league/${type}`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getSameAthletes = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `portfolio/sameathletes`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
                 },
             },
         });
@@ -547,6 +628,32 @@ export const getAthletes = async (initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`GET athletes fail ${e}`);
+    }
+};
+
+export const getAthleteChoices = async (league, boosterQuantity, initDataRaw) => {
+    try {
+        const payload = {
+            league: league,
+            boosterQuantity: boosterQuantity,
+        };
+        const restOperation = post({
+            apiName: "playibleApi",
+            path: "mint",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(payload),
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`GET athlete choices fail ${e}`);
     }
 };
 
@@ -689,6 +796,7 @@ export const getAthletePaginated = async (
     limit: number,
     searchString: string,
     position: string,
+    leagueTypes: string[],
     initDataRaw: string
 ) => {
     try {
@@ -696,11 +804,12 @@ export const getAthletePaginated = async (
             pageOffset: pageOffset.toString(),
             limit: limit.toString(),
             searchString: searchString,
+            leagueTypes: leagueTypes.toString(),
             position: position,
         };
         const restOperation = get({
             apiName: "playibleApi",
-            path: "portfolio",
+            path: "portfolio/paginated",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
@@ -897,7 +1006,7 @@ export const saveDreamTeam = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(response)
+        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`saveDreamTeam call failed ${e}`);
@@ -926,11 +1035,7 @@ export const checkReferralCode = async (referralCode, initDataRaw) => {
     }
 };
 
-export const addNewReferral = async (
-    userId,
-    referralCode,
-    initDataRaw
-) => {
+export const addNewReferral = async (userId, referralCode, initDataRaw) => {
     try {
         const data = {
             userId: userId,
@@ -950,9 +1055,187 @@ export const addNewReferral = async (
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(response)
+        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`addNewReferral call failed ${e}`);
+    }
+};
+
+export const getPackInfos = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "packinfos/all",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        // console.log(JSON.parse(response.toLocaleString()));
+        console.log(`Successful GET of packinfos`);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of packinfos ${e}`);
+    }
+};
+
+export const saveSkin = async (
+    userId,
+    skin: Skin,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            skin: skin,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `mint`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`saveSkin call failed ${e}`);
+    }
+};
+
+export const getInvoiceLinkForExchangePacks = async (
+    userId,
+    packInfo: PackInfo,
+    count,
+    initDataRaw
+) => {
+    try {
+        const newUser = {
+            userId: userId,
+            transactionType: "exchange_packs",
+            packInfo: packInfo,
+            count: count,
+        };
+        const restOperation = post({
+            apiName: "playibleApi",
+            path: "telegramstars/invoice",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(newUser),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Invoice for user ${userId} failed ${e}`);
+    }
+};
+
+export const payBPForExchangePacks = async (
+    userId,
+    packInfo: PackInfo,
+    count,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            packInfo: packInfo,
+            count: count,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/paypacks`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`payBPForExchangePacks call failed ${e}`);
+    }
+};
+
+export const equipSkin = async (
+    userId,
+    oldIndex,
+    newIndex,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/equipskin`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`equipSkin call failed ${e}`);
+    }
+};
+
+export const getAthlete = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "portfolio/athlete",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
     }
 };

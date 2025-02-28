@@ -2,13 +2,13 @@ import { ComponentType } from "react";
 import { FriendsScreen } from "../../pages/FriendsScreen";
 import { QuestsScreen } from "../../pages/QuestsScreen";
 import { PlayScreen } from "../../pages/PlayScreen";
-import { CollectionScreen } from "../../pages/CollectionScreen";
+//import { CollectionScreen } from "../../pages/CollectionScreen";
 import { ExchangeScreen } from "../../pages/ExchangeScreen";
 import { TournamentScreen } from "../../pages/PlayScreen/pages/TournamentScreen";
 import { PreviousScreen } from "../../pages/PlayScreen/pages/PreviousScreen";
 import { UpcomingScreen } from "../../pages/PlayScreen/pages/UpcomingScreen";
 import { CommunityLineupsScreen } from "../../pages/PlayScreen/pages/CommunityLineupsScreen";
-import { AthleteScreen } from "../../pages/CollectionScreen/pages/AthleteScreen";
+//import { AthleteScreen } from "../../pages/CollectionScreen/pages/AthleteScreen";
 
 interface Route {
     path: string;
@@ -20,11 +20,11 @@ export const routes: Route[] = [
     { path: "/", Component: PlayScreen },
     { path: "/friends", Component: FriendsScreen, title: "Friends Screen" },
     { path: "/quests", Component: QuestsScreen, title: "Quests Screen" },
-    {
-        path: "/collection",
-        Component: CollectionScreen,
-        title: "Collection Screen",
-    },
+    // {
+    //     path: "/collection",
+    //     Component: CollectionScreen,
+    //     title: "Collection Screen",
+    // },
     { path: "/exchange", Component: ExchangeScreen, title: "Exchange Screen" },
     {
         path: "/tournament/:tournamentId",
@@ -38,5 +38,9 @@ export const routes: Route[] = [
         Component: CommunityLineupsScreen,
         title: "Community Lineups Screen",
     },
-    { path: "/athlete", Component: AthleteScreen, title: "Athlete Screen" },
+    // {
+    //     path: "/athlete",
+    //     Component: AthleteScreen,
+    //     title: "Athlete Screen",
+    // },
 ];

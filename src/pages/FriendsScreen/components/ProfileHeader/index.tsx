@@ -26,10 +26,10 @@ export const ProfileHeader = () => {
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
     const [showAlreadyReferredModal, setShowAlreadyReferredModal] = useState<boolean>(false);
     const [showOwnCodeModal, setShowOwnCodeModal] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loading, isLoading] = useState<boolean>(false);
     
     const handleCheckReferralCode = async (searchReferral) => {
-        setIsLoading(true);
+        isLoading(true);
         if(user.referredBy == undefined || user.referredBy.userID == undefined){
             if (searchReferral === "")
                 setShowErrorModal(true);
@@ -59,7 +59,7 @@ export const ProfileHeader = () => {
             }
         } else
             setShowAlreadyReferredModal(true);
-        setIsLoading(false);
+        isLoading(false);
     }
     
     const handleReferralCodeCopy = () => {
@@ -114,7 +114,7 @@ export const ProfileHeader = () => {
                         onClose={() => setShowOwnCodeModal(false)}
                     />
                 )}
-                {isLoading && <LoadingModal />}
+                {loading && <LoadingModal />}
                 <img className="h-full w-full" src={ProfileHeaderBackground} />
                 <div className="absolute left-[8vw] top-[6vw] flex h-[24vw] w-[84vw]">
                     <div className="flex h-full w-[75%] flex-col items-start justify-center">
