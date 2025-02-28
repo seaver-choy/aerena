@@ -23,7 +23,7 @@ export const PointsBanner = () => {
             const controls = animate(count, user.points, { duration: 2 });
             return () => controls.stop();
         }
-    }, [user]);
+    }, [user.points]);
 
     return (
         <div className="mt-[4vw] h-[19.8vw]">

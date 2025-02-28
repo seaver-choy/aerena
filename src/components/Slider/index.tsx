@@ -15,6 +15,8 @@ const transition = {
 
 interface Props {
     athletes: SameAthlete[];
+    cardIndex: number;
+    setCardIndex: (cardIndex: number) => void;
     onCardIndexChange: (title: string) => void;
 }
 
@@ -30,19 +32,18 @@ interface Cards {
     type: string;
 }
 
-export const Slider = ({ athletes, onCardIndexChange }: Props) => {
+export const Slider = ({ athletes, cardIndex, setCardIndex, onCardIndexChange }: Props) => {
     //const [imageIndex, setImageIndex] = useState(0);
-    const [cardIndex, setCardIndex] = useState<number>(0);
     const [cards, setCards] = useState<Cards[]>([]);
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
         const x = dragX.get();
         if (x <= -buffer && cardIndex < cards.length - 1) {
-            setCardIndex((pv) => pv + 1);
+            setCardIndex(cardIndex + 1);
             onCardIndexChange(cards[cardIndex + 1].title);
         } else if (x >= buffer && cardIndex > 0) {
-            setCardIndex((pv) => pv - 1);
+            setCardIndex(cardIndex - 1);
             onCardIndexChange(cards[cardIndex - 1].title);
         }
     };

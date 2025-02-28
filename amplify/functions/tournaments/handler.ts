@@ -91,10 +91,12 @@ async function getLuckyPicks(event: APIGatewayProxyEvent) {
             {
                 $project: {
                     _id: 1,
+                    athleteId: 1,
                     player: 1,
                     displayName: 1,
                     team: 1,
                     position: 1,
+                    league: 1,
                     img: 1,
                 },
             },

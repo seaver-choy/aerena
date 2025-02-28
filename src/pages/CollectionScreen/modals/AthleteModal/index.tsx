@@ -11,6 +11,7 @@ import {
     getAthleteAverageStats,
     getTeamInfo,
     getSameAthletes,
+    equipSkin,
 } from "../../../../helpers/lambda.helper";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 import LargeModal from "../../../../assets/modal/large.svg";
@@ -22,25 +23,32 @@ import {
     AverageStats,
     Team,
     SameAthlete,
+    Skin,
 } from "../../../../helpers/interfaces";
 import { useUsers } from "../../../../hooks/useUser";
 interface AthleteModalProps {
     athlete: Athlete;
     onClose: () => void;
+    skin?: Skin;
 }
 
-export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
+export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProps) => {
     const user = useUsers();
     const navigate = useNavigate();
 
     const [sameAthletes, setSameAthletes] = useState<SameAthlete[]>([]);
+    const [skinTitle, setSkinTitle] = useState<string>("");
+    const [cardIndex, setCardIndex] = useState<number>(0);
+    const [equippedIndex, setEquippedIndex] = useState<number>(0);
+    const [athleteSkins, setAthleteSkins] = useState<Skin[]>(null);
+    const [teamInfo, setTeamInfo] = useState<Team>();
     const [averageStats, setAverageStats] = useState<AverageStats>({
         averageKills: 0,
         averageDeaths: 0,
         averageAssists: 0,
         averagePoints: 0,
     });
-    const [skinTitle, setSkinTitle] = useState<string>("Default Card");
+
     const handleViewPlayerProfile = () => {
         navigate(`athlete`, {
             state: {
@@ -50,7 +58,40 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
             },
         });
     };
-    const [teamInfo, setTeamInfo] = useState<Team>();
+
+    const handleEquipSkin = async () => {
+        let oldIndex = equippedIndex - 1;
+        let newIndex = cardIndex - 1;
+        
+        if(oldIndex > -1) {
+            oldIndex = findSkin(user.skins, oldIndex);
+        }
+        if(newIndex > -1) {
+            newIndex = findSkin(user.skins, newIndex);
+        }
+        const result = await equipSkin(user.id, oldIndex, newIndex, user.initDataRaw);
+        if(result) {
+            const skins = result["skins"];
+            user.dispatch({
+                type: "SET_SKINS",
+                payload: {
+                    skins: skins,
+                },
+            });
+            const ownedSkins = skins.filter((skin) => skin.athleteId == athlete.athleteId);
+            setAthleteSkins(ownedSkins);
+            setEquippedIndex(cardIndex);
+        } 
+
+    };
+    
+    const findSkin = (skins, index) => {
+        return skins.findIndex((skin) => skin.athleteId == sameAthletes[index].athleteId && skin.team == sameAthletes[index].team && skin.league == sameAthletes[index].league);
+    };
+
+    const handlePurchase = () => {
+        navigate(`/exchange`);
+    };
 
     const onCardIndexChange = (title: string) => {
         setSkinTitle(title);
@@ -96,7 +137,21 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                 athlete.athleteId,
                 user.initDataRaw
             );
-            setSameAthletes(res.athletes);
+            const athletes: SameAthlete[] = res.athletes;
+            const ownedSkins = user.skins.filter((skin) => skin.athleteId == athlete.athleteId);
+            const equippedSkin = ownedSkins.filter((skin) => skin.isEquipped);
+            if(equippedSkin.length > 0) {
+                const index = athletes.findIndex((athlete) => athlete.team == equippedSkin[0].team && athlete.league == equippedSkin[0].league);
+                setEquippedIndex(index + 1);
+            }
+            setAthleteSkins(ownedSkins);
+            setSameAthletes(athletes);
+            setSkinTitle("Default Card");
+            if(skin != null) {
+                const index = athletes.findIndex((athlete) => athlete.team == skin.team && athlete.league == skin.league);
+                setCardIndex(index + 1);
+                setSkinTitle(athletes[index].team);
+            }
         }
         fetchSameAthletes();
     }, []);
@@ -172,11 +227,17 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                             >
                                 <Slider
                                     athletes={sameAthletes}
+                                    cardIndex={cardIndex}
+                                    setCardIndex={setCardIndex}
                                     onCardIndexChange={onCardIndexChange}
                                 />
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                                    {skinTitle}
-                                </p>
+                                <motion.div
+                                    {...appearTextAnimation}
+                                >
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
+                                        {skinTitle}
+                                    </p>
+                                </motion.div>
                             </div>
                             )
                             : (
@@ -185,17 +246,54 @@ export const AthleteModal = ({ athlete, onClose }: AthleteModalProps) => {
                         }
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
-                            <motion.button
-                                className="relative flex h-full w-full justify-center"
-                                {...appearTextAnimation}
-                            >
-                                <img className="h-full" src={GoldButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                        Purchase
-                                    </p>
-                                </div>
-                            </motion.button>
+                            {
+                                teamInfo !== undefined && (
+                                    cardIndex === equippedIndex ?
+                                    (
+                                        <motion.div
+                                            className="relative flex h-full w-full justify-center"
+                                            {...appearTextAnimation}
+                                        >
+                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                                <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
+                                                    Equipped
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    )
+                                    : cardIndex == 0 || (cardIndex > 0 && findSkin(athleteSkins, cardIndex-1) != -1) ?
+                                    (
+                                        <motion.button
+                                            className="relative flex h-full w-full justify-center"
+                                            onClick={handleEquipSkin}
+                                            {...appearTextAnimation}
+                                        >
+                                            <img className="h-full" src={GoldButton} />
+                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                                    Equip
+                                                </p>
+                                            </div>
+                                        </motion.button>
+                                    )
+                                    :
+                                    (
+                                        <motion.button
+                                            className="relative flex h-full w-full justify-center"
+                                            onClick={handlePurchase}
+                                            {...appearTextAnimation}
+                                        >
+                                            <img className="h-full" src={GoldButton} />
+                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                                    Purchase
+                                                </p>
+                                            </div>
+                                        </motion.button>
+                                    )
+                                )
+                            }
+                            
                         </div>
                     </div>
                 </div>

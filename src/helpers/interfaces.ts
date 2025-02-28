@@ -7,6 +7,20 @@ export interface Token {
     img: string;
     athleteScore: number;
     league: string;
+    skin?: {
+        skinId: string;
+        teamData: {
+            colors: {
+                main: string;
+                light: string;
+                dark: string;
+                wings: string;
+                accent: string;
+                details: string;
+                wave: string;
+            },
+        },
+    }
 }
 
 export interface UpgradeToken extends Token {
@@ -185,13 +199,18 @@ export interface PackInfo {
 }
 
 export interface Skin {
+    skinId: string;
     athleteId: number;
     player: string;
     position: [string];
+    team: string;
     league: string;
     type: string;
     teamData: {
         colors: TeamColor;
     };
     isEquipped: boolean;
+    packId: string;
+    costType: string;
+    savedAt: Date;
 }

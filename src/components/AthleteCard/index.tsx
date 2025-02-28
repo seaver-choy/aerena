@@ -26,6 +26,8 @@ import { getAthleteSticker } from "../../helpers/athletes";
 import PH15Card from "../../assets/card/ph15.svg";
 
 import { TeamColor } from "../../helpers/interfaces";
+import OwnedCard from "../../assets/card/owned.svg";
+
 interface Props {
     color: TeamColor;
     ign: string;
@@ -34,15 +36,17 @@ interface Props {
     league?: string;
     type?: string;
     id?: number;
+    owned? : boolean;
 }
 export const AthleteCard = ({
     color,
     ign,
     opacity,
     role,
-    type,
-    league,
+    type = null,
+    league = null,
     id = -1,
+    owned = false,
 }: Props) => {
     return (
         <div
@@ -50,7 +54,7 @@ export const AthleteCard = ({
             style={{ transform: "none", transition: "none" }}
         >
             <div className="absolute h-full w-full">
-                {type !== undefined && type === "basic" ? (
+                {type !== null && type === "basic" ? (
                     <GlowBasic id={id} />
                 ) : (
                     <Glow id={id} />
@@ -110,7 +114,7 @@ export const AthleteCard = ({
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
             </div>
-            {type !== undefined && type === "basic" && (
+            {type !== null && type === "basic" && (
                 <>
                     <div className="absolute h-full w-full">
                         <BorderBasic id={id} />
@@ -119,7 +123,7 @@ export const AthleteCard = ({
                         <img
                             className="h-full w-full"
                             src={
-                                league !== undefined
+                                league !== null
                                     ? getAthleteSticker(league)
                                     : PH15Card
                             }
@@ -128,6 +132,16 @@ export const AthleteCard = ({
                     </div>
                 </>
             )}
+            {
+                owned && 
+                (
+                    <img
+                        className="absolute h-full"
+                        src={OwnedCard}
+                        draggable={false}
+                    />
+                )
+            }
         </div>
     );
 };

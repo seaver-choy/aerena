@@ -13,7 +13,7 @@ const UsernameModal: React.FC = () => {
     const user = useUsers();
     const [username, setUsername] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loading, isLoading] = useState<boolean>(false);
 
     const handleUsernameChange = (e) => {
         const value = e.target.value;
@@ -23,15 +23,15 @@ const UsernameModal: React.FC = () => {
     const lp = useLaunchParams();
 
     const handleSubmit = async () => {
-        if (!isLoading) {
+        if (!loading) {
             setErrorMessage("");
-            setIsLoading(true);
+            isLoading(true);
             if (!username || username.length === 0) {
-                setIsLoading(false);
+                isLoading(false);
                 setErrorMessage("Please choose a username.");
                 return;
             } else if (username.length < 3 || username.length > 12) {
-                setIsLoading(false);
+                isLoading(false);
                 setErrorMessage(
                     "Choose a username 3-12 characters long. Usernames can have letters (a-z) & numbers (0-9)."
                 );
@@ -43,7 +43,7 @@ const UsernameModal: React.FC = () => {
                 user.initDataRaw
             );
             if (checkData["message"] == "DUPLICATE") {
-                setIsLoading(false);
+                isLoading(false);
                 setErrorMessage("Username is already taken.");
                 return; //have to change this
             } else if (checkData["message"] == "UNIQUE") {
@@ -159,12 +159,22 @@ const UsernameModal: React.FC = () => {
                         referredBy: data["referredBy"],
                     },
                 });
+                user.dispatch({
+                    type: "SET_SKINS",
+                    payload: {
+                        referredBy: data["skins"],
+                    },
+                });
+                user.dispatch({
+                    type: "SET_NUM_BOOSTER_BOUGHT",
+                    payload: { numBoosterBought: data["numBoosterBought"] },
+                });
 
                 user.dispatch({
                     type: "SET_REFERRAL_CHECK",
                     payload: { referralCheck: true },
                 });
-                setIsLoading(false);
+                isLoading(false);
             }
         }
     };
@@ -209,13 +219,13 @@ const UsernameModal: React.FC = () => {
                                     placeholder="Enter your username"
                                     onChange={handleUsernameChange}
                                     maxLength={12}
-                                    disabled={isLoading}
+                                    disabled={loading}
                                 ></input>
                             </div>
                             <motion.button
                                 className="flex h-full w-[15%] items-center justify-center"
                                 onClick={() => handleSubmit()}
-                                disabled={isLoading}
+                                disabled={loading}
                                 {...appearAnimation}
                             >
                                 <img className="h-[5vw]" src={RightIcon} />

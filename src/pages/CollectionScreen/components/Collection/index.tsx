@@ -12,13 +12,16 @@ import {
     getAthletePositionLogo,
     getAthletePositionBackground,
 } from "../../../../helpers/athletes";
-import { Token } from "../../../../helpers/interfaces";
+import { Athlete, Skin } from "../../../../helpers/interfaces";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteModal } from "../../modals/AthleteModal";
+import { getAthlete } from "../../../../helpers/lambda.helper";
 
 export const Collection = () => {
     const user = useUsers();
@@ -26,11 +29,31 @@ export const Collection = () => {
     const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [positionIndex, setPositionIndex] = useState<number>(0);
     const [maxLength] = useState<number>(positionList.length - 1);
-    const [displayAthletes, setDisplayAthletes] = useState<Token[]>(null);
-    const [showAthlete, setShowAthlete] = useState(false);
+    const [displaySkins, setDisplaySkins] = useState<Skin[]>(null);
+    const [showSkin, setShowSkin] = useState(false);
+    const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
+    const [selectedSkin, setSelectedSkin] = useState<Skin>(null);
+    const [selectedAthlete, setSelectedAthlete] = useState<Athlete>(null);
 
     const handlePurchase = () => {
         navigate(`/exchange`);
+    };
+    
+    const fetchAthlete = async (skin) => {
+        const result = await getAthlete(skin.athleteId, user.initDataRaw);
+        if(result) {
+            setSelectedAthlete(result);
+            setSelectedSkin(skin);
+            setShowAthleteModal(true);
+        }
+    }
+    const displayAthleteModal = (skin: Skin) => {
+        fetchAthlete(skin);
+    };
+
+    const closeAthleteModal = () => {
+        setSelectedSkin(null);
+        setShowAthleteModal(false);
     };
 
     const handlePreviousCategory = () => {
@@ -45,45 +68,37 @@ export const Collection = () => {
         }
     };
 
-    // function compileAthletes(position: string) {
-    //     console.log("Compiling athletes");
-    //     const filteredPosition = user.tokens.filter((obj) =>
-    //         obj.position.includes(position)
-    //     );
+    function compileSkins(position: string) {
+        const filteredPosition = user.skins.filter((obj) =>
+            obj.position.includes(position)
+        );
 
-    //     const sorted = filteredPosition.sort((a, b) => {
-    //         const teamA = a.team.toUpperCase();
-    //         const teamB = b.team.toUpperCase();
+        const sorted = filteredPosition.sort((a, b) => {
+            // const teamA = a.team.toUpperCase();
+            // const teamB = b.team.toUpperCase();
 
-    //         const nameA = a.displayName;
-    //         const nameB = b.displayName;
+            const nameA = a.player;
+            const nameB = b.player;
 
-    //         const teamOrder = teamA.localeCompare(teamB);
-    //         const nameOrder = nameA.localeCompare(nameB);
+            // const teamOrder = teamA.localeCompare(teamB);
+            const nameOrder = nameA.localeCompare(nameB);
 
-    //         return teamOrder || nameOrder;
-    //     });
-    //     console.log(sorted);
-    //     setDisplayAthletes(sorted);
-    // }
+            // return teamOrder || nameOrder;
+            return nameOrder;
+        });
+        setDisplaySkins(sorted);
+        setShowSkin(true);
+    }
 
     useEffect(() => {
-        let timer;
-        if (user.tokens.length > 0) {
-            // compileAthletes(positionList[positionIndex]); //TODO: temporary, just to display the no skins message since no 'skins implementation' yet
-            setDisplayAthletes([]);
-            setShowAthlete(false);
-
-            timer = setTimeout(() => {
-                setShowAthlete(true);
-            }, 1000);
+        if (user.skins.length > 0) {
+            setShowSkin(false);
+            compileSkins(positionList[positionIndex]);
         } else {
-            setShowAthlete(false);
-            setDisplayAthletes([]);
+            setShowSkin(false);
+            setDisplaySkins([]);
         }
-
-        return () => clearTimeout(timer);
-    }, [positionIndex, user.tokens]);
+    }, [positionIndex, user.skins]);
 
     return (
         <div className="mt-[10vw] h-[193vw]">
@@ -131,7 +146,7 @@ export const Collection = () => {
                         className="flex w-[8%] items-center justify-end"
                     >
                         <img
-                            className={`h-[6vw] ${positionIndex === 0 || user.tokens.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
+                            className={`h-[6vw] ${positionIndex === 0 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
                             src={LeftIcon}
                         />
                     </button>
@@ -148,25 +163,32 @@ export const Collection = () => {
                         className="flex w-[8%] items-center justify-end"
                     >
                         <img
-                            className={`h-[6vw] ${positionIndex === positionList.length - 1 || user.tokens.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
+                            className={`h-[6vw] ${positionIndex === positionList.length - 1 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
                             src={RightIcon}
                         />
                     </button>
                 </div>
                 <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
                     <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                        {displayAthletes?.length > 0 ? (
-                            displayAthletes?.map((athlete, index) =>
-                                showAthlete ? (
+                        {displaySkins?.length > 0 ? (
+                            displaySkins?.map((athlete, index) =>
+                                showSkin ? (
                                     <motion.button
                                         className="relative flex h-[36.4vw] w-[28vw]"
                                         key={index}
+                                        onClick={() => {
+                                            displayAthleteModal(athlete);
+                                        }}
                                         {...appearCardAnimation}
                                     >
-                                        <img
-                                            className="h-full w-full"
-                                            src={athlete.img}
-                                            alt={athlete.displayName}
+                                        <AthleteCard
+                                            color={athlete.teamData.colors}
+                                            ign={athlete.player}
+                                            opacity={{wave: athlete.teamData.colors.wave}}
+                                            role={athlete.position[0]}
+                                            type={"basic"}
+                                            league={athlete.league}
+                                            id={index}
                                         />
                                     </motion.button>
                                 ) : (
@@ -193,6 +215,13 @@ export const Collection = () => {
                     </div>
                 </div>
             </div>
+            {showAthleteModal && (
+                <AthleteModal
+                    athlete={selectedAthlete}
+                    onClose={closeAthleteModal}
+                    skin={selectedSkin}
+                />
+            )}
         </div>
     );
 };
