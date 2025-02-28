@@ -90,7 +90,6 @@ export const Catalog = () => {
             // return teamOrder || nameOrder;
             return nameOrder;
         });
-        console.log(sorted);
         setCurrentAthletes(sorted);
     }
 

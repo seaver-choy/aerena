@@ -104,7 +104,7 @@ export const LineupSection = ({
             athlete: null,
         },
     ]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loading, isLoading] = useState<boolean>(false);
     const invoice = initInvoice();
 
     const setupTournamentLineup = () => {
@@ -180,7 +180,7 @@ export const LineupSection = ({
                     },
                 });
                 //setHasJoinedTournament(true);
-                setIsLoading(false);
+                isLoading(false);
                 setShowSuccessModal(true);
                 setTournamentLineup(defaultLineup);
                 updateLineup(result.tournamentUpdate);
@@ -197,7 +197,7 @@ export const LineupSection = ({
         try {
             const check = tournamentLineup.every((obj) => obj.athlete !== null);
             if (check) {
-                setIsLoading(true);
+                isLoading(true);
                 const lineup = tournamentLineup.map((obj) => {
                     return obj.athlete;
                 });
@@ -211,7 +211,7 @@ export const LineupSection = ({
                             ongoingTournament.joinCost,
                             user.initDataRaw
                         );
-                    setIsLoading(false);
+                    isLoading(false);
                     if (invoiceLink != null && invoiceLink["link"] != null) {
                         invoice
                             .open(invoiceLink["link"], "url")
@@ -227,7 +227,7 @@ export const LineupSection = ({
                                             user.initDataRaw
                                         );
                                     if (transactionResult) {
-                                        setIsLoading(true);
+                                        isLoading(true);
                                         lineupSubmission(lineup);
                                     }
                                 }
@@ -245,7 +245,7 @@ export const LineupSection = ({
                     });
                     lineupSubmission(lineup);
                 } else {
-                    setIsLoading(false);
+                    isLoading(false);
                     setShowInsufficientModal(true);
                 }
             } else {
@@ -253,7 +253,7 @@ export const LineupSection = ({
             }
         } catch (e) {
             console.log(e);
-            setIsLoading(false);
+            isLoading(false);
             setShowErrorModal(true);
         }
         setTeamName("");
@@ -309,7 +309,7 @@ export const LineupSection = ({
                             setShowNameModal(true);
                             setShowConfirmModal(false);
                         }}
-                        loading={isLoading}
+                        loading={loading}
                         tournamentType={ongoingTournament.type}
                         joinCost={ongoingTournament.joinCost}
                     />
@@ -328,7 +328,7 @@ export const LineupSection = ({
                         }}
                     />
                 )}
-                {isLoading && <LoadingModal />}
+                {loading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
                     <LineupTitle />
@@ -350,7 +350,7 @@ export const LineupSection = ({
                         <button
                             className="relative w-full items-center justify-center"
                             onClick={
-                                isLoading
+                                loading
                                     ? () => {}
                                     : () => setShowConfirmModal(true)
                             }

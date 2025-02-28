@@ -14,7 +14,6 @@ import { mintFunction } from "./functions/mint/resource";
 import { portfolioFunction } from "./functions/portfolio/resource";
 import { schedulerFunction } from "./functions/scheduler/resource";
 import { friendsFunction } from "./functions/friends/resource";
-import { countersFunction } from "./functions/counters/resource";
 import { statsFunction } from "./functions/stats/resource";
 import { upgradeFunction } from "./functions/upgrade/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
@@ -33,7 +32,6 @@ const backend = defineBackend({
     portfolioFunction,
     schedulerFunction,
     friendsFunction,
-    countersFunction,
     statsFunction,
     upgradeFunction,
     telegramstarsFunction,
@@ -135,9 +133,6 @@ const schedulerIntegration = new LambdaIntegration(
 const friendsIntegration = new LambdaIntegration(
     backend.friendsFunction.resources.lambda
 );
-const countersIntegration = new LambdaIntegration(
-    backend.countersFunction.resources.lambda
-);
 const statsIntegration = new LambdaIntegration(
     backend.statsFunction.resources.lambda
 );
@@ -163,7 +158,6 @@ const schedulerPath = api.root.addResource("recharge", {});
 const friendsPath = api.root.addResource("friends", {});
 const joinTgChannelPath = userPath.addResource("joinTgChannel", {});
 const loginPath = userPath.addResource("login", {});
-const countersPath = api.root.addResource("counters", {});
 const statsPath = api.root.addResource("stats", {});
 const upgradePath = api.root.addResource("upgrade", {});
 const telegramstarsPath = api.root.addResource("telegramstars", {});
@@ -222,10 +216,6 @@ friendsPath.addMethod("GET", friendsIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 friendsPath.addMethod("PUT", friendsIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
-
-countersPath.addMethod("GET", countersIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 

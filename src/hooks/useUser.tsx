@@ -16,6 +16,7 @@ import {
     InventoryItem,
     DreamTeam,
     Referrer,
+    Skin,
 } from "../helpers/interfaces";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
 
@@ -44,6 +45,7 @@ interface State {
     dreamTeam: DreamTeam;
     referralCode: string;
     referredBy: Referrer;
+    skins: Skin[];
 }
 
 interface Action {
@@ -70,7 +72,8 @@ interface Action {
         | "SET_REFERRAL_PURCHASES"
         | "SET_DREAM_TEAM"
         | "SET_REFERRAL_CODE"
-        | "SET_REFERRED_BY";
+        | "SET_REFERRED_BY"
+        | "SET_SKINS";
     payload?: Partial<State>;
 }
 
@@ -98,6 +101,7 @@ export interface UserContextValue {
     dreamTeam: DreamTeam;
     referralCode: string;
     referredBy: Referrer;
+    skins: Skin[];
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -125,6 +129,7 @@ const initialState: State = {
     dreamTeam: null,
     referralCode: "",
     referredBy: null,
+    skins: [],
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -256,6 +261,13 @@ function reducer(state: State, action: Action): State {
                     action.payload?.referredBy ??
                     state.referredBy,
             };
+        case "SET_SKINS":
+            return {
+                ...state,
+                skins:
+                    action.payload?.skins ??
+                    state.skins,
+            };
         default:
             return state;
     }
@@ -284,6 +296,7 @@ export const UserContext = createContext<UserContextValue>({
     dreamTeam: null,
     referralCode: "",
     referredBy: null,
+    skins: [],
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -406,6 +419,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_REFERRED_BY",
                         payload: {
                             referredBy: data["referredBy"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_SKINS",
+                        payload: {
+                            skins: data["skins"],
                         },
                     });
                 } catch (e) {

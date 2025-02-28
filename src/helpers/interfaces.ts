@@ -188,10 +188,14 @@ export interface Skin {
     athleteId: number;
     player: string;
     position: [string];
+    team: string;
     league: string;
     type: string;
     teamData: {
         colors: TeamColor;
     };
     isEquipped: boolean;
+    packId: string;
+    costType: string;
+    savedAt: Date;
 }

@@ -20,13 +20,19 @@ import { PackInfo, Skin } from "../../../../helpers/interfaces";
 import { useUsers } from "../../../../hooks/useUser";
 import {
     getAthleteChoices,
+    getInvoiceLinkForExchangePacks,
     getPackInfos,
+    payBPForExchangePacks,
+    saveSkin,
+    saveStarsTransaction,
 } from "../../../../helpers/lambda.helper";
 import { getStickerImage } from "../../../../helpers/images";
 import { LoadingModal } from "../../modals/LoadingModal";
 import { ConfirmModal } from "../../modals/ConfirmModal";
 import { AnimationModal } from "../../modals/AnimationModal";
 import { SuccessModal } from "../../modals/SuccessModal";
+import { ErrorModal } from "../../modals/ErrorModal";
+import { initInvoice } from "@telegram-apps/sdk-react";
 
 export const ChoiceBanner = () => {
     const user = useUsers();
@@ -35,6 +41,8 @@ export const ChoiceBanner = () => {
     const [showAnimationModal, setShowAnimationModal] =
         useState<boolean>(false);
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+    const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
+    const [showInsufficientModal, setShowInsufficientModal] = useState<boolean>(false);
     const [packInfos, setPackInfos] = useState<PackInfo[]>(null);
     const [selectedPackInfo, setSelectedPackInfo] = useState<PackInfo>(null);
     const [costType, setCostType] = useState<string>(null);
@@ -43,6 +51,7 @@ export const ChoiceBanner = () => {
     const [athleteChoices, setAthleteChoices] = useState<Skin[][]>(null);
     const [choicesIndex, setChoicesIndex] = useState<number>(-1);
     const [athleteChoice, setAthleteChoice] = useState<Skin>(null);
+    const invoice = initInvoice();
 
     const getPackInfosData = async () => {
         const result = await getPackInfos(user.initDataRaw);
@@ -52,19 +61,80 @@ export const ChoiceBanner = () => {
     };
 
     const fetchAthleteChoices = async () => {
-        const result = await getAthleteChoices(
-            selectedPackInfo.league,
-            boosterQuantity,
-            user.initDataRaw
-        );
-        setAthleteChoices(result);
-        setChoicesIndex(0);
-        isLoading(false);
+        try {
+            if (costType === "star") {
+                const invoiceLink = await getInvoiceLinkForExchangePacks(user.id, selectedPackInfo, boosterQuantity, user.initDataRaw);
+                if (invoiceLink != null && invoiceLink["link"] != null) {
+                    invoice
+                        .open(invoiceLink["link"], "url")
+                        .then(async (status) => {
+                            if (status === "paid") {
+                                const transactionResult =
+                                    await saveStarsTransaction(
+                                        user.id,
+                                        invoiceLink.updateId,
+                                        invoiceLink.transactionInfo,
+                                        invoiceLink.transactionType,
+                                        invoiceLink.amount,
+                                        user.initDataRaw
+                                    );
+                                if (transactionResult) {
+                                    const result = await getAthleteChoices(
+                                        selectedPackInfo.league,
+                                        boosterQuantity,
+                                        user.initDataRaw
+                                    );
+                                    setAthleteChoices(result);
+                                    setChoicesIndex(0);
+                                    isLoading(false);
+                                }
+                            }
+                        });
+                }
+            } else {
+                const updateResult = await payBPForExchangePacks(user.id, selectedPackInfo, boosterQuantity, user.initDataRaw);
+                if(updateResult) {
+                    user.dispatch({
+                        type: "SET_POINTS",
+                        payload: {
+                            points: updateResult["points"],
+                        },
+                    });
+                    const result = await getAthleteChoices(
+                        selectedPackInfo.league,
+                        boosterQuantity,
+                        user.initDataRaw
+                    );
+                    setAthleteChoices(result);
+                    setChoicesIndex(0);
+                    isLoading(false);
+                } else {
+                    setShowInsufficientModal(true);
+                }
+            }
+        }
+        catch (e) {
+            console.log(e);
+            setShowErrorModal(true);
+        }
     };
 
     const handleAthleteChoice = async (athleteChoice: Skin) => {
-        setAthleteChoice(athleteChoice);
-        setShowSuccessModal(true);
+        const newSkin = {...athleteChoice, costType: costType, packId: selectedPackInfo.packId};
+        const result = await saveSkin(user.id, newSkin, user.initDataRaw);
+        if(result) {
+            user.dispatch({
+                type: "SET_SKINS",
+                payload: {
+                    skins: result["skins"],
+                },
+            });
+            setAthleteChoice(newSkin);
+            setShowSuccessModal(true);
+        }
+        else {
+            //error
+        }
     };
 
     const closeSuccessModal = () => {
@@ -220,6 +290,25 @@ export const ChoiceBanner = () => {
                         <img className="h-full w-full" src={ChoicePackSonner} />
                     </motion.div>
                 </div>
+            )}
+            
+            {showErrorModal && (
+                <ErrorModal
+                    title={"Oops!"}
+                    message={
+                        "Something went wrong on our end. Please try again later."
+                    }
+                    onClose={() => setShowErrorModal(false)}
+                />
+            )}
+            {showInsufficientModal && (
+                <ErrorModal
+                    title={"Insufficient Battle Points"}
+                    message={
+                        "You do not have enough Battle Points to make this purchase."
+                    }
+                    onClose={() => setShowInsufficientModal(false)}
+                />
             )}
             {showPurchaseModal && (
                 <PurchaseModal

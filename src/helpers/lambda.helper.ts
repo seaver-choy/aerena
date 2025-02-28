@@ -1,6 +1,6 @@
 import { get, put, post } from "aws-amplify/api";
 import { retrieveLaunchParams } from "@telegram-apps/sdk-react";
-import { DreamTeam } from "./interfaces";
+import { DreamTeam, PackInfo, Skin } from "./interfaces";
 
 export const submitLineup = async (
     tournamentId,
@@ -1080,5 +1080,134 @@ export const getPackInfos = async (initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`Encountered error during GET of packinfos ${e}`);
+    }
+};
+
+export const saveSkin = async (
+    userId,
+    skin: Skin,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            skin: skin,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `mint`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`saveSkin call failed ${e}`);
+    }
+};
+
+export const getInvoiceLinkForExchangePacks = async (
+    userId,
+    packInfo: PackInfo,
+    count,
+    initDataRaw
+) => {
+    try {
+        const newUser = {
+            userId: userId,
+            transactionType: "exchange_packs",
+            packInfo: packInfo,
+            count: count,
+        };
+        const restOperation = post({
+            apiName: "playibleApi",
+            path: "telegramstars/invoice",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(newUser),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Invoice for user ${userId} failed ${e}`);
+    }
+};
+
+export const payBPForExchangePacks = async (
+    userId,
+    packInfo: PackInfo,
+    count,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            packInfo: packInfo,
+            count: count,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/paypacks`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`payBPForExchangePacks call failed ${e}`);
+    }
+};
+
+export const equipSkin = async (
+    userId,
+    oldIndex,
+    newIndex,
+    initDataRaw
+) => {
+    try {
+        const data = {
+            userId: userId,
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/equipskin`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        console.log(response);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`equipSkin call failed ${e}`);
     }
 };

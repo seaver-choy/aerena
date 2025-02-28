@@ -79,7 +79,6 @@ export function getEmptyAthleteCard(position: string) {
 }
 
 export function getAthleteSticker(league: string) {
-    console.log(league);
     switch (league) {
         case "PH15":
             return PH15;

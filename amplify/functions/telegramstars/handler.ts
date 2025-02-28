@@ -125,6 +125,27 @@ async function getNewInvoice(event: APIGatewayProxyEvent) {
                 };
                 break;
             }
+            case "exchange_packs": {
+                {
+                    const packInfo = content.packInfo;
+                    const league = packInfo.league;
+                    const packType = packInfo.packType;
+                    const transactionType = league.toUpperCase() + " " + packType.charAt(0).toUpperCase() + packType.slice(1);
+                    const count = content.count;
+                    const amount = packInfo.starCost * count;
+                    title = count + " " + transactionType + " Pack" + (count > 1 ? "s" : "");
+                    description = "Buying " + transactionType + " Pack";
+                    payload = JSON.stringify({ transactionInfo: "exchange_packs_" + packInfo.packId + "_" + updateId });
+    
+                    prices = [{ label: 'Total', amount: amount}];
+                    responseData = {
+                        userId: content.userId,
+                        transactionInfo: league + "_" + packType,
+                        transactionType: "exchange_packs",
+                        amount: amount};
+                    break;
+                }
+            }
         }
         const response = await axios.post(process.env.BOT_WEBHOOK_URL!, {
             update_id: updateId,

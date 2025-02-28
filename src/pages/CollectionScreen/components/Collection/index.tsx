@@ -12,13 +12,14 @@ import {
     getAthletePositionLogo,
     getAthletePositionBackground,
 } from "../../../../helpers/athletes";
-import { Token } from "../../../../helpers/interfaces";
+import { Skin } from "../../../../helpers/interfaces";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
+import { AthleteCard } from "../../../../components/AthleteCard";
 
 export const Collection = () => {
     const user = useUsers();
@@ -26,7 +27,7 @@ export const Collection = () => {
     const positionList = ["Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [positionIndex, setPositionIndex] = useState<number>(0);
     const [maxLength] = useState<number>(positionList.length - 1);
-    const [displayAthletes, setDisplayAthletes] = useState<Token[]>(null);
+    const [displaySkins, setDisplaySkins] = useState<Skin[]>(null);
     const [showAthlete, setShowAthlete] = useState(false);
 
     const handlePurchase = () => {
@@ -45,45 +46,37 @@ export const Collection = () => {
         }
     };
 
-    // function compileAthletes(position: string) {
-    //     console.log("Compiling athletes");
-    //     const filteredPosition = user.tokens.filter((obj) =>
-    //         obj.position.includes(position)
-    //     );
+    function compileSkins(position: string) {
+        const filteredPosition = user.skins.filter((obj) =>
+            obj.position.includes(position)
+        );
 
-    //     const sorted = filteredPosition.sort((a, b) => {
-    //         const teamA = a.team.toUpperCase();
-    //         const teamB = b.team.toUpperCase();
+        const sorted = filteredPosition.sort((a, b) => {
+            // const teamA = a.team.toUpperCase();
+            // const teamB = b.team.toUpperCase();
 
-    //         const nameA = a.displayName;
-    //         const nameB = b.displayName;
+            const nameA = a.player;
+            const nameB = b.player;
 
-    //         const teamOrder = teamA.localeCompare(teamB);
-    //         const nameOrder = nameA.localeCompare(nameB);
+            // const teamOrder = teamA.localeCompare(teamB);
+            const nameOrder = nameA.localeCompare(nameB);
 
-    //         return teamOrder || nameOrder;
-    //     });
-    //     console.log(sorted);
-    //     setDisplayAthletes(sorted);
-    // }
+            // return teamOrder || nameOrder;
+            return nameOrder;
+        });
+        setDisplaySkins(sorted);
+        setShowAthlete(true);
+    }
 
     useEffect(() => {
-        let timer;
-        if (user.tokens.length > 0) {
-            // compileAthletes(positionList[positionIndex]); //TODO: temporary, just to display the no skins message since no 'skins implementation' yet
-            setDisplayAthletes([]);
+        if (user.skins.length > 0) {
             setShowAthlete(false);
-
-            timer = setTimeout(() => {
-                setShowAthlete(true);
-            }, 1000);
+            compileSkins(positionList[positionIndex]);
         } else {
             setShowAthlete(false);
-            setDisplayAthletes([]);
+            setDisplaySkins([]);
         }
-
-        return () => clearTimeout(timer);
-    }, [positionIndex, user.tokens]);
+    }, [positionIndex, user.skins]);
 
     return (
         <div className="mt-[10vw] h-[193vw]">
@@ -131,7 +124,7 @@ export const Collection = () => {
                         className="flex w-[8%] items-center justify-end"
                     >
                         <img
-                            className={`h-[6vw] ${positionIndex === 0 || user.tokens.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
+                            className={`h-[6vw] ${positionIndex === 0 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
                             src={LeftIcon}
                         />
                     </button>
@@ -148,25 +141,29 @@ export const Collection = () => {
                         className="flex w-[8%] items-center justify-end"
                     >
                         <img
-                            className={`h-[6vw] ${positionIndex === positionList.length - 1 || user.tokens.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
+                            className={`h-[6vw] ${positionIndex === positionList.length - 1 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
                             src={RightIcon}
                         />
                     </button>
                 </div>
                 <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
                     <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                        {displayAthletes?.length > 0 ? (
-                            displayAthletes?.map((athlete, index) =>
+                        {displaySkins?.length > 0 ? (
+                            displaySkins?.map((athlete, index) =>
                                 showAthlete ? (
                                     <motion.button
                                         className="relative flex h-[36.4vw] w-[28vw]"
                                         key={index}
                                         {...appearCardAnimation}
                                     >
-                                        <img
-                                            className="h-full w-full"
-                                            src={athlete.img}
-                                            alt={athlete.displayName}
+                                        <AthleteCard
+                                            color={athlete.teamData.colors}
+                                            ign={athlete.player}
+                                            opacity={{wave: athlete.teamData.colors.wave}}
+                                            role={athlete.position[0]}
+                                            type={"basic"}
+                                            league={athlete.league}
+                                            id={index}
                                         />
                                     </motion.button>
                                 ) : (

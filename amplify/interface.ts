@@ -54,3 +54,42 @@ interface TournamentData {
         },
     ];
 }
+
+export interface Skin {
+    skinId: string;
+    athleteId: number;
+    player: string;
+    position: string[];
+    league: string;
+    type: string;
+    teamData: {
+        colors: {
+            main: string;
+            light: string;
+            dark: string;
+            accent: string;
+            details: string;
+            wave: string;
+        };
+    };
+    isEquipped: boolean;
+    packId: string;
+    costType: string;
+    savedAt: Date;
+}
+
+export interface Athlete {
+    athleteId: number;
+    player: string;
+    team: string;
+    position: [string];
+    league: string;
+    type: string;
+}
+
+export interface InventoryItem {
+    key: string;
+    type: string;
+    isClaimed?: boolean;
+    stock?: number;
+}

@@ -107,24 +107,28 @@ export const teamProfileSchema = new mongoose.Schema(
 
 export const skinSchema = new mongoose.Schema(
     {
-    skinId: { type: String, default: "0" },
-    athleteId: Number,
-    player: String,
-    position: [String],
-    league: String,
-    type: String,
-    teamData: {
-        colors: {
-            main: String,
-            light: String,
-            dark: String,
-            wings: String,
-            accent: String,
-            details: String,
-            wave: String,
+        skinId: { type: String, default: "0" },
+        athleteId: Number,
+        player: String,
+        position: [String],
+        team: String,
+        league: String,
+        type: String,
+        teamData: {
+            colors: {
+                main: String,
+                light: String,
+                dark: String,
+                wings: String,
+                accent: String,
+                details: String,
+                wave: String,
+            },
         },
-    },
-    isEquipped: { type: Boolean, default: false },
+        isEquipped: { type: Boolean, default: false },
+        packId: String,
+        costType: { type: String, default: "" },
+        savedAt: Date,
     }
 );
 
@@ -238,8 +242,8 @@ export const userSchema = new mongoose.Schema(
             }),
             default: null,
         },
-        hasBeenReset: { type: Boolean },
         skins: [skinSchema],
+        hasBeenReset: { type: Boolean },
     },
     {
         timestamps: true,
@@ -295,13 +299,7 @@ athleteSchema.plugin(paginate);
 
 export const counterSchema = new mongoose.Schema(
     {
-        tokenCounter: Number,
-        cashPackInfo: [
-            {
-                value: Number,
-                stocksLeft: Number,
-            },
-        ],
+        skinCounter: Number,
     },
     {
         collection: "counter",
