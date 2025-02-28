@@ -36,7 +36,7 @@ export const Catalog = () => {
     const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>([]);
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
-    const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
+    const [chosenLeagueType, setChosenLeagueType] = useState<string>('ALL');
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
     const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
@@ -77,7 +77,7 @@ export const Catalog = () => {
 
     function handleSetLeagueType(leagueType: string) {
         if (leagueType === "ALL") {
-            setChosenLeagueType(null);
+            setChosenLeagueType('ALL');
         } else {
             setChosenLeagueType(leagueType);
         }
@@ -92,7 +92,7 @@ export const Catalog = () => {
                 12,
                 searchString,
                 positionList[positionIndex],
-                chosenLeagueType !== null ? [chosenLeagueType] : leagueTypes,
+                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : leagueTypes,
                 user.initDataRaw
             );
 
@@ -144,7 +144,7 @@ export const Catalog = () => {
                 12,
                 searchString,
                 positionList[positionIndex],
-                chosenLeagueType !== null ? [chosenLeagueType] : leagueTypes,
+                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : leagueTypes,
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);
