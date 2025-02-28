@@ -77,6 +77,14 @@ export const Catalog = () => {
         setHasFinishedLoading(true);
     }
 
+    function handleSetLeagueType(leagueType: string) {
+        if (leagueType === "all") {
+            setChosenLeagueType(null);
+        } else {
+            setChosenLeagueType(leagueType);
+        }
+    }
+
     async function fetchMoreData() {
         if (hasNextPage && !isLoadingMore) {
             setIsLoadingMore(true); // Set loading flag
@@ -114,7 +122,6 @@ export const Catalog = () => {
                     //initial display, it's set to -1 so it doesn't show the first athlete only
                     setShowAthleteOffset(12);
                 } else {
-                    console.log(showAthleteOffset);
                     setShowAthleteOffset(showAthleteOffset + 12);
                 }
             }, 300);
@@ -125,7 +132,7 @@ export const Catalog = () => {
     useEffect(() => {
         async function fetchAllLeagueTypes() {
             const res = await getLeagues(user.initDataRaw);
-            setLeagueTypes(res);
+            setLeagueTypes(["all", ...res]);
         }
         fetchAllLeagueTypes();
     }, []);
@@ -174,7 +181,7 @@ export const Catalog = () => {
                         onClose={closeLeagueModal}
                         leagueTypes={leagueTypes}
                         chosenLeagueType={chosenLeagueType}
-                        setChosenLeagueType={setChosenLeagueType}
+                        setChosenLeagueType={handleSetLeagueType}
                     />
                 )}
                 <div className="relative flex">
