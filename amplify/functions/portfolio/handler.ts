@@ -234,7 +234,6 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
 
     const res = await athleteModel.aggregatePaginate(aggregate, options);
 
-    console.log(JSON.stringify(res));
     return {
         statusCode: 200,
         headers: {
