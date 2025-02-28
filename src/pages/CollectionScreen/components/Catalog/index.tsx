@@ -15,7 +15,6 @@ import {
 } from "../../../../helpers/athletes";
 import { Athlete, TeamColor } from "../../../../helpers/interfaces";
 import {
-    getAthletes,
     getLeagues,
     getAthletePaginated,
 } from "../../../../helpers/lambda.helper";
@@ -26,8 +25,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
-import LeftIcon from "../../../../assets/icon/left-gold.svg";
-import RightIcon from "../../../../assets/icon/right-gold.svg";
+
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
 export const Catalog = () => {
@@ -35,9 +33,6 @@ export const Catalog = () => {
     const positionList = ["All", "Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const [positionIndex, setPositionIndex] = useState<number>(0);
-    const [maxLength] = useState<number>(positionList.length - 1);
-    const [showAthlete, setShowAthlete] = useState(false);
-    const [allAthletes, setAllAthletes] = useState<Athlete[]>([]);
     const [leagueAthletes, setLeagueAthletes] = useState<Athlete[]>([]);
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
@@ -62,6 +57,9 @@ export const Catalog = () => {
     //         setPositionIndex(positionIndex + 1);
     //     }
     // };
+
+    const [searchString, setSearchString] = useState<string>("");
+    const [queryString, setQueryString] = useState<string>("");
 
     const displayLeagueModal = () => {
         setShowLeagueModal(true);
@@ -113,7 +111,7 @@ export const Catalog = () => {
             const res = await getAthletePaginated(
                 offset + 12,
                 12,
-                "",
+                searchString,
                 positionList[positionIndex],
                 leagueTypes,
                 user.initDataRaw
@@ -127,8 +125,14 @@ export const Catalog = () => {
         }
     }
 
+    //debounce on search
     useEffect(() => {
-        if (allAthletes !== null && leagueAthletes != null) {
+        const searchTimer = setTimeout(() => setSearchString(queryString), 500);
+        return () => clearTimeout(searchTimer);
+    }, [queryString]);
+
+    useEffect(() => {
+        if (leagueAthletes != null) {
             compileAthletes();
 
             const timer = setTimeout(() => {
@@ -183,7 +187,7 @@ export const Catalog = () => {
             const res = await getAthletePaginated(
                 0,
                 12,
-                "",
+                searchString,
                 positionList[positionIndex],
                 leagueTypes,
                 user.initDataRaw
@@ -196,7 +200,7 @@ export const Catalog = () => {
             setHasNextPage(res.hasNextPage);
         }
         fetchInitialAthletes();
-    }, [positionIndex, leagueTypes]);
+    }, [searchString, positionIndex, leagueTypes]);
 
     return (
         <div className="mt-[4vw]">
@@ -210,6 +214,8 @@ export const Catalog = () => {
                         type="text"
                         placeholder="Search Player..."
                         maxLength={12}
+                        value={queryString}
+                        onChange={(e) => setQueryString(e.target.value)}
                     ></input>
                 </div>
             </motion.div>
