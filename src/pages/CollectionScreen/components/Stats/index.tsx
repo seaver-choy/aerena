@@ -42,7 +42,6 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                 competitionType,
                 user.initDataRaw
             );
-            console.log(res);
             if (res.results) {
                 setLeagueStats(res.leagueStats);
             }

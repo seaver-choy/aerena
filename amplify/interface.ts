@@ -8,13 +8,28 @@ export interface InventoryItem {
 
 export interface Token {
     tokenId: string;
+    athleteId: number,
     player: string;
     displayName: string;
     team: string;
     position: string[];
     img: string;
-    amount?: string;
-    packId: string;
+    athleteScore: number;
+    league: string;
+    skin?: {
+        skinId: string;
+        teamData: {
+            colors: {
+                main: string;
+                light: string;
+                dark: string;
+                wings: string;
+                accent: string;
+                details: string;
+                wave: string;
+            },
+        },
+    }
 }
 
 export interface AthleteDocument extends mongoose.Document, AthleteData {}

@@ -122,7 +122,7 @@ export const PersonalLineup = ({
                                                     className="relative flex h-[36.4vw] w-[28vw]"
                                                 >
                                                     <AthleteCard
-                                                        color={baseColor}
+                                                        color={athlete.skin?.teamData.colors ?? baseColor}
                                                         ign={
                                                             athlete.displayName
                                                         }
@@ -130,8 +130,10 @@ export const PersonalLineup = ({
                                                             athlete.position[0]
                                                         }
                                                         opacity={{
-                                                            wave: baseColor.wave,
+                                                            wave: athlete.skin?.teamData.colors.wave ?? baseColor.wave,
                                                         }}
+                                                        type={athlete.skin ? "basic" : null}
+                                                        league={athlete.skin ? athlete.league : null}
                                                         id={index}
                                                     />
                                                 </div>
@@ -151,7 +153,7 @@ export const PersonalLineup = ({
                                             {ongoingTournament.tournamentName}
                                         </p>
                                     </div>
-                                    <div className="absolute bottom-[2.1vw] right-[2vw] h-[8vw] w-[25vw]">
+                                    {/* <div className="absolute bottom-[2.1vw] right-[2vw] h-[8vw] w-[25vw]">
                                         <div className="relative flex h-full w-full">
                                             <div className="h-full w-full rounded-[1vw] bg-gray"></div>
                                             <div className="absolute flex h-full w-full items-center justify-center">
@@ -160,7 +162,7 @@ export const PersonalLineup = ({
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             )
                     )}

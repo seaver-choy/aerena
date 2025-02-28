@@ -13,7 +13,6 @@ interface Props {
 }
 export const CardSkins = ({ sameAthletes }: Props) => {
     const [showCard, setShowCard] = useState(false);
-    console.log(sameAthletes);
 
     useEffect(() => {
         const timer = setTimeout(() => {

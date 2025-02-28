@@ -1211,3 +1211,29 @@ export const equipSkin = async (
         console.log(`equipSkin call failed ${e}`);
     }
 };
+
+export const getAthlete = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "portfolio/athlete",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: {
+                    athleteId: athleteId.toString(),
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};

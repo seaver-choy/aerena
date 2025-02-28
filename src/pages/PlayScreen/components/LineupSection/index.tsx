@@ -9,7 +9,7 @@ import {
     saveStarsTransaction,
     joinBasic,
 } from "../../../../helpers/lambda.helper";
-import { Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import { Skin, Tournament, TournamentLineup } from "../../../../helpers/interfaces";
 import {
     isTournamentClosed,
     isTournamentUpcoming,
@@ -45,6 +45,10 @@ export const LineupSection = ({
 }: LineupSectionProps) => {
     // const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
     const user = useUsers();
+    const positionList =
+        ongoingTournament !== null
+            ? ongoingTournament.positions
+            : ["Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
@@ -57,6 +61,7 @@ export const LineupSection = ({
     const [showNameModal, setShowNameModal] =
     useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
+    const [athleteSkins, setAthleteSkins] = useState<Skin[]>([]);
 
     const defaultLineup = [
         {
@@ -118,30 +123,8 @@ export const LineupSection = ({
                 };
                 lineup.push(obj);
             }
-
-            // /* Code for single user lineup submission*/
-            // const userFilter = ongoingTournament.usersJoined.filter(
-            //     (x) => x.username === user.username
-            // );
-            // if (userFilter.length > 0) {
-            //     for (let i = 0; i < ongoingTournament.positions.length; i++) {
-            //         const obj = {
-            //             position: ongoingTournament.positions[i],
-            //             athlete: userFilter[0].lineup[i],
-            //         };
-            //         lineup.push(obj);
-            //     }
-            //     setHasJoinedTournament(true);
-            // } else {
-            //     for (const position of ongoingTournament.positions) {
-            //         const obj = {
-            //             position: position,
-            //             athlete: null,
-            //         };
-            //         lineup.push(obj);
-            //     }
-            // }
             setTournamentLineup(lineup);
+            setAthleteSkins(user.skins.filter((skin) => skin.league == ongoingTournament.league && skin.isEquipped));
         }
     };
 
@@ -154,8 +137,14 @@ export const LineupSection = ({
                 user.initDataRaw
             );
 
+            
             const lineup = tournamentLineup.map((obj, i) => {
-                return { ...obj, athlete: luckyPicks[i] };
+                const skin = athleteSkins?.find(s => s.position[0] === positionList[i] && s.athleteId === (luckyPicks[i]?.athleteId ?? null));
+                
+                if(skin == undefined)
+                    return { ...obj, athlete: luckyPicks[i] };
+                else
+                    return { ...obj, athlete: {...luckyPicks[i], skin: { skinId: skin.skinId, teamData: skin.teamData }} };
             });
             setTournamentLineup(lineup);
         }
@@ -201,7 +190,7 @@ export const LineupSection = ({
                 const lineup = tournamentLineup.map((obj) => {
                     return obj.athlete;
                 });
-
+                console.log(lineup);
                 if (ongoingTournament.type === "premium") {
                     const invoiceLink =
                         await getInvoiceLinkForPremiumTournament(
@@ -339,7 +328,7 @@ export const LineupSection = ({
                                 : 0
                         }
                         // playTab={playTab}
-                        //athletes={user.tokens}
+                        athleteSkins={athleteSkins}
                         tournament={ongoingTournament}
                         tournamentLineup={tournamentLineup}
                         setTournamentLineup={setTournamentLineup}

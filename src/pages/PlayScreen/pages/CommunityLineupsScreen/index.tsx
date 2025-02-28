@@ -92,12 +92,14 @@ export const CommunityLineupsScreen = () => {
                                         className="relative flex h-[36.4vw] w-[28vw]"
                                     >
                                         <AthleteCard
-                                            color={baseColor}
+                                            color={athlete.skin?.teamData.colors ?? baseColor}
                                             ign={athlete.displayName}
                                             role={athlete.position[0]}
                                             opacity={{
-                                                wave: baseColor.wave,
+                                                wave: athlete.skin?.teamData.colors.wave ?? baseColor.wave,
                                             }}
+                                            type={athlete.skin ? "basic" : null}
+                                            league={athlete.skin ? athlete.league : null}
                                             id={index}
                                         />
                                     </div>

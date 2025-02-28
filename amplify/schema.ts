@@ -11,6 +11,20 @@ export const tokenSchema = new mongoose.Schema({
     img: String,
     athleteScore: Number,
     league: String,
+    skin: {
+        skinId: String,
+        teamData: {
+            colors: {
+                main: String,
+                light: String,
+                dark: String,
+                wings: String,
+                accent: String,
+                details: String,
+                wave: String,
+            },
+        },
+    },
 });
 
 export const athleteSchema = new mongoose.Schema(

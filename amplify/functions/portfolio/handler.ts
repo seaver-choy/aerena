@@ -40,6 +40,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return getAthleteProfile(event);
     } else if (event.path.includes("sameathletes")) {
         return getSameAthletes(event);
+    } else if (event.path.includes("athlete")) {
+        return getAthlete(event);
     } else {
         return getAthletePositionFilter(event);
     }
@@ -534,3 +536,50 @@ async function getSameAthletes(event: APIGatewayProxyEvent) {
 //         };
 //     }
 // }
+
+async function getAthlete(event: APIGatewayProxyEvent) {
+    const athleteModel = conn!.model("Athletes");
+
+    const athleteId = parseInt(event.queryStringParameters!.athleteId!);
+
+    try {
+        const res = await athleteModel.findOne({
+            athleteId: athleteId,
+        });
+
+        if (res) {
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify(res),
+            };
+        } else {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Athlete not found",
+                }),
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An unexpected error occured",
+                error: e,
+            }),
+        };
+    }
+}

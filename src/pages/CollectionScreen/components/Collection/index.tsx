@@ -12,7 +12,7 @@ import {
     getAthletePositionLogo,
     getAthletePositionBackground,
 } from "../../../../helpers/athletes";
-import { Skin } from "../../../../helpers/interfaces";
+import { Athlete, Skin } from "../../../../helpers/interfaces";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
@@ -20,6 +20,8 @@ import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteModal } from "../../modals/AthleteModal";
+import { getAthlete } from "../../../../helpers/lambda.helper";
 
 export const Collection = () => {
     const user = useUsers();
@@ -28,10 +30,30 @@ export const Collection = () => {
     const [positionIndex, setPositionIndex] = useState<number>(0);
     const [maxLength] = useState<number>(positionList.length - 1);
     const [displaySkins, setDisplaySkins] = useState<Skin[]>(null);
-    const [showAthlete, setShowAthlete] = useState(false);
+    const [showSkin, setShowSkin] = useState(false);
+    const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
+    const [selectedSkin, setSelectedSkin] = useState<Skin>(null);
+    const [selectedAthlete, setSelectedAthlete] = useState<Athlete>(null);
 
     const handlePurchase = () => {
         navigate(`/exchange`);
+    };
+    
+    const fetchAthlete = async (skin) => {
+        const result = await getAthlete(skin.athleteId, user.initDataRaw);
+        if(result) {
+            setSelectedAthlete(result);
+            setSelectedSkin(skin);
+            setShowAthleteModal(true);
+        }
+    }
+    const displayAthleteModal = (skin: Skin) => {
+        fetchAthlete(skin);
+    };
+
+    const closeAthleteModal = () => {
+        setSelectedSkin(null);
+        setShowAthleteModal(false);
     };
 
     const handlePreviousCategory = () => {
@@ -65,15 +87,15 @@ export const Collection = () => {
             return nameOrder;
         });
         setDisplaySkins(sorted);
-        setShowAthlete(true);
+        setShowSkin(true);
     }
 
     useEffect(() => {
         if (user.skins.length > 0) {
-            setShowAthlete(false);
+            setShowSkin(false);
             compileSkins(positionList[positionIndex]);
         } else {
-            setShowAthlete(false);
+            setShowSkin(false);
             setDisplaySkins([]);
         }
     }, [positionIndex, user.skins]);
@@ -150,10 +172,13 @@ export const Collection = () => {
                     <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
                         {displaySkins?.length > 0 ? (
                             displaySkins?.map((athlete, index) =>
-                                showAthlete ? (
+                                showSkin ? (
                                     <motion.button
                                         className="relative flex h-[36.4vw] w-[28vw]"
                                         key={index}
+                                        onClick={() => {
+                                            displayAthleteModal(athlete);
+                                        }}
                                         {...appearCardAnimation}
                                     >
                                         <AthleteCard
@@ -190,6 +215,13 @@ export const Collection = () => {
                     </div>
                 </div>
             </div>
+            {showAthleteModal && (
+                <AthleteModal
+                    athlete={selectedAthlete}
+                    onClose={closeAthleteModal}
+                    skin={selectedSkin}
+                />
+            )}
         </div>
     );
 };

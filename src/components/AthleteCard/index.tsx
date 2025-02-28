@@ -40,8 +40,8 @@ export const AthleteCard = ({
     ign,
     opacity,
     role,
-    type,
-    league,
+    type = null,
+    league = null,
     id = -1,
 }: Props) => {
     return (
@@ -50,7 +50,7 @@ export const AthleteCard = ({
             style={{ transform: "none", transition: "none" }}
         >
             <div className="absolute h-full w-full">
-                {type !== undefined && type === "basic" ? (
+                {type !== null && type === "basic" ? (
                     <GlowBasic id={id} />
                 ) : (
                     <Glow id={id} />
@@ -110,7 +110,7 @@ export const AthleteCard = ({
             <div className="absolute h-full w-full">
                 <SmallDiamond color={color} />
             </div>
-            {type !== undefined && type === "basic" && (
+            {type !== null && type === "basic" && (
                 <>
                     <div className="absolute h-full w-full">
                         <BorderBasic id={id} />
@@ -119,7 +119,7 @@ export const AthleteCard = ({
                         <img
                             className="h-full w-full"
                             src={
-                                league !== undefined
+                                league !== null
                                     ? getAthleteSticker(league)
                                     : PH15Card
                             }

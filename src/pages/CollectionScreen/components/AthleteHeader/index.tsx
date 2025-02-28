@@ -17,7 +17,6 @@ interface Props {
 }
 export const AthleteHeader = ({ athlete, averageStats }: Props) => {
     const [showAthleteHeader, setShowAthleteHeader] = useState(false);
-    console.log(athlete);
     const ign = athlete.player;
     const role = athlete.position[0];
 
