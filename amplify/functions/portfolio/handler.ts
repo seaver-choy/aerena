@@ -175,6 +175,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
             $match: {
                 player: {
                     $regex: searchString,
+                    $options: "i",
                 },
                 league: {
                     $in: leagueTypes,
