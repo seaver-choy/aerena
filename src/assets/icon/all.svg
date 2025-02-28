@@ -1,0 +1,23 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="all">
+<path id="ALL" d="M27.0245 100L34.5845 83.2H37.6565L45.2405 100H41.9765L35.4725 84.856H36.7205L30.2405 100H27.0245ZM30.5045 96.112L31.3445 93.664H40.4165L41.2565 96.112H30.5045ZM47.3771 100V83.2H50.4971V97.36H59.2811V100H47.3771ZM61.7443 100V83.2H64.8643V97.36H73.6483V100H61.7443Z" fill="url(#paint0_linear_3195_4209)"/>
+<g id="all_2" clip-path="url(#clip0_3195_4209)">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M54.8999 0H79.3999L84.9999 5.6V30.1L76.5999 21.7V8.4H63.2999L54.8999 0ZM45.1 70H20.6L15 64.4V39.9L23.4 48.3V61.6H36.7L45.1 70ZM47.2 0H15V32.2L24.1 41.3H37.4V28.7H27.6V12.6H43.7V21V28.7V41.3V44.1V60.9L52.8 70H85V37.8L75.9 28.7H62.6001V41.3H72.4V57.4H56.3V41.3H56.3001V28.7H56.3V9.1L47.2 0Z" fill="url(#paint1_linear_3195_4209)"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_3195_4209" x1="24.8028" y1="91.5001" x2="74.8598" y2="91.5001" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3195_4209" x1="11.7276" y1="35.0003" x2="86.2805" y2="35.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<clipPath id="clip0_3195_4209">
+<rect width="70" height="70" fill="white" transform="translate(15)"/>
+</clipPath>
+</defs>
+</svg>
