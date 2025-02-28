@@ -46,17 +46,7 @@ export const Catalog = () => {
     const [hasFetchedInitial, setHasFetchedInitial] = useState<boolean>(false);
     const [hasFinishedLoading, setHasFinishedLoading] =
         useState<boolean>(false);
-    // const handlePreviousCategory = () => {
-    //     if (positionIndex > 0) {
-    //         setPositionIndex(positionIndex - 1);
-    //     }
-    // };
-
-    // const handleNextCategory = () => {
-    //     if (positionIndex < maxLength) {
-    //         setPositionIndex(positionIndex + 1);
-    //     }
-    // };
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
@@ -79,49 +69,32 @@ export const Catalog = () => {
     };
 
     function compileAthletes() {
-        // const filteredPosition = leagueAthletes.filter((obj) =>
-        //     obj.position.includes(position)
-        // );
-
         const uniqueAthletesMap = new Map(
             leagueAthletes.map((player) => [player.athleteId, player])
         );
-
-        // const sorted = [...uniqueAthletesMap.values()].sort((a, b) => {
-        //     // const teamA = a.team.toUpperCase();
-        //     // const teamB = b.team.toUpperCase();
-
-        //     const nameA = a.displayName;
-        //     const nameB = b.displayName;
-
-        //     // const teamOrder = teamA.localeCompare(teamB);
-        //     const nameOrder = nameA.localeCompare(nameB);
-
-        //     // return teamOrder || nameOrder;
-        //     return nameOrder;
-        // });
 
         setCurrentAthletes([...uniqueAthletesMap.values()]);
         setHasFinishedLoading(true);
     }
 
     async function fetchMoreData() {
-        console.log("fetching more data");
-        if (hasNextPage && hasFinishedLoading) {
+        if (hasNextPage && !isLoadingMore) {
+            setIsLoadingMore(true); // Set loading flag
             const res = await getAthletePaginated(
-                offset + 12,
+                offset, // Use the current offset
                 12,
                 searchString,
                 positionList[positionIndex],
                 leagueTypes,
                 user.initDataRaw
             );
-            setHasFinishedLoading(false);
-            setLeagueAthletes([...leagueAthletes, ...res.docs]);
-            setOffset(offset + 12);
+
+            setLeagueAthletes((prevAthletes) => [...prevAthletes, ...res.docs]);
+            setOffset((prevOffset) => prevOffset + 12); // Update offset correctly
             setHasNextPage(res.hasNextPage);
+            setIsLoadingMore(false); // Reset loading flag
         } else {
-            console.log("No more athletes left");
+            console.log("No more athletes left or loading in progress");
         }
     }
 
@@ -147,30 +120,6 @@ export const Catalog = () => {
             return () => clearTimeout(timer);
         }
     }, [leagueAthletes]);
-
-    // useEffect(() => {
-    //     if (allAthletes !== null && chosenLeagueType != null) {
-    //         const tempAthletes = allAthletes.filter((obj) =>
-    //             obj.league.includes(chosenLeagueType)
-    //         );
-    //         setLeagueAthletes(tempAthletes);
-    //     }
-    // }, [chosenLeagueType]);
-
-    // const getAllAthletes = async () => {
-    //     const allAthletes = await getAthletes(user.initDataRaw);
-    //     const allLeagueTypes = await getLeagues(user.initDataRaw);
-    //     setAllAthletes(allAthletes);
-    //     setLeagueTypes(allLeagueTypes);
-    //     const tempAthletes = allAthletes.filter((obj) =>
-    //         allLeagueTypes.includes(obj.league)
-    //     );
-    //     setLeagueAthletes(tempAthletes);
-    // };
-
-    // useEffect(() => {
-    //     getAllAthletes();
-    // }, []);
 
     useEffect(() => {
         async function fetchAllLeagueTypes() {
@@ -326,32 +275,6 @@ export const Catalog = () => {
                                 src={getAthletePositionLogo("EXP")}
                             />
                         </button>
-                        {/* <button
-                            onClick={handlePreviousCategory}
-                            className="flex w-[8%] items-center justify-end"
-                        >
-                            <img
-                                className={`h-[6vw] ${positionIndex === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
-                                src={LeftIcon}
-                            />
-                        </button>
-                        <div className="flex w-[84%] items-center justify-center">
-                            <img
-                                className="h-[10vw]"
-                                src={getAthletePositionLogo(
-                                    positionList[positionIndex]
-                                )}
-                            />
-                        </div>
-                        <button
-                            onClick={handleNextCategory}
-                            className="flex w-[8%] items-center justify-end"
-                        >
-                            <img
-                                className={`h-[6vw] ${positionIndex === positionList.length - 1 ? "cursor-default opacity-50" : "opacity-100"}`}
-                                src={RightIcon}
-                            />
-                        </button> */}
                     </div>
                     <div
                         className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]"
@@ -364,8 +287,10 @@ export const Catalog = () => {
                             <InfiniteScroll
                                 dataLength={leagueAthletes.length}
                                 next={fetchMoreData}
-                                hasMore={hasNextPage}
-                                loader={<h4>Loading...</h4>}
+                                hasMore={hasNextPage && !isLoadingMore} // Disable next if loading
+                                loader={
+                                    isLoadingMore ? <h4>Loading...</h4> : null
+                                } // Conditionally show loader
                                 scrollableTarget="collection-id"
                                 className="disable-scrollbar flex flex-row flex-wrap gap-[2vw]"
                             >
