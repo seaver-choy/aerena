@@ -78,7 +78,7 @@ export const Catalog = () => {
     }
 
     function handleSetLeagueType(leagueType: string) {
-        if (leagueType === "all") {
+        if (leagueType === "ALL") {
             setChosenLeagueType(null);
         } else {
             setChosenLeagueType(leagueType);
@@ -132,7 +132,7 @@ export const Catalog = () => {
     useEffect(() => {
         async function fetchAllLeagueTypes() {
             const res = await getLeagues(user.initDataRaw);
-            setLeagueTypes(["all", ...res]);
+            setLeagueTypes(["ALL", ...res]);
         }
         fetchAllLeagueTypes();
     }, []);
