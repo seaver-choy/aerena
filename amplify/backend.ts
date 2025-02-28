@@ -19,6 +19,7 @@ import { statsFunction } from "./functions/stats/resource";
 import { upgradeFunction } from "./functions/upgrade/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
 import { mlTournamentFunction } from './functions/mltournaments/resource';
+import { packInfoFunction } from './functions/packinfo/resource';
 import * as dotenv from "dotenv";
 import * as path from "path";
 /**
@@ -37,6 +38,7 @@ const backend = defineBackend({
     upgradeFunction,
     telegramstarsFunction,
     mlTournamentFunction,
+    packInfoFunction,
 });
 
 const __dirname = path.dirname("../.env");
@@ -148,6 +150,9 @@ const telegramstarsIntegration = new LambdaIntegration(
 const mlTournamentIntegration = new LambdaIntegration(
     backend.mlTournamentFunction.resources.lambda
 );
+const packInfoIntegration = new LambdaIntegration(
+    backend.packInfoFunction.resources.lambda
+);
 
 //addResource section
 const userPath = api.root.addResource("user", {});
@@ -164,6 +169,7 @@ const upgradePath = api.root.addResource("upgrade", {});
 const telegramstarsPath = api.root.addResource("telegramstars", {});
 const invoicelinkPath = api.root.addResource("invoice", {});
 const mlTournamentPath = api.root.addResource("mltournaments", {});
+const packInfoPath = api.root.addResource("packinfos", {});
 const joinBasicPath = api.root.addResource("joinbasic", {});
 
 //addMethod section
@@ -195,6 +201,9 @@ tournamentsPath.addMethod("PUT", tournamentsIntegration, {
 });
 
 mintPath.addMethod("GET", mintIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+mintPath.addMethod("POST", mintIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 mintPath.addMethod("PUT", mintIntegration, {
@@ -243,6 +252,10 @@ mlTournamentPath.addMethod("POST", mlTournamentIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
+packInfoPath.addMethod("GET", packInfoIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
 joinBasicPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
@@ -279,6 +292,11 @@ telegramstarsPath.addProxy({
 mlTournamentPath.addProxy({
     anyMethod: true,
     defaultIntegration: mlTournamentIntegration,
+});
+
+packInfoPath.addProxy({
+    anyMethod: true,
+    defaultIntegration: packInfoIntegration,
 });
 
 backend.addOutput({

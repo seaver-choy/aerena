@@ -21,7 +21,7 @@ import {
 import { LeagueModal } from "../../modals/LeagueModal";
 
 import TournamentSonner from "../../../../assets/sonner/tournament.svg";
-import FreeTournamentBackground from "../../../../assets/background/tournament-free.svg";
+import BasicTournamentBackground from "../../../../assets/background/tournament-basic.svg";
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
 import ChangeIcon from "../../../../assets/icon/change-white.svg";
 import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
@@ -172,7 +172,7 @@ export const TournamentBanner = ({
                             className="h-full w-full"
                             src={
                                 currentTournamentType == "basic"
-                                    ? FreeTournamentBackground
+                                    ? BasicTournamentBackground
                                     : PremiumTournamentBackground
                             }
                         />
@@ -186,8 +186,8 @@ export const TournamentBanner = ({
                             {...appearAnimation}
                         >
                             <img
+                                className="h-full w-full will-change-transform backface-hidden"
                                 src={getStickerImage(ongoingTournament.league)}
-                                className="h-full w-full"
                             />
                             {ongoingTournaments != null &&
                                 ongoingTournaments.length > 1 && (

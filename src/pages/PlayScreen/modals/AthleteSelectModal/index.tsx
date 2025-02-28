@@ -176,41 +176,45 @@ export const AthleteSelectModal = ({
                         </motion.div>
                     </div>
                     <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        {displayAthletes != null && displayAthletes?.map((athlete, index) => (
-                            <div key={index}>
-                                {showAthlete && (
-                                    <motion.div
-                                        className={`relative flex h-[27.95vw] w-[21.5vw]`}
-                                        key={index}
-                                        onClick={() =>
-                                            handleAthleteSelect(index)
-                                        }
-                                        {...(index === selectedIndex && selectedIndex !== -1 ? appearCardAnimation : appearCardEmptyAnimation)}
-                                    >
-                                        <AthleteCard
-                                            color={baseColor}
-                                            ign={athlete.displayName}
-                                            role={athlete.position[0]}
-                                            opacity={{
-                                                wave: baseColor.wave,
-                                            }}
-                                            id={index}
-                                        />
-                                    </motion.div>
-                                )}
-                                {!showAthlete && (
-                                    <motion.div
-                                        className="relative flex h-[27.95vw] w-[21.5vw]"
-                                        {...pulseAnimation}
-                                    >
-                                        <img
-                                            className="h-full w-full"
-                                            src={AthleteSonner}
-                                        />
-                                    </motion.div>
-                                )}
-                            </div>
-                        ))}
+                        {displayAthletes != null &&
+                            displayAthletes?.map((athlete, index) => (
+                                <div key={index}>
+                                    {showAthlete && (
+                                        <motion.div
+                                            className="relative flex h-[27.95vw] w-[21.5vw] overflow-hidden"
+                                            key={index}
+                                            onClick={() =>
+                                                handleAthleteSelect(index)
+                                            }
+                                            {...(index === selectedIndex &&
+                                            selectedIndex !== -1
+                                                ? appearCardAnimation
+                                                : appearCardEmptyAnimation)}
+                                        >
+                                            <AthleteCard
+                                                color={baseColor}
+                                                ign={athlete.displayName}
+                                                role={athlete.position[0]}
+                                                opacity={{
+                                                    wave: baseColor.wave,
+                                                }}
+                                                id={index}
+                                            />
+                                        </motion.div>
+                                    )}
+                                    {!showAthlete && (
+                                        <motion.div
+                                            className="relative flex h-[27.95vw] w-[21.5vw]"
+                                            {...pulseAnimation}
+                                        >
+                                            <img
+                                                className="h-full w-full"
+                                                src={AthleteSonner}
+                                            />
+                                        </motion.div>
+                                    )}
+                                </div>
+                            ))}
                     </div>
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">

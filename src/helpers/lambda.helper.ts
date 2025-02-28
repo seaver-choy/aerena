@@ -7,6 +7,7 @@ export const submitLineup = async (
     userID,
     username,
     userLineup,
+    lineupName,
     initDataRaw
 ) => {
     try {
@@ -14,7 +15,9 @@ export const submitLineup = async (
             userID: userID,
             username: username,
             lineup: userLineup,
+            lineupName: lineupName,
             score: 0,
+            submittedAt: new Date(),
         };
 
         const restOperation = put({
@@ -628,6 +631,32 @@ export const getAthletes = async (initDataRaw) => {
     }
 };
 
+export const getAthleteChoices = async (league, boosterQuantity, initDataRaw) => {
+    try {
+        const payload = {
+            league: league,
+            boosterQuantity: boosterQuantity,
+        };
+        const restOperation = post({
+            apiName: "playibleApi",
+            path: "mint",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(payload),
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`GET athlete choices fail ${e}`);
+    }
+};
+
 export const getAthletePositionFilter = async (
     position: string,
     league: string = "",
@@ -1030,5 +1059,28 @@ export const addNewReferral = async (userId, referralCode, initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`addNewReferral call failed ${e}`);
+    }
+};
+
+export const getPackInfos = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "packinfos/all",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        // console.log(JSON.parse(response.toLocaleString()));
+        console.log(`Successful GET of packinfos`);
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of packinfos ${e}`);
     }
 };

@@ -45,7 +45,10 @@ export const AthleteCard = ({
     id = -1,
 }: Props) => {
     return (
-        <div className="relative h-full w-full">
+        <div
+            className="relative h-full w-full will-change-transform backface-hidden"
+            style={{ transform: "none", transition: "none" }}
+        >
             <div className="absolute h-full w-full">
                 {type !== undefined && type === "basic" ? (
                     <GlowBasic id={id} />

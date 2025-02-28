@@ -111,7 +111,7 @@ export const PersonalLineup = ({
                                     </div>
                                     <div className="absolute left-[6vw] top-[11.3vw] flex h-[6.5vw] w-[60vw] items-center">
                                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
-                                            My Fantasy Lineup Team
+                                            {userInfo.lineupName}
                                         </p>
                                     </div>
                                     <div className="absolute left-[4vw] top-[21vw] flex h-[76.8vw] w-[92vw] flex-row flex-wrap items-center justify-center gap-[4vw]">

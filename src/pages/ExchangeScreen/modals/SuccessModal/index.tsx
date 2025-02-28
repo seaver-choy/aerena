@@ -8,13 +8,15 @@ import {
 
 import LargeModal from "../../../../assets/modal/large.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import Sample from "../../../../assets/card/sample-one.svg";
+import { Skin } from "../../../../helpers/interfaces";
+import { AthleteCard } from "../../../../components/AthleteCard";
 
 interface SuccessModalProps {
+    athleteChoice: Skin;
     onClose: () => void;
 }
 
-export const SuccessModal = ({ onClose }: SuccessModalProps) => {
+export const SuccessModal = ({ athleteChoice, onClose }: SuccessModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -23,7 +25,7 @@ export const SuccessModal = ({ onClose }: SuccessModalProps) => {
         };
     }, []);
 
-    return (
+    return athleteChoice != null && (
         <div className="fixed inset-0 z-40">
             <div className="relative flex h-full w-full items-center justify-center">
                 <div className="h-full w-full bg-graydark opacity-95" />
@@ -42,15 +44,25 @@ export const SuccessModal = ({ onClose }: SuccessModalProps) => {
                         </motion.div>
                     </div>
                     <div className="mb-[4vw] flex h-[76.5vw] flex-col items-center justify-center gap-[4vw]">
-                        <motion.div className="h-[46vw]" {...appearAnimation}>
-                            <img className="h-full" src={Sample} />
+                        <motion.div className="h-[46vw] w-[35vw]" {...appearAnimation}>
+                            <AthleteCard
+                                color={athleteChoice.teamData.colors}
+                                ign={athleteChoice.player}
+                                opacity={{
+                                    wave: athleteChoice.teamData.colors.wave,
+                                }}
+                                role={athleteChoice.position[0]}
+                                type={"basic"}
+                                league={athleteChoice.league}
+                                id={0}
+                            />
                         </motion.div>
                         <motion.div
                             className="px-[8vw]"
                             {...appearTextAnimation}
                         >
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                You have unlocked the K1NGKONG Skin! Equip it
+                                You have unlocked the {athleteChoice.player} Skin! Equip it
                                 now in your Collection.
                             </p>
                         </motion.div>
