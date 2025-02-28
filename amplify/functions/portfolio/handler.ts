@@ -229,7 +229,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
                     $first: "$league",
                 },
                 type: {
-                    $first: "type",
+                    $first: "$type",
                 },
             },
         },
