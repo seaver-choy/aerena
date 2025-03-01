@@ -58,18 +58,18 @@ async function saveSkin(event: APIGatewayProxyEvent) {
     const userModel = conn!.model("Users");
     const payload = JSON.parse(JSON.parse(event.body!));
     const skin = payload.skin;
-    console.log(payload.userID);
+    console.log(payload.userId);
 
     //get the initial state of the user, in case an error happens
     const userResult = await userModel.findOne({
-        userID: payload.userID,
+        userID: payload.userId,
     });
     const counterModel = conn!.model("Counter");
     const counterResult = await counterModel.findById(
         process.env.TOKEN_COUNTER_ID!
     );
     if (!userResult) {
-        console.error(`[ERROR] User ${payload.userID} not found`);
+        console.error(`[ERROR] User ${payload.userId} not found`);
         return {
             statusCode: 400,
             headers: {
@@ -109,7 +109,7 @@ async function saveSkin(event: APIGatewayProxyEvent) {
                     newCounter
                 );
 
-                console.info(`[MINT][SKIN] User ${userResult.userID} has saved a new skin from ${packInfoResult.packId}:\n` + JSON.stringify(newSkin));
+                console.info(`[MINT][SKIN] User ${userResult.userId} has saved a new skin from ${packInfoResult.packId}:\n` + JSON.stringify(newSkin));
 
                 return {
                     statusCode: 200,
@@ -122,7 +122,7 @@ async function saveSkin(event: APIGatewayProxyEvent) {
             }
             default: {
                 console.error(
-                    `[MINT] Pack type ${payload.packType} does not exist. Caller: ${payload.userID}`
+                    `[MINT] Pack type ${payload.packType} does not exist. Caller: ${payload.userId}`
                 );
                 return {
                     statusCode: 400,
@@ -138,7 +138,7 @@ async function saveSkin(event: APIGatewayProxyEvent) {
         }
     } catch (err) {
         await userModel.findOneAndReplace(
-            { userID: payload.userID },
+            { userID: payload.userId },
             userResult
         );
         await counterModel.findOneAndReplace(
@@ -146,11 +146,11 @@ async function saveSkin(event: APIGatewayProxyEvent) {
             counterResult
         );
         console.error(
-            `[MINT] ${payload.userID} has encountered an error \n ${err}`
+            `[MINT] ${payload.userId} has encountered an error \n ${err}`
         );
 
         console.info(
-            `User ${payload.userID} initial state \n ${JSON.stringify(userResult)}`
+            `User ${payload.userId} initial state \n ${JSON.stringify(userResult)}`
         );
 
         console.info(
