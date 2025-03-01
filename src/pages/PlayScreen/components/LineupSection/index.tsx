@@ -190,7 +190,6 @@ export const LineupSection = ({
                 const lineup = tournamentLineup.map((obj) => {
                     return obj.athlete;
                 });
-                console.log(lineup);
                 if (ongoingTournament.type === "premium") {
                     const invoiceLink =
                         await getInvoiceLinkForPremiumTournament(

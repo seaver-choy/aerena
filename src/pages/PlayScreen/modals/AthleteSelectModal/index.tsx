@@ -53,36 +53,6 @@ export const AthleteSelectModal = ({
     const [showAthlete, setShowAthlete] = useState(false);
     const [hasSelected, setHasSelected] = useState<boolean>(false);
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-    // function compileAthletes() {
-    //     //TODO: will have to change this code for card upgrades
-
-    //     //filter athlete based on position
-    //     const filteredPosition = athletes.filter(
-    //         (obj) =>
-    //             obj.position.includes(position) &&
-    //             obj.packId.includes(playTab.toLowerCase())
-    //     );
-
-    //     // //reduce the array to unique values
-    //     // const uniques = [
-    //     //     ...new Map(
-    //     //         filteredPosition.map((item) => [item["displayName"], item])
-    //     //     ).values(),
-    //     // ];
-
-    //     // const completeArray = [];
-
-    //     // //count number of same athletes
-    //     // uniques.forEach((x) => {
-    //     //     const count = filteredPosition.filter(
-    //     //         (y) => y.displayName === x.displayName
-    //     //     ).length;
-    //     //     completeArray.push({ ...x, amount: count });
-    //     // });
-
-    //     // console.log(completeArray);
-    //     setDisplayAthletes(filteredPosition);
-    // }
 
     const fetchAthlete = async () => {
         const result = await getAthletePositionFilter(

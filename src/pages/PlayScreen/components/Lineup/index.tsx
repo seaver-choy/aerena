@@ -94,8 +94,6 @@ export const Lineup = ({
             <div className="absolute top-[25vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
                 {positionList.map((position, index) => {
                     const skin = athleteSkins?.find(s => s.position[0] === position && s.athleteId === (tournamentLineup?.[index]?.athlete?.athleteId ?? null));
-                    // console.log(position + " " + skin);
-                    // console.log(tournamentLineup?.[index].athlete ?? null);
                     return (
                         <div key={index}>
                             {loadLuckyPick && (
