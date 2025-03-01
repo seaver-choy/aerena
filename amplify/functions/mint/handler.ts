@@ -109,7 +109,7 @@ async function saveSkin(event: APIGatewayProxyEvent) {
                     newCounter
                 );
 
-                console.info(`[MINT][SKIN] User ${userResult.userId} has saved a new skin from ${packInfoResult.packId}:\n` + JSON.stringify(newSkin));
+                console.info(`[MINT][SKIN] User ${userResult.userID} has saved a new skin from ${packInfoResult.packId}:\n` + JSON.stringify(newSkin));
 
                 return {
                     statusCode: 200,
