@@ -24,6 +24,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
         conn.model("Users", userSchema);
         conn.model("Teams", teamSchema);
+        conn.model("Athletes", athleteSchema);
         athleteSchema.plugin(aggregatePaginate);
         conn.model("AthleteProfile", athleteProfileSchema);
     }
@@ -141,7 +142,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const athleteModel = conn!.model<
         AthleteDocument,
         mongoose.AggregatePaginateModel<AthleteDocument>
-    >("Athletes", athleteSchema, "athletes");
+    >("PaginatedAthletes", athleteSchema, "athletes");
     const pageOffset = parseInt(event.queryStringParameters!.pageOffset!);
     const limit = parseInt(event.queryStringParameters!.limit!);
     const searchString = event.queryStringParameters!.searchString!;
