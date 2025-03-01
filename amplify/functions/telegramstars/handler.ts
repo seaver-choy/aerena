@@ -140,7 +140,7 @@ async function getNewInvoice(event: APIGatewayProxyEvent) {
                     prices = [{ label: 'Total', amount: amount}];
                     responseData = {
                         userId: content.userId,
-                        transactionInfo: league + "_" + packType,
+                        transactionInfo: "exchange_packs_" + packInfo.packId + "_" + updateId,
                         transactionType: "exchange_packs",
                         amount: amount};
                     break;
