@@ -109,7 +109,7 @@ async function getNewInvoice(event: APIGatewayProxyEvent) {
                 }
                 title = tournamentResult.tournamentName;
                 description =
-                    tournamentResult.tournament + " - Premium Tournament";
+                    "Premium Tournament Lineup Submission";
                 transactionInfo =
                     "premium_tournament_" +
                     tournamentResult.tournamentId +
