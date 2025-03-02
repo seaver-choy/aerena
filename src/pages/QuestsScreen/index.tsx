@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { Layout } from "../../components/Layout";
-import Upgrading from "../../assets/others/upgrading.svg";
+import { Tabs } from "../../components/Tabs";
+import { TasksSection } from "./components/TasksSection";
+import { questsOptions } from "../../helpers/tabs";
 
 export const QuestsScreen = () => {
+    const [questsTab, setQuestsTab] = useState("Main");
     return (
         <Layout>
-            <div className="flex h-full items-center justify-center">
-                <img className="h-[80vw] w-[80vw]" src={Upgrading} />
-            </div>
+            <Tabs
+                options={questsOptions}
+                onToggle={(selected) => {
+                    setQuestsTab(selected);
+                }}
+                selectedTab={questsTab}
+            />
+            <TasksSection />
         </Layout>
     );
 };
