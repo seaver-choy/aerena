@@ -124,6 +124,10 @@ const UsernameModal: React.FC = () => {
                     payload: { joinedTgChannel: data["joinedTgChannel"] },
                 });
                 user.dispatch({
+                    type: "SET_JOINED_TG_COMMUNITY",
+                    payload: { joinedTgCommunity: data["joinedTgCommunity"] },
+                });
+                user.dispatch({
                     type: "SET_QUESTS",
                     payload: { quests: data["quests"] },
                 });

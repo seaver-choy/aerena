@@ -381,6 +381,31 @@ export const joinTgChannel = async (userId, initDataRaw) => {
     }
 };
 
+export const joinTgCommunity = async (userId, initDataRaw) => {
+    try {
+        const payload = {
+            userID: userId,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: "user/joinTgCommunity",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(payload),
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const login = async (userID, initDataRaw) => {
     try {
         console.log(userID);

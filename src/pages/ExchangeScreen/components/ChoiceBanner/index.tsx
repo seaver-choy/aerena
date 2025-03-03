@@ -10,7 +10,6 @@ import { PurchaseModal } from "../../modals/PurchaseModal";
 
 import ChoicePackSonner from "../../../../assets/sonner/pack-choice.svg";
 import ChoicePackBackground from "../../../../assets/background/pack-choice.svg";
-import PH15ChoicePack from "../../../../assets/pack/choice-ph15.svg";
 import AerenaTextLogo from "../../../../assets/logo/aerena-text.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import BlackButton from "../../../../assets/button/black.svg";
@@ -26,7 +25,7 @@ import {
     saveSkin,
     saveStarsTransaction,
 } from "../../../../helpers/lambda.helper";
-import { getStickerImage } from "../../../../helpers/images";
+import { getChoicePackImage, getStickerImage } from "../../../../helpers/images";
 import { LoadingModal } from "../../modals/LoadingModal";
 import { ConfirmModal } from "../../modals/ConfirmModal";
 import { AnimationModal } from "../../modals/AnimationModal";
@@ -198,7 +197,7 @@ export const ChoiceBanner = () => {
                         >
                             <img
                                 className="h-full will-change-transform backface-hidden"
-                                src={PH15ChoicePack}
+                                src={getChoicePackImage(packInfo.league)}
                             />
                         </motion.div>
                         <motion.div
@@ -346,6 +345,7 @@ export const ChoiceBanner = () => {
                 <AnimationModal
                     athleteChoices={athleteChoices[choicesIndex]}
                     handleAthleteChoice={handleAthleteChoice}
+                    league={selectedPackInfo != null ? selectedPackInfo.league : ''}
                 />
             )}
             {showSuccessModal && (

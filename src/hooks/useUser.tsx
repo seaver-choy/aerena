@@ -33,7 +33,7 @@ interface State {
     weeklyReferralCount: number;
     joinedTournaments: number;
     hasWonTournament: boolean;
-    // tonWalletConnected: boolean;
+    joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
     quests: Quest[];
     referralCheck: boolean;
@@ -62,7 +62,7 @@ interface Action {
         | "SET_WEEKLY_REFERRAL_COUNT"
         | "SET_JOINED_TOURNAMENTS"
         | "SET_HAS_WON_TOURNAMENT"
-        // | "SET_TON_WALLET_CONNECTED"
+        | "SET_JOINED_TG_COMMUNITY"
         | "SET_JOINED_TG_CHANNEL"
         | "SET_QUESTS"
         | "SET_REFERRAL_CHECK"
@@ -90,6 +90,7 @@ export interface UserContextValue {
     weeklyReferralCount: number;
     joinedTournaments: number;
     hasWonTournament: boolean;
+    joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
 
     quests: Quest[];
@@ -119,6 +120,7 @@ const initialState: State = {
     weeklyReferralCount: 0,
     joinedTournaments: 0,
     hasWonTournament: false,
+    joinedTgCommunity: false,
     joinedTgChannel: false,
     quests: [],
     referralCheck: false,
@@ -198,6 +200,12 @@ function reducer(state: State, action: Action): State {
                 ...state,
                 hasWonTournament:
                     action.payload?.hasWonTournament ?? state.hasWonTournament,
+            };
+        case "SET_JOINED_TG_COMMUNITY":
+            return {
+                ...state,
+                joinedTgCommunity:
+                    action.payload?.joinedTgCommunity ?? state.joinedTgCommunity,
             };
         case "SET_JOINED_TG_CHANNEL":
             return {
@@ -286,6 +294,7 @@ export const UserContext = createContext<UserContextValue>({
     weeklyReferralCount: 0,
     joinedTournaments: 0,
     hasWonTournament: false,
+    joinedTgCommunity: false,
     joinedTgChannel: false,
     quests: [],
     referralCheck: false,
@@ -376,6 +385,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     dispatch({
                         type: "SET_HAS_WON_TOURNAMENT",
                         payload: { hasWonTournament: data["hasWonTournament"] },
+                    });
+                    dispatch({
+                        type: "SET_JOINED_TG_COMMUNITY",
+                        payload: { joinedTgCommunity: data["joinedTgCommunity"] },
                     });
                     dispatch({
                         type: "SET_JOINED_TG_CHANNEL",

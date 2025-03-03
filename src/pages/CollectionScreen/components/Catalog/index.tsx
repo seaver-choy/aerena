@@ -91,7 +91,7 @@ export const Catalog = () => {
                 12,
                 searchString,
                 positionList[positionIndex],
-                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : leagueTypes,
+                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : [],
                 user.initDataRaw
             );
 
@@ -143,7 +143,7 @@ export const Catalog = () => {
                 12,
                 searchString,
                 positionList[positionIndex],
-                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : leagueTypes,
+                chosenLeagueType !== 'ALL' ? [chosenLeagueType] : [],
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);

@@ -181,7 +181,7 @@ export const userSchema = new mongoose.Schema(
         referralCount: { type: Number, default: 0 },
         joinedTournaments: { type: Number, default: 0 },
         hasWonTournament: { type: Boolean, default: false },
-        // tonWalletConnected: { type: Boolean, default: false },
+        joinedTgCommunity: { type: Boolean, default: false },
         joinedTgChannel: { type: Boolean, default: false },
         weeklyReferralCount: { type: Number, default: 0 },
         quests: [
@@ -264,18 +264,20 @@ export const userSchema = new mongoose.Schema(
     }
 );
 
-export const questSchema = new mongoose.Schema({
-    questId: Number,
-    tasks: [
-        {
-            taskName: String,
-            value: mongoose.Schema.Types.Mixed,
-            description: String,
-            isWeekly: Boolean,
-        },
-    ],
-    reward: Number,
-});
+export const questSchema = new mongoose.Schema(
+    {
+        questId: Number,
+        taskName: String,
+        description: String,
+        isWeekly: { type: Boolean, default: false },
+        isRepeating: { type: Boolean, default: false },
+        value: mongoose.Schema.Types.Mixed,
+        reward: Number,
+    },
+    {
+        collection: "quests",
+    }
+);
 
 export const tournamentSchema = new mongoose.Schema(
     {

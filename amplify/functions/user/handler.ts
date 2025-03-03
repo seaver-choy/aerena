@@ -52,6 +52,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return checkUserNameExists(event);
     } else if (event.path.includes("joinTgChannel")) {
         return joinTgChannel(event);
+    } else if (event.path.includes("joinTgCommunity")) {
+        return joinTgCommunity(event);
     } else if (event.path.includes("login")) {
         return login(event);
     } else if (event.path.includes("templineup")) {
@@ -161,26 +163,20 @@ async function createUser(event: APIGatewayProxyEvent) {
                     isUnique = true;
                 }
             }
-                
+            
+            const questModel = conn!.model("Quest");
+            const questResult = await questModel.find({});
+            const questIdsWithStatus = questResult.map(quest => ({
+                questId: quest.questId,
+                isClaimed: false
+              }));
+
             const userData = {
                 username: payload.username,
                 userID: payload.userID,
                 tokens: [],
                 friends: [],
-                quests: [
-                    {
-                        questId: 1,
-                        isClaimed: false,
-                    },
-                    {
-                        questId: 2,
-                        isClaimed: false,
-                    },
-                    {
-                        questId: 3,
-                        isClaimed: false,
-                    },
-                ],
+                quests: questIdsWithStatus,
                 inventory: null,
                 seasonalLogins: 1,
                 points: 20000, //TODO: temporary hardcoded to give 20k BP to new users for Aerena free tournament
@@ -314,16 +310,31 @@ async function updateQuestClaim(event: APIGatewayProxyEvent) {
     }
 
     let claim = false;
-    for (const task of quest.tasks) {
-        console.log(`${task.taskName}`);
-        console.log(`${user[task.taskName]} vs ${task.value}`);
-        if (user[task.taskName] >= task.value) {
-            claim = true;
-        } else {
-            claim = false;
-            break;
+    const value = quest.value;
+    if(!quest.isRepeating)
+        switch(value){
+            case null:
+                if(user[quest.taskName] != null) {
+                    claim = true;
+                } else {
+                    claim = false;
+                }
+                break;
+            case true:
+                if(user[quest.taskName]) {
+                    claim = true;
+                } else {
+                    claim = false;
+                }
+                break;
+            default:
+                if(user[quest.taskName] >= quest.value) {
+                    claim = true;
+                } else {
+                    claim = false;
+                }
+                break;
         }
-    }
 
     if (claim) {
         try {
@@ -467,6 +478,48 @@ async function joinTgChannel(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "Failed to join tg channel " + e,
+            }),
+        };
+    }
+}
+
+async function joinTgCommunity(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    const payload = JSON.parse(JSON.parse(event.body!));
+    try {
+        const userID = payload.userID;
+        if (userID === "0") throw new Error("Invalid user ID");
+        const userResult = await userModel.findOneAndUpdate(
+            { userID },
+            [
+                {
+                    $set: {
+                        joinedTgCommunity: true,
+                    },
+                },
+            ],
+            { new: true }
+        );
+        console.info(
+            `[JOINCOMMUNITY] User ${userID} has joined the Telegram community`
+        );
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(userResult),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to join tg community " + e,
             }),
         };
     }

@@ -1,12 +1,41 @@
+import { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
-import Upgrading from "../../assets/others/upgrading.svg";
+import { Tabs } from "../../components/Tabs";
+import { TasksSection } from "./components/TasksSection";
+import { questsOptions } from "../../helpers/tabs";
+import { useUsers } from "../../hooks/useUser";
+import { getQuests } from "../../helpers/lambda.helper";
 
 export const QuestsScreen = () => {
+    const [quests, setQuests] = useState(null);
+    const [questsTab, setQuestsTab] = useState("Main");
+    const user = useUsers();
+
+    async function fetchQuests() {
+        let result = await getQuests(user.initDataRaw);
+        result = result.map((quest) => ({
+            ...quest,
+            isClaimable: false,
+            isClaimed: false,
+        }));
+        setQuests(result);
+    }
+
+    useEffect(() => {
+        fetchQuests();
+    }, []);
+
     return (
         <Layout>
-            <div className="flex h-full items-center justify-center">
-                <img className="h-[80vw] w-[80vw]" src={Upgrading} />
-            </div>
+            <Tabs
+                options={questsOptions}
+                onToggle={(selected) => {
+                    if (selected !== 'Weekly') //temporary
+                        setQuestsTab(selected);
+                }}
+                selectedTab={questsTab}
+            />
+            <TasksSection questTab={questsTab} quests={quests}/>
         </Layout>
     );
 };
