@@ -32,7 +32,11 @@ interface AthleteModalProps {
     skin?: Skin;
 }
 
-export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProps) => {
+export const AthleteModal = ({
+    athlete,
+    onClose,
+    skin = null,
+}: AthleteModalProps) => {
     const user = useUsers();
     const navigate = useNavigate();
 
@@ -62,15 +66,20 @@ export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProp
     const handleEquipSkin = async () => {
         let oldIndex = equippedIndex - 1;
         let newIndex = cardIndex - 1;
-        
-        if(oldIndex > -1) {
+
+        if (oldIndex > -1) {
             oldIndex = findSkin(user.skins, oldIndex);
         }
-        if(newIndex > -1) {
+        if (newIndex > -1) {
             newIndex = findSkin(user.skins, newIndex);
         }
-        const result = await equipSkin(user.id, oldIndex, newIndex, user.initDataRaw);
-        if(result) {
+        const result = await equipSkin(
+            user.id,
+            oldIndex,
+            newIndex,
+            user.initDataRaw
+        );
+        if (result) {
             const skins = result["skins"];
             user.dispatch({
                 type: "SET_SKINS",
@@ -78,15 +87,21 @@ export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProp
                     skins: skins,
                 },
             });
-            const ownedSkins = skins.filter((skin) => skin.athleteId == athlete.athleteId);
+            const ownedSkins = skins.filter(
+                (skin) => skin.athleteId == athlete.athleteId
+            );
             setAthleteSkins(ownedSkins);
             setEquippedIndex(cardIndex);
-        } 
-
+        }
     };
-    
+
     const findSkin = (skins, index) => {
-        return skins.findIndex((skin) => skin.athleteId == sameAthletes[index].athleteId && skin.team == sameAthletes[index].team && skin.league == sameAthletes[index].league);
+        return skins.findIndex(
+            (skin) =>
+                skin.athleteId == sameAthletes[index].athleteId &&
+                skin.team == sameAthletes[index].team &&
+                skin.league == sameAthletes[index].league
+        );
     };
 
     const handlePurchase = () => {
@@ -138,17 +153,27 @@ export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProp
                 user.initDataRaw
             );
             const athletes: SameAthlete[] = res.athletes;
-            const ownedSkins = user.skins.filter((skin) => skin.athleteId == athlete.athleteId);
+            const ownedSkins = user.skins.filter(
+                (skin) => skin.athleteId == athlete.athleteId
+            );
             const equippedSkin = ownedSkins.filter((skin) => skin.isEquipped);
-            if(equippedSkin.length > 0) {
-                const index = athletes.findIndex((athlete) => athlete.team == equippedSkin[0].team && athlete.league == equippedSkin[0].league);
+            if (equippedSkin.length > 0) {
+                const index = athletes.findIndex(
+                    (athlete) =>
+                        athlete.team == equippedSkin[0].team &&
+                        athlete.league == equippedSkin[0].league
+                );
                 setEquippedIndex(index + 1);
             }
             setAthleteSkins(ownedSkins);
             setSameAthletes(athletes);
             setSkinTitle("Default Card");
-            if(skin != null) {
-                const index = athletes.findIndex((athlete) => athlete.team == skin.team && athlete.league == skin.league);
+            if (skin != null) {
+                const index = athletes.findIndex(
+                    (athlete) =>
+                        athlete.team == skin.team &&
+                        athlete.league == skin.league
+                );
                 setCardIndex(index + 1);
                 setSkinTitle(athletes[index].team);
             }
@@ -220,80 +245,79 @@ export const AthleteModal = ({ athlete, onClose, skin = null }: AthleteModalProp
                             ></img>
                         </motion.button>
                     </div>
-                        {teamInfo !== undefined ? (
-                            <div
-                                key={sameAthletes.length}
-                                className="mb-[4vw] flex h-[55vw] flex-col items-center"
+                    {teamInfo !== undefined ? (
+                        <div
+                            key={sameAthletes.length}
+                            className="mb-[4vw] flex h-[55vw] flex-col items-center"
+                        >
+                            <Slider
+                                athletes={sameAthletes}
+                                cardIndex={cardIndex}
+                                setCardIndex={setCardIndex}
+                                onCardIndexChange={onCardIndexChange}
+                            />
+                            <motion.div
+                                className="will-change-transform backface-hidden"
+                                {...appearTextAnimation}
                             >
-                                <Slider
-                                    athletes={sameAthletes}
-                                    cardIndex={cardIndex}
-                                    setCardIndex={setCardIndex}
-                                    onCardIndexChange={onCardIndexChange}
-                                />
-                                <motion.div
-                                    {...appearTextAnimation}
-                                >
-                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                                        {skinTitle}
-                                    </p>
-                                </motion.div>
-                            </div>
-                            )
-                            : (
-                                <div className="mb-[4vw] flex h-[55vw] flex-col items-center"/>
-                            )
-                        }
+                                <p className="font-russoone text-[3.5vw] font-normal text-golddark">
+                                    {skinTitle}
+                                </p>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        <div className="mb-[4vw] flex h-[55vw] flex-col items-center" />
+                    )}
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
-                            {
-                                teamInfo !== undefined && (
-                                    cardIndex === equippedIndex ?
-                                    (
-                                        <motion.div
-                                            className="relative flex h-full w-full justify-center"
-                                            {...appearTextAnimation}
-                                        >
-                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                                <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
-                                                    Equipped
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    )
-                                    : cardIndex == 0 || (cardIndex > 0 && findSkin(athleteSkins, cardIndex-1) != -1) ?
-                                    (
-                                        <motion.button
-                                            className="relative flex h-full w-full justify-center"
-                                            onClick={handleEquipSkin}
-                                            {...appearTextAnimation}
-                                        >
-                                            <img className="h-full" src={GoldButton} />
-                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                                    Equip
-                                                </p>
-                                            </div>
-                                        </motion.button>
-                                    )
-                                    :
-                                    (
-                                        <motion.button
-                                            className="relative flex h-full w-full justify-center"
-                                            onClick={handlePurchase}
-                                            {...appearTextAnimation}
-                                        >
-                                            <img className="h-full" src={GoldButton} />
-                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                                    Purchase
-                                                </p>
-                                            </div>
-                                        </motion.button>
-                                    )
-                                )
-                            }
-                            
+                            {teamInfo !== undefined &&
+                                (cardIndex === equippedIndex ? (
+                                    <motion.div
+                                        className="relative flex h-full w-full justify-center"
+                                        {...appearTextAnimation}
+                                    >
+                                        <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                            <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
+                                                Equipped
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ) : cardIndex == 0 ||
+                                  (cardIndex > 0 &&
+                                      findSkin(athleteSkins, cardIndex - 1) !=
+                                          -1) ? (
+                                    <motion.button
+                                        className="relative flex h-full w-full justify-center"
+                                        onClick={handleEquipSkin}
+                                        {...appearTextAnimation}
+                                    >
+                                        <img
+                                            className="h-full"
+                                            src={GoldButton}
+                                        />
+                                        <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                            <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                                Equip
+                                            </p>
+                                        </div>
+                                    </motion.button>
+                                ) : (
+                                    <motion.button
+                                        className="relative flex h-full w-full justify-center"
+                                        onClick={handlePurchase}
+                                        {...appearTextAnimation}
+                                    >
+                                        <img
+                                            className="h-full"
+                                            src={GoldButton}
+                                        />
+                                        <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                            <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                                Purchase
+                                            </p>
+                                        </div>
+                                    </motion.button>
+                                ))}
                         </div>
                     </div>
                 </div>
