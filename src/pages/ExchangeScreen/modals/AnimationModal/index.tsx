@@ -18,22 +18,24 @@ import {
 
 import Dust from "../../../../assets/others/dust-gold.svg";
 import Glow from "../../../../assets/others/glow-radial.svg";
-import PH15ChoicePack from "../../../../assets/pack/choice-ph15.svg";
 import Back from "../../../../assets/card/back.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import { Skin } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { useUsers } from "../../../../hooks/useUser";
+import { getChoicePackImage } from "../../../../helpers/images";
 
 interface AnimationModalProps {
     athleteChoices: Skin[];
     handleAthleteChoice: (athleteChoice: Skin) => void;
+    league: string;
 }
 
 export const AnimationModal = ({
     athleteChoices,
     handleAthleteChoice,
+    league,
 }: AnimationModalProps) => {
     // 0: Initial, 1: Open Pack, 2: Back Card, 3: Athlete Card, 4: Card Selection, 5: Confirm Selection
     const user = useUsers();
@@ -181,7 +183,7 @@ export const AnimationModal = ({
                                 >
                                     <img
                                         className="h-full"
-                                        src={PH15ChoicePack}
+                                        src={getChoicePackImage(league)}
                                     />
                                 </motion.div>
                             )}
@@ -193,7 +195,7 @@ export const AnimationModal = ({
                                 >
                                     <img
                                         className="h-full"
-                                        src={PH15ChoicePack}
+                                        src={getChoicePackImage(league)}
                                     />
                                 </motion.div>
                             )}

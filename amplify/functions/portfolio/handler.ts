@@ -147,7 +147,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const limit = parseInt(event.queryStringParameters!.limit!);
     const searchString = event.queryStringParameters!.searchString!;
     const position = event.queryStringParameters!.position!;
-    const leagueTypes = event.queryStringParameters!.leagueTypes!.split(",");
+    const leagueTypes = event.queryStringParameters!.leagueTypes!.split(",").filter(type => type !== "");
 
     // const search = {
     //     offset: pageOffset,
@@ -173,68 +173,131 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
         sort: { player: 1 },
     };
 
-    const aggregate = athleteModel.aggregate([
-        {
-            $match: {
-                player: {
-                    $regex: searchString,
-                    $options: "i",
-                },
-                league: {
-                    $in: leagueTypes,
-                },
-                position: {
-                    $regex: position === "All" ? "" : position,
+    let aggregate;
+    if(leagueTypes.length > 0) {
+        aggregate = athleteModel.aggregate([
+            {
+                $match: {
+                    player: {
+                        $regex: searchString,
+                        $options: "i",
+                    },
+                    league: {
+                        $in: leagueTypes,
+                    },
+                    position: {
+                        $regex: position === "All" ? "" : position,
+                    },
                 },
             },
-        },
-        {
-            $lookup: {
-                from: "ml_tournaments",
-                let: {
-                    league: "$league",
-                    type: "$type",
-                },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $and: [
-                                    { $eq: ["$code", "$$league"] },
-                                    { $eq: ["$type", "$$type"] },
-                                ],
+            {
+                $lookup: {
+                    from: "ml_tournaments",
+                    let: {
+                        league: "$league",
+                        type: "$type",
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$code", "$$league"] },
+                                        { $eq: ["$type", "$$type"] },
+                                    ],
+                                },
                             },
                         },
+                    ],
+                    as: "tournamentData",
+                },
+            },
+            {
+                $unwind: "$tournamentData",
+            },
+            {
+                $sort: {
+                    "tournamentData.endDate": -1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$athleteId",
+                    athleteId: { $first: "$athleteId" },
+                    player: { $first: "$player" },
+                    displayName: { $first: "$displayName" },
+                    team: { $first: "$team" },
+                    position: { $first: "$position" },
+                    league: {
+                        $first: "$league",
                     },
-                ],
-                as: "tournamentData",
-            },
-        },
-        {
-            $unwind: "$tournamentData",
-        },
-        {
-            $sort: {
-                "tournamentData.endDate": -1,
-            },
-        },
-        {
-            $group: {
-                _id: "$athleteId",
-                athleteId: { $first: "$athleteId" },
-                player: { $first: "$player" },
-                displayName: { $first: "$displayName" },
-                team: { $first: "$team" },
-                position: { $first: "$position" },
-                league: {
-                    $first: "$league",
-                },
-                type: {
-                    $first: "$type",
+                    type: {
+                        $first: "$type",
+                    },
                 },
             },
-        },
-    ]);
+        ]);
+    } else {
+        aggregate = athleteModel.aggregate([
+            {
+                $match: {
+                    player: {
+                        $regex: searchString,
+                        $options: "i",
+                    },
+                    position: {
+                        $regex: position === "All" ? "" : position,
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: "ml_tournaments",
+                    let: {
+                        league: "$league",
+                        type: "$type",
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$code", "$$league"] },
+                                        { $eq: ["$type", "$$type"] },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "tournamentData",
+                },
+            },
+            {
+                $unwind: "$tournamentData",
+            },
+            {
+                $sort: {
+                    "tournamentData.endDate": -1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$athleteId",
+                    athleteId: { $first: "$athleteId" },
+                    player: { $first: "$player" },
+                    displayName: { $first: "$displayName" },
+                    team: { $first: "$team" },
+                    position: { $first: "$position" },
+                    league: {
+                        $first: "$league",
+                    },
+                    type: {
+                        $first: "$type",
+                    },
+                },
+            },
+        ]);
+    }
 
     const res = await athleteModel.aggregatePaginate(aggregate, options);
 

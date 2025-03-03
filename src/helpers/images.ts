@@ -10,8 +10,11 @@ import PhilippinesSticker from "../assets/sticker/philippines.svg";
 import IndonesiaSticker from "../assets/sticker/indonesia.svg";
 import MalaysiaSticker from "../assets/sticker/malaysia.svg";
 
-export function getStickerImage(leagueType: string) {
-    switch (leagueType) {
+import PH15ChoicePack from "../assets/pack/choice-ph15.svg";
+import ID15ChoicePack from "../assets/pack/choice-id15.svg";
+
+export function getStickerImage(league: string) {
+    switch (league) {
         case "PH14":
             return PH14Sticker;
         case "MSC2024":
@@ -39,6 +42,17 @@ export function getCountryImage(country: string) {
             return IndonesiaSticker;
         case "Malaysia":
             return MalaysiaSticker;
+        default:
+            return null;
+    }
+}
+
+export function getChoicePackImage(league: string) {
+    switch (league) {
+        case "PH15":
+            return PH15ChoicePack;
+        case "ID15":
+            return ID15ChoicePack;
         default:
             return null;
     }

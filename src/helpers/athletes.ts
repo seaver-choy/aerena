@@ -18,6 +18,7 @@ import JungleEmpty from "../assets/card/jungle-empty.svg";
 import GoldEmpty from "../assets/card/gold-empty.svg";
 import EXPEmpty from "../assets/card/exp-empty.svg";
 
+import ID15 from "../assets/card/id15.svg";
 import PH15 from "../assets/card/ph15.svg";
 import PH14 from "../assets/card/ph14.svg";
 import PH13 from "../assets/card/ph13.svg";
@@ -86,6 +87,8 @@ export function getEmptyAthleteCard(position: string) {
 
 export function getAthleteSticker(league: string) {
     switch (league) {
+        case "ID15":
+            return ID15;
         case "PH15":
             return PH15;
         case "PH14":
