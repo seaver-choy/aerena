@@ -19,6 +19,20 @@ import GoldEmpty from "../assets/card/gold-empty.svg";
 import EXPEmpty from "../assets/card/exp-empty.svg";
 
 import ID15 from "../assets/card/id15.svg";
+import ID14 from "../assets/card/id14.svg";
+import ID13 from "../assets/card/id13.svg";
+import ID12 from "../assets/card/id12.svg";
+import ID11 from "../assets/card/id11.svg";
+import ID10 from "../assets/card/id10.svg";
+import ID9 from "../assets/card/id9.svg";
+import ID8 from "../assets/card/id8.svg";
+import ID7 from "../assets/card/id7.svg";
+import ID6 from "../assets/card/id6.svg";
+import ID5 from "../assets/card/id5.svg";
+import ID4 from "../assets/card/id4.svg";
+import ID3 from "../assets/card/id3.svg";
+import ID2 from "../assets/card/id2.svg";
+import ID1 from "../assets/card/id1.svg";
 import PH15 from "../assets/card/ph15.svg";
 import PH14 from "../assets/card/ph14.svg";
 import PH13 from "../assets/card/ph13.svg";
@@ -87,8 +101,6 @@ export function getEmptyAthleteCard(position: string) {
 
 export function getAthleteSticker(league: string) {
     switch (league) {
-        case "ID15":
-            return ID15;
         case "PH15":
             return PH15;
         case "PH14":
@@ -119,6 +131,36 @@ export function getAthleteSticker(league: string) {
             return PH2;
         case "PH1":
             return PH1;
+        case "ID15":
+            return ID15;
+        case "ID14":
+            return ID14;
+        case "ID13":
+            return ID13;
+        case "ID12":
+            return ID12;
+        case "ID11":
+            return ID11;
+        case "ID10":
+            return ID10;
+        case "ID9":
+            return ID9;
+        case "ID8":
+            return ID8;
+        case "ID7":
+            return ID7;
+        case "ID6":
+            return ID6;
+        case "ID5":
+            return ID5;
+        case "ID4":
+            return ID4;
+        case "ID3":
+            return ID3;
+        case "ID2":
+            return ID2;
+        case "ID1":
+            return ID1;
         case "SPS6 APAC CF":
             return SPS6;
     }

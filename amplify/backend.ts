@@ -156,7 +156,6 @@ const mintPath = api.root.addResource("mint", {});
 const portfolioPath = api.root.addResource("portfolio", {});
 const schedulerPath = api.root.addResource("recharge", {});
 const friendsPath = api.root.addResource("friends", {});
-const joinTgChannelPath = userPath.addResource("joinTgChannel", {});
 const loginPath = userPath.addResource("login", {});
 const statsPath = api.root.addResource("stats", {});
 const upgradePath = api.root.addResource("upgrade", {});
@@ -174,10 +173,6 @@ userPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 userPath.addMethod("POST", userIntegration, {
-    requestParameters: { "method.request.header.X-Telegram-Auth": true },
-});
-
-joinTgChannelPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
