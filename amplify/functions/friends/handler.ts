@@ -123,7 +123,7 @@ async function updateFriends(event: APIGatewayProxyEvent) {
                     $push: { friends: newReferral },
                     $inc: {
                         referralCount: 1,
-                        points: 5000,
+                        points: 10000,
                         weeklyReferralCount: 1,
                     },
                     $set: {

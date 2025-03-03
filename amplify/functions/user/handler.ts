@@ -885,7 +885,7 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                         },
                         $inc: {
                             referralCount: 1,
-                            points: 5000,
+                            points: 10000,
                             weeklyReferralCount: 1,
                         },
                         $set: {
@@ -905,7 +905,7 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                     {
                         $inc: {
                             referralCount: 1,
-                            points: 5000,
+                            points: 10000,
                             weeklyReferralCount: 1,
                         },
                         $set: {
