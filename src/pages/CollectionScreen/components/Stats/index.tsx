@@ -32,14 +32,8 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
     // const [currentAthlete, setCurrentAthlete] = useState<Athlete>(null);
     const [showStatsDetails, setShowStatsDetails] = useState<boolean>(false);
 
-    const handleFullDetails = (athlete) => {
-        console.log("athlete");
-        // setCurrentAthlete(athlete);
+    const handleFullDetails = () => {
         setShowStatsDetails(true);
-    };
-
-    const closeStatsDetails = () => {
-        setShowStatsDetails(false);
     };
 
     useEffect(() => {
@@ -170,9 +164,7 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                                 <motion.button
                                                     className="relative flex h-[7vw] justify-center"
                                                     onClick={() =>
-                                                        handleFullDetails(
-                                                            athlete
-                                                        )
+                                                        handleFullDetails()
                                                     }
                                                     {...appearTextAnimation}
                                                 >
