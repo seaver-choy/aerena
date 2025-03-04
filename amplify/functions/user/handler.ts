@@ -50,10 +50,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         }
     } else if (event.path.includes("checkUsername")) {
         return checkUserNameExists(event);
-    } else if (event.path.includes("joinTgChannel")) {
-        return joinTgChannel(event);
-    } else if (event.path.includes("joinTgCommunity")) {
-        return joinTgCommunity(event);
+    } else if (event.path.includes("updatequestfield")) {
+        return updateQuestField(event);
     } else if (event.path.includes("login")) {
         return login(event);
     } else if (event.path.includes("templineup")) {
@@ -226,7 +224,7 @@ async function createUser(event: APIGatewayProxyEvent) {
 async function getQuests() {
     const questModel = conn!.model("Quest");
     try {
-        const result = await questModel.find({});
+        const result = await questModel.find({}).sort({questId: 1});
         if (!result) {
             return {
                 statusCode: 500,
@@ -441,25 +439,26 @@ async function checkUserNameExists(event: APIGatewayProxyEvent) {
     }
 }
 
-async function joinTgChannel(event: APIGatewayProxyEvent) {
+async function updateQuestField(event: APIGatewayProxyEvent) {
     const userModel = conn!.model("User");
     const payload = JSON.parse(JSON.parse(event.body!));
+    const userID = payload.userID;
+    const fieldName = payload.fieldName;
     try {
-        const userID = payload.userID;
         if (userID === "0") throw new Error("Invalid user ID");
         const userResult = await userModel.findOneAndUpdate(
             { userID },
             [
                 {
                     $set: {
-                        joinedTgChannel: true,
+                        [fieldName]: true,
                     },
                 },
             ],
             { new: true }
         );
         console.info(
-            `[JOINCHANNEL] User ${userID} has joined the Telegram channel`
+            `[${fieldName.toUpperCase()}] User ${userID} has updated ${fieldName}`
         );
         return {
             statusCode: 200,
@@ -477,49 +476,7 @@ async function joinTgChannel(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
             body: JSON.stringify({
-                message: "Failed to join tg channel " + e,
-            }),
-        };
-    }
-}
-
-async function joinTgCommunity(event: APIGatewayProxyEvent) {
-    const userModel = conn!.model("User");
-    const payload = JSON.parse(JSON.parse(event.body!));
-    try {
-        const userID = payload.userID;
-        if (userID === "0") throw new Error("Invalid user ID");
-        const userResult = await userModel.findOneAndUpdate(
-            { userID },
-            [
-                {
-                    $set: {
-                        joinedTgCommunity: true,
-                    },
-                },
-            ],
-            { new: true }
-        );
-        console.info(
-            `[JOINCOMMUNITY] User ${userID} has joined the Telegram community`
-        );
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify(userResult),
-        };
-    } catch (e) {
-        return {
-            statusCode: 500,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                message: "Failed to join tg community " + e,
+                message: `Failed to update ${fieldName} ` + e,
             }),
         };
     }

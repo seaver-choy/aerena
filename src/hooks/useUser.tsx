@@ -35,6 +35,8 @@ interface State {
     hasWonTournament: boolean;
     joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
+    likedAerenaPage: boolean;
+    joinedBeGods: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -64,6 +66,8 @@ interface Action {
         | "SET_HAS_WON_TOURNAMENT"
         | "SET_JOINED_TG_COMMUNITY"
         | "SET_JOINED_TG_CHANNEL"
+        | "SET_LIKED_AERENA_PAGE"
+        | "SET_JOINED_BE_GODS"
         | "SET_QUESTS"
         | "SET_REFERRAL_CHECK"
         | "SET_SEASONAL_LOGINS"
@@ -92,7 +96,8 @@ export interface UserContextValue {
     hasWonTournament: boolean;
     joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
-
+    likedAerenaPage: boolean;
+    joinedBeGods: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -122,6 +127,8 @@ const initialState: State = {
     hasWonTournament: false,
     joinedTgCommunity: false,
     joinedTgChannel: false,
+    likedAerenaPage: false,
+    joinedBeGods: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -213,6 +220,18 @@ function reducer(state: State, action: Action): State {
                 joinedTgChannel:
                     action.payload?.joinedTgChannel ?? state.joinedTgChannel,
             };
+        case "SET_LIKED_AERENA_PAGE":
+            return {
+                ...state,
+                likedAerenaPage:
+                    action.payload?.likedAerenaPage ?? state.likedAerenaPage,
+            };
+        case "SET_JOINED_BE_GODS":
+            return {
+                ...state,
+                joinedBeGods:
+                    action.payload?.joinedBeGods ?? state.joinedBeGods,
+            };
         case "SET_QUESTS":
             return {
                 ...state,
@@ -296,6 +315,8 @@ export const UserContext = createContext<UserContextValue>({
     hasWonTournament: false,
     joinedTgCommunity: false,
     joinedTgChannel: false,
+    likedAerenaPage: false,
+    joinedBeGods: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -393,6 +414,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     dispatch({
                         type: "SET_JOINED_TG_CHANNEL",
                         payload: { joinedTgChannel: data["joinedTgChannel"] },
+                    });
+                    dispatch({
+                        type: "SET_LIKED_AERENA_PAGE",
+                        payload: { likedAerenaPage: data["likedAerenaPage"] },
+                    });
+                    dispatch({
+                        type: "SET_JOINED_BE_GODS",
+                        payload: { joinedBeGods: data["joinedBeGods"] },
                     });
                     dispatch({
                         type: "SET_QUESTS",

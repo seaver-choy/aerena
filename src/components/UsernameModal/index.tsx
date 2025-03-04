@@ -120,12 +120,20 @@ const UsernameModal: React.FC = () => {
                     payload: { hasWonTournament: data["hasWonTournament"] },
                 });
                 user.dispatch({
+                    type: "SET_JOINED_TG_COMMUNITY",
+                    payload: { joinedTgCommunity: data["joinedTgCommunity"] },
+                });
+                user.dispatch({
                     type: "SET_JOINED_TG_CHANNEL",
                     payload: { joinedTgChannel: data["joinedTgChannel"] },
                 });
                 user.dispatch({
-                    type: "SET_JOINED_TG_COMMUNITY",
-                    payload: { joinedTgCommunity: data["joinedTgCommunity"] },
+                    type: "SET_LIKED_AERENA_PAGE",
+                    payload: { likedAerenaPage: data["likedAerenaPage"] },
+                });
+                user.dispatch({
+                    type: "SET_JOINED_BE_GODS",
+                    payload: { joinedBeGods: data["joinedBeGods"] },
                 });
                 user.dispatch({
                     type: "SET_QUESTS",
