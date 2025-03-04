@@ -167,6 +167,7 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                                         handleFullDetails()
                                                     }
                                                     {...appearTextAnimation}
+                                                    disabled
                                                 >
                                                     <img
                                                         className="h-full"
