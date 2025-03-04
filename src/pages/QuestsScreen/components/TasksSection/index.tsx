@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { initUtils } from "@telegram-apps/sdk-react";
 import { useUsers } from "../../../../hooks/useUser";
 import { claimQuest, updateQuestField } from "../../../../helpers/lambda.helper";
+import { openLink } from '@telegram-apps/sdk-react';
 
 interface Quest {
     _id: string;
@@ -97,35 +98,28 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
             let data;
             switch (quest.taskName) {
                 case "joinedTgCommunity":
+                    utils.openTelegramLink("https://t.me/aerenagg");
                     data = await updateQuestField(user.id, "joinedTgCommunity", user.initDataRaw);
                     user.dispatch({
                         type: "SET_JOINED_TG_COMMUNITY",
                         payload: { joinedTgCommunity: data["joinedTgCommunity"] },
                     });
-                    utils.openTelegramLink("https://t.me/aerenagg");
                     break;
                 case "joinedTgChannel":
+                    utils.openTelegramLink("https://t.me/aerenachannel");
                     data = await updateQuestField(user.id, "joinedTgChannel", user.initDataRaw);
                     user.dispatch({
                         type: "SET_JOINED_TG_CHANNEL",
                         payload: { joinedTgChannel: data["joinedTgChannel"] },
                     });
-                    utils.openTelegramLink("https://t.me/aerenachannel");
                     break;
                 case "likedAerenaPage": {
+                    utils.openLink('https://www.facebook.com/aerenagg');
                     data = await updateQuestField(user.id, "likedAerenaPage", user.initDataRaw);
                     user.dispatch({
                         type: "SET_LIKED_AERENA_PAGE",
                         payload: { likedAerenaPage: data["likedAerenaPage"] },
                     });
-                    // window.open('https://www.facebook.com/aerenagg', '_blank');
-                    const url = 'https://www.facebook.com/aerenagg';
-
-                    const link = document.createElement("a");
-                    link.setAttribute('href', url);
-                    link.setAttribute('target', '_blank');
-                    link.click();
-                    document.body.removeChild(link);
                     break;
                 }
                 case "joinedBeGods":
