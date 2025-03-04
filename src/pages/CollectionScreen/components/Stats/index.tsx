@@ -29,12 +29,12 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
     const user = useUsers();
     const [showStatsBanner, setShowStatsBanner] = useState(false);
     const [leagueStats, setLeagueStats] = useState<AverageStats[]>([]);
-    const [currentAthlete, setCurrentAthlete] = useState<Athlete>(null);
+    // const [currentAthlete, setCurrentAthlete] = useState<Athlete>(null);
     const [showStatsDetails, setShowStatsDetails] = useState<boolean>(false);
 
     const handleFullDetails = (athlete) => {
         console.log("athlete");
-        setCurrentAthlete(athlete);
+        // setCurrentAthlete(athlete);
         setShowStatsDetails(true);
     };
 
@@ -209,6 +209,6 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
             })}
         </div>
     ) : (
-        <StatsDetails onBack={closeStatsDetails} />
+        <StatsDetails/>
     );
 };

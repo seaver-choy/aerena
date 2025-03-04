@@ -6,11 +6,7 @@ import PH15Sticker from "../../../../assets/sticker/ph15.svg";
 
 import StatsBackground from "../../../../assets/background/stats.svg";
 
-interface StatsDetailsProps {
-    onBack: () => void;
-}
-
-export const StatsDetails = ({ onBack }: StatsDetailsProps) => {
+export const StatsDetails = () => {
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
             {/* <button onClick={onBack}>back</button> */}
