@@ -41,11 +41,11 @@ export const StatsDisplay = ({
                     className="h-full w-full will-change-transform backface-hidden"
                     src={StatsBackground}
                 />
-                <div className="absolute flex h-full w-full flex-col items-center justify-center">
+                <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
                     <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
                         {text}
                     </p>
-                    <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
+                    <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white will-change-transform backface-hidden">
                         {noStats ? "-" : stat}
                     </motion.pre>
                 </div>
