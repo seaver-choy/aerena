@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { initUtils } from "@telegram-apps/sdk-react";
 import { useUsers } from "../../../../hooks/useUser";
 import { claimQuest, updateQuestField } from "../../../../helpers/lambda.helper";
-import { openLink } from '@telegram-apps/sdk-react';
 
 interface Quest {
     _id: string;
