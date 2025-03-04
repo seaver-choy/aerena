@@ -112,15 +112,23 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
                     });
                     utils.openTelegramLink("https://t.me/aerenachannel");
                     break;
-                case "likedAerenaPage":
+                case "likedAerenaPage": {
                     data = await updateQuestField(user.id, "likedAerenaPage", user.initDataRaw);
                     user.dispatch({
                         type: "SET_LIKED_AERENA_PAGE",
                         payload: { likedAerenaPage: data["likedAerenaPage"] },
                     });
-                    window.open("https://www.facebook.com/aerenagg");
+                    // window.open('https://www.facebook.com/aerenagg', '_blank');
+                    const url = 'https://www.facebook.com/aerenagg';
+
+                    const link = document.createElement("a");
+                    link.setAttribute('href', url);
+                    link.setAttribute('target', '_blank');
+                    link.click();
+                    document.body.removeChild(link);
                     break;
-                 case "joinedBeGods":
+                }
+                case "joinedBeGods":
                     data = await updateQuestField(user.id, "joinedBeGods", user.initDataRaw);
                     user.dispatch({
                         type: "SET_JOINED_BE_GODS",
@@ -150,11 +158,11 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
     return allQuests != null && (
         <div className="mx-[4vw] mt-[4vw] flex flex-col gap-[2vw]">
             {
-                allQuests?.map((quest) =>
+                allQuests?.map((quest, index) =>
                 (questTab == "Weekly" && quest.isWeekly) ||
                 (questTab == "Main" && !quest.isWeekly) ?
                 (
-                    <div className="flex w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]">
+                    <div key={index} className="flex w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]">
                         <div className="flex h-full w-screen flex-row rounded-[2.4vw] bg-graydark px-[4vw] py-[3vw]">
                             <div className="flex h-full w-[80%] flex-col">
                                 <motion.div

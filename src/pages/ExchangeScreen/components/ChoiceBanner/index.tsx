@@ -32,6 +32,7 @@ import { AnimationModal } from "../../modals/AnimationModal";
 import { SuccessModal } from "../../modals/SuccessModal";
 import { ErrorModal } from "../../modals/ErrorModal";
 import { initInvoice } from "@telegram-apps/sdk-react";
+import { sortList } from "../../../../helpers/athletes";
 
 export const ChoiceBanner = () => {
     const user = useUsers();
@@ -55,7 +56,7 @@ export const ChoiceBanner = () => {
     const getPackInfosData = async () => {
         const result = await getPackInfos(user.initDataRaw);
         setPackInfos(
-            result.filter((packInfo) => packInfo.packType === "choice")
+            sortList(result.filter((packInfo) => packInfo.packType === "choice"), user.country)
         );
     };
 

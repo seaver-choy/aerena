@@ -6,6 +6,7 @@ import { getPreviousTournaments } from "../../../../helpers/lambda.helper";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
 import { TournamentListBanner } from "../../components/TournamentListBanner";
+import { sortList } from "../../../../helpers/athletes";
 
 export const PreviousScreen = () => {
     const user = useUsers();
@@ -19,7 +20,7 @@ export const PreviousScreen = () => {
                 playTab.split(" ")[1],
                 user.initDataRaw
             );
-            setPreviousTournaments(result);
+            setPreviousTournaments(sortList(result, user.country));
         } catch (e) {
             setPreviousTournaments(null);
         }

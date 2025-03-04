@@ -48,6 +48,7 @@ interface State {
     referralCode: string;
     referredBy: Referrer;
     skins: Skin[];
+    country: string;
 }
 
 interface Action {
@@ -77,7 +78,8 @@ interface Action {
         | "SET_DREAM_TEAM"
         | "SET_REFERRAL_CODE"
         | "SET_REFERRED_BY"
-        | "SET_SKINS";
+        | "SET_SKINS"
+        | "SET_COUNTRY";
     payload?: Partial<State>;
 }
 
@@ -108,6 +110,7 @@ export interface UserContextValue {
     referralCode: string;
     referredBy: Referrer;
     skins: Skin[];
+    country: string;
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -139,6 +142,7 @@ const initialState: State = {
     referralCode: "",
     referredBy: null,
     skins: [],
+    country: "",
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -295,6 +299,13 @@ function reducer(state: State, action: Action): State {
                     action.payload?.skins ??
                     state.skins,
             };
+        case "SET_COUNTRY":
+            return {
+                ...state,
+                country:
+                    action.payload?.country ??
+                    state.country,
+            };
         default:
             return state;
     }
@@ -327,6 +338,7 @@ export const UserContext = createContext<UserContextValue>({
     referralCode: "",
     referredBy: null,
     skins: [],
+    country: "",
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -467,6 +479,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_SKINS",
                         payload: {
                             skins: data["skins"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_COUNTRY",
+                        payload: {
+                            country: data["country"],
                         },
                     });
                 } catch (e) {

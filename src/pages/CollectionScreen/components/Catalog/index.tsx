@@ -12,6 +12,7 @@ import {
     getAthletePositionLogo,
     getAthletePositionBackground,
     getBaseTeamColor,
+    sortLeagues,
 } from "../../../../helpers/athletes";
 import { Athlete, TeamColor } from "../../../../helpers/interfaces";
 import {
@@ -129,7 +130,7 @@ export const Catalog = () => {
     useEffect(() => {
         async function fetchAllLeagueTypes() {
             const res = await getLeagues(user.initDataRaw);
-            setLeagueTypes(["ALL", ...res]);
+            setLeagueTypes(["ALL", ...sortLeagues(res, user.country)]);
         }
         fetchAllLeagueTypes();
     }, []);

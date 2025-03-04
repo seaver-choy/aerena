@@ -29,6 +29,7 @@ import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import Closed from "../../../../assets/others/closed.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import { sortList } from "../../../../helpers/athletes";
 
 interface TournamentBannerProps {
     ongoingTournament: Tournament;
@@ -67,7 +68,7 @@ export const TournamentBanner = ({
                 playTab.split(" ")[1], //current strings are Play Basic & Play Premium, hence the split
                 user.initDataRaw
             );
-            setOngoingTournaments(result);
+            setOngoingTournaments(sortList(result, user.country));
             if (result.length > 0) setOngoingTournament(result[0]);
             else {
                 const previousTournamentResult =
@@ -75,7 +76,7 @@ export const TournamentBanner = ({
                         playTab.split(" ")[1],
                         user.initDataRaw
                     );
-                setOngoingTournaments(previousTournamentResult);
+                setOngoingTournaments(sortList(result, user.country));
                 setOngoingTournament(previousTournamentResult[0]);
             }
         } catch (e) {

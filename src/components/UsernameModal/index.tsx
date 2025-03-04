@@ -178,9 +178,16 @@ const UsernameModal: React.FC = () => {
                     },
                 });
                 user.dispatch({
+                    type: "SET_COUNTRY",
+                    payload: {
+                        country: data["country"],
+                    },
+                });
+                user.dispatch({
                     type: "SET_NUM_BOOSTER_BOUGHT",
                     payload: { numBoosterBought: data["numBoosterBought"] },
                 });
+                
 
                 user.dispatch({
                     type: "SET_REFERRAL_CHECK",

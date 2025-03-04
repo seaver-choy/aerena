@@ -185,13 +185,20 @@ async function createUser(event: APIGatewayProxyEvent) {
             console.info(
                 `[CREATEUSER] A new user ${userData.userID} has been created \n ${JSON.stringify(userData)}`
             );
+
+            //adding country e.g. PH or ID for priority sort purposes
+            const responseBody = {
+                ...newUser.toObject(),
+                country: event.headers['CloudFront-Viewer-Country'] ?? null
+              };
+
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify(newUser),
+                body: JSON.stringify(responseBody),
             };
         } else {
             //user exists
@@ -498,6 +505,7 @@ async function login(event: APIGatewayProxyEvent) {
             body: JSON.stringify({ message: "User ID not found" }),
         };
     }
+    // console.info(event.requestContext.identity.sourceIp + ' IP check' + event.headers['CloudFront-Viewer-Country']);
 
     try {
         if (userResult.isNewDay) {
@@ -524,13 +532,19 @@ async function login(event: APIGatewayProxyEvent) {
                 );
             }
 
+            //adding country e.g. PH or ID for priority sort purposes
+            const responseBody = {
+                ...updateResult.toObject(),
+                country: event.headers['CloudFront-Viewer-Country'] ?? null
+              };
+
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify(updateResult),
+                body: JSON.stringify(responseBody),
             };
         } else {
             // Not a new day, just update lastLoggedInAt
@@ -545,13 +559,19 @@ async function login(event: APIGatewayProxyEvent) {
             );
 
             console.info(`[LOGIN] User ${userResult.username} has logged in`);
+
+            //adding country e.g. PH or ID for priority sort purposes
+            const responseBody = {
+                ...updateResult.toObject(),
+                country: event.headers['CloudFront-Viewer-Country'] ?? null
+              };
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify(updateResult),
+                body: JSON.stringify(responseBody),
             };
         }
     } catch (e) {
