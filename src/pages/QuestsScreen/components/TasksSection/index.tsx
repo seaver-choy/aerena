@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { initUtils } from "@telegram-apps/sdk-react";
 import { useUsers } from "../../../../hooks/useUser";
-import { claimQuest, joinTgChannel, joinTgCommunity, updateQuestField } from "../../../../helpers/lambda.helper";
+import { claimQuest, updateQuestField } from "../../../../helpers/lambda.helper";
 
 interface Quest {
     _id: string;
