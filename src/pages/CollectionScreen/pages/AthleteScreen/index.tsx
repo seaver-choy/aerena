@@ -11,12 +11,12 @@ import { CardSkins } from "../../components/CardSkins";
 export const AthleteScreen = () => {
     const [athleteTab, setAthleteTab] = useState("Player Profile");
     const location = useLocation();
-    const averageStats = location.state?.averageStats;
+    // const averageStats = location.state?.averageStats;
     const athlete = location.state?.athlete;
     const sameAthletes = location.state?.sameAthletes;
     return (
         <Layout>
-            <AthleteHeader athlete={athlete} averageStats={averageStats} />
+            <AthleteHeader athlete={athlete} />
             <Tabs
                 options={athleteOptions}
                 onToggle={(selected) => {

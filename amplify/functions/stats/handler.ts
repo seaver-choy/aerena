@@ -4,6 +4,8 @@ import {
     athleteSchema,
     athleteStatsSchema,
     totalStatsSchema,
+    athleteProfileSchema,
+    mlTournamentSchema,
 } from "../../schema";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -22,6 +24,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             conn.model("Athletes", athleteSchema);
             conn.model("TotalStats", totalStatsSchema);
             conn.model("AthleteStats", athleteStatsSchema);
+            conn.model("AthleteProfiles", athleteProfileSchema);
+            conn.model("MLTournaments", mlTournamentSchema);
         }
 
         if (event.httpMethod === "GET") {
@@ -33,8 +37,10 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 params[1] = week
                 params[2] = league
             */
-            if (params?.[1] === "average") {
-                return await getAthleteAllStats(event);
+            if (params?.[1] === "latest") {
+                return await getAthleteLatestSeasonAverageStats(event);
+            } else if (params?.[1] === "moonton") {
+                return await getAthleteAllTimeAverageMoontonStats(event);
             } else if (params?.[0] === "league") {
                 return await getAthleteLeagueStats(event);
             } else {
@@ -281,8 +287,9 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
     }
 }
 
-async function getAthleteAllStats(event: APIGatewayProxyEvent) {
+async function getAthleteLatestSeasonAverageStats(event: APIGatewayProxyEvent) {
     const statsModel = conn!.model("AthleteStats");
+    const profileModel = conn!.model("AthleteProfiles");
     //const totalStatsModel = conn!.model("TotalStats");
     const params = event.pathParameters?.proxy?.split("/");
 
@@ -293,14 +300,21 @@ async function getAthleteAllStats(event: APIGatewayProxyEvent) {
     //const athleteModel = conn!.model("Athletes");
 
     if (params !== undefined) {
-        const athleteId = params[0];
+        const athleteId = parseInt(params[0]);
 
         try {
+            //get the athlete's latest tournament by getting the athlete profile
+            const profile = await profileModel.findOne({
+                athleteId: athleteId,
+            });
+
+            //aggregate and get the average stats for the latest tournament
             const average = await statsModel.aggregate(
                 [
                     {
                         $match: {
-                            athleteId: parseInt(athleteId),
+                            athleteId: athleteId,
+                            league: profile.latestTournament.code,
                         },
                     },
                     {
@@ -354,6 +368,133 @@ async function getAthleteAllStats(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
             body: JSON.stringify({ message: "Path parameters are undefined" }),
+        };
+    }
+}
+
+async function getAthleteAllTimeAverageMoontonStats(
+    event: APIGatewayProxyEvent
+) {
+    const statsModel = conn!.model("AthleteStats");
+    const mlModel = conn!.model("MLTournaments");
+
+    const params = event.pathParameters?.proxy?.split("/");
+
+    if (params !== undefined) {
+        const athleteId = parseInt(params[0]);
+
+        try {
+            //get all the accredited moonton tournaments in ml_tournaments collection
+            const mlTournaments = await mlModel.find(
+                {
+                    accredited: true,
+                },
+                { code: 1, _id: 0 }
+            );
+
+            //transform mlTournaments into code array
+
+            if (mlTournaments.length === 0) {
+                return {
+                    statusCode: 404,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                    },
+                    body: JSON.stringify({
+                        message: "No accredited moonton tournaments found",
+                    }),
+                };
+            } else {
+                //aggregate and get the average stats for all accredited moonton tournaments the athlete has played on
+
+                const codeArray = mlTournaments.map((x) => x.code);
+                const average = await statsModel.aggregate(
+                    [
+                        {
+                            $match: {
+                                athleteId: athleteId,
+                                league: {
+                                    $in: codeArray,
+                                },
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: "$player",
+                                averageKills: {
+                                    $avg: "$kills",
+                                },
+                                averageDeaths: {
+                                    $avg: "$deaths",
+                                },
+                                averageAssists: {
+                                    $avg: "$assists",
+                                },
+                                averagePoints: {
+                                    $avg: "$points",
+                                },
+                            },
+                        },
+                    ],
+                    {
+                        allowDiskUse: true,
+                        maxTimeMS: 60000,
+                    }
+                );
+
+                if (average) {
+                    return {
+                        statusCode: 200,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                        },
+                        body: JSON.stringify({
+                            average: average,
+                            status: "success",
+                        }),
+                    };
+                } else {
+                    return {
+                        statusCode: 404,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                        },
+                        body: JSON.stringify({
+                            message: `No stats found for athlete ${athleteId}`,
+                            status: "failed",
+                        }),
+                    };
+                }
+            }
+        } catch (e) {
+            console.log(e);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({
+                    message: "An error has occured while getting all stats",
+                    error: e,
+                    status: "failed",
+                }),
+            };
+        }
+    } else {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "No parameters found",
+                status: "failed",
+            }),
         };
     }
 }

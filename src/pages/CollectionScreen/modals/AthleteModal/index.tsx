@@ -8,7 +8,7 @@ import {
 } from "../../../../helpers/animation";
 import { Slider } from "../../../../components/Slider";
 import {
-    getAthleteAverageStats,
+    getAthleteLatestSeasonAverageStats,
     getTeamInfo,
     getSameAthletes,
     equipSkin,
@@ -134,7 +134,7 @@ export const AthleteModal = ({
 
     useEffect(() => {
         async function fetchAthleteAverageStats() {
-            const res = await getAthleteAverageStats(
+            const res = await getAthleteLatestSeasonAverageStats(
                 athlete.athleteId,
                 user.initDataRaw
             );

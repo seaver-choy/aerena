@@ -6,19 +6,22 @@ import {
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import { AthleteCard } from "../../../../components/AthleteCard";
+import { useUsers } from "../../../../hooks/useUser";
 import { Athlete, AverageStats } from "../../../../helpers/interfaces";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { getAthleteAllTimeAverageMoontonStats } from "../../../../helpers/lambda.helper";
 interface Props {
     athlete: Athlete;
-    averageStats: AverageStats;
 }
-export const AthleteHeader = ({ athlete, averageStats }: Props) => {
+export const AthleteHeader = ({ athlete }: Props) => {
     const [showAthleteHeader, setShowAthleteHeader] = useState(false);
+    const user = useUsers();
     const ign = athlete.player;
     const role = athlete.position[0];
+    const [averageStats, setAverageStats] = useState<AverageStats>(null);
 
     const color = {
         main: getBaseTeamColor().main,
@@ -39,6 +42,23 @@ export const AthleteHeader = ({ athlete, averageStats }: Props) => {
             setShowAthleteHeader(true);
         }, 1000);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        const fetchAthleteAllTimeAverageMoontonStats = async () => {
+            const res = await getAthleteAllTimeAverageMoontonStats(
+                athlete.athleteId,
+                user.initDataRaw
+            );
+
+            if (res.status === "success") {
+                setAverageStats(res.average[0]);
+            } else {
+                //TODO: Handle error
+                console.log(res);
+            }
+        };
+        fetchAthleteAllTimeAverageMoontonStats();
     }, []);
 
     return (
@@ -88,19 +108,47 @@ export const AthleteHeader = ({ athlete, averageStats }: Props) => {
                         <div className="absolute -bottom-[6vw] left-[4vw] flex h-[12vw] w-[92vw] gap-[2vw]">
                             <StatsDisplay
                                 text={"KILLS"}
-                                value={averageStats.averageKills}
+                                value={
+                                    averageStats !== undefined
+                                        ? averageStats.averageKills
+                                        : 0
+                                }
+                                noStats={
+                                    averageStats === undefined ? true : false
+                                }
                             />
                             <StatsDisplay
                                 text={"DEATHS"}
-                                value={averageStats.averageDeaths}
+                                value={
+                                    averageStats !== undefined
+                                        ? averageStats.averageDeaths
+                                        : 0
+                                }
+                                noStats={
+                                    averageStats === undefined ? true : false
+                                }
                             />
                             <StatsDisplay
                                 text={"ASSISTS"}
-                                value={averageStats.averageAssists}
+                                value={
+                                    averageStats !== undefined
+                                        ? averageStats.averageAssists
+                                        : 0
+                                }
+                                noStats={
+                                    averageStats === undefined ? true : false
+                                }
                             />
                             <StatsDisplay
                                 text={"POINTS"}
-                                value={averageStats.averagePoints}
+                                value={
+                                    averageStats !== undefined
+                                        ? averageStats.averagePoints
+                                        : 0
+                                }
+                                noStats={
+                                    averageStats === undefined ? true : false
+                                }
                             />
                         </div>
                     </div>
