@@ -32,7 +32,12 @@ interface Cards {
     type: string;
 }
 
-export const Slider = ({ athletes, cardIndex, setCardIndex, onCardIndexChange }: Props) => {
+export const Slider = ({
+    athletes,
+    cardIndex,
+    setCardIndex,
+    onCardIndexChange,
+}: Props) => {
     //const [imageIndex, setImageIndex] = useState(0);
     const [cards, setCards] = useState<Cards[]>([]);
     const dragX = useMotionValue(0);
@@ -112,7 +117,7 @@ export const Slider = ({ athletes, cardIndex, setCardIndex, onCardIndexChange }:
                     return (
                         <motion.div
                             key={index}
-                            className="flex h-full w-full shrink-0 justify-center"
+                            className="flex h-full w-full shrink-0 justify-center overflow-hidden"
                             animate={{
                                 scale: cardIndex === index ? 0.95 : 0.8,
                                 opacity: cardIndex === index ? 1 : 0.5,

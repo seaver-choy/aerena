@@ -356,40 +356,16 @@ export const checkUsernameExists = async (username, initDataRaw) => {
     }
 };
 
-export const joinTgChannel = async (userId, initDataRaw) => {
+export const updateQuestField = async (userId, fieldName, initDataRaw) => {
     try {
         const payload = {
             userID: userId,
+            fieldName: fieldName,
         };
 
         const restOperation = put({
             apiName: "playibleApi",
-            path: "user/joinTgChannel",
-            options: {
-                headers: {
-                    "X-Telegram-Auth": `tma ${initDataRaw}`,
-                },
-                body: JSON.stringify(payload),
-            },
-        });
-
-        const { body } = await restOperation.response;
-        const response = await body.text();
-        return JSON.parse(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
-
-export const joinTgCommunity = async (userId, initDataRaw) => {
-    try {
-        const payload = {
-            userID: userId,
-        };
-
-        const restOperation = put({
-            apiName: "playibleApi",
-            path: "user/joinTgCommunity",
+            path: "user/updatequestfield",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
@@ -492,14 +468,37 @@ export const getAthleteProfile = async (
     }
 };
 
-export const getAthleteAverageStats = async (
+export const getAthleteLatestSeasonAverageStats = async (
     athleteId: number,
     initDataRaw: string
 ) => {
     try {
         const restOperation = get({
             apiName: "playibleApi",
-            path: `stats/${athleteId}/average`,
+            path: `stats/${athleteId}/latest`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getAthleteAllTimeAverageMoontonStats = async (
+    athleteId: number,
+    initDataRaw: string
+) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `stats/${athleteId}/moonton`,
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
@@ -656,7 +655,11 @@ export const getAthletes = async (initDataRaw) => {
     }
 };
 
-export const getAthleteChoices = async (league, boosterQuantity, initDataRaw) => {
+export const getAthleteChoices = async (
+    league,
+    boosterQuantity,
+    initDataRaw
+) => {
     try {
         const payload = {
             league: league,
@@ -1110,11 +1113,7 @@ export const getPackInfos = async (initDataRaw) => {
     }
 };
 
-export const saveSkin = async (
-    userId,
-    skin: Skin,
-    initDataRaw
-) => {
+export const saveSkin = async (userId, skin: Skin, initDataRaw) => {
     try {
         const data = {
             userId: userId,
@@ -1206,12 +1205,7 @@ export const payBPForExchangePacks = async (
     }
 };
 
-export const equipSkin = async (
-    userId,
-    oldIndex,
-    newIndex,
-    initDataRaw
-) => {
+export const equipSkin = async (userId, oldIndex, newIndex, initDataRaw) => {
     try {
         const data = {
             userId: userId,
@@ -1239,10 +1233,7 @@ export const equipSkin = async (
     }
 };
 
-export const getAthlete = async (
-    athleteId: number,
-    initDataRaw: string
-) => {
+export const getAthlete = async (athleteId: number, initDataRaw: string) => {
     try {
         const restOperation = get({
             apiName: "playibleApi",

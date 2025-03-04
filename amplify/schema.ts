@@ -183,6 +183,8 @@ export const userSchema = new mongoose.Schema(
         hasWonTournament: { type: Boolean, default: false },
         joinedTgCommunity: { type: Boolean, default: false },
         joinedTgChannel: { type: Boolean, default: false },
+        likedAerenaPage: { type: Boolean, default: false },
+        joinedBeGods: { type: Boolean, default: false },
         weeklyReferralCount: { type: Number, default: 0 },
         quests: [
             {

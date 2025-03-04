@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { initUtils } from "@telegram-apps/sdk-react";
 import { useUsers } from "../../../../hooks/useUser";
-import { claimQuest, joinTgChannel, joinTgCommunity } from "../../../../helpers/lambda.helper";
+import { claimQuest, updateQuestField } from "../../../../helpers/lambda.helper";
 
 interface Quest {
     _id: string;
@@ -97,20 +97,37 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
             let data;
             switch (quest.taskName) {
                 case "joinedTgCommunity":
-                    data = await joinTgCommunity(user.id, user.initDataRaw);
+                    utils.openTelegramLink("https://t.me/aerenagg");
+                    data = await updateQuestField(user.id, "joinedTgCommunity", user.initDataRaw);
                     user.dispatch({
                         type: "SET_JOINED_TG_COMMUNITY",
                         payload: { joinedTgCommunity: data["joinedTgCommunity"] },
                     });
-                    utils.openTelegramLink("https://t.me/aerenagg");
                     break;
                 case "joinedTgChannel":
-                    data = await joinTgChannel(user.id, user.initDataRaw);
+                    utils.openTelegramLink("https://t.me/aerenachannel");
+                    data = await updateQuestField(user.id, "joinedTgChannel", user.initDataRaw);
                     user.dispatch({
                         type: "SET_JOINED_TG_CHANNEL",
                         payload: { joinedTgChannel: data["joinedTgChannel"] },
                     });
-                    utils.openTelegramLink("https://t.me/aerenachannel");
+                    break;
+                case "likedAerenaPage": {
+                    utils.openLink('https://www.facebook.com/aerenagg');
+                    data = await updateQuestField(user.id, "likedAerenaPage", user.initDataRaw);
+                    user.dispatch({
+                        type: "SET_LIKED_AERENA_PAGE",
+                        payload: { likedAerenaPage: data["likedAerenaPage"] },
+                    });
+                    break;
+                }
+                case "joinedBeGods":
+                    data = await updateQuestField(user.id, "joinedBeGods", user.initDataRaw);
+                    user.dispatch({
+                        type: "SET_JOINED_BE_GODS",
+                        payload: { joinedBeGods: data["joinedBeGods"] },
+                    });
+                    utils.openTelegramLink("https://t.me/BeGods_bot");
                     break;
                 case "friends":
                 case "referredBy":
@@ -134,11 +151,11 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
     return allQuests != null && (
         <div className="mx-[4vw] mt-[4vw] flex flex-col gap-[2vw]">
             {
-                allQuests?.map((quest) =>
+                allQuests?.map((quest, index) =>
                 (questTab == "Weekly" && quest.isWeekly) ||
                 (questTab == "Main" && !quest.isWeekly) ?
                 (
-                    <div className="flex w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]">
+                    <div key={index} className="flex w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]">
                         <div className="flex h-full w-screen flex-row rounded-[2.4vw] bg-graydark px-[4vw] py-[3vw]">
                             <div className="flex h-full w-[80%] flex-col">
                                 <motion.div

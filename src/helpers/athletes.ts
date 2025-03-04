@@ -177,3 +177,40 @@ export function getBaseTeamColor() {
         wave: "0.15",
     };
 }
+
+export function sortList (list, country) {
+    const sortedList = list.sort((a, b) => {
+        const aHasMatch = a.league.includes(country)
+        const bHasMatch = b.league.includes(country)
+
+        if (aHasMatch !== bHasMatch)
+            return bHasMatch ? 1 : -1;
+        
+        if (a.tournamentEndSubmissionDate && b.tournamentEndSubmissionDate) {
+            const dateA = new Date(a.tournamentEndSubmissionDate);
+            const dateB = new Date(b.tournamentEndSubmissionDate);
+            const now = new Date();
+            const timeToA = Math.abs(dateA.getTime() - now.getTime());
+            const timeToB = Math.abs(dateB.getTime() - now.getTime());
+
+            return timeToA - timeToB;
+        }
+
+        return 0;
+        });
+    return sortedList;
+}
+
+export function sortLeagues (leagues, country) {
+    const sortedLeagues = leagues.sort((a, b) => {
+        const aHasMatch = a.includes(country)
+        const bHasMatch = b.includes(country)
+
+        if (aHasMatch !== bHasMatch)
+            return bHasMatch ? 1 : -1;
+        else
+            return 0;
+        });
+    return sortedLeagues;
+}
+

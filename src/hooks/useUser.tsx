@@ -35,6 +35,8 @@ interface State {
     hasWonTournament: boolean;
     joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
+    likedAerenaPage: boolean;
+    joinedBeGods: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -46,6 +48,7 @@ interface State {
     referralCode: string;
     referredBy: Referrer;
     skins: Skin[];
+    country: string;
 }
 
 interface Action {
@@ -64,6 +67,8 @@ interface Action {
         | "SET_HAS_WON_TOURNAMENT"
         | "SET_JOINED_TG_COMMUNITY"
         | "SET_JOINED_TG_CHANNEL"
+        | "SET_LIKED_AERENA_PAGE"
+        | "SET_JOINED_BE_GODS"
         | "SET_QUESTS"
         | "SET_REFERRAL_CHECK"
         | "SET_SEASONAL_LOGINS"
@@ -73,7 +78,8 @@ interface Action {
         | "SET_DREAM_TEAM"
         | "SET_REFERRAL_CODE"
         | "SET_REFERRED_BY"
-        | "SET_SKINS";
+        | "SET_SKINS"
+        | "SET_COUNTRY";
     payload?: Partial<State>;
 }
 
@@ -92,7 +98,8 @@ export interface UserContextValue {
     hasWonTournament: boolean;
     joinedTgCommunity: boolean;
     joinedTgChannel: boolean;
-
+    likedAerenaPage: boolean;
+    joinedBeGods: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -103,6 +110,7 @@ export interface UserContextValue {
     referralCode: string;
     referredBy: Referrer;
     skins: Skin[];
+    country: string;
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -122,6 +130,8 @@ const initialState: State = {
     hasWonTournament: false,
     joinedTgCommunity: false,
     joinedTgChannel: false,
+    likedAerenaPage: false,
+    joinedBeGods: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -132,6 +142,7 @@ const initialState: State = {
     referralCode: "",
     referredBy: null,
     skins: [],
+    country: "",
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -213,6 +224,18 @@ function reducer(state: State, action: Action): State {
                 joinedTgChannel:
                     action.payload?.joinedTgChannel ?? state.joinedTgChannel,
             };
+        case "SET_LIKED_AERENA_PAGE":
+            return {
+                ...state,
+                likedAerenaPage:
+                    action.payload?.likedAerenaPage ?? state.likedAerenaPage,
+            };
+        case "SET_JOINED_BE_GODS":
+            return {
+                ...state,
+                joinedBeGods:
+                    action.payload?.joinedBeGods ?? state.joinedBeGods,
+            };
         case "SET_QUESTS":
             return {
                 ...state,
@@ -276,6 +299,13 @@ function reducer(state: State, action: Action): State {
                     action.payload?.skins ??
                     state.skins,
             };
+        case "SET_COUNTRY":
+            return {
+                ...state,
+                country:
+                    action.payload?.country ??
+                    state.country,
+            };
         default:
             return state;
     }
@@ -296,6 +326,8 @@ export const UserContext = createContext<UserContextValue>({
     hasWonTournament: false,
     joinedTgCommunity: false,
     joinedTgChannel: false,
+    likedAerenaPage: false,
+    joinedBeGods: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -306,6 +338,7 @@ export const UserContext = createContext<UserContextValue>({
     referralCode: "",
     referredBy: null,
     skins: [],
+    country: "",
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -395,6 +428,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         payload: { joinedTgChannel: data["joinedTgChannel"] },
                     });
                     dispatch({
+                        type: "SET_LIKED_AERENA_PAGE",
+                        payload: { likedAerenaPage: data["likedAerenaPage"] },
+                    });
+                    dispatch({
+                        type: "SET_JOINED_BE_GODS",
+                        payload: { joinedBeGods: data["joinedBeGods"] },
+                    });
+                    dispatch({
                         type: "SET_QUESTS",
                         payload: { quests: data["quests"] },
                     });
@@ -438,6 +479,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_SKINS",
                         payload: {
                             skins: data["skins"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_COUNTRY",
+                        payload: {
+                            country: data["country"],
                         },
                     });
                 } catch (e) {
