@@ -33,6 +33,22 @@ import PH4Logo from "../assets/sticker/ph4.svg";
 import PH3Logo from "../assets/sticker/ph3.svg";
 import PH2Logo from "../assets/sticker/ph2.svg";
 import PH1Logo from "../assets/sticker/ph1.svg";
+import ID15Logo from "../assets/sticker/id15.svg";
+import ID14Logo from "../assets/sticker/id14.svg";
+import ID13Logo from "../assets/sticker/id13.svg";
+import ID12Logo from "../assets/sticker/id12.svg";
+import ID11Logo from "../assets/sticker/id11.svg";
+import ID10Logo from "../assets/sticker/id10.svg";
+import ID9Logo from "../assets/sticker/id9.svg";
+import ID8Logo from "../assets/sticker/id8.svg";
+import ID7Logo from "../assets/sticker/id7.svg";
+import ID6Logo from "../assets/sticker/id6.svg";
+import ID5Logo from "../assets/sticker/id5.svg";
+import ID4Logo from "../assets/sticker/id4.svg";
+import ID3Logo from "../assets/sticker/id3.svg";
+import ID2Logo from "../assets/sticker/id2.svg";
+import ID1Logo from "../assets/sticker/id1.svg";
+import SPS6Logo from "../assets/sticker/sps6.svg";
 
 import ID15 from "../assets/card/id15.svg";
 import ID14 from "../assets/card/id14.svg";
@@ -147,6 +163,38 @@ export function getAthleteStickerLogo(league: string) {
             return PH2Logo;
         case "PH1":
             return PH1Logo;
+        case "ID15":
+            return ID15Logo;
+        case "ID14":
+            return ID14Logo;
+        case "ID13":
+            return ID13Logo;
+        case "ID12":
+            return ID12Logo;
+        case "ID11":
+            return ID11Logo;
+        case "ID10":
+            return ID10Logo;
+        case "ID9":
+            return ID9Logo;
+        case "ID8":
+            return ID8Logo;
+        case "ID7":
+            return ID7Logo;
+        case "ID6":
+            return ID6Logo;
+        case "ID5":
+            return ID5Logo;
+        case "ID4":
+            return ID4Logo;
+        case "ID3":
+            return ID3Logo;
+        case "ID2":
+            return ID2Logo;
+        case "ID1":
+            return ID1Logo;
+        case "SPS6 APAC CF":
+            return SPS6Logo;
     }
 }
 export function getAthleteSticker(league: string) {
