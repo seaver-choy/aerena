@@ -361,6 +361,8 @@ export const matchStatsSchema = new mongoose.Schema(
         match_id: String,
         league: String,
         competitionType: String,
+        matchType: String,
+        playoffs: Boolean,
     },
     {
         collection: "matchstats",
