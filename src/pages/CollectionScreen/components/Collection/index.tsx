@@ -17,14 +17,11 @@ import { Athlete, Skin } from "../../../../helpers/interfaces";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
-import LeftIcon from "../../../../assets/icon/left-gold.svg";
-import RightIcon from "../../../../assets/icon/right-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { AthleteModal } from "../../modals/AthleteModal";
 import { getAthlete } from "../../../../helpers/lambda.helper";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { off } from "@telegram-apps/sdk-react";
 
 export const Collection = () => {
     const user = useUsers();
@@ -335,105 +332,6 @@ export const Collection = () => {
                     </div>
                 </div>
             </div>
-            {/* <div className="relative flex">
-                <img
-                    className="h-full w-full"
-                    src={getAthletePositionBackground(
-                        positionList[positionIndex]
-                    )}
-                />
-                <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[11vw]">
-                    <div className="flex h-full w-[50%] items-center pl-[4vw]">
-                        <motion.p
-                            className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
-                            {...slideRightTextAnimation}
-                        >
-                            Personal Collection
-                        </motion.p>
-                    </div>
-                    <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
-                        
-                    </div>
-                    <img
-                        className="absolute bottom-0 left-0 w-full"
-                        src={GoldLine}
-                    ></img>
-                </div>
-                <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center px-[4vw]">
-                    <button
-                        onClick={handlePreviousCategory}
-                        className="flex w-[8%] items-center justify-end"
-                    >
-                        <img
-                            className={`h-[6vw] ${positionIndex === 0 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
-                            src={LeftIcon}
-                        />
-                    </button>
-                    <div className="flex w-[84%] items-center justify-center">
-                        <img
-                            className="h-[10vw]"
-                            src={getAthletePositionLogo(
-                                positionList[positionIndex]
-                            )}
-                        />
-                    </div>
-                    <button
-                        onClick={handleNextCategory}
-                        className="flex w-[8%] items-center justify-end"
-                    >
-                        <img
-                            className={`h-[6vw] ${positionIndex === positionList.length - 1 || user.skins.length === 0 ? "cursor-default opacity-50" : "opacity-100"}`}
-                            src={RightIcon}
-                        />
-                    </button>
-                </div>
-                <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
-                    <div className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]">
-                        {displaySkins?.length > 0 ? (
-                            displaySkins?.map((athlete, index) =>
-                                showSkin ? (
-                                    <motion.button
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        key={index}
-                                        onClick={() => {
-                                            displayAthleteModal(athlete);
-                                        }}
-                                        {...appearCardAnimation}
-                                    >
-                                        <AthleteCard
-                                            color={athlete.teamData.colors}
-                                            ign={athlete.player}
-                                            opacity={{wave: athlete.teamData.colors.wave}}
-                                            role={athlete.position[0]}
-                                            type={"basic"}
-                                            league={athlete.league}
-                                            id={index}
-                                        />
-                                    </motion.button>
-                                ) : (
-                                    <motion.div
-                                        className="relative flex h-[36.4vw] w-[28vw]"
-                                        {...pulseAnimation}
-                                    >
-                                        <img
-                                            className="h-full w-full"
-                                            src={AthleteSonner}
-                                        />
-                                    </motion.div>
-                                )
-                            )
-                        ) : (
-                            <div className="mt-[2vw] px-[5vw]">
-                                <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
-                                    You do not have skins for{" "}
-                                    {positionList[positionIndex]}. Purchase
-                                    packs to obtain skins.
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div> */}
         </div>
     );
 };
