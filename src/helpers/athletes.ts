@@ -18,6 +18,22 @@ import JungleEmpty from "../assets/card/jungle-empty.svg";
 import GoldEmpty from "../assets/card/gold-empty.svg";
 import EXPEmpty from "../assets/card/exp-empty.svg";
 
+import PH15Logo from "../assets/sticker/ph15.svg";
+import PH14Logo from "../assets/sticker/ph14.svg";
+import PH13Logo from "../assets/sticker/ph13.svg";
+import PH12Logo from "../assets/sticker/ph12.svg";
+import PH11Logo from "../assets/sticker/ph11.svg";
+import PH10Logo from "../assets/sticker/ph10.svg";
+import PH9Logo from "../assets/sticker/ph9.svg";
+import PH8Logo from "../assets/sticker/ph8.svg";
+import PH7Logo from "../assets/sticker/ph7.svg";
+import PH6Logo from "../assets/sticker/ph6.svg";
+import PH5Logo from "../assets/sticker/ph5.svg";
+import PH4Logo from "../assets/sticker/ph4.svg";
+import PH3Logo from "../assets/sticker/ph3.svg";
+import PH2Logo from "../assets/sticker/ph2.svg";
+import PH1Logo from "../assets/sticker/ph1.svg";
+
 import ID15 from "../assets/card/id15.svg";
 import ID14 from "../assets/card/id14.svg";
 import ID13 from "../assets/card/id13.svg";
@@ -99,6 +115,40 @@ export function getEmptyAthleteCard(position: string) {
     }
 }
 
+export function getAthleteStickerLogo(league: string) {
+    switch (league) {
+        case "PH15":
+            return PH15Logo;
+        case "PH14":
+            return PH14Logo;
+        case "PH13":
+            return PH13Logo;
+        case "PH12":
+            return PH12Logo;
+        case "PH11":
+            return PH11Logo;
+        case "PH10":
+            return PH10Logo;
+        case "PH9":
+            return PH9Logo;
+        case "PH8":
+            return PH8Logo;
+        case "PH7":
+            return PH7Logo;
+        case "PH6":
+            return PH6Logo;
+        case "PH5":
+            return PH5Logo;
+        case "PH4":
+            return PH4Logo;
+        case "PH3":
+            return PH3Logo;
+        case "PH2":
+            return PH2Logo;
+        case "PH1":
+            return PH1Logo;
+    }
+}
 export function getAthleteSticker(league: string) {
     switch (league) {
         case "PH15":
@@ -178,14 +228,13 @@ export function getBaseTeamColor() {
     };
 }
 
-export function sortList (list, country) {
+export function sortList(list, country) {
     const sortedList = list.sort((a, b) => {
-        const aHasMatch = a.league.includes(country)
-        const bHasMatch = b.league.includes(country)
+        const aHasMatch = a.league.includes(country);
+        const bHasMatch = b.league.includes(country);
 
-        if (aHasMatch !== bHasMatch)
-            return bHasMatch ? 1 : -1;
-        
+        if (aHasMatch !== bHasMatch) return bHasMatch ? 1 : -1;
+
         if (a.tournamentEndSubmissionDate && b.tournamentEndSubmissionDate) {
             const dateA = new Date(a.tournamentEndSubmissionDate);
             const dateB = new Date(b.tournamentEndSubmissionDate);
@@ -197,20 +246,17 @@ export function sortList (list, country) {
         }
 
         return 0;
-        });
+    });
     return sortedList;
 }
 
-export function sortLeagues (leagues, country) {
+export function sortLeagues(leagues, country) {
     const sortedLeagues = leagues.sort((a, b) => {
-        const aHasMatch = a.includes(country)
-        const bHasMatch = b.includes(country)
+        const aHasMatch = a.includes(country);
+        const bHasMatch = b.includes(country);
 
-        if (aHasMatch !== bHasMatch)
-            return bHasMatch ? 1 : -1;
-        else
-            return 0;
-        });
+        if (aHasMatch !== bHasMatch) return bHasMatch ? 1 : -1;
+        else return 0;
+    });
     return sortedLeagues;
 }
-
