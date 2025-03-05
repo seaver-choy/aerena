@@ -6,7 +6,6 @@ import { getUpcomingTournaments } from "../../../../helpers/lambda.helper";
 import { Layout } from "../../../../components/Layout";
 import { Title } from "../../../../components/Title";
 import { TournamentListBanner } from "../../components/TournamentListBanner";
-import { sortList } from "../../../../helpers/athletes";
 
 export const UpcomingScreen = () => {
     const user = useUsers();
@@ -21,7 +20,7 @@ export const UpcomingScreen = () => {
                 playTab.split(" ")[1],
                 user.initDataRaw
             );
-            setUpcomingTournaments(sortList(result, user.country));
+            setUpcomingTournaments(result);
         } catch (e) {
             setUpcomingTournaments(null);
         }
