@@ -320,18 +320,18 @@ export const Collection = () => {
                                             </p>
                                         </div>
                                     )}
-                                {showAthleteModal && (
-                                    <AthleteModal
-                                        athlete={selectedAthlete}
-                                        onClose={closeAthleteModal}
-                                        skin={selectedSkin}
-                                    />
-                                )}
                             </InfiniteScroll>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>        
+            {showAthleteModal && (
+                <AthleteModal
+                    athlete={selectedAthlete}
+                    onClose={closeAthleteModal}
+                    skin={selectedSkin}
+                />
+            )}
         </div>
     );
 };
