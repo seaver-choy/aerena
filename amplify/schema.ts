@@ -119,32 +119,30 @@ export const teamProfileSchema = new mongoose.Schema(
     }
 );
 
-export const skinSchema = new mongoose.Schema(
-    {
-        skinId: { type: String, default: "0" },
-        athleteId: Number,
-        player: String,
-        position: [String],
-        team: String,
-        league: String,
-        type: String,
-        teamData: {
-            colors: {
-                main: String,
-                light: String,
-                dark: String,
-                wings: String,
-                accent: String,
-                details: String,
-                wave: String,
-            },
+export const skinSchema = new mongoose.Schema({
+    skinId: { type: String, default: "0" },
+    athleteId: Number,
+    player: String,
+    position: [String],
+    team: String,
+    league: String,
+    type: String,
+    teamData: {
+        colors: {
+            main: String,
+            light: String,
+            dark: String,
+            wings: String,
+            accent: String,
+            details: String,
+            wave: String,
         },
-        isEquipped: { type: Boolean, default: false },
-        packId: String,
-        costType: { type: String, default: "" },
-        savedAt: Date,
-    }
-);
+    },
+    isEquipped: { type: Boolean, default: false },
+    packId: String,
+    costType: { type: String, default: "" },
+    savedAt: Date,
+});
 
 export const userSchema = new mongoose.Schema(
     {
@@ -349,7 +347,7 @@ export const counterSchema = new mongoose.Schema(
 //     }
 // );
 
-export const athleteStatsSchema = new mongoose.Schema(
+export const matchStatsSchema = new mongoose.Schema(
     {
         player: String,
         team: String,
