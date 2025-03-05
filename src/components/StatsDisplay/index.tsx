@@ -28,7 +28,7 @@ export const StatsDisplay = ({
 
     useEffect(() => {
         const control = animate(mv, value, {
-            duration: 2,
+            duration: fromFullDetails ? 0 : 2,
         });
 
         return () => {

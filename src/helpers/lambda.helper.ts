@@ -514,11 +514,31 @@ export const getAthleteAllTimeAverageMoontonStats = async (
     }
 };
 
+export const getLeagueWeeks = async (league, initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `stats/${encodeURIComponent(league)}/info`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getAthleteStats = async (athleteId, league, day, initDataRaw) => {
     try {
         const restOperation = get({
             apiName: "playibleApi",
-            path: `stats/${athleteId}/${league}/${day}`,
+            path: `stats/${athleteId}/${encodeURIComponent(league)}/${day}`,
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,

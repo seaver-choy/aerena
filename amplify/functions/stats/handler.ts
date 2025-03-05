@@ -225,10 +225,11 @@ async function getLeagueWeeks(event: APIGatewayProxyEvent) {
 
     if (params !== undefined) {
         try {
-            const league = params[0];
+            const league = decodeURIComponent(params[0]);
 
             const weeks = await statsModel.distinct("day", {
                 league: league,
+                playoffs: false,
             });
 
             //check if playoffs exist
@@ -246,7 +247,6 @@ async function getLeagueWeeks(event: APIGatewayProxyEvent) {
                     matchType: 1,
                 }
             );
-
             return {
                 statusCode: 200,
                 headers: {
@@ -299,30 +299,28 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
     */
     if (params !== undefined) {
         try {
-            // const weeklyStats = await statsModel.find({
-            //     player: params[0],
-            //     week: parseInt(params[1]),
-            // });
+            //differentiate inputType depending on if the request needs all the stats, only playoffs stats, or stats for a specific week
             let inputType = {};
+            const league = decodeURIComponent(params[1]);
             if (params[2] === "all") {
                 inputType = {
                     athleteId: parseInt(params[0]),
-                    league: params[1],
+                    league: league,
                 };
             } else if (params[2] === "playoffs") {
                 inputType = {
                     athleteId: parseInt(params[0]),
-                    league: params[1],
+                    league: league,
                     playoffs: true,
                 };
             } else {
                 inputType = {
                     athleteId: parseInt(params[0]),
-                    league: params[1],
+                    league: league,
                     day: parseInt(params[2]),
                 };
             }
-            console.log(inputType);
+
             const stats = await statsModel.aggregate(
                 [
                     {

@@ -1,17 +1,20 @@
-import { motion } from "motion/react";
 import {
     SameAthlete,
     AthleteStats,
     Athlete,
+    TournamentDetails,
 } from "../../../../helpers/interfaces";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
-import PH15Sticker from "../../../../assets/sticker/ph15.svg";
-import { getAthleteStats } from "../../../../helpers/lambda.helper";
+import {
+    getAthleteStats,
+    getLeagueWeeks,
+} from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
-import StatsBackground from "../../../../assets/background/stats.svg";
+import { getAthleteStickerLogo } from "../../../../helpers/athletes";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { useDraggable } from "react-use-draggable-scroll";
 
 interface Props {
     athlete: Athlete;
@@ -19,6 +22,8 @@ interface Props {
     sameAthletes: SameAthlete[];
 }
 export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
+    const ref = useRef();
+    const { events } = useDraggable(ref);
     const user = useUsers();
     const [stats, setStats] = useState<AthleteStats>({
         averageKills: 0,
@@ -34,74 +39,117 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
         mvpRate: 0,
         totalMvps: 0,
     });
+    const [currentLeagueIndex, setCurrentLeagueIndex] =
+        useState<number>(leagueIndex);
+    const [currentWeekIndex, setCurrentWeekIndex] = useState<number>(0);
+    const [tournamentDetails, setTournamentDetails] =
+        useState<TournamentDetails>({
+            weeks: [],
+            playoffs: false,
+            matchType: "",
+        });
+    const handleLeftArrow = () => {
+        if (currentLeagueIndex > 0) {
+            setCurrentLeagueIndex(currentLeagueIndex - 1);
+        }
+    };
+    const handleRightArrow = () => {
+        if (currentLeagueIndex < sameAthletes.length - 1) {
+            setCurrentLeagueIndex(currentLeagueIndex + 1);
+        }
+    };
+
     useEffect(() => {
         async function fetchAthleteStats() {
             const res = await getAthleteStats(
                 athlete.athleteId,
-                sameAthletes[leagueIndex].league,
-                "all",
+                sameAthletes[currentLeagueIndex].league,
+                tournamentDetails.weeks[currentWeekIndex] !== undefined
+                    ? tournamentDetails.weeks[currentWeekIndex]
+                    : "all",
                 user.initDataRaw
             );
             if (res.status === "success") {
                 setStats(res.stats[0]);
-                console.log(res.stats[0]);
             }
         }
         fetchAthleteStats();
-    }, []);
+    }, [currentLeagueIndex, currentWeekIndex]);
+
+    useEffect(() => {
+        async function fetchLeagueWeeks() {
+            const res = await getLeagueWeeks(
+                sameAthletes[currentLeagueIndex].league,
+                user.initDataRaw
+            );
+            if (res.status === "success") {
+                const temp = res.weeks;
+                res.weeks = ["all", ...temp];
+                if (res.playoffs) res.weeks.push("playoffs");
+                setTournamentDetails(res);
+            }
+        }
+        fetchLeagueWeeks();
+    }, [currentLeagueIndex]);
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
             {/* <button onClick={onBack}>back</button> */}
             <div className="flex w-full justify-center px-[3vw]">
-                <button className="flex w-[8%] items-center justify-end">
+                <button
+                    className="flex w-[8%] items-center justify-end"
+                    onClick={handleLeftArrow}
+                >
                     <img className="h-[6vw]" src={LeftIcon} />
                 </button>
                 <div className="flex w-[84%] flex-col items-center justify-center gap-[2vw]">
-                    <img className="h-[12vw]" src={PH15Sticker} />
+                    <img
+                        className="h-[12vw]"
+                        src={getAthleteStickerLogo(
+                            sameAthletes[currentLeagueIndex].league
+                        )}
+                    />
                     <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
-                        ONIC PH
+                        {sameAthletes[currentLeagueIndex].team}
                     </p>
                 </div>
-                <button className="flex w-[8%] items-center justify-end">
+                <button
+                    className="flex w-[8%] items-center justify-end"
+                    onClick={handleRightArrow}
+                >
                     <img className="h-[6vw]" src={RightIcon} />
                 </button>
             </div>
-            <div className="mx-[3vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                <button className="items-center justify-center bg-graydark px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-white">
-                        ALL
-                    </p>
-                </button>
-                <button className="items-center justify-center px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-gold">
-                        WEEK 1
-                    </p>
-                </button>
-                <button className="items-center justify-center px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-gold">
-                        WEEK 2
-                    </p>
-                </button>
-                <button className="items-center justify-center px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-gold">
-                        WEEK 3
-                    </p>
-                </button>
-                <button className="items-center justify-center px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-gold">
-                        WEEK 4
-                    </p>
-                </button>
-                <button className="items-center justify-center px-[2vw]">
-                    <p className="font-russone text-nowrap text-[3.5vw] font-extrabold text-gold">
-                        WEEK 5
-                    </p>
-                </button>
+            <div
+                className="mx-[3vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]"
+                {...events}
+                ref={ref}
+            >
+                {tournamentDetails.weeks.map((x, index) => (
+                    <button
+                        className={`items-center justify-center px-[2vw] ${index === currentWeekIndex && "bg-graydark"}`}
+                        onClick={() => setCurrentWeekIndex(index)}
+                    >
+                        <p
+                            className={`text-nowrap font-russoone text-[3.5vw] font-extrabold ${index === currentWeekIndex ? "text-white" : "text-gold"}`}
+                        >
+                            {x === "all"
+                                ? "ALL"
+                                : x === "playoffs"
+                                  ? "PLAYOFFS"
+                                  : `${tournamentDetails.matchType.toUpperCase()} ${x}`}
+                        </p>
+                    </button>
+                ))}
             </div>
             <div className="mx-[3vw] mt-[4vw] flex flex-col gap-[2vw]">
                 <div className="">
                     <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
-                        SEASON AVERAGES
+                        {tournamentDetails.weeks[currentWeekIndex] === "all"
+                            ? "SEASONAL AVERAGES"
+                            : tournamentDetails.weeks[currentWeekIndex] ===
+                                "playoffs"
+                              ? "PLAYOFF AVERAGES"
+                              : `${tournamentDetails.matchType === "week" ? "WEEKLY" : "DAILY"} AVERAGES`}
                     </p>
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
@@ -166,7 +214,12 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
             <div className="mx-[3vw] mt-[4vw] flex flex-col gap-[2vw]">
                 <div className="">
                     <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
-                        SEASON TOTALS
+                        {tournamentDetails.weeks[currentWeekIndex] === "all"
+                            ? "SEASONAL TOTALS"
+                            : tournamentDetails.weeks[currentWeekIndex] ===
+                                "playoffs"
+                              ? "PLAYOFF TOTALS"
+                              : `${tournamentDetails.matchType === "week" ? "WEEKLY" : "DAILY"} TOTALS`}
                     </p>
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
