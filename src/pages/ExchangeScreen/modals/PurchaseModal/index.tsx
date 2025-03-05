@@ -24,9 +24,10 @@ interface PurchaseModalProps {
 export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: PurchaseModalProps) => {
     const packCost = costType === 'star' ? packInfo.starCost : packInfo.bpCost;
     const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
+    const maxQuantity = 2;
 
     const handleIncrement = () => {
-        if (boosterQuantity < 2) setBoosterQuantity(boosterQuantity + 1);
+        if (boosterQuantity < maxQuantity) setBoosterQuantity(boosterQuantity + 1);
     };
 
     const handleDecrement = () => {
@@ -87,7 +88,7 @@ export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: Purch
                                     </div>
                                 </div>
                                 <img
-                                    className={`h-[8vw] ${boosterQuantity < 10 ? "" : "opacity-50"}`}
+                                    className={`h-[8vw] ${boosterQuantity < maxQuantity ? "" : "opacity-50"}`}
                                     src={AddIcon}
                                     onClick={handleIncrement}
                                 />
