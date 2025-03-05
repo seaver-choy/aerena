@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
@@ -50,6 +50,7 @@ export const Catalog = () => {
 
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
+    const containerRef = useRef(null);
 
     const displayLeagueModal = () => {
         setShowLeagueModal(true);
@@ -136,8 +137,6 @@ export const Catalog = () => {
     }, []);
 
     useEffect(() => {
-        // Fetches for the initial athletes with pagination.
-        // Occurs on initial page load and when positionIndex/leagueTypes changes
         async function fetchInitialAthletes() {
             const res = await getAthletePaginated(
                 0,
@@ -154,6 +153,9 @@ export const Catalog = () => {
             setHasNextPage(res.hasNextPage);
         }
         fetchInitialAthletes();
+        if (containerRef.current) {
+            containerRef.current.scrollTop = 0;
+        }
     }, [searchString, positionIndex, leagueTypes, chosenLeagueType]);
 
     return (
@@ -287,6 +289,7 @@ export const Catalog = () => {
                         id="test-id"
                     >
                         <div
+                            ref={containerRef}
                             className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]"
                             id="collection-id"
                         >
