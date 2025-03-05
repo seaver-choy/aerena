@@ -350,17 +350,17 @@ export const Catalog = () => {
                                               </p>
                                           </div>
                                       )}
-                                {showAthleteModal && (
-                                    <AthleteModal
-                                        athlete={selectedAthlete}
-                                        onClose={closeAthleteModal}
-                                    />
-                                )}
                             </InfiniteScroll>
                         </div>
                     </div>
                 </div>
             </div>
+            {showAthleteModal && (
+                <AthleteModal
+                    athlete={selectedAthlete}
+                    onClose={closeAthleteModal}
+                />
+            )}
         </div>
     );
 };
