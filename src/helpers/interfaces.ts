@@ -90,6 +90,13 @@ export interface Tournament {
     resultsTallied: boolean;
 }
 
+//For Athlete FullDetails page
+export interface TournamentDetails {
+    weeks: string[]; //or days, depending on tournament
+    playoffs: boolean;
+    matchType: string;
+}
+
 export interface TournamentLineup {
     position: string;
     athlete: Token | null;
