@@ -36,10 +36,14 @@ export const PlayScreen = () => {
     }, [playTab]);
 
     useEffect(() => {
-        if(user.country == 'PH')
-            setPlayTab("Play Premium");
-        else if(user.country == 'ID')
-            setPlayTab("Play Basic")
+        if(user.id != 0) {
+            if(user.country == 'PH')
+                setPlayTab("Play Premium");
+            else if(user.country == 'ID')
+                setPlayTab("Play Basic")
+            else
+                setPlayTab("Play Basic")
+        }
     }, [user.country]);
 
     return (
