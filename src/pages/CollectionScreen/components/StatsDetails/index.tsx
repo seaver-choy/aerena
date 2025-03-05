@@ -1,12 +1,54 @@
 import { motion } from "motion/react";
-
+import {
+    SameAthlete,
+    AthleteStats,
+    Athlete,
+} from "../../../../helpers/interfaces";
+import { useEffect, useState } from "react";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import PH15Sticker from "../../../../assets/sticker/ph15.svg";
-
+import { getAthleteStats } from "../../../../helpers/lambda.helper";
+import { useUsers } from "../../../../hooks/useUser";
 import StatsBackground from "../../../../assets/background/stats.svg";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 
-export const StatsDetails = () => {
+interface Props {
+    athlete: Athlete;
+    leagueIndex: number;
+    sameAthletes: SameAthlete[];
+}
+export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
+    const user = useUsers();
+    const [stats, setStats] = useState<AthleteStats>({
+        averageKills: 0,
+        totalKills: 0,
+        averageDeaths: 0,
+        totalDeaths: 0,
+        averageAssists: 0,
+        totalAssists: 0,
+        averagePoints: 0,
+        totalPoints: 0,
+        winRate: 0,
+        totalWins: 0,
+        mvpRate: 0,
+        totalMvps: 0,
+    });
+    useEffect(() => {
+        async function fetchAthleteStats() {
+            const res = await getAthleteStats(
+                athlete.athleteId,
+                sameAthletes[leagueIndex].league,
+                "all",
+                user.initDataRaw
+            );
+            if (res.status === "success") {
+                setStats(res.stats[0]);
+                console.log(res.stats[0]);
+            }
+        }
+        fetchAthleteStats();
+    }, []);
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
             {/* <button onClick={onBack}>back</button> */}
@@ -64,72 +106,60 @@ export const StatsDetails = () => {
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                KPG
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text={"KPG"}
+                            value={stats !== undefined ? stats.averageKills : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                DPG
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="DPG"
+                            value={
+                                stats !== undefined ? stats.averageDeaths : 0
+                            }
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                APG
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="APG"
+                            value={
+                                stats !== undefined ? stats.averageAssists : 0
+                            }
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                WIN RATE
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="WIN RATE %"
+                            value={stats !== undefined ? stats.winRate : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                MVP RATE
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="MVP RATE %"
+                            value={stats !== undefined ? stats.mvpRate : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                PPG
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="PPG"
+                            value={
+                                stats !== undefined ? stats.averagePoints : 0
+                            }
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                 </div>
             </div>
@@ -141,72 +171,54 @@ export const StatsDetails = () => {
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                KILLS
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="KILLS"
+                            value={stats !== undefined ? stats.totalKills : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                DEATHS
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="DEATHS"
+                            value={stats !== undefined ? stats.totalDeaths : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                ASSISTS
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="ASSISTS"
+                            value={stats !== undefined ? stats.totalAssists : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                 </div>
                 <div className="flex h-[15.1vw] gap-[2.5vw]">
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                WINS
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="WINS"
+                            value={stats !== undefined ? stats.totalWins : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                MVP
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="MVP"
+                            value={stats !== undefined ? stats.totalMvps : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                     <div className="relative flex w-[27vw]">
-                        <img className="h-full" src={StatsBackground} />
-                        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-                            <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                POINTS
-                            </p>
-                            <motion.pre className="-mt-[1vw] font-russoone text-[5vw] font-normal text-white">
-                                0.00
-                            </motion.pre>
-                        </div>
+                        <StatsDisplay
+                            text="POINTS"
+                            value={stats !== undefined ? stats.totalPoints : 0}
+                            fromFullDetails={true}
+                            noStats={stats === undefined ? true : false}
+                        />
                     </div>
                 </div>
             </div>
@@ -237,7 +249,7 @@ export const StatsDetails = () => {
                         APG:
                     </p>
                     <p className="font-montserrat text-[3.5vw] text-graydark">
-                        Assits Per Game
+                        Assists Per Game
                     </p>
                 </div>
                 <div className="flex gap-[1vw]">

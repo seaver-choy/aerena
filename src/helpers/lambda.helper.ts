@@ -514,16 +514,11 @@ export const getAthleteAllTimeAverageMoontonStats = async (
     }
 };
 
-export const getAthleteStats = async (
-    playerName,
-    league,
-    week,
-    initDataRaw
-) => {
+export const getAthleteStats = async (athleteId, league, day, initDataRaw) => {
     try {
         const restOperation = get({
             apiName: "playibleApi",
-            path: `stats/${encodeURIComponent(playerName)}/${league}/${week}`,
+            path: `stats/${athleteId}/${league}/${day}`,
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
