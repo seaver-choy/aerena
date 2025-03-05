@@ -43,6 +43,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 return await getAthleteAllTimeAverageMoontonStats(event);
             } else if (params?.[0] === "league") {
                 return await getAthleteLeagueStats(event);
+            } else if (params?.[1] === "info") {
+                return await getLeagueWeeks(event);
             } else {
                 return await getAthleteWeeklyStats(event);
             }
@@ -212,6 +214,76 @@ async function getAthleteLeagueStats(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: "An error has occured while getting league stats",
+            }),
+        };
+    }
+}
+async function getLeagueWeeks(event: APIGatewayProxyEvent) {
+    const statsModel = conn!.model("MatchStats");
+
+    const params = event.pathParameters?.proxy?.split("/");
+
+    if (params !== undefined) {
+        try {
+            const league = params[0];
+
+            const weeks = await statsModel.distinct("day", {
+                league: league,
+            });
+
+            //check if playoffs exist
+            const playoffs = await statsModel.findOne({
+                league: league,
+                playoffs: true,
+            });
+
+            //check matchType for league
+            const matchType = await statsModel.findOne(
+                {
+                    league: league,
+                },
+                {
+                    matchType: 1,
+                }
+            );
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    weeks: weeks,
+                    playoffs: playoffs ? true : false,
+                    matchType: matchType.matchType,
+                    status: "success",
+                }),
+            };
+        } catch (e) {
+            console.log(e);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "An error has occured while getting league weeks",
+                    status: "failed",
+                }),
+            };
+        }
+    } else {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An error has occured while getting league weeks",
+                status: "failed",
             }),
         };
     }
