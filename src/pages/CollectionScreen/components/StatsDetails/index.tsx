@@ -14,7 +14,6 @@ import {
 import { useUsers } from "../../../../hooks/useUser";
 import { getAthleteStickerLogo } from "../../../../helpers/athletes";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
-import { useDraggable } from "react-use-draggable-scroll";
 
 interface Props {
     athlete: Athlete;
@@ -22,8 +21,6 @@ interface Props {
     sameAthletes: SameAthlete[];
 }
 export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
-    const ref = useRef();
-    const { events } = useDraggable(ref);
     const user = useUsers();
     const [stats, setStats] = useState<AthleteStats>({
         averageKills: 0,
@@ -119,11 +116,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     <img className="h-[6vw]" src={RightIcon} />
                 </button>
             </div>
-            <div
-                className="mx-[3vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]"
-                {...events}
-                ref={ref}
-            >
+            <div className="mx-[3vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
                 {tournamentDetails.weeks.map((x, index) => (
                     <button
                         className={`items-center justify-center px-[2vw] ${index === currentWeekIndex && "bg-graydark"}`}
