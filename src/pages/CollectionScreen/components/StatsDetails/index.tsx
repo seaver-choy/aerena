@@ -20,7 +20,7 @@ import {
 } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
 import { getAthleteStickerLogo } from "../../../../helpers/athletes";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { FullDetails } from "../FullDetails";
 
 import StatsDurationSonner from "../../../../assets/sonner/stats-duration.svg";
 import StatsDetailsSonner from "../../../../assets/sonner/stats-details.svg";
@@ -197,66 +197,60 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text={"KPG"}
                                 value={
                                     stats !== undefined ? stats.averageKills : 0
                                 }
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="DPG"
                                 value={
                                     stats !== undefined
                                         ? stats.averageDeaths
                                         : 0
                                 }
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="APG"
                                 value={
                                     stats !== undefined
                                         ? stats.averageAssists
                                         : 0
                                 }
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="WIN RATE %"
                                 value={stats !== undefined ? stats.winRate : 0}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="MVP RATE %"
                                 value={stats !== undefined ? stats.mvpRate : 0}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="PPG"
                                 value={
                                     stats !== undefined
                                         ? stats.averagePoints
                                         : 0
                                 }
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
@@ -289,70 +283,64 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="KILLS"
                                 value={
                                     stats !== undefined ? stats.totalKills : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="DEATHS"
                                 value={
                                     stats !== undefined ? stats.totalDeaths : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="ASSISTS"
                                 value={
                                     stats !== undefined ? stats.totalAssists : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="WINS"
                                 value={
                                     stats !== undefined ? stats.totalWins : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="MVP"
                                 value={
                                     stats !== undefined ? stats.totalMvps : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <StatsDisplay
+                            <FullDetails
                                 text="POINTS"
                                 value={
                                     stats !== undefined ? stats.totalPoints : 0
                                 }
                                 isTotal={true}
-                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>

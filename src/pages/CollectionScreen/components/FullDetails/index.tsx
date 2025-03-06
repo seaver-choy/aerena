@@ -1,24 +1,22 @@
 import { useEffect } from "react";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 
-import { appearAnimation } from "../../helpers/animation";
+import {
+    appearAnimation,
+    appearTextAnimation,
+} from "../../../../helpers/animation";
 
-import StatsBackground from "../../assets/background/stats.svg";
-
+import StatsBackground from "../../../../assets/background/stats.svg";
 interface Props {
     text: string;
     value: number;
     isTotal?: boolean;
-    fromStats?: boolean;
-    fromFullDetails?: boolean;
     noStats?: boolean;
 }
-export const StatsDisplay = ({
+export const FullDetails = ({
     text = "",
     value = 0,
     isTotal,
-    fromStats,
-    fromFullDetails,
     noStats,
 }: Props) => {
     const mv = useMotionValue(0);
@@ -28,7 +26,7 @@ export const StatsDisplay = ({
 
     useEffect(() => {
         const control = animate(mv, value, {
-            duration: fromFullDetails ? 0 : 2,
+            duration: 0,
         });
 
         return () => {
@@ -36,9 +34,24 @@ export const StatsDisplay = ({
         };
     }, [mv, value]);
 
+    useEffect(() => {
+        const control = animate(
+            "pre",
+            { scale: [0.8, 0.8, 1.05, 1] },
+            {
+                duration: 0.3,
+                ease: [0.4, 0, 0.6, 1],
+                times: [0, 0.1, 0.8, 1],
+            }
+        );
+        return () => {
+            control.stop();
+        };
+    }, [mv, value]);
+
     return (
         <motion.div
-            className={`${fromStats ? "h-[13.14vw] w-[24vw]" : "h-full w-[21.5vw]"} overflow-hidden`}
+            className={`h-full w-[27vw] overflow-hidden`}
             {...appearAnimation}
         >
             <div className="relative flex h-full w-full">
@@ -48,13 +61,14 @@ export const StatsDisplay = ({
                 />
                 <div className="absolute flex h-full w-full flex-col items-center justify-center">
                     <p
-                        className={`mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden`}
+                        className={`mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent will-change-transform backface-hidden`}
                     >
                         {text}
                     </p>
                     <motion.pre
                         id={"stat-value"}
-                        className={`-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white`}
+                        className={`-mt-[1vw] font-russoone text-[5vw] font-normal text-white`}
+                        {...appearTextAnimation}
                     >
                         {noStats ? "-" : stat}
                     </motion.pre>
