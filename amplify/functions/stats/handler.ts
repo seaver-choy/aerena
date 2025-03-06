@@ -348,7 +348,7 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                                 $sum: "$assists",
                             },
                             averagePoints: {
-                                $sum: "$points",
+                                $avg: "$points",
                             },
                             totalPoints: {
                                 $sum: "$points",
