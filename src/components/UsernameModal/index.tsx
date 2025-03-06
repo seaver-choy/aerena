@@ -136,6 +136,10 @@ const UsernameModal: React.FC = () => {
                     payload: { joinedBeGods: data["joinedBeGods"] },
                 });
                 user.dispatch({
+                    type: "SET_JOINED_THE_BOBO_BOT",
+                    payload: { joinedTheBoboBot: data["joinedTheBoboBot"] },
+                });
+                user.dispatch({
                     type: "SET_QUESTS",
                     payload: { quests: data["quests"] },
                 });

@@ -129,6 +129,14 @@ export const TasksSection = ({ questTab, quests }: TaskSectionProps) => {
                     });
                     utils.openTelegramLink("https://t.me/BeGods_bot");
                     break;
+                case "joinedTheBoboBot":
+                    data = await updateQuestField(user.id, "joinedTheBoboBot", user.initDataRaw);
+                    user.dispatch({
+                        type: "SET_JOINED_THE_BOBO_BOT",
+                        payload: { joinedTheBoboBot: data["joinedTheBoboBot"] },
+                    });
+                    utils.openTelegramLink("https://t.me/AngBoboBot/bobo?startapp=ref-1947935016");
+                    break;
                 case "friends":
                 case "referredBy":
                     navigate("/friends");
