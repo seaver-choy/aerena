@@ -118,7 +118,10 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     onClick={handleLeftArrow}
                     {...appearAnimation}
                 >
-                    <img className="h-[6vw]" src={LeftIcon} />
+                    <img
+                        className={`h-[6vw] ${currentLeagueIndex === 0 && "opacity-50"}`}
+                        src={LeftIcon}
+                    />
                 </motion.button>
                 <div className="flex w-[84%] flex-col items-center justify-center gap-[2vw]">
                     <motion.div {...appearAnimation}>
@@ -141,7 +144,10 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     {...appearAnimation}
                     onClick={handleRightArrow}
                 >
-                    <img className="h-[6vw]" src={RightIcon} />
+                    <img
+                        className={`h-[6vw] ${currentLeagueIndex === sameAthletes.length - 1 && "opacity-50"}`}
+                        src={RightIcon}
+                    />
                 </motion.button>
             </div>
             {showStatsDetails ? (
@@ -182,11 +188,11 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                             {...slideRightTextAnimation}
                         >
                             {tournamentDetails.weeks[currentWeekIndex] === "all"
-                                ? "SEASONAL AVERAGES"
+                                ? "SEASON AVERAGES"
                                 : tournamentDetails.weeks[currentWeekIndex] ===
                                     "playoffs"
                                   ? "PLAYOFF AVERAGES"
-                                  : `${tournamentDetails.matchType === "week" ? "WEEKLY" : "DAILY"} AVERAGES`}
+                                  : `${tournamentDetails.matchType === "week" ? "WEEK" : "DAILY"} AVERAGES`}
                         </motion.p>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
@@ -274,11 +280,11 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                             {...slideRightTextAnimation}
                         >
                             {tournamentDetails.weeks[currentWeekIndex] === "all"
-                                ? "SEASONAL TOTALS"
+                                ? "SEASON TOTALS"
                                 : tournamentDetails.weeks[currentWeekIndex] ===
                                     "playoffs"
                                   ? "PLAYOFF TOTALS"
-                                  : `${tournamentDetails.matchType === "week" ? "WEEKLY" : "DAILY"} TOTALS`}
+                                  : `${tournamentDetails.matchType === "week" ? "WEEK" : "DAILY"} TOTALS`}
                         </motion.p>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
@@ -288,6 +294,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalKills : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
@@ -298,6 +305,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalDeaths : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
@@ -308,6 +316,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalAssists : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
@@ -320,6 +329,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalWins : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
@@ -330,6 +340,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalMvps : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
@@ -340,6 +351,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                                 value={
                                     stats !== undefined ? stats.totalPoints : 0
                                 }
+                                isTotal={true}
                                 fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
