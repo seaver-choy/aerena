@@ -35,18 +35,20 @@ export const FullDetails = ({
     }, [mv, value]);
 
     useEffect(() => {
-        const control = animate(
-            "pre",
-            { scale: [0.8, 0.8, 1.05, 1] },
-            {
-                duration: 0.3,
-                ease: [0.4, 0, 0.6, 1],
-                times: [0, 0.1, 0.8, 1],
-            }
-        );
-        return () => {
-            control.stop();
-        };
+        if (!noStats) {
+            const control = animate(
+                "pre",
+                { scale: [0.8, 0.8, 1.05, 1] },
+                {
+                    duration: 0.3,
+                    ease: [0.4, 0, 0.6, 1],
+                    times: [0, 0.1, 0.8, 1],
+                }
+            );
+            return () => {
+                control.stop();
+            };
+        }
     }, [mv, value]);
 
     return (
