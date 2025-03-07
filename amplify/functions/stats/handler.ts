@@ -263,7 +263,7 @@ async function getLeagueWeeks(event: APIGatewayProxyEvent) {
         } catch (e) {
             console.log(e);
             return {
-                statusCode: 500,
+                statusCode: 404,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": true,
@@ -276,7 +276,7 @@ async function getLeagueWeeks(event: APIGatewayProxyEvent) {
         }
     } else {
         return {
-            statusCode: 500,
+            statusCode: 404,
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
