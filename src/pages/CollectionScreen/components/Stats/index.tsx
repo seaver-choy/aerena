@@ -22,10 +22,18 @@ import StatsBannerSonner from "../../../../assets/sonner/stats-banner.svg";
 interface Props {
     athlete: Athlete;
     sameAthletes: SameAthlete[];
+    reset: boolean;
+    handleReset: () => void;
     competitionType: string;
 }
 
-export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
+export const Stats = ({
+    athlete,
+    sameAthletes,
+    reset,
+    handleReset,
+    competitionType,
+}: Props) => {
     const user = useUsers();
     const [showStatsBanner, setShowStatsBanner] = useState(false);
     const [leagueStats, setLeagueStats] = useState<AthleteStats[]>([]);
@@ -58,6 +66,13 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
         }
         fetchLeagueStats();
     }, []);
+
+    useEffect(() => {
+        if (reset) {
+            setShowStatsDetails(false);
+            handleReset();
+        }
+    }, [reset]);
 
     return !showStatsDetails ? (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
