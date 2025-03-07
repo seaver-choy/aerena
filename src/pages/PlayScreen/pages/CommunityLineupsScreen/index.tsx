@@ -15,22 +15,19 @@ export const CommunityLineupsScreen = () => {
     const location = useLocation();
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
     const ongoingTournament = location.state?.ongoingTournament;
-    const [reversedUsersJoined, setReverseUsersJoined] = useState([]);
+    const [sortedUsersJoined, setSortedUsersJoined] = useState([]);
     // const playTab = location.state?.playTab;
     const [displayLineup, setDisplayLineup] = useState([]);
     // const [hasMore, setHasMore] = useState<boolean>(true);
     const [currentIndex, setCurrentIndex] = useState<number>(5);
     const fetchMoreData = () => {
         setTimeout(() => {
-            if (currentIndex >= reversedUsersJoined.length) {
+            if (currentIndex >= sortedUsersJoined.length) {
                 // setHasMore(false);
             } else {
                 setDisplayLineup(
                     displayLineup.concat(
-                        reversedUsersJoined.slice(
-                            currentIndex,
-                            currentIndex + 5
-                        )
+                        sortedUsersJoined.slice(currentIndex, currentIndex + 5)
                     )
                 );
                 setCurrentIndex(currentIndex + 5);
@@ -40,10 +37,26 @@ export const CommunityLineupsScreen = () => {
 
     useEffect(() => {
         async function reverseData() {
-            const reversedUsersJoined =
-                await ongoingTournament.usersJoined.reverse();
-            setReverseUsersJoined(reversedUsersJoined);
-            setDisplayLineup(reversedUsersJoined.slice(0, 5));
+            if (ongoingTournament.usersJoined.length > 0) {
+                const sorted = await ongoingTournament.usersJoined.sort(
+                    (a, b) => b.score - a.score
+                );
+
+                if (sorted[0].score === 0) {
+                    const reverse =
+                        await ongoingTournament.usersJoined.reverse();
+                    setSortedUsersJoined(reverse);
+                    setDisplayLineup(reverse.slice(0, 5));
+                } else {
+                    setSortedUsersJoined(sorted);
+                    setDisplayLineup(sorted.slice(0, 5));
+                }
+            }
+            // const reversedUsersJoined =
+            //     await ongoingTournament.usersJoined.reverse();
+            // const sorted = reversedUsersJoined.sort(
+            //     (a, b) => b.score - a.score
+            // );
         }
         reverseData();
     }, []);
@@ -92,14 +105,24 @@ export const CommunityLineupsScreen = () => {
                                         className="relative flex h-[36.4vw] w-[28vw]"
                                     >
                                         <AthleteCard
-                                            color={athlete.skin?.teamData.colors ?? baseColor}
+                                            color={
+                                                athlete.skin?.teamData.colors ??
+                                                baseColor
+                                            }
                                             ign={athlete.displayName}
                                             role={athlete.position[0]}
                                             opacity={{
-                                                wave: athlete.skin?.teamData.colors.wave ?? baseColor.wave,
+                                                wave:
+                                                    athlete.skin?.teamData
+                                                        .colors.wave ??
+                                                    baseColor.wave,
                                             }}
                                             type={athlete.skin ? "basic" : null}
-                                            league={athlete.skin ? athlete.league : null}
+                                            league={
+                                                athlete.skin
+                                                    ? athlete.league
+                                                    : null
+                                            }
                                             id={index}
                                         />
                                     </div>
@@ -121,7 +144,7 @@ export const CommunityLineupsScreen = () => {
                         </div>
                     ))}
             </div>
-            {reversedUsersJoined.length == 0 ? (
+            {sortedUsersJoined.length == 0 ? (
                 <div className="mt-[30vh]">
                     <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-bold text-transparent">
                         No Community Lineups
@@ -130,12 +153,12 @@ export const CommunityLineupsScreen = () => {
                         Please check again later
                     </p>
                 </div>
-            ) : currentIndex < reversedUsersJoined.length ? (
+            ) : currentIndex < sortedUsersJoined.length ? (
                 <div className="mt-[4vw] flex w-full flex-col items-center">
                     <div className="flex flex-col items-center">
                         <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[4vw] font-normal text-transparent">
                             Displaying {currentIndex} out of{" "}
-                            {reversedUsersJoined.length} lineups.
+                            {sortedUsersJoined.length} lineups.
                         </p>
                         <button
                             className="relative mt-[2vw] flex h-[8vw] justify-center"
