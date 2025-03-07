@@ -7,7 +7,7 @@ import {
 } from "../../../../helpers/animation";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { useUsers } from "../../../../hooks/useUser";
-import { Athlete, AverageStats } from "../../../../helpers/interfaces";
+import { Athlete, AthleteStats } from "../../../../helpers/interfaces";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
@@ -21,7 +21,7 @@ export const AthleteHeader = ({ athlete }: Props) => {
     const user = useUsers();
     const ign = athlete.player;
     const role = athlete.position[0];
-    const [averageStats, setAverageStats] = useState<AverageStats>(null);
+    const [averageStats, setAverageStats] = useState<AthleteStats>(null);
 
     const color = {
         main: getBaseTeamColor().main,

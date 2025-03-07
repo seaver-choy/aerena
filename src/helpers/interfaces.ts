@@ -18,9 +18,9 @@ export interface Token {
                 accent: string;
                 details: string;
                 wave: string;
-            },
-        },
-    }
+            };
+        };
+    };
 }
 
 export interface UpgradeToken extends Token {
@@ -90,6 +90,13 @@ export interface Tournament {
     resultsTallied: boolean;
 }
 
+//For Athlete FullDetails page
+export interface TournamentDetails {
+    weeks: string[]; //or days, depending on tournament
+    playoffs: boolean;
+    matchType: string;
+}
+
 export interface TournamentLineup {
     position: string;
     athlete: Token | null;
@@ -133,7 +140,7 @@ export interface Ranking {
     users: UsersJoined[];
 }
 
-export interface Stats {
+export interface MatchStats {
     player: string;
     team: string;
     kills: number;
@@ -147,12 +154,20 @@ export interface Stats {
     league: string;
     competitionType: string;
 }
-export interface AverageStats {
+export interface AthleteStats {
     league?: string;
     averageKills: number;
+    totalKills: number;
     averageDeaths: number;
+    totalDeaths: number;
     averageAssists: number;
+    totalAssists: number;
     averagePoints: number;
+    totalPoints: number;
+    winRate: number;
+    totalWins: number;
+    mvpRate: number;
+    totalMvps: number;
 }
 
 export interface AthleteProfile {

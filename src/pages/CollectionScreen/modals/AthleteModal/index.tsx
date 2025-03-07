@@ -20,7 +20,7 @@ import FunctionModalButton from "../../../../assets/button/function-modal.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import {
     Athlete,
-    AverageStats,
+    AthleteStats,
     Team,
     SameAthlete,
     Skin,
@@ -45,12 +45,20 @@ export const AthleteModal = ({
     const [cardIndex, setCardIndex] = useState<number>(0);
     const [equippedIndex, setEquippedIndex] = useState<number>(0);
     const [athleteSkins, setAthleteSkins] = useState<Skin[]>(null);
-    const [teamInfo, setTeamInfo] = useState<Team>(null);
-    const [averageStats, setAverageStats] = useState<AverageStats>({
+    const [teamInfo, setTeamInfo] = useState<Team>();
+    const [athleteStats, setAthleteStats] = useState<AthleteStats>({
         averageKills: 0,
+        totalKills: 0,
         averageDeaths: 0,
+        totalDeaths: 0,
         averageAssists: 0,
+        totalAssists: 0,
         averagePoints: 0,
+        totalPoints: 0,
+        winRate: 0,
+        totalWins: 0,
+        mvpRate: 0,
+        totalMvps: 0,
     });
 
     const handleViewPlayerProfile = () => {
@@ -58,7 +66,7 @@ export const AthleteModal = ({
             state: {
                 athlete,
                 sameAthletes,
-                averageStats,
+                athleteStats,
             },
         });
     };
@@ -123,7 +131,7 @@ export const AthleteModal = ({
             setTeamInfo(res);
         }
         fetchTeamInfo();
-    }, [averageStats]);
+    }, [athleteStats]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -140,7 +148,7 @@ export const AthleteModal = ({
             );
 
             if (res.average[0] !== undefined) {
-                setAverageStats(res.average[0]);
+                setAthleteStats(res.average[0]);
             }
         }
         fetchAthleteAverageStats();
@@ -217,15 +225,15 @@ export const AthleteModal = ({
                     <div className="mb-[2vw] flex h-[11.5vw] gap-[2vw]">
                         <StatsDisplay
                             text={"KILLS"}
-                            value={averageStats.averageKills}
+                            value={athleteStats.averageKills}
                         />
                         <StatsDisplay
                             text={"DEATHS"}
-                            value={averageStats.averageDeaths}
+                            value={athleteStats.averageDeaths}
                         />
                         <StatsDisplay
                             text={"ASSISTS"}
-                            value={averageStats.averageAssists}
+                            value={athleteStats.averageAssists}
                         />
                     </div>
                     <div className="mb-[2vw] flex h-[6vw] justify-center">
@@ -233,7 +241,9 @@ export const AthleteModal = ({
                             className="relative flex h-[6vw] items-center justify-center"
                             onClick={handleViewPlayerProfile}
                             {...appearTextAnimation}
-                            disabled={teamInfo == null || sameAthletes.length == 0}
+                            disabled={
+                                teamInfo == null || sameAthletes.length == 0
+                            }
                         >
                             <div className="absolute flex">
                                 <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
