@@ -68,16 +68,18 @@ export const TournamentBanner = ({
                 playTab.split(" ")[1], //current strings are Play Basic & Play Premium, hence the split
                 user.initDataRaw
             );
-            setOngoingTournaments(sortList(result, user.country));
-            if (result.length > 0) setOngoingTournament(result[0]);
+            const sortedResult = sortList(result, user.country);
+            setOngoingTournaments(sortedResult);
+            if (result.length > 0) setOngoingTournament(sortedResult[0]);
             else {
                 const previousTournamentResult =
                     await getLatestPreviousTournament(
                         playTab.split(" ")[1],
                         user.initDataRaw
                     );
-                setOngoingTournaments(sortList(result, user.country));
-                setOngoingTournament(previousTournamentResult[0]);
+                const sortedResult = sortList(previousTournamentResult, user.country);
+                setOngoingTournaments(sortList(sortedResult, user.country));
+                setOngoingTournament(sortedResult[0]);
             }
         } catch (e) {
             setOngoingTournaments(null);
@@ -280,7 +282,7 @@ export const TournamentBanner = ({
                                 {ongoingTournament != null &&
                                 isTournamentClosed(ongoingTournament) ? (
                                     <p
-                                        className={`font-montserrat text-[2vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
+                                        className={`font-montserrat text-[2.8vw] ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}
                                     >
                                         {ongoingTournament.resultsTallied
                                             ? ""

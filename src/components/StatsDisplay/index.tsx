@@ -63,7 +63,7 @@ export const StatsDisplay = ({
                     className="h-full w-full will-change-transform backface-hidden"
                     src={StatsBackground}
                 />
-                <div className="absolute flex h-full w-full flex-col items-center justify-center">
+                <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
                     <p
                         className={`mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone ${fromFullDetails ? "text-[3.2vw]" : "text-[2.5vw]"} font-normal text-transparent will-change-transform backface-hidden`}
                     >

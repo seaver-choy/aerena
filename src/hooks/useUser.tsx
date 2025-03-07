@@ -37,6 +37,7 @@ interface State {
     joinedTgChannel: boolean;
     likedAerenaPage: boolean;
     joinedBeGods: boolean;
+    joinedTheBoboBot: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -69,6 +70,7 @@ interface Action {
         | "SET_JOINED_TG_CHANNEL"
         | "SET_LIKED_AERENA_PAGE"
         | "SET_JOINED_BE_GODS"
+        | "SET_JOINED_THE_BOBO_BOT"
         | "SET_QUESTS"
         | "SET_REFERRAL_CHECK"
         | "SET_SEASONAL_LOGINS"
@@ -100,6 +102,7 @@ export interface UserContextValue {
     joinedTgChannel: boolean;
     likedAerenaPage: boolean;
     joinedBeGods: boolean;
+    joinedTheBoboBot: boolean;
     quests: Quest[];
     referralCheck: boolean;
     seasonalLogins: number;
@@ -132,6 +135,7 @@ const initialState: State = {
     joinedTgChannel: false,
     likedAerenaPage: false,
     joinedBeGods: false,
+    joinedTheBoboBot: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -236,6 +240,12 @@ function reducer(state: State, action: Action): State {
                 joinedBeGods:
                     action.payload?.joinedBeGods ?? state.joinedBeGods,
             };
+        case "SET_JOINED_THE_BOBO_BOT":
+            return {
+                ...state,
+                joinedTheBoboBot:
+                    action.payload?.joinedTheBoboBot ?? state.joinedTheBoboBot,
+            };
         case "SET_QUESTS":
             return {
                 ...state,
@@ -328,6 +338,7 @@ export const UserContext = createContext<UserContextValue>({
     joinedTgChannel: false,
     likedAerenaPage: false,
     joinedBeGods: false,
+    joinedTheBoboBot: false,
     quests: [],
     referralCheck: false,
     seasonalLogins: 0,
@@ -434,6 +445,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     dispatch({
                         type: "SET_JOINED_BE_GODS",
                         payload: { joinedBeGods: data["joinedBeGods"] },
+                    });
+                    dispatch({
+                        type: "SET_JOINED_THE_BOBO_BOT",
+                        payload: { joinedTheBoboBot: data["joinedTheBoboBot"] },
                     });
                     dispatch({
                         type: "SET_QUESTS",

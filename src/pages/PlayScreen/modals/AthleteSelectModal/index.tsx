@@ -55,11 +55,15 @@ export const AthleteSelectModal = ({
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     const fetchAthlete = async () => {
-        const result = await getAthletePositionFilter(
+        const result = (await getAthletePositionFilter(
             position,
             tournament.league,
             user.initDataRaw
-        );
+        )).sort((a, b) => {
+            const nameA = a.player;
+            const nameB = b.player;
+            return nameA.localeCompare(nameB);
+        });
         setDisplayAthletes(result);
         let foundIndex = -1;
         for (let i = 0; i < result.length; i++) {

@@ -13,7 +13,7 @@ import { PersonalLineup } from "./components/PersonalLineup";
 
 export const PlayScreen = () => {
     const user = useUsers();
-    const [playTab, setPlayTab] = useState("Play Premium");
+    const [playTab, setPlayTab] = useState("");
     const [showTournament, setShowTournament] = useState<boolean>(false);
     const [keyRemount, setKeyRemount] = useState<number>(0);
     const [ongoingTournament, setOngoingTournament] =
@@ -35,11 +35,22 @@ export const PlayScreen = () => {
         setShowTournament(false);
     }, [playTab]);
 
+    useEffect(() => {
+        if(user.id != 0) {
+            if(user.country == 'PH')
+                setPlayTab("Play Premium");
+            else if(user.country == 'ID')
+                setPlayTab("Play Basic")
+            else
+                setPlayTab("Play Basic")
+        }
+    }, [user.country]);
+
     return (
         <>
             <Layout>
-                {user.id != 0 && user.username == "" && <UsernameModal />}
-                {user.id != 0 && user.username != "" && (
+                {user.id != 0 && user.username == "" && playTab != "" && <UsernameModal />}
+                {user.id != 0 && user.username != "" && playTab != "" && (
                     <div>
                         <Tabs
                             options={tournamentOptions}

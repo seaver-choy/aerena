@@ -184,6 +184,7 @@ export const userSchema = new mongoose.Schema(
         joinedTgChannel: { type: Boolean, default: false },
         likedAerenaPage: { type: Boolean, default: false },
         joinedBeGods: { type: Boolean, default: false },
+        joinedTheBoboBot: { type: Boolean, default: false },
         weeklyReferralCount: { type: Number, default: 0 },
         quests: [
             {

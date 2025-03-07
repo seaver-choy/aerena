@@ -241,6 +241,9 @@ export const AthleteModal = ({
                             className="relative flex h-[6vw] items-center justify-center"
                             onClick={handleViewPlayerProfile}
                             {...appearTextAnimation}
+                            disabled={
+                                teamInfo == null || sameAthletes.length == 0
+                            }
                         >
                             <div className="absolute flex">
                                 <p className="mt-[0.4vw] font-russoone text-[2vw] font-normal tracking-wide text-white">
@@ -253,7 +256,7 @@ export const AthleteModal = ({
                             ></img>
                         </motion.button>
                     </div>
-                    {teamInfo !== undefined ? (
+                    {teamInfo !== null ? (
                         <div
                             key={sameAthletes.length}
                             className="mb-[4vw] flex h-[55vw] flex-col items-center"
@@ -278,7 +281,7 @@ export const AthleteModal = ({
                     )}
                     <div className="flex h-[7.5vw] justify-center">
                         <div className="flex h-full w-full">
-                            {teamInfo !== undefined &&
+                            {teamInfo !== null &&
                                 (cardIndex === equippedIndex ? (
                                     <motion.div
                                         className="relative flex h-full w-full justify-center"

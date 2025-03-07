@@ -43,6 +43,7 @@ export const ChoiceBanner = () => {
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
     const [showInsufficientModal, setShowInsufficientModal] = useState<boolean>(false);
+    const [showChoiceBanners, setShowChoiceBanners] = useState<boolean>(false);
     const [packInfos, setPackInfos] = useState<PackInfo[]>(null);
     const [selectedPackInfo, setSelectedPackInfo] = useState<PackInfo>(null);
     const [costType, setCostType] = useState<string>(null);
@@ -174,10 +175,15 @@ export const ChoiceBanner = () => {
         getPackInfosData();
     }, []);
 
+    useEffect(() => {
+        const searchTimer = setTimeout(() => setShowChoiceBanners(true), 500);
+        return () => clearTimeout(searchTimer);
+    }, [packInfos]);
+
     return (
         <div className="mt-[6vw]">
-            {packInfos != null ? (
-                packInfos?.map((packInfo) => (
+            {packInfos != null && (
+                packInfos?.map((packInfo) => showChoiceBanners ? (
                     <div key={packInfo.packId} className="relative h-[74.8vw]">
                         <img
                             className="h-full w-full"
@@ -284,14 +290,17 @@ export const ChoiceBanner = () => {
                             </motion.button>
                         </div>
                     </div>
+                )
+                :
+                (
+                    <div className="h-[74.8vw]">
+                        <motion.div className="relative" {...pulseAnimation}>
+                            <img className="h-full w-full" src={ChoicePackSonner} />
+                        </motion.div>
+                    </div>
                 ))
-            ) : (
-                <div className="h-[74.8vw]">
-                    <motion.div className="relative" {...pulseAnimation}>
-                        <img className="h-full w-full" src={ChoicePackSonner} />
-                    </motion.div>
-                </div>
-            )}
+            )
+        }
             
             {showErrorModal && (
                 <ErrorModal
