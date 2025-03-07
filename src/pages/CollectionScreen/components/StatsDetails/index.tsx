@@ -96,16 +96,34 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
 
     useEffect(() => {
         async function fetchLeagueWeeks() {
-            const res = await getLeagueWeeks(
-                sameAthletes[currentLeagueIndex].league,
-                user.initDataRaw
-            );
-            if (res.status === "success") {
-                const temp = res.weeks;
-                res.weeks = ["all", ...temp];
-                if (res.playoffs) res.weeks.push("playoffs");
-                setTournamentDetails(res);
-                setCurrentWeekIndex(0);
+            try {
+                const res = await getLeagueWeeks(
+                    sameAthletes[currentLeagueIndex].league,
+                    user.initDataRaw
+                );
+                if (res.status === "success") {
+                    const temp = res.weeks;
+                    res.weeks = ["all", ...temp];
+                    if (res.playoffs) res.weeks.push("playoffs");
+                    setTournamentDetails(res);
+                    setCurrentWeekIndex(0);
+                } else {
+                    console.log("failed to get weeks");
+                    //reset weeks to default
+                    setTournamentDetails({
+                        weeks: ["all"],
+                        playoffs: false,
+                        matchType: "",
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+                //error has occured, reset tournamentdetails to default for now
+                setTournamentDetails({
+                    weeks: ["all"],
+                    playoffs: false,
+                    matchType: "",
+                });
             }
         }
         fetchLeagueWeeks();
