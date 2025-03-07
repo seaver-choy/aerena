@@ -5,6 +5,7 @@ import {
     questSchema,
 } from "../../schema";
 import axios from "axios";
+import { Quest } from "../../interface";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -284,8 +285,8 @@ async function updateQuestClaim(event: APIGatewayProxyEvent) {
         };
     }
     //checking of quest requirements
-
-    if (user.quests[questId - 1].isClaimed) {
+    const userQuest = user.quests.find((q: Quest) => q.questId === questId);
+    if (userQuest.isClaimed) {
         console.error(
             `[ERROR][QUEST] User ${userID} has already claimed quest ${questId}`
         );

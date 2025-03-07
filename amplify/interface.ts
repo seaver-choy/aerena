@@ -108,3 +108,8 @@ export interface InventoryItem {
     isClaimed?: boolean;
     stock?: number;
 }
+
+export interface Quest {
+    questId: number;
+    isClaimed: boolean;
+}
