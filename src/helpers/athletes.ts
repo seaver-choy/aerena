@@ -180,21 +180,24 @@ export function getBaseTeamColor() {
 
 export function sortList (list, country) {
     const sortedList = list.sort((a, b) => {
-        const aHasMatch = a.league.includes(country)
-        const bHasMatch = b.league.includes(country)
-
-        if (aHasMatch !== bHasMatch)
-            return bHasMatch ? 1 : -1;
-        
         if (a.tournamentEndSubmissionDate && b.tournamentEndSubmissionDate) {
             const dateA = new Date(a.tournamentEndSubmissionDate);
             const dateB = new Date(b.tournamentEndSubmissionDate);
             const now = new Date();
-            const timeToA = Math.abs(dateA.getTime() - now.getTime());
-            const timeToB = Math.abs(dateB.getTime() - now.getTime());
-
-            return timeToA - timeToB;
+            const timeToA = dateA.getTime() - now.getTime();
+            const timeToB = dateB.getTime() - now.getTime();
+            if (timeToA !== timeToB) {
+                if (timeToA > 0 && timeToB <= 0) return -1;
+                if (timeToB > 0 && timeToA <= 0) return 1;
+                
+                return Math.abs(timeToA) - Math.abs(timeToB);
+            }
         }
+        const aHasMatch = a.league.includes(country);
+        const bHasMatch = b.league.includes(country);
+
+        if (aHasMatch !== bHasMatch)
+            return bHasMatch ? 1 : -1;
 
         return 0;
         });
