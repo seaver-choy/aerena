@@ -113,3 +113,32 @@ export interface Quest {
     questId: number;
     isClaimed: boolean;
 }
+
+export interface Team {
+    teamId: number;
+    name: string;
+    key: string;
+    colors: {
+        main: string;
+        light: string;
+        dark: string;
+        wings: string;
+        accent: string;
+        details: string;
+        wave: string;
+    },
+    league: string;
+    type: string;
+    players: Athlete;
+}
+
+export interface MLTournament {
+    code: string;
+    name: string;
+    type: string;
+    startDate: Date;
+    endDate: Date;
+    teams: Team;
+    accredited: boolean;
+    isActiveFilter: boolean;
+}

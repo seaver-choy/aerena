@@ -1,7 +1,7 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import { tournamentSchema, userSchema, athleteSchema } from "../../schema";
-import { TournamentDocument } from "../../interface";
+import { tournamentSchema, userSchema, athleteSchema, mlTournamentSchema } from "../../schema";
+import { MLTournament, TournamentDocument } from "../../interface";
 import paginate from "mongoose-paginate-v2";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -23,6 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
             .asPromise();
 
         conn.model("Tournaments", tournamentSchema);
+        conn.model("MLTournaments", mlTournamentSchema);
         conn.model("User", userSchema);
         conn.model("Athletes", athleteSchema);
 
@@ -386,20 +387,8 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
         const currentDate = new Date();
         const result = await tournamentModel.find({
             type: type,
-            $and: [
-                {
-                    $or: [
-                        {
-                            tournamentStartSubmissionDate: { $lte: currentDate },
-                            tournamentEndSubmissionDate: { $gt: currentDate }
-                        },
-                        {
-                            tournamentStartSubmissionDate: { $lte: currentDate },
-                            resultsTallied: false
-                        }
-                    ]
-                }
-            ],
+            tournamentStartSubmissionDate: { $lte: currentDate },
+            tournamentEndSubmissionDate: { $gt: currentDate }
         })
         .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
@@ -416,15 +405,33 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
                     message: "No ongoing tournaments found",
                 }),
             };
+        } else if(result.length != 0) {
+            const previousResult = await tournamentModel.find({
+                type: type,
+                tournamentStartSubmissionDate: { $lte: currentDate },
+                tournamentEndSubmissionDate: { $lt: currentDate },
+                resultsTallied: false,
+            })
+
+            const finalResult = previousResult.length > 0 ? [...result, ...previousResult] : result;
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify(finalResult),
+            };
+        } else {
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify(result),
+            };
         }
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify(result),
-        };
     } catch (e) {
         console.error(
             `[ERROR][TOURNAMENTS] An error occured during getOngoingTournaments: \n${e}`
@@ -444,24 +451,56 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
 
 async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
     const tournamentModel = conn!.model("Tournaments");
+    const mlTournamentModel = conn!.model("MLTournaments");
 
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        let result = await tournamentModel.find({
-            type: type,
-            tournamentStartSubmissionDate: { $gt: currentDate },
-        }).sort({ tournamentStartSubmissionDate: 1 }).limit(1);
-        if(result.length < 1) {
-            result = await tournamentModel.find({
+        const activeFilters = await mlTournamentModel.find({ isActiveFilter: true });
+
+        const getNearestForFilter = async (filter: MLTournament) => {
+            const upcoming = await tournamentModel.findOne({
+                type: type,
+                tournamentStartSubmissionDate: { $gt: currentDate },
+                league: filter.code
+            })
+            .sort({ tournamentStartSubmissionDate: 1 });
+
+            let previous;
+            if(!upcoming) {
+                previous = await tournamentModel.findOne({
+                    type: type,
+                    tournamentEndSubmissionDate: { $lt: currentDate },
+                    resultsTallied: true,
+                    league: filter.code
+                })
+                .sort({ tournamentEndSubmissionDate: -1 });
+            }
+            else {
+                previous = await tournamentModel.findOne({
+                    type: type,
+                    tournamentEndSubmissionDate: { $lt: currentDate },
+                    resultsTallied: false,
+                    league: filter.code
+                }).sort({ tournamentEndSubmissionDate: -1 });
+            }
+
+            return { filter, upcoming, previous };
+        };
+
+        const results = await Promise.all(activeFilters.map(filter => getNearestForFilter(filter)));
+
+        let finalResult = results.flatMap(r => [r.upcoming, r.previous]).filter(tournament => tournament !== null);
+        if(finalResult.length == 0) {
+            finalResult = await tournamentModel.find({
                 type: type,
                 tournamentEndSubmissionDate: { $lt: currentDate },
                 resultsTallied: true,
             })
-            .sort({ tournamentEndSubmissionDate: -1 })
-            .limit(1);
+            .sort({ tournamentEndSubmissionDate: -1 }).limit(1);
         }
-        if (!result) {
+        
+        if (!finalResult) {
             console.error(
                 `[ERROR][TOURNAMENT] Previous latest tournament not found in database.`
             );
@@ -482,7 +521,7 @@ async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
             },
-            body: JSON.stringify(result),
+            body: JSON.stringify(finalResult),
         };
     } catch (e) {
         console.error(

@@ -213,7 +213,7 @@ export const TournamentScreen = () => {
                                                         tournament != null &&
                                                         isTournamentClosed(tournament) &&
                                                         (
-                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                            <p className={`font-montserrat text-[2.8vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
                                                                 {tournament.resultsTallied
                                                                     ? ""
                                                                     : "Calculating Results"}
@@ -240,7 +240,7 @@ export const TournamentScreen = () => {
                                                         tournament != null &&
                                                         isTournamentClosed(tournament) ? 
                                                         (
-                                                            <p className={`font-montserrat text-[2vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
+                                                            <p className={`font-montserrat text-[2.8vw] ${tournament.type == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-transparent" : "text-white"}`}>
                                                                 {tournament.resultsTallied
                                                                     ? ""
                                                                     : "Calculating Results"}
