@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, animate } from "motion/react";
 import {
     appearAnimation,
     appearTextAnimation,
@@ -20,7 +20,7 @@ import {
 } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
 import { getAthleteStickerLogo } from "../../../../helpers/athletes";
-import { FullDetails } from "../FullDetails";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 
 import StatsDurationSonner from "../../../../assets/sonner/stats-duration.svg";
 import StatsDetailsSonner from "../../../../assets/sonner/stats-details.svg";
@@ -105,9 +105,33 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                 res.weeks = ["all", ...temp];
                 if (res.playoffs) res.weeks.push("playoffs");
                 setTournamentDetails(res);
+                setCurrentWeekIndex(0);
             }
         }
         fetchLeagueWeeks();
+
+        //animation portion for league logo and team key
+        const leagueLogo = document.getElementById("league-logo");
+        const teamKey = document.getElementById("team-key");
+        const control = animate(
+            [leagueLogo, teamKey],
+            {
+                scale: [0.5, 0.8, 1],
+                opacity: [0, 0.5, 1],
+            },
+            {
+                scale: {
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                },
+                opacity: { duration: 0.2 },
+            }
+        );
+        return () => {
+            control.stop();
+        };
     }, [currentLeagueIndex]);
     return (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
@@ -126,13 +150,15 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                 <div className="flex w-[84%] flex-col items-center justify-center gap-[2vw]">
                     <motion.div {...appearAnimation}>
                         <img
-                            className="h-[12vw]"
+                            id="league-logo"
+                            className="h-[12vw] scale-50 opacity-0"
                             src={getAthleteStickerLogo(
                                 sameAthletes[currentLeagueIndex].league
                             )}
                         />
                     </motion.div>
                     <motion.p
+                        id="team-key"
                         className="font-montserrat text-[4vw] font-extrabold text-golddark"
                         {...appearTextAnimation}
                     >
@@ -197,60 +223,66 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text={"KPG"}
                                 value={
                                     stats !== undefined ? stats.averageKills : 0
                                 }
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="DPG"
                                 value={
                                     stats !== undefined
                                         ? stats.averageDeaths
                                         : 0
                                 }
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="APG"
                                 value={
                                     stats !== undefined
                                         ? stats.averageAssists
                                         : 0
                                 }
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="WIN RATE %"
                                 value={stats !== undefined ? stats.winRate : 0}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="MVP RATE %"
                                 value={stats !== undefined ? stats.mvpRate : 0}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="PPG"
                                 value={
                                     stats !== undefined
                                         ? stats.averagePoints
                                         : 0
                                 }
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
@@ -283,64 +315,70 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="KILLS"
                                 value={
                                     stats !== undefined ? stats.totalKills : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="DEATHS"
                                 value={
                                     stats !== undefined ? stats.totalDeaths : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="ASSISTS"
                                 value={
                                     stats !== undefined ? stats.totalAssists : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                     </div>
                     <div className="flex h-[15.1vw] gap-[2.5vw]">
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="WINS"
                                 value={
                                     stats !== undefined ? stats.totalWins : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="MVP"
                                 value={
                                     stats !== undefined ? stats.totalMvps : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
                         <div className="relative flex w-[27vw]">
-                            <FullDetails
+                            <StatsDisplay
                                 text="POINTS"
                                 value={
                                     stats !== undefined ? stats.totalPoints : 0
                                 }
                                 isTotal={true}
+                                fromFullDetails={true}
                                 noStats={stats === undefined ? true : false}
                             />
                         </div>
