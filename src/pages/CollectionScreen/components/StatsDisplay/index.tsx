@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { motion, animate, useMotionValue, useTransform } from "motion/react";
 
-import { appearAnimation } from "../../helpers/animation";
+import { appearAnimation } from "../../../../helpers/animation";
 
-import StatsBackground from "../../assets/background/stats.svg";
+import StatsBackground from "../../../../assets/background/stats.svg";
 
 interface Props {
     text: string;

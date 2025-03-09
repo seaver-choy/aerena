@@ -20,7 +20,7 @@ import {
 } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
 import { getAthleteStickerLogo } from "../../../../helpers/athletes";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { StatsDisplay } from "../StatsDisplay";
 
 import StatsDurationSonner from "../../../../assets/sonner/stats-duration.svg";
 import StatsDetailsSonner from "../../../../assets/sonner/stats-details.svg";

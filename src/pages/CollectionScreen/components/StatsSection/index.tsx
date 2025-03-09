@@ -15,7 +15,7 @@ import {
     AthleteStats,
 } from "../../../../helpers/interfaces";
 import { StatsDetails } from "../StatsDetails";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { StatsDisplay } from "../StatsDisplay";
 import { getAthleteLeagueStats } from "../../../../helpers/lambda.helper";
 import StatsBannerSonner from "../../../../assets/sonner/stats-banner.svg";
 

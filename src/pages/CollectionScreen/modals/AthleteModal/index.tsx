@@ -21,7 +21,7 @@ import {
     equipSkin,
 } from "../../../../helpers/lambda.helper";
 import { Slider } from "../../../../components/Slider";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { StatsDisplay } from "../../components/StatsDisplay";
 
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
