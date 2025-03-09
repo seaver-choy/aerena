@@ -27,7 +27,7 @@ interface Props {
     competitionType: string;
 }
 
-export const Stats = ({
+export const StatsSection = ({
     athlete,
     sameAthletes,
     reset,
@@ -167,8 +167,9 @@ export const Stats = ({
                                             </div>
                                         </div>
                                         <div className="mt-[2vw] flex">
-                                            <div className="ml-[2vw] flex h-full w-[40%] items-center">
+                                            <div className="ml-[2vw] flex h-full w-[40%] items-center overflow-hidden">
                                                 <motion.div
+                                                    className="will-change-transform backface-hidden"
                                                     {...appearAnimation}
                                                 >
                                                     <p className="font-montserrat text-[4vw] font-extrabold text-golddark">

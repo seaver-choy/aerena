@@ -5,7 +5,7 @@ import { Layout } from "../../../../components/Layout";
 import { Tabs } from "../../../../components/Tabs";
 import { AthleteHeader } from "../../components/AthleteHeader";
 import { PlayerProfile } from "../../components/PlayerProfile";
-import { Stats } from "../../components/Stats";
+import { StatsSection } from "../../components/StatsSection";
 import { CardSkins } from "../../components/CardSkins";
 
 export const AthleteScreen = () => {
@@ -40,7 +40,7 @@ export const AthleteScreen = () => {
                 <PlayerProfile athlete={athlete} />
             )}
             {athleteTab === "Local Stats" && (
-                <Stats
+                <StatsSection
                     athlete={athlete}
                     sameAthletes={sameAthletes.filter(
                         (athlete) => athlete.type === "regional"
@@ -51,7 +51,7 @@ export const AthleteScreen = () => {
                 />
             )}
             {athleteTab === "Global Stats" && (
-                <Stats
+                <StatsSection
                     athlete={athlete}
                     sameAthletes={sameAthletes.filter(
                         (athlete) => athlete.type === "international"

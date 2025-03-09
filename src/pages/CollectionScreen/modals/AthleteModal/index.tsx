@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import { Slider } from "../../../../components/Slider";
-import {
-    getAthleteLatestSeasonAverageStats,
-    getTeamInfo,
-    getSameAthletes,
-    equipSkin,
-} from "../../../../helpers/lambda.helper";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
-import LargeModal from "../../../../assets/modal/large.svg";
-import CloseIcon from "../../../../assets/icon/close.svg";
-import FunctionModalButton from "../../../../assets/button/function-modal.svg";
-import GoldButton from "../../../../assets/button/gold.svg";
 import {
     Athlete,
     AthleteStats,
@@ -25,7 +14,20 @@ import {
     SameAthlete,
     Skin,
 } from "../../../../helpers/interfaces";
-import { useUsers } from "../../../../hooks/useUser";
+import {
+    getAthleteLatestSeasonAverageStats,
+    getTeamInfo,
+    getSameAthletes,
+    equipSkin,
+} from "../../../../helpers/lambda.helper";
+import { Slider } from "../../../../components/Slider";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
+
+import LargeModal from "../../../../assets/modal/large.svg";
+import CloseIcon from "../../../../assets/icon/close.svg";
+import FunctionModalButton from "../../../../assets/button/function-modal.svg";
+import GoldButton from "../../../../assets/button/gold.svg";
+
 interface AthleteModalProps {
     athlete: Athlete;
     onClose: () => void;
