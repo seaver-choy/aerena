@@ -77,7 +77,7 @@ export const LeagueModal = ({
                             </p>
                         </motion.div>
                         <motion.button
-                            className="absolute right-0 top-0 h-[5vw] w-[5vw]"
+                            className="absolute right-0 top-0 h-[7vw] w-[7vw]"
                             onClick={onClose}
                             {...appearAnimation}
                         >

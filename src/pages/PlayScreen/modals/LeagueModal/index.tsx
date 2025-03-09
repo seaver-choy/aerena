@@ -35,7 +35,7 @@ export const LeagueModal = ({
         setOngoingTournament(ongoingTournaments[leagueSlide]);
         onClose();
     };
-    
+
     const fetchImages = async () => {
         const leagueImages = await Promise.all(
             ongoingTournaments.map(async (tournament) => {
@@ -49,7 +49,11 @@ export const LeagueModal = ({
         fetchImages();
         if (ongoingTournament != null)
             setLeagueSlide(
-                ongoingTournaments.findIndex((tournament) => tournament.tournamentId === ongoingTournament.tournamentId)
+                ongoingTournaments.findIndex(
+                    (tournament) =>
+                        tournament.tournamentId ===
+                        ongoingTournament.tournamentId
+                )
             );
         document.body.style.overflow = "hidden";
 
@@ -79,14 +83,14 @@ export const LeagueModal = ({
                             </p>
                         </motion.div>
                         <motion.button
-                            className="absolute right-0 top-0 h-[5vw] w-[5vw]"
+                            className="absolute right-0 top-0 h-[7vw] w-[7vw]"
                             onClick={onClose}
                             {...appearAnimation}
                         >
                             <img className="h-full w-full" src={CloseIcon} />
                         </motion.button>
                         <motion.div
-                            className="mt-[4vw] flex h-[41.5vw] w-full justify-center"
+                            className="mt-[4vw] flex h-[41.5vw] w-full flex-col justify-center"
                             {...appearAnimation}
                         >
                             <ImageSlider
@@ -94,50 +98,50 @@ export const LeagueModal = ({
                                 imageIndex={leagueSlide}
                                 setImageIndex={setLeagueSlide}
                             />
-                        </motion.div>
-                        
-                        <motion.div
-                            {...appearTextAnimation}
-                        >
-                            <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
-                                {ongoingTournaments[leagueSlide].tournamentName}
-                            </p>
+                            <motion.div
+                                className="self-center"
+                                {...appearTextAnimation}
+                            >
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent">
+                                    {
+                                        ongoingTournaments[leagueSlide]
+                                            .tournamentName
+                                    }
+                                </p>
+                            </motion.div>
                         </motion.div>
                     </div>
-                    {
-                        ongoingTournament != null &&
-                        ongoingTournaments[leagueSlide].tournamentId === ongoingTournament.tournamentId ?
-                            (
-                                <motion.div
+                    {ongoingTournament != null &&
+                    ongoingTournaments[leagueSlide].tournamentId ===
+                        ongoingTournament.tournamentId ? (
+                        <motion.div
+                            className="relative flex h-full w-full justify-center"
+                            {...appearTextAnimation}
+                        >
+                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
+                                    Selected
+                                </p>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <div className="flex h-[7.5vw] justify-center gap-[4vw]">
+                            <div className="flex h-full w-full">
+                                <motion.button
                                     className="relative flex h-full w-full justify-center"
+                                    onClick={handleSelect}
                                     {...appearTextAnimation}
                                 >
+                                    <img className="h-full" src={GoldButton} />
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="mt-[0.2vw] font-russoone text-[3.5vw] font-normal text-gold">
-                                            Selected
+                                        <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                            Select
                                         </p>
                                     </div>
-                                </motion.div>
-                            )
-                            :
-                            (
-                                <div className="flex h-[7.5vw] justify-center gap-[4vw]">
-                                    <div className="flex h-full w-full">
-                                        <motion.button
-                                            className="relative flex h-full w-full justify-center"
-                                            onClick={handleSelect}
-                                            {...appearTextAnimation}
-                                        >
-                                            <img className="h-full" src={GoldButton} />
-                                            <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                                <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
-                                                    Select
-                                                </p>
-                                            </div>
-                                        </motion.button>
-                                    </div>
-                                </div>
-                            )}
+                                </motion.button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

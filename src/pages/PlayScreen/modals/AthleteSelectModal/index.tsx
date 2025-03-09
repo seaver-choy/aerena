@@ -55,11 +55,13 @@ export const AthleteSelectModal = ({
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     const fetchAthlete = async () => {
-        const result = (await getAthletePositionFilter(
-            position,
-            tournament.league,
-            user.initDataRaw
-        )).sort((a, b) => {
+        const result = (
+            await getAthletePositionFilter(
+                position,
+                tournament.league,
+                user.initDataRaw
+            )
+        ).sort((a, b) => {
             const nameA = a.player;
             const nameB = b.player;
             return nameA.localeCompare(nameB);
@@ -131,7 +133,7 @@ export const AthleteSelectModal = ({
                             </p>
                         </motion.div>
                         <motion.button
-                            className="absolute right-0 top-0 h-[5vw] w-[5vw]"
+                            className="absolute right-0 top-0 h-[7vw] w-[7vw]"
                             onClick={onClose}
                             {...appearAnimation}
                         >
@@ -152,48 +154,58 @@ export const AthleteSelectModal = ({
                     <div className="mb-[4vw] flex h-[66vw] flex-row flex-wrap content-start gap-[0.75vw] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {displayAthletes != null &&
                             displayAthletes?.map((athlete, index) => {
-                                const skin = athleteSkins?.find(s => s.athleteId === athlete.athleteId);
-                                
+                                const skin = athleteSkins?.find(
+                                    (s) => s.athleteId === athlete.athleteId
+                                );
+
                                 return (
-                                <div key={index}>
-                                    {showAthlete && (
-                                        <motion.div
-                                            className="relative flex h-[27.95vw] w-[21.5vw] overflow-hidden"
-                                            key={index}
-                                            onClick={() =>
-                                                handleAthleteSelect(index)
-                                            }
-                                            {...(index === selectedIndex &&
-                                            selectedIndex !== -1
-                                                ? appearCardAnimation
-                                                : appearCardEmptyAnimation)}
-                                        >
-                                            <AthleteCard
-                                                color={skin?.teamData.colors ?? baseColor}
-                                                ign={athlete.displayName}
-                                                role={athlete.position[0]}
-                                                opacity={{
-                                                    wave: skin?.teamData.colors.wave ?? baseColor.wave,
-                                                }}
-                                                type={skin ? "basic" : null}
-                                                league={skin?.league ?? null}
-                                                id={index}
-                                            />
-                                        </motion.div>
-                                    )}
-                                    {!showAthlete && (
-                                        <motion.div
-                                            className="relative flex h-[27.95vw] w-[21.5vw]"
-                                            {...pulseAnimation}
-                                        >
-                                            <img
-                                                className="h-full w-full"
-                                                src={AthleteSonner}
-                                            />
-                                        </motion.div>
-                                    )}
-                                </div>
-                            );
+                                    <div key={index}>
+                                        {showAthlete && (
+                                            <motion.div
+                                                className="relative flex h-[27.95vw] w-[21.5vw] overflow-hidden"
+                                                key={index}
+                                                onClick={() =>
+                                                    handleAthleteSelect(index)
+                                                }
+                                                {...(index === selectedIndex &&
+                                                selectedIndex !== -1
+                                                    ? appearCardAnimation
+                                                    : appearCardEmptyAnimation)}
+                                            >
+                                                <AthleteCard
+                                                    color={
+                                                        skin?.teamData.colors ??
+                                                        baseColor
+                                                    }
+                                                    ign={athlete.displayName}
+                                                    role={athlete.position[0]}
+                                                    opacity={{
+                                                        wave:
+                                                            skin?.teamData
+                                                                .colors.wave ??
+                                                            baseColor.wave,
+                                                    }}
+                                                    type={skin ? "basic" : null}
+                                                    league={
+                                                        skin?.league ?? null
+                                                    }
+                                                    id={index}
+                                                />
+                                            </motion.div>
+                                        )}
+                                        {!showAthlete && (
+                                            <motion.div
+                                                className="relative flex h-[27.95vw] w-[21.5vw]"
+                                                {...pulseAnimation}
+                                            >
+                                                <img
+                                                    className="h-full w-full"
+                                                    src={AthleteSonner}
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </div>
+                                );
                             })}
                     </div>
                     <div className="flex h-[7.5vw] justify-center">

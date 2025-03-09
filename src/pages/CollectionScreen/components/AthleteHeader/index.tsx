@@ -8,7 +8,7 @@ import {
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { useUsers } from "../../../../hooks/useUser";
 import { Athlete, AthleteStats } from "../../../../helpers/interfaces";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { StatsDisplay } from "../StatsDisplay";
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
