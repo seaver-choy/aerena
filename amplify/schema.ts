@@ -23,6 +23,7 @@ export const tokenSchema = new mongoose.Schema({
                 wave: String,
             },
         },
+        league: String,
     },
 });
 

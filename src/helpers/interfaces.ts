@@ -18,9 +18,10 @@ export interface Token {
                 accent: string;
                 details: string;
                 wave: string;
-            },
-        },
-    }
+            };
+        };
+        league: string;
+    };
 }
 
 export interface UpgradeToken extends Token {

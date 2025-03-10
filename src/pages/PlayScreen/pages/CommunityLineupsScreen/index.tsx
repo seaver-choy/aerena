@@ -120,7 +120,9 @@ export const CommunityLineupsScreen = () => {
                                             type={athlete.skin ? "basic" : null}
                                             league={
                                                 athlete.skin
-                                                    ? athlete.league
+                                                    ? athlete.skin.league
+                                                        ? athlete.skin.league
+                                                        : ongoingTournament.league
                                                     : null
                                             }
                                             id={index}
