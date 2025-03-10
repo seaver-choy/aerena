@@ -167,6 +167,24 @@ export const Winners = ({
                                                                                     .wave ??
                                                                                 baseColor.wave,
                                                                         }}
+                                                                        type={
+                                                                            athlete.skin
+                                                                                ? "basic"
+                                                                                : null
+                                                                        }
+                                                                        league={
+                                                                            athlete.skin !=
+                                                                            undefined
+                                                                                ? athlete
+                                                                                      .skin
+                                                                                      .league !=
+                                                                                  undefined
+                                                                                    ? athlete
+                                                                                          .skin
+                                                                                          .league
+                                                                                    : tournament.league
+                                                                                : null
+                                                                        }
                                                                         id={
                                                                             index
                                                                         }
@@ -257,6 +275,22 @@ export const Winners = ({
                                                                         .wave ??
                                                                     baseColor.wave,
                                                             }}
+                                                            type={
+                                                                athlete.skin
+                                                                    ? "basic"
+                                                                    : null
+                                                            }
+                                                            league={
+                                                                athlete.skin
+                                                                    ? athlete
+                                                                          .skin
+                                                                          .league
+                                                                        ? athlete
+                                                                              .skin
+                                                                              .league
+                                                                        : tournament.league
+                                                                    : null
+                                                            }
                                                             id={index}
                                                         />
                                                     </div>

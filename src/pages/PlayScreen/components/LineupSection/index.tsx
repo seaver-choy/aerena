@@ -9,7 +9,11 @@ import {
     saveStarsTransaction,
     joinBasic,
 } from "../../../../helpers/lambda.helper";
-import { Skin, Tournament, TournamentLineup } from "../../../../helpers/interfaces";
+import {
+    Skin,
+    Tournament,
+    TournamentLineup,
+} from "../../../../helpers/interfaces";
 import {
     isTournamentClosed,
     isTournamentUpcoming,
@@ -58,8 +62,7 @@ export const LineupSection = ({
     const [showInsufficientModal, setShowInsufficientModal] =
         useState<boolean>(false);
     const [teamName, setTeamName] = useState<string>("");
-    const [showNameModal, setShowNameModal] =
-    useState<boolean>(false);
+    const [showNameModal, setShowNameModal] = useState<boolean>(false);
     const [loadLuckyPick, setLoadLuckyPick] = useState<boolean>(false);
     const [athleteSkins, setAthleteSkins] = useState<Skin[]>([]);
 
@@ -137,14 +140,27 @@ export const LineupSection = ({
                 user.initDataRaw
             );
 
-            
             const lineup = tournamentLineup.map((obj, i) => {
-                const skin = athleteSkins?.find(s => s.position[0] === positionList[i] && s.athleteId === (luckyPicks[i]?.athleteId ?? null));
-                
-                if(skin == undefined)
+                const skin = athleteSkins?.find(
+                    (s) =>
+                        s.position[0] === positionList[i] &&
+                        s.athleteId === (luckyPicks[i]?.athleteId ?? null)
+                );
+
+                if (skin == undefined)
                     return { ...obj, athlete: luckyPicks[i] };
                 else
-                    return { ...obj, athlete: {...luckyPicks[i], skin: { skinId: skin.skinId, teamData: skin.teamData }} };
+                    return {
+                        ...obj,
+                        athlete: {
+                            ...luckyPicks[i],
+                            skin: {
+                                skinId: skin.skinId,
+                                teamData: skin.teamData,
+                                league: skin.league,
+                            },
+                        },
+                    };
             });
             setTournamentLineup(lineup);
         }
@@ -308,7 +324,7 @@ export const LineupSection = ({
                         setTeamName={setTeamName}
                         onClose={() => {
                             setTeamName("");
-                            setShowNameModal(false)
+                            setShowNameModal(false);
                         }}
                         onConfirm={() => {
                             setShowNameModal(false);

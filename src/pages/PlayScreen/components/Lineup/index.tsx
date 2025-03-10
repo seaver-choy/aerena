@@ -48,16 +48,29 @@ export const Lineup = ({
         useState<boolean>(false);
     const [newSelected, setNewSelected] = useState<boolean>(false);
     const [usedLP, setUsedLP] = useState<boolean>(false);
-    
+
     const handleSelect = async (athlete) => {
         setShowAthleteSelectModal(false);
-        const skin = athleteSkins?.find(s => s.position[0] === positionList[currentPositionIndex] && s.athleteId === (athlete?.athleteId ?? null));
+        const skin = athleteSkins?.find(
+            (s) =>
+                s.position[0] === positionList[currentPositionIndex] &&
+                s.athleteId === (athlete?.athleteId ?? null)
+        );
         const newLineup = tournamentLineup.map((obj, i) => {
             if (i === currentPositionIndex) {
-                if(skin == undefined)
-                    return { ...obj, athlete: athlete };
+                if (skin == undefined) return { ...obj, athlete: athlete };
                 else
-                    return { ...obj, athlete: {...athlete, skin: { skinId: skin.skinId, teamData: skin.teamData }} };
+                    return {
+                        ...obj,
+                        athlete: {
+                            ...athlete,
+                            skin: {
+                                skinId: skin.skinId,
+                                teamData: skin.teamData,
+                                league: skin.league,
+                            },
+                        },
+                    };
             } else {
                 return obj;
             }
@@ -93,7 +106,13 @@ export const Lineup = ({
         <>
             <div className="absolute top-[25vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
                 {positionList.map((position, index) => {
-                    const skin = athleteSkins?.find(s => s.position[0] === position && s.athleteId === (tournamentLineup?.[index]?.athlete?.athleteId ?? null));
+                    const skin = athleteSkins?.find(
+                        (s) =>
+                            s.position[0] === position &&
+                            s.athleteId ===
+                                (tournamentLineup?.[index]?.athlete
+                                    ?.athleteId ?? null)
+                    );
                     return (
                         <div key={index}>
                             {loadLuckyPick && (
@@ -130,18 +149,22 @@ export const Lineup = ({
                                     <motion.div
                                         className="relative flex h-[36.4vw] w-[28vw] overflow-hidden"
                                         onClick={() => handleSetLineup(index)}
-                                        {...(currentPositionIndex === -1 && !usedLP
+                                        {...(currentPositionIndex === -1 &&
+                                        !usedLP
                                             ? appearCardAnimation
                                             : appearTextLuckyPickAnimation({
-                                                delay: index,
-                                            }))}
+                                                  delay: index,
+                                              }))}
                                     >
                                         {/* <img
                                                     className="h-full w-full"
                                                     src={tournamentLineup[index].athlete.img}
                                                 ></img> */}
                                         <AthleteCard
-                                            color={skin?.teamData.colors ?? baseColor}
+                                            color={
+                                                skin?.teamData.colors ??
+                                                baseColor
+                                            }
                                             ign={
                                                 tournamentLineup[index].athlete
                                                     .displayName
@@ -150,7 +173,11 @@ export const Lineup = ({
                                                 tournamentLineup[index].athlete
                                                     .position[0]
                                             }
-                                            opacity={{ wave: skin?.teamData.colors.wave ?? baseColor.wave }}
+                                            opacity={{
+                                                wave:
+                                                    skin?.teamData.colors
+                                                        .wave ?? baseColor.wave,
+                                            }}
                                             type={skin ? "basic" : null}
                                             league={skin?.league ?? null}
                                             id={index}
@@ -168,7 +195,10 @@ export const Lineup = ({
                                         {...appearCardAnimation}
                                     >
                                         <AthleteCard
-                                            color={skin?.teamData.colors ?? baseColor}
+                                            color={
+                                                skin?.teamData.colors ??
+                                                baseColor
+                                            }
                                             ign={
                                                 tournamentLineup[index].athlete
                                                     .displayName
@@ -178,7 +208,9 @@ export const Lineup = ({
                                                     .position[0]
                                             }
                                             opacity={{
-                                                wave: skin?.teamData.colors.wave ?? baseColor.wave,
+                                                wave:
+                                                    skin?.teamData.colors
+                                                        .wave ?? baseColor.wave,
                                             }}
                                             type={skin ? "basic" : null}
                                             league={skin?.league ?? null}
@@ -200,7 +232,11 @@ export const Lineup = ({
             {showAthleteSelectModal && (
                 <AthleteSelectModal
                     // playTab={playTab}
-                    athleteSkins={athleteSkins.filter(skin => skin.position[0] === positionList[currentPositionIndex])}
+                    athleteSkins={athleteSkins.filter(
+                        (skin) =>
+                            skin.position[0] ===
+                            positionList[currentPositionIndex]
+                    )}
                     onClose={closeAthleteModal}
                     onSelect={handleSelect}
                     position={positionList[currentPositionIndex]}

@@ -23,8 +23,6 @@ import {
 } from "./assets";
 
 import { getAthleteSticker } from "../../helpers/athletes";
-import PH15Card from "../../assets/card/ph15.svg";
-
 import { TeamColor } from "../../helpers/interfaces";
 import OwnedCard from "../../assets/card/owned.svg";
 
@@ -36,7 +34,7 @@ interface Props {
     league?: string;
     type?: string;
     id?: number;
-    owned? : boolean;
+    owned?: boolean;
 }
 export const AthleteCard = ({
     color,
@@ -119,29 +117,24 @@ export const AthleteCard = ({
                     <div className="absolute h-full w-full">
                         <BorderBasic id={id} />
                     </div>
-                    <div className="absolute h-full w-full">
-                        <img
-                            className="h-full w-full"
-                            src={
-                                league !== null
-                                    ? getAthleteSticker(league)
-                                    : PH15Card
-                            }
-                            draggable={false}
-                        />
-                    </div>
+                    {league !== null && (
+                        <div className="absolute h-full w-full">
+                            <img
+                                className="h-full w-full"
+                                src={getAthleteSticker(league)}
+                                draggable={false}
+                            />
+                        </div>
+                    )}
                 </>
             )}
-            {
-                owned && 
-                (
-                    <img
-                        className="absolute h-full"
-                        src={OwnedCard}
-                        draggable={false}
-                    />
-                )
-            }
+            {owned && (
+                <img
+                    className="absolute h-full"
+                    src={OwnedCard}
+                    draggable={false}
+                />
+            )}
         </div>
     );
 };

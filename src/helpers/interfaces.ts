@@ -20,6 +20,7 @@ export interface Token {
                 wave: string;
             };
         };
+        league: string;
     };
 }
 
