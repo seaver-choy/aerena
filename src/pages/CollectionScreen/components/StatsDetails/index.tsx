@@ -115,6 +115,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                         playoffs: false,
                         matchType: "",
                     });
+                    setCurrentWeekIndex(0);
                 }
             } catch (e) {
                 console.log(e);
@@ -124,6 +125,7 @@ export const StatsDetails = ({ athlete, leagueIndex, sameAthletes }: Props) => {
                     playoffs: false,
                     matchType: "",
                 });
+                setCurrentWeekIndex(0);
             }
         }
         fetchLeagueWeeks();
