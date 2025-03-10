@@ -145,6 +145,10 @@ export const Winners = ({
                                                                 >
                                                                     <AthleteCard
                                                                         color={
+                                                                            athlete
+                                                                                .skin
+                                                                                ?.teamData
+                                                                                .colors ??
                                                                             baseColor
                                                                         }
                                                                         ign={
@@ -155,7 +159,13 @@ export const Winners = ({
                                                                                 .position[0]
                                                                         }
                                                                         opacity={{
-                                                                            wave: baseColor.wave,
+                                                                            wave:
+                                                                                athlete
+                                                                                    .skin
+                                                                                    ?.teamData
+                                                                                    .colors
+                                                                                    .wave ??
+                                                                                baseColor.wave,
                                                                         }}
                                                                         id={
                                                                             index
@@ -225,12 +235,13 @@ export const Winners = ({
                                                         key={index}
                                                         className="relative flex h-[36.4vw] w-[28vw]"
                                                     >
-                                                        {/* <img
-                                                                className="h-full"
-                                                                src={athlete.img}
-                                                            /> */}
                                                         <AthleteCard
-                                                            color={baseColor}
+                                                            color={
+                                                                athlete.skin
+                                                                    ?.teamData
+                                                                    .colors ??
+                                                                baseColor
+                                                            }
                                                             ign={
                                                                 athlete.displayName
                                                             }
@@ -239,7 +250,12 @@ export const Winners = ({
                                                                     .position[0]
                                                             }
                                                             opacity={{
-                                                                wave: baseColor.wave,
+                                                                wave:
+                                                                    athlete.skin
+                                                                        ?.teamData
+                                                                        .colors
+                                                                        .wave ??
+                                                                    baseColor.wave,
                                                             }}
                                                             id={index}
                                                         />
