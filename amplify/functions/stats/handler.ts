@@ -2,7 +2,7 @@ import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import {
     athleteSchema,
-    athleteStatsSchema,
+    matchStatsSchema,
     totalStatsSchema,
     athleteProfileSchema,
     mlTournamentSchema,
@@ -23,7 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
             conn.model("Athletes", athleteSchema);
             conn.model("TotalStats", totalStatsSchema);
-            conn.model("AthleteStats", athleteStatsSchema);
+            conn.model("MatchStats", matchStatsSchema);
             conn.model("AthleteProfiles", athleteProfileSchema);
             conn.model("MLTournaments", mlTournamentSchema);
         }
@@ -43,6 +43,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
                 return await getAthleteAllTimeAverageMoontonStats(event);
             } else if (params?.[0] === "league") {
                 return await getAthleteLeagueStats(event);
+            } else if (params?.[1] === "info") {
+                return await getLeagueWeeks(event);
             } else {
                 return await getAthleteWeeklyStats(event);
             }
@@ -87,7 +89,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 };
 
 async function getAthleteLeagueStats(event: APIGatewayProxyEvent) {
-    const statsModel = conn!.model("AthleteStats");
+    const statsModel = conn!.model("MatchStats");
 
     const athleteId = parseInt(event.queryStringParameters!.athleteId!);
     const params = event.pathParameters?.proxy?.split("/");
@@ -122,14 +124,46 @@ async function getAthleteLeagueStats(event: APIGatewayProxyEvent) {
                                 averageKills: {
                                     $avg: "$kills",
                                 },
+                                totalKills: {
+                                    $sum: "$kills",
+                                },
                                 averageDeaths: {
                                     $avg: "$deaths",
+                                },
+                                totalDeaths: {
+                                    $sum: "$deaths",
                                 },
                                 averageAssists: {
                                     $avg: "$assists",
                                 },
+                                totalAssists: {
+                                    $sum: "$assists",
+                                },
                                 averagePoints: {
                                     $avg: "$points",
+                                },
+                                totalPoints: {
+                                    $sum: "$points",
+                                },
+                                winRate: {
+                                    $avg: {
+                                        $cond: ["$teamWon", 100, 0],
+                                    },
+                                },
+                                totalWins: {
+                                    $sum: {
+                                        $cond: ["$teamWon", 1, 0],
+                                    },
+                                },
+                                mvpRate: {
+                                    $avg: {
+                                        $cond: ["$isMVP", 100, 0],
+                                    },
+                                },
+                                totalMVPs: {
+                                    $sum: {
+                                        $cond: ["$isMVP", 1, 0],
+                                    },
                                 },
                             },
                         },
@@ -184,8 +218,78 @@ async function getAthleteLeagueStats(event: APIGatewayProxyEvent) {
         };
     }
 }
+async function getLeagueWeeks(event: APIGatewayProxyEvent) {
+    const statsModel = conn!.model("MatchStats");
+
+    const params = event.pathParameters?.proxy?.split("/");
+
+    if (params !== undefined) {
+        try {
+            const league = decodeURIComponent(params[0]);
+
+            const weeks = await statsModel.distinct("day", {
+                league: league,
+                playoffs: false,
+            });
+
+            //check if playoffs exist
+            const playoffs = await statsModel.findOne({
+                league: league,
+                playoffs: true,
+            });
+
+            //check matchType for league
+            const matchType = await statsModel.findOne(
+                {
+                    league: league,
+                },
+                {
+                    matchType: 1,
+                }
+            );
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    weeks: weeks,
+                    playoffs: playoffs ? true : false,
+                    matchType: matchType.matchType,
+                    status: "success",
+                }),
+            };
+        } catch (e) {
+            console.log(e);
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "An error has occured while getting league weeks",
+                    status: "failed",
+                }),
+            };
+        }
+    } else {
+        return {
+            statusCode: 404,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+                message: "An error has occured while getting league weeks",
+                status: "failed",
+            }),
+        };
+    }
+}
 async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
-    const statsModel = conn!.model("AthleteStats");
+    const statsModel = conn!.model("MatchStats");
 
     const params = event.pathParameters?.proxy?.split("/");
     /*
@@ -195,46 +299,79 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
     */
     if (params !== undefined) {
         try {
-            // const weeklyStats = await statsModel.find({
-            //     player: params[0],
-            //     week: parseInt(params[1]),
-            // });
+            //differentiate inputType depending on if the request needs all the stats, only playoffs stats, or stats for a specific week
+            let inputType = {};
+            const league = decodeURIComponent(params[1]);
+            if (params[2] === "all") {
+                inputType = {
+                    athleteId: parseInt(params[0]),
+                    league: league,
+                };
+            } else if (params[2] === "playoffs") {
+                inputType = {
+                    athleteId: parseInt(params[0]),
+                    league: league,
+                    playoffs: true,
+                };
+            } else {
+                inputType = {
+                    athleteId: parseInt(params[0]),
+                    league: league,
+                    day: parseInt(params[2]),
+                };
+            }
 
-            const weeklyStats = await statsModel.aggregate(
+            const stats = await statsModel.aggregate(
                 [
                     {
-                        $match: {
-                            player: decodeURIComponent(params[0]),
-                            league: params[1],
-                            week: parseInt(params[2]),
-                        },
+                        $match: inputType,
                     },
                     {
                         $group: {
                             _id: "$player",
+                            averageKills: {
+                                $avg: "$kills",
+                            },
                             totalKills: {
-                                $sum: "$kill",
+                                $sum: "$kills",
+                            },
+                            averageDeaths: {
+                                $avg: "$deaths",
                             },
                             totalDeaths: {
-                                $sum: "$death",
+                                $sum: "$deaths",
+                            },
+                            averageAssists: {
+                                $avg: "$assists",
                             },
                             totalAssists: {
-                                $sum: "$assist",
+                                $sum: "$assists",
                             },
-                            kdaRatio: {
-                                $avg: "$KDA",
+                            averagePoints: {
+                                $avg: "$points",
                             },
-                            gold: {
-                                $sum: "$gold",
+                            totalPoints: {
+                                $sum: "$points",
                             },
-                            heroDamage: {
-                                $sum: "$hero_damage",
+                            winRate: {
+                                $avg: {
+                                    $cond: ["$teamWon", 100, 0],
+                                },
                             },
-                            damageTaken: {
-                                $sum: "$damage_taken",
+                            totalWins: {
+                                $sum: {
+                                    $cond: ["$teamWon", 1, 0],
+                                },
                             },
-                            towerDamage: {
-                                $sum: "$tower_damage",
+                            mvpRate: {
+                                $avg: {
+                                    $cond: ["$isMVP", 100, 0],
+                                },
+                            },
+                            totalMvps: {
+                                $sum: {
+                                    $cond: ["$isMVP", 1, 0],
+                                },
                             },
                         },
                     },
@@ -242,17 +379,44 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                 { allowDiskUse: true, maxTimeMS: 60000 }
             );
 
-            if (!weeklyStats) {
-                return {
-                    statusCode: 404,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                    },
-                    body: JSON.stringify(
-                        `Athlete or athlete's stats for week ${params[1]} does not exist`
-                    ),
-                };
+            if (!stats) {
+                if (params[2] === "all") {
+                    return {
+                        statusCode: 404,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                        },
+                        body: JSON.stringify({
+                            message: `Athlete ${params[0]}'s stats for league ${params[1]} does not exist`,
+                            status: "failed",
+                        }),
+                    };
+                } else if (params[2] === "playoffs") {
+                    return {
+                        statusCode: 404,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                        },
+                        body: JSON.stringify({
+                            message: `Athlete ${params[0]}'s playoff stats for league ${params[1]} does not exist `,
+                            status: "failed",
+                        }),
+                    };
+                } else {
+                    return {
+                        statusCode: 404,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                        },
+                        body: JSON.stringify({
+                            message: `Athlete or athlete's stats for league ${params[1]} and day/week ${params[2]} does not exist`,
+                            status: "failed",
+                        }),
+                    };
+                }
             }
             return {
                 statusCode: 200,
@@ -260,7 +424,7 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ weeklyStats: weeklyStats }),
+                body: JSON.stringify({ stats: stats, status: "success" }),
             };
         } catch (e) {
             return {
@@ -270,8 +434,9 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
                 body: JSON.stringify({
-                    message: "An error has occured while getting weekly stats",
+                    message: "An error has occured while getting stats",
                     error: e,
+                    status: "failed",
                 }),
             };
         }
@@ -282,13 +447,16 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify({ message: "Path parameters are undefined" }),
+            body: JSON.stringify({
+                message: "Path parameters are undefined",
+                status: "failed",
+            }),
         };
     }
 }
 
 async function getAthleteLatestSeasonAverageStats(event: APIGatewayProxyEvent) {
-    const statsModel = conn!.model("AthleteStats");
+    const statsModel = conn!.model("MatchStats");
     const profileModel = conn!.model("AthleteProfiles");
     //const totalStatsModel = conn!.model("TotalStats");
     const params = event.pathParameters?.proxy?.split("/");
@@ -375,7 +543,7 @@ async function getAthleteLatestSeasonAverageStats(event: APIGatewayProxyEvent) {
 async function getAthleteAllTimeAverageMoontonStats(
     event: APIGatewayProxyEvent
 ) {
-    const statsModel = conn!.model("AthleteStats");
+    const statsModel = conn!.model("MatchStats");
     const mlModel = conn!.model("MLTournaments");
 
     const params = event.pathParameters?.proxy?.split("/");
@@ -499,9 +667,9 @@ async function getAthleteAllTimeAverageMoontonStats(
     }
 }
 
-// async function getBatchAthleteStats(event: APIGatewayProxyEvent) {
+// async function getBatchMatchStats(event: APIGatewayProxyEvent) {
 //     const athleteModel = conn!.model("Athletes");
-//     const statsModel = conn!.model("AthleteStats");
+//     const statsModel = conn!.model("MatchStats");
 
 //     const payload = JSON.parse(JSON.parse(event.body!));
 //     try {

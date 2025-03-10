@@ -143,11 +143,14 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
         AthleteDocument,
         mongoose.AggregatePaginateModel<AthleteDocument>
     >("PaginatedAthletes", athleteSchema, "athletes");
+    const profileModel = conn!.model("AthleteProfile");
     const pageOffset = parseInt(event.queryStringParameters!.pageOffset!);
     const limit = parseInt(event.queryStringParameters!.limit!);
     const searchString = event.queryStringParameters!.searchString!;
     const position = event.queryStringParameters!.position!;
-    const leagueTypes = event.queryStringParameters!.leagueTypes!.split(",").filter(type => type !== "");
+    const leagueTypes = event
+        .queryStringParameters!.leagueTypes!.split(",")
+        .filter((type) => type !== "");
 
     // const search = {
     //     offset: pageOffset,
@@ -174,7 +177,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     };
 
     let aggregate;
-    if(leagueTypes.length > 0) {
+    if (leagueTypes.length > 0) {
         aggregate = athleteModel.aggregate([
             {
                 $match: {
@@ -300,6 +303,30 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     }
 
     const res = await athleteModel.aggregatePaginate(aggregate, options);
+
+    for (let i = 0; i < res.docs.length; i++) {
+        const doc = res.docs[i];
+
+        //query the athlete profile to get the latest tournament
+        const profile = await profileModel.findOne({
+            athleteId: doc.athleteId,
+        });
+
+        const latestTournament = profile.latestTournament.code;
+
+        if (latestTournament !== undefined) {
+            //using the latest tournament, query the latest athlete information
+
+            const latestAthlete = await athleteModel.findOne({
+                athleteId: doc.athleteId,
+                league: latestTournament,
+            });
+
+            //then replace
+
+            res.docs[i] = latestAthlete;
+        }
+    }
 
     return {
         statusCode: 200,

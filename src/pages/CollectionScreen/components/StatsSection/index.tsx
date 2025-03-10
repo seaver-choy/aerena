@@ -12,28 +12,38 @@ import { useUsers } from "../../../../hooks/useUser";
 import {
     Athlete,
     SameAthlete,
-    AverageStats,
+    AthleteStats,
 } from "../../../../helpers/interfaces";
 import { StatsDetails } from "../StatsDetails";
-import { StatsDisplay } from "../../../../components/StatsDisplay";
+import { StatsDisplay } from "../StatsDisplay";
 import { getAthleteLeagueStats } from "../../../../helpers/lambda.helper";
 import StatsBannerSonner from "../../../../assets/sonner/stats-banner.svg";
 
 interface Props {
     athlete: Athlete;
     sameAthletes: SameAthlete[];
+    reset: boolean;
+    handleReset: () => void;
     competitionType: string;
 }
 
-export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
+export const StatsSection = ({
+    athlete,
+    sameAthletes,
+    reset,
+    handleReset,
+    competitionType,
+}: Props) => {
     const user = useUsers();
     const [showStatsBanner, setShowStatsBanner] = useState(false);
-    const [leagueStats, setLeagueStats] = useState<AverageStats[]>([]);
+    const [leagueStats, setLeagueStats] = useState<AthleteStats[]>([]);
     // const [currentAthlete, setCurrentAthlete] = useState<Athlete>(null);
     const [showStatsDetails, setShowStatsDetails] = useState<boolean>(false);
+    const [leagueIndex, setLeagueIndex] = useState<number>(-1);
 
-    const handleFullDetails = () => {
+    const handleFullDetails = (league: string) => {
         setShowStatsDetails(true);
+        setLeagueIndex(sameAthletes.findIndex((x) => x.league === league));
     };
 
     useEffect(() => {
@@ -57,12 +67,18 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
         fetchLeagueStats();
     }, []);
 
+    useEffect(() => {
+        if (reset) {
+            setShowStatsDetails(false);
+            handleReset();
+        }
+    }, [reset]);
+
     return !showStatsDetails ? (
         <div className="mx-[4vw] mt-[8vw] flex flex-col gap-[4vw]">
             {sameAthletes?.map((athlete) => {
-                console.log("test");
                 let noStats = false;
-                let stats: AverageStats | undefined;
+                let stats: AthleteStats | undefined;
                 if (leagueStats.length > 0) {
                     stats = leagueStats.find(
                         (x) => x.league === athlete.league
@@ -151,8 +167,9 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                             </div>
                                         </div>
                                         <div className="mt-[2vw] flex">
-                                            <div className="ml-[2vw] flex h-full w-[40%] items-center">
+                                            <div className="ml-[2vw] flex h-full w-[40%] items-center overflow-hidden">
                                                 <motion.div
+                                                    className="will-change-transform backface-hidden"
                                                     {...appearAnimation}
                                                 >
                                                     <p className="font-montserrat text-[4vw] font-extrabold text-golddark">
@@ -164,7 +181,9 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
                                                 <motion.button
                                                     className="relative flex h-[7vw] justify-center"
                                                     onClick={() =>
-                                                        handleFullDetails()
+                                                        handleFullDetails(
+                                                            athlete.league
+                                                        )
                                                     }
                                                     {...appearTextAnimation}
                                                     disabled
@@ -202,6 +221,10 @@ export const Stats = ({ athlete, sameAthletes, competitionType }: Props) => {
             })}
         </div>
     ) : (
-        <StatsDetails/>
+        <StatsDetails
+            leagueIndex={leagueIndex}
+            athlete={athlete}
+            sameAthletes={sameAthletes}
+        />
     );
 };

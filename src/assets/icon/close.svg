@@ -1,1 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="none" xmlns:v="https://vecta.io/nano"><path d="M50 38L0 0l38 50-38 50 50-38 50 38-38-50 38-50-50 38z" fill="#ab750f"/></svg>
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="close" clip-path="url(#clip0_3341_3283)">
+<g id="Group 332">
+<rect id="Rectangle 414" x="7" y="93" width="86" height="86" rx="43" transform="rotate(-90 7 93)" fill="url(#paint0_linear_3341_3283)"/>
+<path id="Rectangle 416 (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M50 97.5C76.2335 97.5 97.5 76.2335 97.5 50C97.5 23.7665 76.2335 2.5 50 2.5C23.7665 2.5 2.5 23.7665 2.5 50C2.5 76.2335 23.7665 97.5 50 97.5ZM-1.09278e-06 50C-4.89256e-07 77.6142 22.3858 100 50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 -1.69631e-06 50 -1.09278e-06C22.3858 -4.89256e-07 -1.69631e-06 22.3858 -1.09278e-06 50Z" fill="url(#paint1_linear_3341_3283)"/>
+<g id="Group 264">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M65.9099 34.0901C68.5459 36.7261 68.546 41 65.9099 43.636L59.5459 50L65.9099 56.3639C68.5459 59 68.546 63.2738 65.9099 65.9099C63.2739 68.5459 59 68.5459 56.364 65.9099L50 59.5459L43.636 65.9099C41 68.5459 36.7261 68.5459 34.0901 65.9099C31.4541 63.2739 31.454 59 34.0901 56.3639L40.4541 50L34.0901 43.636C31.4541 41 31.454 36.7261 34.0901 34.0901C36.7261 31.454 41 31.4541 43.636 34.0901L50 40.454L56.364 34.0901C59 31.454 63.2739 31.4541 65.9099 34.0901Z" fill="#F5F1EE"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_3341_3283" x1="111.856" y1="126.36" x2="4.12655" y2="127.459" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.237787" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3341_3283" x1="50.0004" y1="104.675" x2="50.0004" y2="-1.82926" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.516" stop-color="#D8A956"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+<clipPath id="clip0_3341_3283">
+<rect width="100" height="100" fill="white"/>
+</clipPath>
+</defs>
+</svg>

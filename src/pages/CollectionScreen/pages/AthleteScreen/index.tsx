@@ -5,7 +5,7 @@ import { Layout } from "../../../../components/Layout";
 import { Tabs } from "../../../../components/Tabs";
 import { AthleteHeader } from "../../components/AthleteHeader";
 import { PlayerProfile } from "../../components/PlayerProfile";
-import { Stats } from "../../components/Stats";
+import { StatsSection } from "../../components/StatsSection";
 import { CardSkins } from "../../components/CardSkins";
 
 export const AthleteScreen = () => {
@@ -14,6 +14,16 @@ export const AthleteScreen = () => {
     // const averageStats = location.state?.averageStats;
     const athlete = location.state?.athlete;
     const sameAthletes = location.state?.sameAthletes;
+
+    const [resetLocal, setResetLocal] = useState<boolean>(false);
+    const [resetGlobal, setResetGlobal] = useState<boolean>(false);
+
+    const handleResetLocal = () => {
+        setResetLocal(false);
+    };
+    const handleResetGlobal = () => {
+        setResetGlobal(false);
+    };
     return (
         <Layout>
             <AthleteHeader athlete={athlete} />
@@ -21,6 +31,8 @@ export const AthleteScreen = () => {
                 options={athleteOptions}
                 onToggle={(selected) => {
                     setAthleteTab(selected);
+                    if (selected === "Local Stats") setResetLocal(true);
+                    if (selected === "Global Stats") setResetGlobal(true);
                 }}
                 selectedTab={athleteTab}
             />
@@ -28,20 +40,24 @@ export const AthleteScreen = () => {
                 <PlayerProfile athlete={athlete} />
             )}
             {athleteTab === "Local Stats" && (
-                <Stats
+                <StatsSection
                     athlete={athlete}
                     sameAthletes={sameAthletes.filter(
                         (athlete) => athlete.type === "regional"
                     )}
+                    reset={resetLocal}
+                    handleReset={handleResetLocal}
                     competitionType={"regional"}
                 />
             )}
             {athleteTab === "Global Stats" && (
-                <Stats
+                <StatsSection
                     athlete={athlete}
                     sameAthletes={sameAthletes.filter(
                         (athlete) => athlete.type === "international"
                     )}
+                    reset={resetGlobal}
+                    handleReset={handleResetGlobal}
                     competitionType={"international"}
                 />
             )}

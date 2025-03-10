@@ -16,16 +16,14 @@ export const FriendsScreen = () => {
             <Tabs
                 options={friendsOptions}
                 onToggle={(selected) => {
-                    if(selected !== "Favorites") //temporary in disabling Favorites; comment together with the line in Tabs to enable
+                    if (selected !== "Favorites")
+                        //temporary in disabling Favorites; comment together with the line in Tabs to enable
                         setFriendsTab(selected);
                 }}
                 selectedTab={friendsTab}
             />
             {friendsTab === "Friends" && <FriendsSection />}
             {friendsTab === "Favorites" && <DreamTeamSection />}
-            {/* <div className="flex h-full items-center justify-center">
-                <img className="h-[80vw] w-[80vw]" src={Upgrading} />
-            </div> */}
         </Layout>
     );
 };
