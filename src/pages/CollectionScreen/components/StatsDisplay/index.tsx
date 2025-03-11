@@ -72,14 +72,14 @@ export const StatsDisplay = ({
                     {fromFullDetails ? (
                         <motion.main
                             id={"stat-value"}
-                            className={`-mt-[1vw] font-russoone ${fromFullDetails ? "text-[5vw]" : "text-[4.5vw]"} font-normal text-white`}
+                            className={`-mt-[1vw] font-russoone text-[5vw] font-normal ${text === "POINTS" || text === "PPG" ? "text-goldlight" : "text-white"}`}
                         >
                             {noStats ? "-" : stat}
                         </motion.main>
                     ) : (
                         <motion.pre
                             id={"stat-value"}
-                            className={`-mt-[1vw] font-russoone ${fromFullDetails ? "text-[5vw]" : "text-[4.5vw]"} font-normal text-white`}
+                            className={`-mt-[1vw] font-russoone ${fromFullDetails ? "text-[5vw]" : "text-[4.5vw]"} font-normal ${text === "POINTS" || text === "PPG" ? "text-goldlight" : "text-white"}`}
                         >
                             {noStats ? "-" : stat}
                         </motion.pre>
