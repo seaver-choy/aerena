@@ -186,7 +186,6 @@ export const StatsSection = ({
                                                         )
                                                     }
                                                     {...appearTextAnimation}
-                                                    disabled
                                                 >
                                                     <img
                                                         className="h-full"
