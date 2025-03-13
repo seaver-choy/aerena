@@ -6,7 +6,6 @@ import PH15Sticker from "../assets/sticker/ph15.svg";
 import ID15Sticker from "../assets/sticker/id15.svg";
 import AllSticker from "../assets/sticker/all-leagues.svg";
 
-import PhilippinesSticker from "../assets/sticker/philippines.svg";
 import ChinaSticker from "../assets/sticker/china.svg";
 import CambodiaSticker from "../assets/sticker/cambodia.svg";
 import IndonesiaSticker from "../assets/sticker/indonesia.svg";
