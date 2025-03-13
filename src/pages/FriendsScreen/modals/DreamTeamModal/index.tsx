@@ -43,7 +43,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         if (!lineupRef.current) return;
 
         try {
-            const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
+            const dataUrl = await htmlToImage.toPng(lineupRef.current, {
                 cacheBust: true,
                 pixelRatio: 2,
             });
@@ -58,8 +58,8 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
 
             /* navigator.share */
             const blob = await fetch(dataUrl).then((r) => r.blob());
-            const file = new File([blob], "dream-team-lineup.jpeg", {
-                type: "image/jpeg",
+            const file = new File([blob], "dream-team-lineup.png", {
+                type: "image/png",
                 lastModified: Date.now(),
             });
             const shareData = {
