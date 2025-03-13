@@ -48,27 +48,28 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                 pixelRatio: 2,
             });
 
-            // const link = document.createElement("a");
-            // link.download = "dream-team-lineup.png";
-            // link.href = dataUrl;
-            // link.click();
+            const link = document.createElement("a");
+            link.download = "dream-team-lineup.png";
+            link.href = dataUrl;
+            link.click();
 
             // URL.revokeObjectURL(dataUrl);
             // Convert dataURL to blob
 
             /* navigator.share */
-            const blob = await fetch(dataUrl).then((r) => r.blob());
-            const file = new File([blob], "dream-team-lineup.png", {
-                type: "image/png",
-                lastModified: Date.now(),
-            });
-            const shareData = {
-                files: [file],
-                title: "Dream Team Lineup",
-                text: "Check out my dream team lineup!",
-                url: "https://t.me/aerena_bot",
-            };
-            await navigator.share(shareData);
+            // const blob = await fetch(dataUrl).then((r) => r.blob());
+            // const file = new File([blob], "dream-team-lineup.png", {
+            //     type: "image/png",
+            //     lastModified: Date.now(),
+            // });
+            // const shareData = {
+            //     files: [file],
+            //     title: "Dream Team Lineup",
+            //     text: "Check out my dream team lineup!",
+            //     url: "https://t.me/aerena_bot",
+            // };
+            // await navigator.share(shareData);
+
             // const canvas = document.createElement("canvas");
             // const ctx = canvas.getContext("2d");
             // if (!ctx) throw new Error("Failed to get canvas context");
@@ -89,7 +90,6 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             // });
         } catch (error) {
             console.error("Error exporting lineup:", error);
-            alert("Failed - " + navigator.canShare());
         } finally {
             // setIsExporting(false);
         }
