@@ -65,7 +65,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             const shareData = {
                 title: "Dream Team Lineup",
                 text: "Check out my dream team lineup! Visit https://t.me/aerena_bot",
-                url: "https://t.me/aerena_bot",
+                // url: "https://t.me/aerena_bot",
                 files: [file],
             };
             await navigator.share(shareData);
