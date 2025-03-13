@@ -10,7 +10,7 @@ import DreamTeamBackground from "../../../../assets/background/dream-team.svg";
 import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
-import * as htmlToImage from "html-to-image";
+// import * as htmlToImage from "html-to-image";
 import { DreamTeam, TeamColor } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
