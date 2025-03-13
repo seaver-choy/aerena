@@ -89,7 +89,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             // });
         } catch (error) {
             console.error("Error exporting lineup:", error);
-            alert("Failed to generate image. Please try again.");
+            alert("Failed - " + error);
         } finally {
             // setIsExporting(false);
         }
