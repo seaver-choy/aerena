@@ -191,7 +191,6 @@ const UsernameModal: React.FC = () => {
                     type: "SET_NUM_BOOSTER_BOUGHT",
                     payload: { numBoosterBought: data["numBoosterBought"] },
                 });
-                
 
                 user.dispatch({
                     type: "SET_REFERRAL_CHECK",
@@ -222,13 +221,10 @@ const UsernameModal: React.FC = () => {
                             />
                         </motion.div>
                         <motion.div
-                            className="absolute top-[10vw] h-[9vw] w-full"
+                            className="absolute top-[10vw] flex h-[9vw] w-full items-center justify-center"
                             {...appearAnimation}
                         >
-                            <img
-                                className="h-full w-full"
-                                src={AerenaTextLogo}
-                            />
+                            <img className="h-full" src={AerenaTextLogo} />
                         </motion.div>
                         <div className="absolute left-[5.6vw] top-[25.7vw] flex h-[13.1vw] w-[81vw]">
                             <div className="flex h-full w-[85%] flex-col justify-center px-[4vw]">
