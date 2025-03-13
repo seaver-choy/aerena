@@ -85,7 +85,9 @@ export const AthleteSelectModal = ({
 
     const checkAthleteExistsInLineup = (athlete) => {
         return tournamentLineup.some(
-            (obj) => obj.athlete?.displayName === athlete.displayName
+            (obj) =>
+                obj.athlete?.displayName === athlete.displayName &&
+                obj.athlete?.position[0] === athlete.position[0]
         );
     };
 

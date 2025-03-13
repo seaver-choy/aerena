@@ -1,7 +1,6 @@
 import { DreamTeamTitle } from "../DreamTeamTitle";
 import { DreamTeamLineup } from "../DreamTeamLineup";
 
-import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import { useUsers } from "../../../../hooks/useUser";
 import {
@@ -13,6 +12,7 @@ import {
 import { saveDreamTeam } from "../../../../helpers/lambda.helper";
 import { useEffect, useState } from "react";
 import { DreamTeamModal } from "../../modals/DreamTeamModal";
+import { ErrorModal } from "../../modals/ErrorModal";
 
 export const DreamTeamSection = () => {
     const user = useUsers();
@@ -45,6 +45,8 @@ export const DreamTeamSection = () => {
     const [teamChange, setTeamChange] = useState<boolean>(false);
     const [showDreamTeamModal, setShowDreamTeamModal] =
         useState<boolean>(false);
+    const [showIncompleteModal, setShowIncompleteModal] =
+        useState<boolean>(false);
 
     const handleDreamTeam = async (
         teamProfile: TeamProfile,
@@ -67,11 +69,6 @@ export const DreamTeamSection = () => {
                     dreamTeam: result["dreamTeam"],
                 },
             });
-            //for testing
-            // setTimeout(() => {
-            //     setPositionChange(false);
-            //     setTeamChange(false);
-            // }, 1000);
 
             setPositionChange(false);
             setTeamChange(false);
@@ -93,6 +90,8 @@ export const DreamTeamSection = () => {
     }, [dreamTeam]);
 
     const displayDreamTeamModal = () => {
+        console.log(dreamTeam);
+        setCurrentPositionIndex(-1);
         setShowDreamTeamModal(true);
     };
 
@@ -103,7 +102,6 @@ export const DreamTeamSection = () => {
     return (
         <div className="mb-[6vw] mt-[4vw] h-[120vw]">
             <div className="relative flex justify-center">
-                <img className="h-full w-full" src={LineupBackground} />
                 <DreamTeamTitle
                     dreamTeam={dreamTeam}
                     handleDreamTeam={handleDreamTeam}
@@ -115,7 +113,16 @@ export const DreamTeamSection = () => {
                     currentPositionIndex={currentPositionIndex}
                     positionChange={positionChange}
                     teamChange={teamChange}
+                    // isExporting={isExporting}
+                    // setIsExporting={setIsExporting}
+                    // setShareData={setShareData}
                 />
+                {/* <div className="absolute bottom-[3vw] flex h-[7.2vh] w-[56vw] items-end">
+                    <button
+                        className="relative w-full items-center justify-center"
+                        onClick={displayDreamTeamModal}
+                    />
+                </div> */}
                 <div className="absolute bottom-[3vw] flex h-[7.2vh] w-[56vw] items-end">
                     <button
                         className="relative w-full items-center justify-center"
@@ -129,7 +136,19 @@ export const DreamTeamSection = () => {
                         <img className="h-full w-full" src={LineupButton} />
                     </button>
                     {showDreamTeamModal && (
-                        <DreamTeamModal onClose={closeDreamTeamModal} />
+                        <DreamTeamModal
+                            dreamTeam={dreamTeam}
+                            onClose={closeDreamTeamModal}
+                        />
+                    )}
+                    {showIncompleteModal && (
+                        <ErrorModal
+                            title={"Oops!"}
+                            message={
+                                "Your Dream Team is incomplete. Please try again later."
+                            }
+                            onClose={() => setShowIncompleteModal(false)}
+                        />
                     )}
                 </div>
             </div>

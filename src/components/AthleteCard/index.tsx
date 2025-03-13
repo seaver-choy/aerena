@@ -100,7 +100,7 @@ export const AthleteCard = ({
             <div className="absolute h-full w-full">
                 <Darken />
             </div>
-            <div className="absolute h-full w-full">
+            <div className="absolute h-full w-full font-russoone">
                 <IGN color={color} ign={ign} />
             </div>
             <div className="absolute h-full w-full">

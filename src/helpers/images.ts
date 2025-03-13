@@ -7,8 +7,13 @@ import ID15Sticker from "../assets/sticker/id15.svg";
 import AllSticker from "../assets/sticker/all-leagues.svg";
 
 import PhilippinesSticker from "../assets/sticker/philippines.svg";
+import ChinaSticker from "../assets/sticker/china.svg";
+import CambodiaSticker from "../assets/sticker/cambodia.svg";
 import IndonesiaSticker from "../assets/sticker/indonesia.svg";
 import MalaysiaSticker from "../assets/sticker/malaysia.svg";
+import MyanmarSticker from "../assets/sticker/myanmar.svg";
+import PhilippinesSticker from "../assets/sticker/philippines.svg";
+import SingaporeSticker from "../assets/sticker/singapore.svg";
 
 import PH15ChoicePack from "../assets/pack/choice-ph15.svg";
 import ID15ChoicePack from "../assets/pack/choice-id15.svg";
@@ -36,12 +41,20 @@ export function getStickerImage(league: string) {
 
 export function getCountryImage(country: string) {
     switch (country) {
-        case "Philippines":
-            return PhilippinesSticker;
+        case "China":
+            return ChinaSticker;
+        case "Cambodia":
+            return CambodiaSticker;
         case "Indonesia":
             return IndonesiaSticker;
         case "Malaysia":
             return MalaysiaSticker;
+        case "Myanmar":
+            return MyanmarSticker;
+        case "Philippines":
+            return PhilippinesSticker;
+        case "Singapore":
+            return SingaporeSticker;
         default:
             return null;
     }

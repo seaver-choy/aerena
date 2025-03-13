@@ -16,9 +16,9 @@ export const FriendsScreen = () => {
             <Tabs
                 options={friendsOptions}
                 onToggle={(selected) => {
-                    if (selected !== "Favorites")
-                        //temporary in disabling Favorites; comment together with the line in Tabs to enable
-                        setFriendsTab(selected);
+                    // if (selected !== "Favorites")
+                    //temporary in disabling Favorites; comment together with the line in Tabs to enable
+                    setFriendsTab(selected);
                 }}
                 selectedTab={friendsTab}
             />

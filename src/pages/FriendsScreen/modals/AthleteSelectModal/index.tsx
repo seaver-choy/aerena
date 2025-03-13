@@ -74,7 +74,9 @@ export const AthleteSelectModal = ({
 
     const checkAthleteExistsInLineup = (athlete) => {
         return dreamTeamLineup.some(
-            (obj) => obj.athlete?.displayName === athlete.displayName
+            (obj) =>
+                obj.athlete?.displayName === athlete.displayName &&
+                obj.athlete?.position[0] === athlete.position[0]
         );
     };
 
@@ -92,6 +94,7 @@ export const AthleteSelectModal = ({
         let foundIndex = -1;
         for (let i = 0; i < result.length; i++) {
             const athlete = result[i];
+
             if (foundIndex === -1) {
                 if (checkAthleteExistsInLineup(athlete)) {
                     foundIndex = i;
@@ -234,7 +237,7 @@ export const AthleteSelectModal = ({
                                                               .wave
                                                         : baseColor.wave,
                                             }}
-                                            id={index}
+                                            id={index + 1000} //extra value for multiple athlete cards of the same one in this part
                                         />
                                     </motion.div>
                                 )}
