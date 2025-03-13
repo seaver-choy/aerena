@@ -43,15 +43,15 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         if (!lineupRef.current) return;
 
         try {
-            const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
-                cacheBust: true,
-                pixelRatio: 2,
-            });
+            // const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
+            //     cacheBust: true,
+            //     pixelRatio: 2,
+            // });
 
-            const link = document.createElement("a");
-            link.download = "dream-team-lineup.png";
-            link.href = dataUrl;
-            link.click();
+            // const link = document.createElement("a");
+            // link.download = "dream-team-lineup.png";
+            // link.href = dataUrl;
+            // link.click();
 
             // URL.revokeObjectURL(dataUrl);
             // Convert dataURL to blob
@@ -62,13 +62,13 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             //     type: "image/png",
             //     lastModified: Date.now(),
             // });
-            // const shareData = {
-            //     files: [file],
-            //     title: "Dream Team Lineup",
-            //     text: "Check out my dream team lineup!",
-            //     url: "https://t.me/aerena_bot",
-            // };
-            // await navigator.share(shareData);
+            const shareData = {
+                // files: [file],
+                title: "Dream Team Lineup",
+                text: "Check out my dream team lineup!",
+                url: "https://t.me/aerena_bot",
+            };
+            await navigator.share(shareData);
 
             // const canvas = document.createElement("canvas");
             // const ctx = canvas.getContext("2d");
