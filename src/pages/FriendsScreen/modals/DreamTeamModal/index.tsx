@@ -10,7 +10,7 @@ import DreamTeamBackground from "../../../../assets/background/dream-team.svg";
 import LineupBackground from "../../../../assets/background/lineup.svg";
 import LineupButton from "../../../../assets/button/lineup.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
-// import * as htmlToImage from "html-to-image";
+import * as htmlToImage from "html-to-image";
 import { DreamTeam, TeamColor } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
@@ -43,10 +43,10 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         if (!lineupRef.current) return;
 
         try {
-            // const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
-            //     cacheBust: true,
-            //     pixelRatio: 2,
-            // });
+            const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
+                cacheBust: true,
+                pixelRatio: 2,
+            });
 
             // const link = document.createElement("a");
             // link.download = "dream-team-lineup.png";
@@ -57,16 +57,16 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             // Convert dataURL to blob
 
             /* navigator.share */
-            // const blob = await fetch(dataUrl).then((r) => r.blob());
-            // const file = new File([blob], "dream-team-lineup.png", {
-            //     type: "image/png",
-            //     lastModified: Date.now(),
-            // });
+            const blob = await fetch(dataUrl).then((r) => r.blob());
+            const file = new File([blob], "dream-team-lineup.jpeg", {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+            });
             const shareData = {
-                // files: [file],
                 title: "Dream Team Lineup",
-                text: "Check out my dream team lineup!",
+                text: "Check out my dream team lineup! Visit https://t.me/aerena_bot",
                 url: "https://t.me/aerena_bot",
+                files: [file],
             };
             await navigator.share(shareData);
 
