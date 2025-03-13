@@ -43,7 +43,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         if (!lineupRef.current) return;
 
         try {
-            const dataUrl = await htmlToImage.toPng(lineupRef.current, {
+            const dataUrl = await htmlToImage.toJpeg(lineupRef.current, {
                 cacheBust: true,
                 pixelRatio: 2,
             });
@@ -90,6 +90,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             // });
         } catch (error) {
             console.error("Error exporting lineup:", error);
+            alert(error);
         } finally {
             // setIsExporting(false);
         }
