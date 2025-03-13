@@ -89,7 +89,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             // });
         } catch (error) {
             console.error("Error exporting lineup:", error);
-            alert("Failed - " + error);
+            alert("Failed - " + navigator.canShare());
         } finally {
             // setIsExporting(false);
         }
