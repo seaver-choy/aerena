@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import {
-    appearAnimation,
-    appearTextAnimation,
-    appearModalAnimation,
-} from "../../../../helpers/animation";
+import { appearAnimation } from "../../../../helpers/animation";
 
 import DreamTeamBackground from "../../../../assets/background/dream-team.svg";
 import LineupBackground from "../../../../assets/background/lineup.svg";
