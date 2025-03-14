@@ -250,9 +250,8 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             <div className="relative flex h-full w-full items-center justify-center">
                 <div className="h-full w-full bg-graydark opacity-95" />
                 <div className="absolute flex h-[96vw] w-[80vw] flex-col gap-[6vw]">
-                    <motion.div
+                    <div
                         className="relative flex h-[80vw] w-[80vw] justify-center"
-                        {...appearModalAnimation}
                         ref={lineupRef}
                     >
                         <div className="absolute flex h-full w-full items-center justify-center">
@@ -263,17 +262,14 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                 />
                             </div>
                         </div>
-                        <motion.div
-                            className="absolute top-[10.5vw] overflow-hidden"
-                            {...appearTextAnimation}
-                        >
-                            <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                        <div className="absolute top-[10.5vw]">
+                            <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
                                 {dreamTeam.teamProfile != null &&
                                 dreamTeam.teamProfile.key != undefined
                                     ? dreamTeam.teamProfile.key
                                     : "My Dream Team"}
                             </p>
-                        </motion.div>
+                        </div>
                         <div className="absolute top-[18.5vw] flex h-[47vw] w-[56vw] flex-row flex-wrap items-center justify-center gap-[1vw]">
                             {dreamTeam.lineup.map((athlete, index) => (
                                 <motion.div
@@ -320,23 +316,15 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             className="h-full w-full"
                             src={DreamTeamBackground}
                         />
-                    </motion.div>
-                    <div className="flex h-[10vw] w-[80vw] items-center justify-center">
-                        {/* <motion.button
+                    </div>
+                    {/* <motion.button
                             className="h-[10vw]"
                             onClick={exportLineup}
                             {...appearAnimation}
                         >
                             <EmailIcon className="h-full" round={true} />
                         </motion.button> */}
-                        <motion.button
-                            className="h-[10vw]"
-                            onClick={exportLineup}
-                            {...appearAnimation}
-                        >
-                            <TelegramIcon className="h-full" round={true} />
-                        </motion.button>
-                        {/* <motion.button
+                    {/* <motion.button
                             className="h-[10vw]"
                             onClick={exportLineup}
                             {...appearAnimation}
@@ -357,8 +345,14 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                         >
                             <FacebookIcon className="h-full" round={true} />
                         </motion.button> */}
-                    </div>
                     <div className="flex h-[10vw] w-[80vw] items-center justify-center">
+                        <motion.button
+                            className="h-[10vw]"
+                            onClick={exportLineup}
+                            {...appearAnimation}
+                        >
+                            <TelegramIcon className="h-full" round={true} />
+                        </motion.button>
                         <motion.button
                             className="h-[10vw]"
                             onClick={onClose}
