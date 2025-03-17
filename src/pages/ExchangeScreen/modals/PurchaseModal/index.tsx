@@ -4,6 +4,7 @@ import {
     appearTextAnimation,
     appearModalAnimation,
 } from "../../../../helpers/animation";
+import { PackInfo } from "../../../../helpers/interfaces";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
@@ -12,7 +13,6 @@ import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import StarsIcon from "../../../../assets/icon/tg-star-gold.svg";
 import AddIcon from "../../../../assets/icon/add.svg";
 import MinusIcon from "../../../../assets/icon/minus.svg";
-import { PackInfo } from "../../../../helpers/interfaces";
 
 interface PurchaseModalProps {
     packInfo: PackInfo;
@@ -21,13 +21,19 @@ interface PurchaseModalProps {
     onConfirm: (boosterQuantity: number) => void;
 }
 
-export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: PurchaseModalProps) => {
-    const packCost = costType === 'star' ? packInfo.starCost : packInfo.bpCost;
+export const PurchaseModal = ({
+    packInfo,
+    costType,
+    onCancel,
+    onConfirm,
+}: PurchaseModalProps) => {
+    const packCost = costType === "star" ? packInfo.starCost : packInfo.bpCost;
     const [boosterQuantity, setBoosterQuantity] = useState<number>(1);
     const maxQuantity = 2;
 
     const handleIncrement = () => {
-        if (boosterQuantity < maxQuantity) setBoosterQuantity(boosterQuantity + 1);
+        if (boosterQuantity < maxQuantity)
+            setBoosterQuantity(boosterQuantity + 1);
     };
 
     const handleDecrement = () => {
@@ -61,12 +67,16 @@ export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: Purch
                             {...appearTextAnimation}
                         >
                             <p className="text-center font-montserrat text-[3.5vw] text-graydark">
-                                Claim your Basic Pack.
+                                Claim your Choice Pack.
                             </p>
                             <div className="my-[1.5vw] flex justify-center gap-[2vw]">
                                 <img
                                     className="mt-[2.8vw] h-[7.2vw]"
-                                    src={costType === 'star' ? StarsIcon : BattlePointsIcon}
+                                    src={
+                                        costType === "star"
+                                            ? StarsIcon
+                                            : BattlePointsIcon
+                                    }
                                 />
                                 <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[9vw] text-transparent">
                                     {(
@@ -111,7 +121,9 @@ export const PurchaseModal = ({ packInfo, costType, onCancel, onConfirm }: Purch
                             </motion.button>
                             <motion.button
                                 className="relative flex h-full w-full justify-center"
-                                onClick={() => {onConfirm(boosterQuantity)}}
+                                onClick={() => {
+                                    onConfirm(boosterQuantity);
+                                }}
                                 {...appearTextAnimation}
                             >
                                 <img className="h-full" src={GoldButton} />

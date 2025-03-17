@@ -1,7 +1,4 @@
-import { DreamTeamTitle } from "../DreamTeamTitle";
-import { DreamTeamLineup } from "../DreamTeamLineup";
-
-import LineupButton from "../../../../assets/button/lineup.svg";
+import { useEffect, useState } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import {
     DreamTeam,
@@ -10,9 +7,12 @@ import {
     TournamentLineup,
 } from "../../../../helpers/interfaces";
 import { saveDreamTeam } from "../../../../helpers/lambda.helper";
-import { useEffect, useState } from "react";
+import { DreamTeamTitle } from "../DreamTeamTitle";
+import { DreamTeamLineup } from "../DreamTeamLineup";
 import { DreamTeamModal } from "../../modals/DreamTeamModal";
 import { ErrorModal } from "../../modals/ErrorModal";
+
+import LineupButton from "../../../../assets/button/lineup.svg";
 
 export const DreamTeamSection = () => {
     const user = useUsers();

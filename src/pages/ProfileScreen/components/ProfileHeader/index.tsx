@@ -1,49 +1,60 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
+import {
+    addNewReferral,
+    checkReferralCode,
+} from "../../../../helpers/lambda.helper";
 import { ReferralModal } from "../../modals/ReferralModal";
 import { AddModal } from "../../modals/AddModal";
+import { ErrorModal } from "../../../../pages/PlayScreen/modals/ErrorModal";
+import { SuccessModal } from "../../../../pages/PlayScreen/modals/SuccessModal";
+import { LoadingModal } from "../../../../pages/PlayScreen/modals/LoadingModal";
 
 import ProfileHeaderBackground from "../../../../assets/background/profile-header.svg";
 import DiamondIcon from "../../../../assets/icon/diamond.svg";
 import CopyIcon from "../../../../assets/icon/copy.svg";
 import AddFriendIcon from "../../../../assets/icon/add-friend.svg";
-import NotificationsIcon from "../../../../assets/icon/notifications.svg";
-import { useUsers } from "../../../../hooks/useUser";
-import { addNewReferral, checkReferralCode } from "../../../../helpers/lambda.helper";
-import { ErrorModal } from "../../../../pages/PlayScreen/modals/ErrorModal";
-import { SuccessModal } from "../../../../pages/PlayScreen/modals/SuccessModal";
-import { LoadingModal } from "../../../../pages/PlayScreen/modals/LoadingModal";
+import QuestsIcon from "../../../../assets/icon/quests.svg";
 
 export const ProfileHeader = () => {
     const user = useUsers();
+    const navigate = useNavigate();
     const [showReferralModal, setShowReferralModal] = useState<boolean>(false);
     const [showAddModal, setShowAddModal] = useState<boolean>(false);
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
-    const [showAlreadyReferredModal, setShowAlreadyReferredModal] = useState<boolean>(false);
+    const [showAlreadyReferredModal, setShowAlreadyReferredModal] =
+        useState<boolean>(false);
     const [showOwnCodeModal, setShowOwnCodeModal] = useState<boolean>(false);
     const [loading, isLoading] = useState<boolean>(false);
-    
+
     const handleCheckReferralCode = async (searchReferral) => {
         isLoading(true);
-        if(user.referredBy == undefined || user.referredBy.userID == undefined){
-            if (searchReferral === "")
-                setShowErrorModal(true);
-            else if(searchReferral === user.referralCode)
+        if (
+            user.referredBy == undefined ||
+            user.referredBy.userID == undefined
+        ) {
+            if (searchReferral === "") setShowErrorModal(true);
+            else if (searchReferral === user.referralCode)
                 setShowOwnCodeModal(true);
             else {
                 const checkData = await checkReferralCode(
                     searchReferral,
                     user.initDataRaw
                 );
-                if (checkData["message"] == "DNE")
-                    setShowErrorModal(true);
+                if (checkData["message"] == "DNE") setShowErrorModal(true);
                 else if (checkData["message"] == "EXISTS") {
-                    const data = await addNewReferral(user.id, searchReferral, user.initDataRaw);
+                    const data = await addNewReferral(
+                        user.id,
+                        searchReferral,
+                        user.initDataRaw
+                    );
                     user.dispatch({
                         type: "SET_FRIENDS",
                         payload: { friends: data["friends"] },
@@ -57,14 +68,17 @@ export const ProfileHeader = () => {
                     setShowSuccessModal(true);
                 }
             }
-        } else
-            setShowAlreadyReferredModal(true);
+        } else setShowAlreadyReferredModal(true);
         isLoading(false);
-    }
-    
+    };
+
     const handleReferralCodeCopy = () => {
         navigator.clipboard.writeText(user.referralCode);
         displayReferralModal();
+    };
+
+    const handleQuests = () => {
+        navigate(`/quests`);
     };
 
     const displayReferralModal = () => {
@@ -138,7 +152,12 @@ export const ProfileHeader = () => {
                                 src={DiamondIcon}
                             />
                             <p className="font-russoone text-[3.5vw] text-white">
-                                 {user.friends.filter(user => user.isReferred === true).length} Referrals
+                                {
+                                    user.friends.filter(
+                                        (user) => user.isReferred === true
+                                    ).length
+                                }{" "}
+                                Referrals
                             </p>
                         </motion.div>
                         <div className="flex items-center gap-[2vw]">
@@ -171,12 +190,18 @@ export const ProfileHeader = () => {
                         >
                             <img className="h-full" src={AddFriendIcon} />
                         </motion.button>
-                        {showAddModal && <AddModal handleSubmit={handleCheckReferralCode} onClose={closeAddModal} />}
-                        <motion.button className="h-[7vw]" {...appearAnimation}>
-                            <img
-                                className="h-full opacity-50"
-                                src={NotificationsIcon}
+                        {showAddModal && (
+                            <AddModal
+                                handleSubmit={handleCheckReferralCode}
+                                onClose={closeAddModal}
                             />
+                        )}
+                        <motion.button
+                            className="h-[7vw]"
+                            onClick={handleQuests}
+                            {...appearAnimation}
+                        >
+                            <img className="h-full" src={QuestsIcon} />
                         </motion.button>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Layout } from "../../components/Layout";
-import { Tabs } from "../../components/Tabs";
-import { TasksSection } from "./components/TasksSection";
-import { questsOptions } from "../../helpers/tabs";
-import { useUsers } from "../../hooks/useUser";
-import { getQuests } from "../../helpers/lambda.helper";
+import { useUsers } from "../../../../hooks/useUser";
+import { getQuests } from "../../../../helpers/lambda.helper";
+import { questsOptions } from "../../../../helpers/tabs";
+import { Layout } from "../../../../components/Layout";
+import { Tabs } from "../../../../components/Tabs";
+import { TasksSection } from "../../components/TaskSection";
 
 export const QuestsScreen = () => {
     const [quests, setQuests] = useState(null);
@@ -30,12 +30,13 @@ export const QuestsScreen = () => {
             <Tabs
                 options={questsOptions}
                 onToggle={(selected) => {
-                    if (selected !== 'Weekly') //temporary
+                    if (selected !== "Weekly")
+                        //temporary
                         setQuestsTab(selected);
                 }}
                 selectedTab={questsTab}
             />
-            <TasksSection questTab={questsTab} quests={quests}/>
+            <TasksSection questTab={questsTab} quests={quests} />
         </Layout>
     );
 };

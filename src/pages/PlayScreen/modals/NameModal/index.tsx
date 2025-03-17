@@ -12,11 +12,16 @@ import WhiteButton from "../../../../assets/button/white.svg";
 interface NameModalProps {
     teamName: string;
     setTeamName: (teamName: string) => void;
-    onClose: () => void;
     onConfirm: () => void;
+    onClose: () => void;
 }
 
-export const NameModal = ({ teamName, setTeamName, onClose, onConfirm }: NameModalProps) => {
+export const NameModal = ({
+    teamName,
+    setTeamName,
+    onConfirm,
+    onClose,
+}: NameModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -26,7 +31,7 @@ export const NameModal = ({ teamName, setTeamName, onClose, onConfirm }: NameMod
     }, []);
 
     const handleTeamNameChange = (e) => {
-        const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '');
+        const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, "");
         setTeamName(value);
     };
 
@@ -67,7 +72,7 @@ export const NameModal = ({ teamName, setTeamName, onClose, onConfirm }: NameMod
                                     ></input>
                                 </div>
                             </div>
-                            <p className="mx-[2vw] mt-[2vw] text-center font-montserrat text-[3.5vw] text-graydark">
+                            <p className="mx-[2vw] mt-[3vw] text-center font-montserrat text-[3.5vw] text-graydark">
                                 Give your fantasy team a name worthy of legend.
                             </p>
                         </motion.div>

@@ -9,12 +9,12 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface ErrorModalProps {
-    onClose: () => void;
     title: string;
     message: string;
+    onClose: () => void;
 }
 
-export const ErrorModal = ({ onClose, title, message }: ErrorModalProps) => {
+export const ErrorModal = ({ title, message, onClose }: ErrorModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 

@@ -5,14 +5,12 @@ import {
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { getStickerImage } from "../../../../helpers/images";
+import { ImageSlider } from "../../../../components/ImageSlider";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
-import { getStickerImage } from "../../../../helpers/images";
-import { ImageSlider } from "../../../../components/ImageSlider";
 
 interface LeagueModalProps {
     onClose: () => void;

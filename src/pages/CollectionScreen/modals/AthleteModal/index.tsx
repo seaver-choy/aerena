@@ -41,7 +41,6 @@ export const AthleteModal = ({
 }: AthleteModalProps) => {
     const user = useUsers();
     const navigate = useNavigate();
-
     const [sameAthletes, setSameAthletes] = useState<SameAthlete[]>([]);
     const [skinTitle, setSkinTitle] = useState<string>("");
     const [cardIndex, setCardIndex] = useState<number>(0);

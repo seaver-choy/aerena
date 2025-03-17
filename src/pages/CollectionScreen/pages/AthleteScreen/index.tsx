@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { athleteOptions } from "../../../../helpers/tabs";
 import { useLocation } from "react-router-dom";
+import { athleteOptions } from "../../../../helpers/tabs";
 import { Layout } from "../../../../components/Layout";
 import { Tabs } from "../../../../components/Tabs";
 import { AthleteHeader } from "../../components/AthleteHeader";

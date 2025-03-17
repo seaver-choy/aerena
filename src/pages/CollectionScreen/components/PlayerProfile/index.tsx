@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     pulseAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
-import { useUsers } from "../../../../hooks/useUser";
 import { Athlete, AthleteProfile } from "../../../../helpers/interfaces";
+import { getAthleteProfile } from "../../../../helpers/lambda.helper";
+import { DateTime } from "luxon";
+import dobToAge from "dob-to-age";
+
 import AthleteDetailsSonner from "../../../../assets/sonner/athlete-details.svg";
 import AthleteDetailsBackground from "../../../../assets/background/athlete-details.svg";
-import { getAthleteProfile } from "../../../../helpers/lambda.helper";
-import dobToAge from "dob-to-age";
-import { DateTime } from "luxon";
+
 interface Props {
     athlete: Athlete;
 }

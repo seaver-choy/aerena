@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useUsers } from "../../../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
+import { useUsers } from "../../../../hooks/useUser";
 import { Token, Tournament } from "../../../../helpers/interfaces";
 import { getStickerImage } from "../../../../helpers/images";
 import { TeamColor } from "../../../../helpers/interfaces";

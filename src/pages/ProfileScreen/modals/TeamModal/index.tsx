@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
     appearModalAnimation,
     appearTextAnimation,
 } from "../../../../helpers/animation";
+import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
+import { getCountryImage } from "../../../../helpers/images";
+import { getTeamProfiles } from "../../../../helpers/lambda.helper";
+import { TeamSlider } from "../../../../components/TeamSlider";
 
 import LargeModal from "../../../../assets/modal/large.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
-import { useUsers } from "../../../../hooks/useUser";
-import { getTeamProfiles } from "../../../../helpers/lambda.helper";
-import { getCountryImage } from "../../../../helpers/images";
-import { TeamSlider } from "../../../../components/TeamSlider";
 
 interface TeamModalProps {
     dreamTeam: DreamTeam;

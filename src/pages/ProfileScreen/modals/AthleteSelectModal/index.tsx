@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
@@ -8,12 +9,10 @@ import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-
-import LargeModal from "../../../../assets/modal/large.svg";
-import CloseIcon from "../../../../assets/icon/close.svg";
-import GoldButton from "../../../../assets/button/gold.svg";
-import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
-
+import {
+    getAthletePositionLogo,
+    getBaseTeamColor,
+} from "../../../../helpers/athletes";
 import {
     DreamTeam,
     TeamColor,
@@ -21,13 +20,13 @@ import {
     Token,
     TournamentLineup,
 } from "../../../../helpers/interfaces";
-import {
-    getAthletePositionLogo,
-    getBaseTeamColor,
-} from "../../../../helpers/athletes";
-import { useUsers } from "../../../../hooks/useUser";
 import { getAthletePositionFilter } from "../../../../helpers/lambda.helper";
 import { AthleteCard } from "../../../../components/AthleteCard";
+
+import LargeModal from "../../../../assets/modal/large.svg";
+import CloseIcon from "../../../../assets/icon/close.svg";
+import GoldButton from "../../../../assets/button/gold.svg";
+import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
 
 interface AthleteSelectModalProps {
     dreamTeam: DreamTeam;

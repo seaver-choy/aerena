@@ -29,23 +29,21 @@ import GoldButton from "../../../../assets/button/gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
 
 interface AthleteSelectModalProps {
-    onClose: () => void;
     onSelect: (lineup) => void;
     position: string;
     athleteSkins: Skin[];
     tournamentLineup: TournamentLineup[];
-    // playTab: string;
     tournament: Tournament;
+    onClose: () => void;
 }
 
 export const AthleteSelectModal = ({
-    onClose,
     onSelect,
     position,
     athleteSkins,
     tournamentLineup,
-    //playTab,
     tournament,
+    onClose,
 }: AthleteSelectModalProps) => {
     const user = useUsers();
     const [displayAthletes, setDisplayAthletes] = useState<Token[]>(null);

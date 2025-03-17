@@ -4,17 +4,21 @@ import {
     appearTextAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
+import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
 import { TeamModal } from "../../modals/TeamModal";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
-import { DreamTeam, TeamProfile, Token } from "../../../../helpers/interfaces";
+
 interface DreamTeamTitleProps {
     dreamTeam: DreamTeam;
     handleDreamTeam: (teamProfile: TeamProfile, tokens: Token[]) => void;
 }
 
-export const DreamTeamTitle = ({dreamTeam, handleDreamTeam}: DreamTeamTitleProps) => {
+export const DreamTeamTitle = ({
+    dreamTeam,
+    handleDreamTeam,
+}: DreamTeamTitleProps) => {
     const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
 
     const displayTeamModal = () => {
@@ -32,7 +36,10 @@ export const DreamTeamTitle = ({dreamTeam, handleDreamTeam}: DreamTeamTitleProps
                     className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                     {...slideRightTextAnimation}
                 >
-                    {dreamTeam.teamProfile != null && dreamTeam.teamProfile.key != undefined ? dreamTeam.teamProfile.key : "My Dream Team"}
+                    {dreamTeam.teamProfile != null &&
+                    dreamTeam.teamProfile.key != undefined
+                        ? dreamTeam.teamProfile.key
+                        : "My Dream Team"}
                 </motion.p>
             </div>
             <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
@@ -48,7 +55,13 @@ export const DreamTeamTitle = ({dreamTeam, handleDreamTeam}: DreamTeamTitleProps
                     </div>
                     <img className="h-[100%]" src={FunctionButton}></img>
                 </motion.button>
-                {showTeamModal && <TeamModal dreamTeam={dreamTeam} onSelect={handleDreamTeam} onClose={closeTeamModal} />}
+                {showTeamModal && (
+                    <TeamModal
+                        dreamTeam={dreamTeam}
+                        onSelect={handleDreamTeam}
+                        onClose={closeTeamModal}
+                    />
+                )}
             </div>
             <img className="absolute bottom-0 w-full" src={GoldLine}></img>
         </div>

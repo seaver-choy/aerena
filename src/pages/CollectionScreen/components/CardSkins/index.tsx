@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
     appearCardEmptyAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import { AthleteCard } from "../../../../components/AthleteCard";
 import { SameAthlete } from "../../../../helpers/interfaces";
+import { AthleteCard } from "../../../../components/AthleteCard";
+
 import AthleteSonner from "../../../../assets/sonner/athlete-silver.svg";
 
 interface Props {

@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearCardAnimation,
     pulseAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
-import { AthleteCard } from "../../../../components/AthleteCard";
-import { useUsers } from "../../../../hooks/useUser";
+import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { Athlete, AthleteStats } from "../../../../helpers/interfaces";
+import { getAthleteAllTimeAverageMoontonStats } from "../../../../helpers/lambda.helper";
+import { AthleteCard } from "../../../../components/AthleteCard";
 import { StatsDisplay } from "../StatsDisplay";
+
 import AthleteHeaderSonner from "../../../../assets/sonner/athlete-header.svg";
 import AthleteHeaderBackground from "../../../../assets/background/athlete-header.svg";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
-import { getAthleteAllTimeAverageMoontonStats } from "../../../../helpers/lambda.helper";
+
 interface Props {
     athlete: Athlete;
 }

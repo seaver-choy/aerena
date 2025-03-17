@@ -19,7 +19,6 @@ import { AthleteSelectModal } from "../../modals/AthleteSelectModal";
 import AthleteSonnerGold from "../../../../assets/sonner/athlete-gold.svg";
 
 interface LineupProps {
-    // playTab: string;
     athleteSkins: Skin[];
     tournament: Tournament;
     tournamentLineup: TournamentLineup[];
@@ -29,7 +28,6 @@ interface LineupProps {
 }
 
 export const Lineup = ({
-    // playTab,
     athleteSkins,
     tournament,
     tournamentLineup,
@@ -156,10 +154,6 @@ export const Lineup = ({
                                                   delay: index,
                                               }))}
                                     >
-                                        {/* <img
-                                                    className="h-full w-full"
-                                                    src={tournamentLineup[index].athlete.img}
-                                                ></img> */}
                                         <AthleteCard
                                             color={
                                                 skin?.teamData.colors ??
@@ -216,13 +210,6 @@ export const Lineup = ({
                                             league={skin?.league ?? null}
                                             id={index}
                                         />
-
-                                        {/* <img
-                                            className="h-full w-full"
-                                            src={
-                                                tournamentLineup[index].athlete.img
-                                            }
-                                        ></img> */}
                                     </motion.div>
                                 )}
                         </div>
@@ -231,7 +218,6 @@ export const Lineup = ({
             </div>
             {showAthleteSelectModal && (
                 <AthleteSelectModal
-                    // playTab={playTab}
                     athleteSkins={athleteSkins.filter(
                         (skin) =>
                             skin.position[0] ===

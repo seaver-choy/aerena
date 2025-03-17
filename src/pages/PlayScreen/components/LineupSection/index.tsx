@@ -22,6 +22,7 @@ import { initInvoice } from "@telegram-apps/sdk-react";
 import { Lineup } from "../Lineup";
 import { LineupTitle } from "../LineupTitle";
 import { ConfirmModal } from "../../modals/ConfirmModal";
+import { NameModal } from "../../modals/NameModal";
 import { SuccessModal } from "../../modals/SuccessModal";
 import { ErrorModal } from "../../modals/ErrorModal";
 import { LoadingModal } from "../../modals/LoadingModal";
@@ -32,22 +33,18 @@ import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
-import { NameModal } from "../../modals/NameModal";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
     updateLineup: (ongoingTournament: Tournament) => void;
     showTournament: boolean;
-    // playTab: string;
 }
 
 export const LineupSection = ({
     ongoingTournament,
     updateLineup,
     showTournament,
-    // playTab,
 }: LineupSectionProps) => {
-    // const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
     const user = useUsers();
     const positionList =
         ongoingTournament !== null
@@ -342,7 +339,6 @@ export const LineupSection = ({
                                 ? ongoingTournament.tournamentId
                                 : 0
                         }
-                        // playTab={playTab}
                         athleteSkins={athleteSkins}
                         tournament={ongoingTournament}
                         tournamentLineup={tournamentLineup}

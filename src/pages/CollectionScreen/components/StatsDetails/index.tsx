@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion, animate } from "motion/react";
 import {
     appearAnimation,
@@ -11,19 +13,17 @@ import {
     Athlete,
     TournamentDetails,
 } from "../../../../helpers/interfaces";
-import { useEffect, useState } from "react";
-import LeftIcon from "../../../../assets/icon/left-gold.svg";
-import RightIcon from "../../../../assets/icon/right-gold.svg";
+import { getAthleteStickerLogo } from "../../../../helpers/athletes";
 import {
     getAthleteStats,
     getLeagueWeeks,
 } from "../../../../helpers/lambda.helper";
-import { useUsers } from "../../../../hooks/useUser";
-import { getAthleteStickerLogo } from "../../../../helpers/athletes";
 import { StatsDisplay } from "../StatsDisplay";
 
 import StatsDurationSonner from "../../../../assets/sonner/stats-duration.svg";
 import StatsDetailsSonner from "../../../../assets/sonner/stats-details.svg";
+import LeftIcon from "../../../../assets/icon/left-gold.svg";
+import RightIcon from "../../../../assets/icon/right-gold.svg";
 
 interface Props {
     athlete: Athlete;

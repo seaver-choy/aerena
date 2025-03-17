@@ -1,29 +1,28 @@
 import { useState } from "react";
-import { friendsOptions } from "../../helpers/tabs";
+import { profileOptions } from "../../helpers/tabs";
 import { Layout } from "../../components/Layout";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { Tabs } from "../../components/Tabs";
-import { DreamTeamSection } from "./components/DreamTeamSection";
 import { FriendsSection } from "./components/FriendsSection";
-// import Upgrading from "../../assets/others/upgrading.svg";
+import { DreamTeamSection } from "./components/DreamTeamSection";
 
-export const FriendsScreen = () => {
-    const [friendsTab, setFriendsTab] = useState("Friends");
+export const ProfileScreen = () => {
+    const [profileTab, setProfileTab] = useState("Friends");
 
     return (
         <Layout>
             <ProfileHeader />
             <Tabs
-                options={friendsOptions}
+                options={profileOptions}
                 onToggle={(selected) => {
                     // if (selected !== "Favorites")
                     //temporary in disabling Favorites; comment together with the line in Tabs to enable
-                    setFriendsTab(selected);
+                    setProfileTab(selected);
                 }}
-                selectedTab={friendsTab}
+                selectedTab={profileTab}
             />
-            {friendsTab === "Friends" && <FriendsSection />}
-            {friendsTab === "Favorites" && <DreamTeamSection />}
+            {profileTab === "Friends" && <FriendsSection />}
+            {profileTab === "Favorites" && <DreamTeamSection />}
         </Layout>
     );
 };
