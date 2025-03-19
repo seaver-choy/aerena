@@ -11,14 +11,15 @@ import { DreamTeam, TeamColor } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import {
-    // EmailIcon,
-    // FacebookIcon,
-    // FacebookShareButton,
-    // XIcon,
+    FacebookIcon,
+    FacebookMessengerIcon,
+    FacebookMessengerShareButton,
+    FacebookShareButton,
     TelegramIcon,
+    TelegramShareButton,
 } from "react-share";
-// import { initUtils } from "@telegram-apps/sdk-react";
-// import { useUsers } from "../../../../hooks/useUser";
+import { sampleURL, shareDreamTeam } from "../../../../helpers/lambda.helper";
+import { useUsers } from "../../../../hooks/useUser";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
     onClose: () => void;
@@ -28,210 +29,62 @@ interface DreamTeamModalProps {
 }
 
 export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
-    // const user = useUsers();
+    const user = useUsers();
     const lineupRef = useRef<HTMLDivElement>(null);
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
-    // const utils = initUtils();
-    // const YOUR_FACEBOOK_TOKEN =
-    //     "EAALmPqUAeYIBO1t15cjD9V1CvRWcm0VvZBbRGCBgQHIQabmdvZCrXI6iTwiqpMBa8GIadqZB3AAAYJBYFPxKSPI68xRQ3QwdZACrziWU3bNLJ90ooKE8sLsspmCMNqT7k7MvV0RF8jJr3PQX2TBTLH7te2A1N4XU4YYFzT7569dZCHJJXPcZB6DAPYDypfbhgtfhD9mIGtGiVIqhZCIlRoX3kMUR53a3Ll8goSZCHDo5rQZB4BA4lN4ZALtPALj1cz2AZDZD";
+    const [currentlySample, setCurrentlySample] = useState<boolean>(false);
+    const [imageUrl, setImageUrl] = useState<string>(null);
+    const [exporting, isExporting] = useState<boolean>(false);
 
     const exportLineup = async () => {
-        if (!lineupRef.current) return;
+        if (currentlySample) {
+            isExporting(true);
+            if (!lineupRef.current) {
+                return Promise.resolve();
+            }
 
-        try {
-            const dataUrl = await htmlToImage.toPng(lineupRef.current, {
-                cacheBust: true,
-                pixelRatio: 2,
-            });
+            try {
+                const dataUrl = await htmlToImage.toPng(lineupRef.current, {
+                    cacheBust: true,
+                    pixelRatio: 4,
+                });
 
-            // const link = document.createElement("a");
-            // link.download = "dream-team-lineup.png";
-            // link.href = dataUrl;
-            // link.click();
-
-            // URL.revokeObjectURL(dataUrl);
-            // Convert dataURL to blob
-
-            /* navigator.share */
-            const blob = await fetch(dataUrl).then((r) => r.blob());
-            const file = new File([blob], "dream-team-lineup.png", {
-                type: "image/png",
-                lastModified: Date.now(),
-            });
-            const shareData = {
-                title: "Dream Team Lineup",
-                text: "Check out my dream team lineup! Visit https://t.me/aerena_bot",
-                // url: "https://t.me/aerena_bot",
-                files: [file],
-            };
-            await navigator.share(shareData);
-
-            // const canvas = document.createElement("canvas");
-            // const ctx = canvas.getContext("2d");
-            // if (!ctx) throw new Error("Failed to get canvas context");
-
-            // const img = new Image();
-            // img.onload = () => {
-            //     // Set canvas dimensions to match image
-            //     canvas.width = img.width;
-            //     canvas.height = img.height;
-
-            //     // Draw image on canvas
-            //     ctx.drawImage(img, 0, 0);
-            // };
-
-            // img.src = dataUrl;
-            // return new Promise<string>((resolve) => {
-            //     img.onload = () => resolve(canvas.toDataURL("image/png", 1.0));
-            // });
-        } catch (error) {
-            console.error("Error exporting lineup:", error);
-            alert(error);
-        } finally {
-            // setIsExporting(false);
+                const result = await shareDreamTeam(
+                    user.id,
+                    dataUrl,
+                    user.initDataRaw
+                );
+                setImageUrl(result.imageUrl);
+                user.dispatch({
+                    type: "SET_DREAM_TEAM_SHARE_COUNTER",
+                    payload: {
+                        dreamTeamShareCounter:
+                            result.user["dreamTeamShareCounter"],
+                    },
+                });
+                isExporting(false);
+                setCurrentlySample(false);
+                return Promise.resolve();
+            } catch (error) {
+                console.error("Error exporting lineup:", error);
+                isExporting(false);
+                return Promise.reject(error);
+            }
         }
+        return Promise.resolve();
     };
 
-    // const imageCanvas = async () => {
-    //     if (!lineupRef.current) return "";
+    const setSampleURL = async () => {
+        isExporting(true);
+        const result = await sampleURL(user.id, "dreamteam", user.initDataRaw);
+        setCurrentlySample(true);
+        setImageUrl(result.imageUrl);
+        isExporting(false);
+    };
 
-    //     return new Promise((resolve, reject) => {
-    //         const canvas = document.createElement("canvas");
-    //         const ctx = canvas.getContext("2d");
-
-    //         if (!ctx) {
-    //             reject(new Error("Failed to get canvas context"));
-    //             return;
-    //         }
-
-    //         const div = lineupRef.current;
-    //         canvas.width = div.offsetWidth;
-    //         canvas.height = div.offsetHeight;
-
-    //         // Convert div to image
-    //         htmlToImage
-    //             .toCanvas(div, {
-    //                 cacheBust: true,
-    //                 pixelRatio: 2,
-    //             })
-    //             .then(() => {
-    //                 resolve(canvas.toDataURL("image/png", 1.0));
-    //             })
-    //             .catch((error) => {
-    //                 reject(
-    //                     new Error(
-    //                         `Failed to convert div to image: ${error.message}`
-    //                     )
-    //                 );
-    //             });
-    //     });
-    // };
-
-    // const shareOnFacebook = async (): Promise<void> => {
-    //     const shareUrl = await imageCanvas();
-    //     const blob = await convertDataURIToBlob(shareUrl);
-
-    //     const formData = new FormData();
-    //     formData.append("access_token", YOUR_FACEBOOK_TOKEN);
-    //     formData.append("source", blob);
-    //     formData.append("message", "Hello!");
-    //     console.log(formData);
-    //     try {
-    //         const response = await fetch(
-    //             `https://graph.facebook.com/v13.0/me/media`,
-    //             {
-    //                 method: "POST",
-    //                 body: formData,
-    //                 cache: "no-store",
-    //             }
-    //         );
-
-    //         const result = await response.json();
-
-    //         if (!response.ok) {
-    //             throw new Error(`Facebook API error: ${result.error?.message}`);
-    //         }
-
-    //         console.log("Post successful:", result);
-    //     } catch (error) {
-    //         console.error("Error sharing to Facebook:", error);
-    //         throw error;
-    //     }
-    // };
-
-    // const convertDataURIToBlob = async (dataURI): Promise<Blob> => {
-    //     const byteString = atob(dataURI.split(",")[1]);
-    //     const ab = new ArrayBuffer(byteString.length);
-    //     const ia = new Uint8Array(ab);
-
-    //     for (let i = 0; i < byteString.length; i++) {
-    //         ia[i] = byteString.charCodeAt(i);
-    //     }
-
-    //     return new Blob([ab], { type: "image/png" });
-    // };
-
-    // useEffect(() => {
-    //     console.log(isExporting);
-    //     if (isExporting) {
-    //         console.log("here");
-    //         exportLineup();
-    //     }
-    // }, [isExporting]);
-
-    // const savePreparedInlineMessageWithImage = async () => {
-    //     const token = "7797240127:AAGTbgSg7Ot9OO7wkz_6gpYZVKQFxmBHVV4";
-
-    //     try {
-    //         if (!lineupRef.current) return;
-
-    //         const dataUrl = await htmlToImage.toPng(lineupRef.current, {
-    //             cacheBust: true,
-    //             pixelRatio: 2,
-    //         });
-
-    //         // const link = document.createElement("a");
-    //         // link.download = "dream-team-lineup.png";
-    //         // link.href = dataUrl;
-    //         // link.click();
-
-    //         // URL.revokeObjectURL(dataUrl);
-    //         // Convert dataURL to blob
-    //         const blob = await fetch(dataUrl).then((r) => r.blob());
-    //         const file = new File([blob], "dream-team-lineup.png", {
-    //             type: "image/png",
-    //             lastModified: Date.now(),
-    //         });
-
-    //         // Then save the prepared inline message
-    //         const preparedMessageResponse = await fetch(
-    //             `https://api.telegram.org/bot${token}/savePreparedInlineMessage`,
-    //             {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 body: JSON.stringify({
-    //                     text: "Hello!",
-    //                     parse_mode: "HTML",
-    //                     result: file,
-    //                     user_id: user.id,
-    //                     allow_user_chats: true,
-    //                     allow_group_chats: true,
-    //                 }),
-    //             }
-    //         );
-
-    //         console.log(await preparedMessageResponse.json());
-    //     } catch (error) {
-    //         console.error("Error saving message:", error);
-    //         throw error;
-    //     }
-    // };
-
-    // const handleTelegram = () => {
-    //     utils.shareURL("https://google.com", "Well Hello There!");
-    // };
+    useEffect(() => {
+        setSampleURL();
+    }, [lineupRef.current]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -313,42 +166,49 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             src={DreamTeamBackground}
                         />
                     </div>
-                    {/* <motion.button
-                            className="h-[10vw]"
-                            onClick={exportLineup}
-                            {...appearAnimation}
-                        >
-                            <EmailIcon className="h-full" round={true} />
-                        </motion.button> */}
-                    {/* <motion.button
-                            className="h-[10vw]"
-                            onClick={exportLineup}
-                            {...appearAnimation}
-                        >
-                            <FacebookIcon className="h-full" round={true} />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            onClick={exportLineup}
-                            {...appearAnimation}
-                        >
-                            <XIcon className="h-full" round={true} />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            onClick={shareOnFacebook}
-                            {...appearAnimation}
-                        >
-                            <FacebookIcon className="h-full" round={true} />
-                        </motion.button> */}
                     <div className="flex h-[10vw] w-[80vw] items-center justify-center">
-                        <motion.button
-                            className="h-[10vw]"
-                            onClick={exportLineup}
-                            {...appearAnimation}
-                        >
-                            <TelegramIcon className="h-full" round={true} />
-                        </motion.button>
+                        <motion.div className="h-full" {...appearAnimation}>
+                            <TelegramShareButton
+                                url={imageUrl}
+                                disabled={exporting}
+                                title={
+                                    "Check out my dream team lineup! Visit https://t.me/aerena_bot"
+                                }
+                                beforeOnClick={() => exportLineup()}
+                            >
+                                <TelegramIcon
+                                    className="h-[10vw]"
+                                    round={true}
+                                />
+                            </TelegramShareButton>
+                        </motion.div>
+                        <motion.div className="h-[10vw]" {...appearAnimation}>
+                            <FacebookShareButton
+                                url={imageUrl}
+                                disabled={exporting}
+                                beforeOnClick={() => exportLineup()}
+                            >
+                                <FacebookIcon
+                                    className="h-[10vw]"
+                                    round={true}
+                                />
+                            </FacebookShareButton>
+                        </motion.div>
+                        <motion.div className="h-[10vw]" {...appearAnimation}>
+                            <FacebookMessengerShareButton
+                                url={imageUrl}
+                                appId={"816106684053890"}
+                                beforeOnClick={() => exportLineup()}
+                                disabled={exporting}
+                            >
+                                <FacebookMessengerIcon
+                                    className="h-[10vw]"
+                                    round={true}
+                                />
+                            </FacebookMessengerShareButton>
+                        </motion.div>
+                    </div>
+                    <div className="flex h-[10vw] w-[80vw] items-center justify-center">
                         <motion.button
                             className="h-[10vw]"
                             onClick={onClose}
