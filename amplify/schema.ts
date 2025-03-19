@@ -259,6 +259,7 @@ export const userSchema = new mongoose.Schema(
             default: null,
         },
         skins: [skinSchema],
+        dreamTeamShareCounter: { type: Number, default: 0 },
         hasBeenReset: { type: Boolean },
     },
     {

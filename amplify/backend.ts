@@ -17,13 +17,15 @@ import { friendsFunction } from "./functions/friends/resource";
 import { statsFunction } from "./functions/stats/resource";
 import { upgradeFunction } from "./functions/upgrade/resource";
 import { telegramstarsFunction } from "./functions/telegramstars/resource";
-import { mlTournamentFunction } from './functions/mltournaments/resource';
-import { packInfoFunction } from './functions/packinfo/resource';
+import { mlTournamentFunction } from "./functions/mltournaments/resource";
+import { packInfoFunction } from "./functions/packinfo/resource";
 import * as dotenv from "dotenv";
 import * as path from "path";
+
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
  */
+
 const backend = defineBackend({
     auth,
     userFunction,
@@ -42,8 +44,6 @@ const backend = defineBackend({
 const __dirname = path.dirname("../.env");
 dotenv.config({ path: __dirname });
 const apiStack = backend.createStack("api-stack");
-console.log("test");
-console.log(process.env.ENVIRONMENT);
 let api: RestApi;
 
 if (process.env.ENVIRONMENT === "prod") {
@@ -293,5 +293,10 @@ backend.addOutput({
                 apiName: api.restApiName,
             },
         },
+    },
+    storage: {
+        aws_region: Stack.of(api).region,
+        bucket_name:
+            process.env.ENVIRONMENT === "prod" ? "aerena-prod" : "aerena-dev",
     },
 });

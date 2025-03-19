@@ -1,14 +1,16 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import {
-    userSchema,
-    questSchema,
-} from "../../schema";
+import { userSchema, questSchema } from "../../schema";
 import axios from "axios";
 import { Quest } from "../../interface";
+import * as AWS from "aws-sdk";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
+const awsRegion = process.env.AWS_REGION;
+const bucketName =
+    process.env.ENVIRONMENT === "prod" ? "aerena-prod" : "aerena-dev";
+const s3 = new AWS.S3({ region: awsRegion });
 
 type Referral = {
     userID: number;
@@ -69,6 +71,10 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return payPacks(event);
     } else if (event.path.includes("equipskin")) {
         return equipSkin(event);
+    } else if (event.path.includes("sampleurl")) {
+        return sampleURL(event);
+    } else if (event.path.includes("sharedreamteam")) {
+        return shareDreamTeam(event);
     } else {
         switch (event.httpMethod) {
             case "GET":
@@ -132,10 +138,10 @@ async function getUser(event: APIGatewayProxyEvent) {
 }
 
 function generateCode(length = 8) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = 'AER';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "AER";
     for (let i = code.length; i < length; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return code;
 }
@@ -149,26 +155,25 @@ async function createUser(event: APIGatewayProxyEvent) {
             userID: payload.userID,
         });
         if (!checkUser) {
-            
             let referralCode = "AER";
             let isUnique = false;
-            
+
             while (!isUnique) {
                 referralCode = generateCode(8);
                 const existingCode = await userModel.findOne({
-                    referralCode: referralCode
+                    referralCode: referralCode,
                 });
                 if (!existingCode) {
                     isUnique = true;
                 }
             }
-            
+
             const questModel = conn!.model("Quest");
             const questResult = await questModel.find({});
-            const questIdsWithStatus = questResult.map(quest => ({
+            const questIdsWithStatus = questResult.map((quest) => ({
                 questId: quest.questId,
-                isClaimed: false
-              }));
+                isClaimed: false,
+            }));
 
             const userData = {
                 username: payload.username,
@@ -190,8 +195,8 @@ async function createUser(event: APIGatewayProxyEvent) {
             //adding country e.g. PH or ID for priority sort purposes
             const responseBody = {
                 ...newUser.toObject(),
-                country: event.headers['CloudFront-Viewer-Country'] ?? null
-              };
+                country: event.headers["CloudFront-Viewer-Country"] ?? null,
+            };
 
             return {
                 statusCode: 200,
@@ -232,7 +237,7 @@ async function createUser(event: APIGatewayProxyEvent) {
 async function getQuests() {
     const questModel = conn!.model("Quest");
     try {
-        const result = await questModel.find({}).sort({questId: 1});
+        const result = await questModel.find({}).sort({ questId: 1 });
         if (!result) {
             return {
                 statusCode: 500,
@@ -317,24 +322,24 @@ async function updateQuestClaim(event: APIGatewayProxyEvent) {
 
     let claim = false;
     const value = quest.value;
-    if(!quest.isRepeating)
-        switch(value){
+    if (!quest.isRepeating)
+        switch (value) {
             case null:
-                if(user[quest.taskName] != null) {
+                if (user[quest.taskName] != null) {
                     claim = true;
                 } else {
                     claim = false;
                 }
                 break;
             case true:
-                if(user[quest.taskName]) {
+                if (user[quest.taskName]) {
                     claim = true;
                 } else {
                     claim = false;
                 }
                 break;
             default:
-                if(user[quest.taskName] >= quest.value) {
+                if (user[quest.taskName] >= quest.value) {
                     claim = true;
                 } else {
                     claim = false;
@@ -536,8 +541,8 @@ async function login(event: APIGatewayProxyEvent) {
             //adding country e.g. PH or ID for priority sort purposes
             const responseBody = {
                 ...updateResult.toObject(),
-                country: event.headers['CloudFront-Viewer-Country'] ?? null
-              };
+                country: event.headers["CloudFront-Viewer-Country"] ?? null,
+            };
 
             return {
                 statusCode: 200,
@@ -564,8 +569,8 @@ async function login(event: APIGatewayProxyEvent) {
             //adding country e.g. PH or ID for priority sort purposes
             const responseBody = {
                 ...updateResult.toObject(),
-                country: event.headers['CloudFront-Viewer-Country'] ?? null
-              };
+                country: event.headers["CloudFront-Viewer-Country"] ?? null,
+            };
             return {
                 statusCode: 200,
                 headers: {
@@ -716,12 +721,9 @@ async function subtractBP(event: APIGatewayProxyEvent) {
             [
                 {
                     $set: {
-                        points:
-                                {
-                                    $subtract: [
-                                        "$points", bpCost
-                                    ],
-                                },
+                        points: {
+                            $subtract: ["$points", bpCost],
+                        },
                         pointsUpdatedAt: new Date(),
                     },
                 },
@@ -769,9 +771,7 @@ async function saveDreamTeam(event: APIGatewayProxyEvent) {
             ],
             { new: true }
         );
-        console.info(
-            `[SAVEDREAMTEAM] User ${userID} has saved Dream Team`
-        );
+        console.info(`[SAVEDREAMTEAM] User ${userID} has saved Dream Team`);
         return {
             statusCode: 200,
             headers: {
@@ -841,15 +841,17 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
         const payload = JSON.parse(JSON.parse(event.body!));
         const userID = payload.userId;
         const referralCode = payload.referralCode;
-        const referrer = await userModel.findOne({referralCode: referralCode});
-        if(referrer) {
+        const referrer = await userModel.findOne({
+            referralCode: referralCode,
+        });
+        if (referrer) {
             const currentDate = new Date();
-            const referee = await userModel.findOne({userID: userID});
+            const referee = await userModel.findOne({ userID: userID });
             const index = referee.friends.findIndex(
                 (obj: Referral) => obj.userID === referrer.userID
             );
             let updatedReferee;
-            if(index === -1) {
+            if (index === -1) {
                 updatedReferee = await userModel.findOneAndUpdate(
                     {
                         userID: userID,
@@ -868,15 +870,14 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                                 userID: referrer.userID,
                                 referralCode: referralCode,
                                 referralDate: currentDate,
-                            }
-                        }
+                            },
+                        },
                     },
                     {
                         new: true,
                     }
                 );
-            }
-            else {
+            } else {
                 updatedReferee = await userModel.findOneAndUpdate(
                     {
                         userID: userID,
@@ -887,8 +888,8 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                                 userID: referrer.userID,
                                 referralCode: referralCode,
                                 referralDate: currentDate,
-                            }
-                        }
+                            },
+                        },
                     },
                     {
                         new: true,
@@ -899,8 +900,8 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                 (obj: Referral) => obj.userID === updatedReferee.userID
             );
             let updatedReferrer;
-            
-            if(index2 === -1) {
+
+            if (index2 === -1) {
                 updatedReferrer = await userModel.findOneAndUpdate(
                     {
                         referralCode: referralCode,
@@ -927,8 +928,7 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                         new: true,
                     }
                 );
-            }
-            else {
+            } else {
                 updatedReferrer = await userModel.findOneAndUpdate(
                     {
                         referralCode: referralCode,
@@ -953,21 +953,29 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
             console.info(
                 `[REFERRAL] User ${updatedReferee.username} is referred by ${updatedReferrer.username}`
             );
-            
+
             const response = await axios.post(process.env.BOT_WEBHOOK_URL!, {
                 update_id: 1,
                 message: {
                     chat: {
                         id: updatedReferrer.userID,
                     },
-                    text: "/notifyreferral " + updatedReferrer.userID + " " + updatedReferee.username,
+                    text:
+                        "/notifyreferral " +
+                        updatedReferrer.userID +
+                        " " +
+                        updatedReferee.username,
                 },
             });
 
-            if(!response)
-                console.error(`[ERROR][REFERRAL] Error in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`);
+            if (!response)
+                console.error(
+                    `[ERROR][REFERRAL] Error in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`
+                );
             else
-                console.info(`[REFERRAL] Success in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`);
+                console.info(
+                    `[REFERRAL] Success in notifying ${updatedReferrer.username} about referring ${updatedReferee.username}`
+                );
             return {
                 statusCode: 200,
                 headers: {
@@ -986,7 +994,9 @@ async function addNewReferral(event: APIGatewayProxyEvent) {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ message: `User with referral code ${referralCode} does not exists` }),
+                body: JSON.stringify({
+                    message: `User with referral code ${referralCode} does not exists`,
+                }),
             };
         }
     } catch (e) {
@@ -1014,7 +1024,7 @@ async function payPacks(event: APIGatewayProxyEvent) {
     const userResult = await userModel.findOne({
         userID: userID,
     });
-    
+
     if (!userResult) {
         console.error(`[ERROR] User ${userID} not found`);
         return {
@@ -1044,7 +1054,7 @@ async function payPacks(event: APIGatewayProxyEvent) {
                 }),
             };
         }
-        
+
         const userUpdate = await userModel.findOneAndUpdate(
             { userID: userID },
             {
@@ -1056,7 +1066,9 @@ async function payPacks(event: APIGatewayProxyEvent) {
             { new: true }
         );
 
-        console.info(`[USER][PACKS] User ${userID} has paid ${amount} BP for ${count} ${payload.packId} pack${count > 1 ? "s" : ""}`);
+        console.info(
+            `[USER][PACKS] User ${userID} has paid ${amount} BP for ${count} ${payload.packId} pack${count > 1 ? "s" : ""}`
+        );
 
         return {
             statusCode: 200,
@@ -1067,11 +1079,8 @@ async function payPacks(event: APIGatewayProxyEvent) {
             body: JSON.stringify(userUpdate),
         };
     } catch (err) {
-        await userModel.findOneAndReplace(
-            { userID: userID },
-            userResult
-        );
-        
+        await userModel.findOneAndReplace({ userID: userID }, userResult);
+
         console.error(
             `[ERROR][USER][PACKS] ${userID} has encountered an error \n ${err}`
         );
@@ -1102,7 +1111,7 @@ async function equipSkin(event: APIGatewayProxyEvent) {
     const userResult = await userModel.findOne({
         userID: userID,
     });
-    
+
     if (!userResult) {
         console.error(`[ERROR] User ${userID} not found`);
         return {
@@ -1117,11 +1126,11 @@ async function equipSkin(event: APIGatewayProxyEvent) {
 
     try {
         const updateQuery: Record<string, boolean> = {};
-    
+
         if (oldIndex >= 0) {
             updateQuery[`skins.${oldIndex}.isEquipped`] = false;
         }
-        
+
         if (newIndex >= 0) {
             updateQuery[`skins.${newIndex}.isEquipped`] = true;
         }
@@ -1132,7 +1141,9 @@ async function equipSkin(event: APIGatewayProxyEvent) {
             { new: true }
         );
 
-        console.info(`[USER][SKIN] User ${userID} equipped ${newIndex == -1 ? 'Default Skin' : 'skins[' + newIndex + ']'} for ${userUpdate.skins[oldIndex == -1 ? newIndex : oldIndex].player}`);
+        console.info(
+            `[USER][SKIN] User ${userID} equipped ${newIndex == -1 ? "Default Skin" : "skins[" + newIndex + "]"} for ${userUpdate.skins[oldIndex == -1 ? newIndex : oldIndex].player}`
+        );
 
         return {
             statusCode: 200,
@@ -1143,11 +1154,8 @@ async function equipSkin(event: APIGatewayProxyEvent) {
             body: JSON.stringify(userUpdate),
         };
     } catch (err) {
-        await userModel.findOneAndReplace(
-            { userID: userID },
-            userResult
-        );
-        
+        await userModel.findOneAndReplace({ userID: userID }, userResult);
+
         console.error(
             `[ERROR][USER][SKIN] ${userID} has encountered an error \n ${err}`
         );
@@ -1163,6 +1171,132 @@ async function equipSkin(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({ error: err }),
+        };
+    }
+}
+
+async function sampleURL(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    try {
+        const payload = JSON.parse(JSON.parse(event.body!));
+        const userID = payload.userId;
+        const userResult = await userModel.findOne({ userID });
+        if (!userResult) {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "User ID not found",
+                }),
+            };
+        }
+        const shareType = payload.shareType;
+        let imageUrl = "";
+        if (shareType == "dreamteam") {
+            imageUrl = `https://${bucketName}.s3.${awsRegion}.amazonaws.com/dreamteam/dream-team-${userResult.username}-${userResult.dreamTeamShareCounter + 1}.png`;
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                imageUrl: imageUrl,
+            }),
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to share dream team: " + error,
+            }),
+        };
+    }
+}
+
+async function shareDreamTeam(event: APIGatewayProxyEvent) {
+    const userModel = conn!.model("User");
+    try {
+        const payload = JSON.parse(JSON.parse(event.body!));
+        const userID = payload.userId;
+        const userResult = await userModel.findOne({ userID });
+        if (!userResult) {
+            return {
+                statusCode: 404,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "User ID not found",
+                }),
+            };
+        }
+        const dataUrl = payload.dataUrl;
+        if (!dataUrl) {
+            return {
+                statusCode: 400,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Image data is required",
+                }),
+            };
+        }
+
+        const base64Data = dataUrl.replace(/^data:image\/\w+;base64,/, "");
+        const buffer = Buffer.from(base64Data, "base64");
+
+        // Generate unique filename
+        const fileName = `dreamteam/dream-team-${userResult.username}-${userResult.dreamTeamShareCounter + 1}.png`;
+        const params = {
+            Bucket: bucketName,
+            Key: fileName,
+            Body: buffer,
+            ContentType: "image/png",
+            ContentLength: buffer.length,
+        };
+        const data = await s3.upload(params).promise();
+        const updatedUserResult = await userModel.findOneAndUpdate(
+            { userID },
+            { $inc: { dreamTeamShareCounter: 1 } },
+            { new: true }
+        );
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                imageUrl: data.Location,
+                user: updatedUserResult,
+            }),
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: "Failed to share dream team: " + error,
+            }),
         };
     }
 }
