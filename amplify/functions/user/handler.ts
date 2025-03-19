@@ -11,7 +11,9 @@ const awsRegion = process.env.AWS_REGION;
 const bucketName =
     process.env.ENVIRONMENT === "prod" ? "aerena-prod" : "aerena-dev";
 const cloudfrontLink =
-    bucketName === "aerena-prod" ? "" : "https://dyv4eu5krd4u1.cloudfront.net";
+    bucketName === "aerena-prod"
+        ? "https://dmm0spqqk25wc.cloudfront.net"
+        : "https://dyv4eu5krd4u1.cloudfront.net";
 const s3 = new AWS.S3({ region: awsRegion });
 
 type Referral = {
