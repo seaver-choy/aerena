@@ -46,7 +46,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             try {
                 const dataUrl = await htmlToImage.toPng(lineupRef.current, {
                     cacheBust: true,
-                    pixelRatio: 4,
+                    pixelRatio: 3,
                 });
 
                 const result = await shareDreamTeam(

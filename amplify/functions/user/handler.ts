@@ -10,6 +10,8 @@ const uri = process.env.MONGODB_URI!;
 const awsRegion = process.env.AWS_REGION;
 const bucketName =
     process.env.ENVIRONMENT === "prod" ? "aerena-prod" : "aerena-dev";
+const cloudfrontLink =
+    bucketName === "aerena-prod" ? "" : "https://dyv4eu5krd4u1.cloudfront.net";
 const s3 = new AWS.S3({ region: awsRegion });
 
 type Referral = {
@@ -1196,7 +1198,10 @@ async function sampleURL(event: APIGatewayProxyEvent) {
         const shareType = payload.shareType;
         let imageUrl = "";
         if (shareType == "dreamteam") {
-            imageUrl = `https://${bucketName}.s3.${awsRegion}.amazonaws.com/dreamteam/dream-team-${userResult.username}-${userResult.dreamTeamShareCounter + 1}.png`;
+            const counterValue = userResult.dreamTeamShareCounter + 1;
+            const counterText =
+                counterValue < 10 ? "0" + counterValue : counterValue;
+            imageUrl = `${cloudfrontLink}/dreamteam/${userResult.username}-${counterText}.png`;
         }
 
         return {
@@ -1259,8 +1264,11 @@ async function shareDreamTeam(event: APIGatewayProxyEvent) {
         const base64Data = dataUrl.replace(/^data:image\/\w+;base64,/, "");
         const buffer = Buffer.from(base64Data, "base64");
 
-        // Generate unique filename
-        const fileName = `dreamteam/dream-team-${userResult.username}-${userResult.dreamTeamShareCounter + 1}.png`;
+        const counterValue = userResult.dreamTeamShareCounter + 1;
+        const counterText =
+            counterValue < 10 ? "0" + counterValue : counterValue;
+        const fileName = `dreamteam/${userResult.username}-${counterText}.png`;
+        const imageUrl = `${cloudfrontLink}/dreamteam/${userResult.username}-${counterText}.png`;
         const params = {
             Bucket: bucketName,
             Key: fileName,
@@ -1269,23 +1277,36 @@ async function shareDreamTeam(event: APIGatewayProxyEvent) {
             ContentLength: buffer.length,
         };
         const data = await s3.upload(params).promise();
-        const updatedUserResult = await userModel.findOneAndUpdate(
-            { userID },
-            { $inc: { dreamTeamShareCounter: 1 } },
-            { new: true }
-        );
+        if (data) {
+            const updatedUserResult = await userModel.findOneAndUpdate(
+                { userID },
+                { $inc: { dreamTeamShareCounter: 1 } },
+                { new: true }
+            );
 
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify({
-                imageUrl: data.Location,
-                user: updatedUserResult,
-            }),
-        };
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({
+                    imageUrl: imageUrl,
+                    user: updatedUserResult,
+                }),
+            };
+        } else {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                },
+                body: JSON.stringify({
+                    message: "Error in saving image in S3 for share dream team",
+                }),
+            };
+        }
     } catch (error) {
         console.error(error);
         return {

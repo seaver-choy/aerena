@@ -17,7 +17,7 @@ import { ErrorModal } from "../../modals/ErrorModal";
 export const DreamTeamSection = () => {
     const user = useUsers();
     const [dreamTeam, setDreamTeam] = useState<DreamTeam>(user.dreamTeam);
-    const [dreamteamLineup, setDreamTeamLineup] = useState<TournamentLineup[]>([
+    const [dreamTeamLineup, setDreamTeamLineup] = useState<TournamentLineup[]>([
         {
             position: "Roam",
             athlete: null,
@@ -78,7 +78,7 @@ export const DreamTeamSection = () => {
     };
 
     const updateDreamTeamLineup = () => {
-        const updatedLineup = dreamteamLineup.map((position, index) => ({
+        const updatedLineup = dreamTeamLineup.map((position, index) => ({
             ...position,
             athlete: dreamTeam.lineup[index] || null,
         }));
@@ -90,9 +90,12 @@ export const DreamTeamSection = () => {
     }, [dreamTeam]);
 
     const displayDreamTeamModal = () => {
-        console.log(dreamTeam);
         setCurrentPositionIndex(-1);
-        setShowDreamTeamModal(true);
+        if (dreamTeam.lineup?.some((athlete) => athlete === null)) {
+            setShowIncompleteModal(true);
+        } else {
+            setShowDreamTeamModal(true);
+        }
     };
 
     const closeDreamTeamModal = () => {
@@ -109,7 +112,7 @@ export const DreamTeamSection = () => {
                 <DreamTeamLineup
                     dreamTeam={dreamTeam}
                     handleDreamTeam={handleDreamTeam}
-                    dreamTeamLineup={dreamteamLineup}
+                    dreamTeamLineup={dreamTeamLineup}
                     currentPositionIndex={currentPositionIndex}
                     positionChange={positionChange}
                     teamChange={teamChange}
