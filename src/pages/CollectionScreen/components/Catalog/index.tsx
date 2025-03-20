@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
@@ -19,14 +19,13 @@ import {
     getLeagues,
     getAthletePaginated,
 } from "../../../../helpers/lambda.helper";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { AthleteModal } from "../../modals/AthleteModal";
 import { LeagueModal } from "../../modals/LeagueModal";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
-
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
 export const Catalog = () => {

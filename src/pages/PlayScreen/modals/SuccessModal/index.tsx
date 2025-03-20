@@ -9,15 +9,15 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface SuccessModalProps {
-    onClose: () => void;
     title: string;
     message: string;
+    onClose: () => void;
 }
 
 export const SuccessModal = ({
-    onClose,
     title,
     message,
+    onClose,
 }: SuccessModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";

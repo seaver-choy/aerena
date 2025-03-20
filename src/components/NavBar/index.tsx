@@ -10,8 +10,8 @@ import ExchangeIcon from "../../assets/icon/exchange.svg";
 export const NavBar = () => {
     const location = useLocation();
     const tabs = [
-        { id: "/friends", text: "Friends", Icon: FriendsIcon },
-        { id: "/quests", text: "Quests", Icon: QuestsIcon },
+        { id: "/profile", text: "Profile", Icon: FriendsIcon },
+        { id: "/nexus", text: "Nexus", Icon: QuestsIcon },
         { id: "/", text: "Play", Icon: PlayIcon },
         { id: "/collection", text: "Collection", Icon: CollectionIcon },
         { id: "/exchange", text: "Exchange", Icon: ExchangeIcon },

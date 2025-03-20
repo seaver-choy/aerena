@@ -12,19 +12,19 @@ import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-gold.svg";
 
 interface ConfirmModalProps {
-    onClose: () => void;
     onConfirm: () => void;
     loading: boolean;
     tournamentType?: string;
     joinCost?: number;
+    onClose: () => void;
 }
 
 export const ConfirmModal = ({
-    onClose,
     onConfirm,
     loading,
     tournamentType = null,
     joinCost = 0,
+    onClose,
 }: ConfirmModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";

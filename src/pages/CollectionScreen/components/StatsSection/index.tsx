@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
@@ -6,18 +7,18 @@ import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import GoldButton from "../../../../assets/button/gold.svg";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { useUsers } from "../../../../hooks/useUser";
 import {
     Athlete,
     SameAthlete,
     AthleteStats,
 } from "../../../../helpers/interfaces";
+import { getAthleteLeagueStats } from "../../../../helpers/lambda.helper";
 import { StatsDetails } from "../StatsDetails";
 import { StatsDisplay } from "../StatsDisplay";
-import { getAthleteLeagueStats } from "../../../../helpers/lambda.helper";
+
 import StatsBannerSonner from "../../../../assets/sonner/stats-banner.svg";
+import GoldButton from "../../../../assets/button/gold.svg";
 
 interface Props {
     athlete: Athlete;

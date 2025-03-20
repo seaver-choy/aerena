@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="390" height="100" fill="none" xmlns:v="https://vecta.io/nano"><path d="M348 100H42L0 50 42 0h306l42 50-42 50z" fill="#222"/><g fill-rule="evenodd"><path d="M345.67 95l37.8-45-37.8-45H44.33L6.53 50l37.8 45h301.34zM42 100h306l42-50-42-50H42L0 50l42 50z" fill="url(#A)"/><path d="M23 48l27-32h145 145l27 32h-4l-24-29-144 .114L51 19 27 48h-4z" fill="url(#B)"/><path d="M23 52l27 32h145 145l27-32h-4l-24 29-144-.114L51 81 27 52h-4z" fill="url(#C)"/></g><path d="M28 41l-9 9 9 9 9-9-9-9z" fill="url(#D)"/><path d="M362 41l-9 9 9 9 9-9-9-9z" fill="url(#E)"/><defs><linearGradient id="A" x1="195" y1="100" x2="195" y2="0" href="#F"><stop stop-color="#ab750f"/><stop offset=".516" stop-color="#d8a956"/><stop offset="1" stop-color="#ab750f"/></linearGradient><linearGradient id="B" x1="23" y1="32.211" x2="366.889" y2="32.211" href="#F"><stop stop-color="#ab750f" stop-opacity="0"/><stop offset=".516" stop-color="#d8a956"/><stop offset="1" stop-color="#ab750f" stop-opacity="0"/></linearGradient><linearGradient id="C" x1="23" y1="67.789" x2="366.889" y2="67.789" href="#F"><stop stop-color="#ab750f" stop-opacity="0"/><stop offset=".516" stop-color="#d8a956"/><stop offset="1" stop-color="#ab750f" stop-opacity="0"/></linearGradient><linearGradient id="D" x1="28" y1="41" x2="28" y2="59" href="#F"><stop stop-color="#ab750f"/><stop offset=".516" stop-color="#d8a956"/><stop offset="1" stop-color="#ab750f"/></linearGradient><linearGradient id="E" x1="362" y1="41" x2="362" y2="59" href="#F"><stop stop-color="#ab750f"/><stop offset=".516" stop-color="#d8a956"/><stop offset="1" stop-color="#ab750f"/></linearGradient><linearGradient id="F" gradientUnits="userSpaceOnUse"/></defs></svg>
+<svg width="390" height="100" viewBox="0 0 390 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="black">
+<path id="shape" d="M42 -3.68152e-06L348 -3.68152e-06L390 49.9999L348 99.9999L42 99.9999L4.35954e-06 50L42 -3.68152e-06Z" fill="#212121"/>
+<g id="Group 407">
+<mask id="mask0_3425_26169" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="390" height="100">
+<path id="shape_2" d="M42 -3.68152e-06L348 -3.68152e-06L390 49.9999L348 99.9999L42 99.9999L4.35954e-06 50L42 -3.68152e-06Z" fill="#CB9A40"/>
+</mask>
+<g mask="url(#mask0_3425_26169)">
+<path id="Vector 483" d="M91 24.9995L117 -12.5005H234L203 35.4995L259.5 38.4995L304.5 64.9995L270 113L219.5 117L211.5 72.4995L142.5 76.4995V45.9995L91 24.9995Z" fill="white" fill-opacity="0.04"/>
+<path id="Vector 486" d="M346.5 7.50049C352.166 14.6672 363.5 27.0005 363.5 27.0005L358 35.5005L346.5 7.50049Z" fill="white" fill-opacity="0.05"/>
+<path id="Vector 487" d="M44.5 71.4999L25.5 65L48 85L55 68L44.5 71.4999Z" fill="white" fill-opacity="0.05"/>
+</g>
+</g>
+<path id="shape (Stroke) (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M42 -3.68152e-06L5.22395 50L43.8639 95.9999L346.136 95.9999L384.776 49.9999L348 -3.80117e-06L390 49.9999L348 99.9999L42 99.9999L4.35954e-06 50L42 -3.68152e-06ZM347.999 0L42 -3.68152e-06L5.22395 50L46.6598 89.9999L343.34 89.9999L384.776 49.9999L347.999 0ZM348 -3.80117e-06L347.999 0L42 -3.68152e-06L4.35954e-06 50L42 99.9999L348 99.9999L390 49.9999L348 -3.80117e-06Z" fill="#303030"/>
+<path id="shape (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M43.8639 4L5.22395 50L43.8639 95.9999L346.136 95.9999L384.776 49.9999L346.136 4L43.8639 4ZM348 -3.68152e-06L42 -3.68152e-06L4.35954e-06 50L42 99.9999L348 99.9999L390 49.9999L348 -3.68152e-06Z" fill="#5C5C5C"/>
+</g>
+</svg>

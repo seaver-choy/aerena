@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearAnimation,
@@ -15,16 +16,15 @@ import {
     scaleUpAnimation,
     sparkleAnimation,
 } from "../../../../helpers/animation";
+import { Skin } from "../../../../helpers/interfaces";
+import { getChoicePackImage } from "../../../../helpers/images";
+import { AthleteCard } from "../../../../components/AthleteCard";
 
 import Dust from "../../../../assets/others/dust-gold.svg";
 import Glow from "../../../../assets/others/glow-radial.svg";
 import Back from "../../../../assets/card/back.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
-import { Skin } from "../../../../helpers/interfaces";
-import { AthleteCard } from "../../../../components/AthleteCard";
-import { useUsers } from "../../../../hooks/useUser";
-import { getChoicePackImage } from "../../../../helpers/images";
 
 interface AnimationModalProps {
     athleteChoices: Skin[];
@@ -86,11 +86,23 @@ export const AnimationModal = ({
     const handlePackOpening = () => {
         setAnimationStage(2);
     };
-    
+
     const updateOwnedStatus = () => {
         const currentOwnedStatus = [false, false];
-        currentOwnedStatus[0] = user.skins.findIndex(skin => skin.athleteId === athleteChoices[0].athleteId && skin.team === athleteChoices[0].team && skin.league === athleteChoices[0].league) != -1;
-        currentOwnedStatus[1] = user.skins.findIndex(skin => skin.athleteId === athleteChoices[1].athleteId && skin.team === athleteChoices[1].team && skin.league === athleteChoices[1].league) != -1;
+        currentOwnedStatus[0] =
+            user.skins.findIndex(
+                (skin) =>
+                    skin.athleteId === athleteChoices[0].athleteId &&
+                    skin.team === athleteChoices[0].team &&
+                    skin.league === athleteChoices[0].league
+            ) != -1;
+        currentOwnedStatus[1] =
+            user.skins.findIndex(
+                (skin) =>
+                    skin.athleteId === athleteChoices[1].athleteId &&
+                    skin.team === athleteChoices[1].team &&
+                    skin.league === athleteChoices[1].league
+            ) != -1;
         setOwnedStatus(currentOwnedStatus);
     };
 
@@ -201,7 +213,7 @@ export const AnimationModal = ({
                             )}
                             {animationStage === 2 && (
                                 <motion.div
-                                    className="h-[80vw] w-[62vw] [transform-style:preserve-3d] backface-hidden"
+                                    className="h-[80vw] w-[62vw] backface-hidden [transform-style:preserve-3d]"
                                     {...(flipBack
                                         ? flipBackAnimation
                                         : !animationBack
@@ -221,7 +233,7 @@ export const AnimationModal = ({
                             {animationStage === 3 && (
                                 <div className="h-[80vw] w-[62vw]">
                                     <motion.div
-                                        className="h-full w-full [transform-style:preserve-3d] backface-hidden"
+                                        className="h-full w-full backface-hidden [transform-style:preserve-3d]"
                                         {...(flipAthlete
                                             ? flipLeftAnimation
                                             : bobbleAnimation)}
@@ -290,9 +302,7 @@ export const AnimationModal = ({
                                             role={athleteChoices[0].position[0]}
                                             type={"basic"}
                                             league={athleteChoices[0].league}
-                                            owned={
-                                                ownedStatus[0]
-                                            }
+                                            owned={ownedStatus[0]}
                                             id={0}
                                         />
                                     </motion.div>
@@ -321,9 +331,7 @@ export const AnimationModal = ({
                                             role={athleteChoices[1].position[0]}
                                             type={"basic"}
                                             league={athleteChoices[1].league}
-                                            owned={
-                                                ownedStatus[1]
-                                            }
+                                            owned={ownedStatus[1]}
                                             id={1}
                                         />
                                     </motion.div>
@@ -354,9 +362,7 @@ export const AnimationModal = ({
                                         league={
                                             athleteChoices[selectedIndex].league
                                         }
-                                        owned={
-                                            ownedStatus[selectedIndex]
-                                        }
+                                        owned={ownedStatus[selectedIndex]}
                                         id={2}
                                     />
                                 </motion.div>

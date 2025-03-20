@@ -1,7 +1,7 @@
 import { motion, useMotionValue } from "motion/react";
 import { appearAnimation } from "../../helpers/animation";
 import { TeamProfile } from "../../helpers/interfaces";
-import { TeamCard } from "../TeamCard";
+import { X } from "../X";
 
 const buffer = 30;
 const transition = {
@@ -17,7 +17,11 @@ interface TeamSliderProps {
     setCardIndex: (index: number) => void;
 }
 
-export const TeamSlider = ({ teams, cardIndex, setCardIndex }: TeamSliderProps) => {
+export const TeamSlider = ({
+    teams,
+    cardIndex,
+    setCardIndex,
+}: TeamSliderProps) => {
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
@@ -76,7 +80,7 @@ export const TeamSlider = ({ teams, cardIndex, setCardIndex }: TeamSliderProps) 
                             }}
                             transition={transition}
                         >
-                            <TeamCard
+                            <X
                                 color={teamColors}
                                 team={teamProfile.key}
                                 opacity={{ wave: teamColors.wave }}

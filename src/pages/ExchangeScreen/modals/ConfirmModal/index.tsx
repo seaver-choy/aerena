@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { motion } from "motion/react";
 import { appearTextAnimation } from "../../../../helpers/animation";
+import { PackInfo } from "../../../../helpers/interfaces";
 
 import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import WhiteButton from "../../../../assets/button/white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import StarsIcon from "../../../../assets/icon/tg-star-gold.svg";
-import { PackInfo } from "../../../../helpers/interfaces";
 
 interface ConfirmModalProps {
     packInfo: PackInfo;

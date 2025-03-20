@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { winnersOptions } from "../../../../helpers/tabs";
-import { Tabs } from "../../../../components/Tabs";
-
-import WinnersBackground from "../../../../assets/background/winners.svg";
-import WinnersRankBackground from "../../../../assets/background/winners-rank.svg";
-import BasicBoardBackground from "../../../../assets/background/board-basic.svg";
-import EmptyBoardBackground from "../../../../assets/background/board-empty.svg";
+import { useUsers } from "../../../../hooks/useUser";
+import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { getStickerImage } from "../../../../helpers/images";
 import {
     Ranking,
     TeamColor,
     Tournament,
     UsersJoined,
 } from "../../../../helpers/interfaces";
-import { useUsers } from "../../../../hooks/useUser";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { winnersOptions } from "../../../../helpers/tabs";
+import { Tabs } from "../../../../components/Tabs";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { getStickerImage } from "../../../../helpers/images";
+
+import WinnersBackground from "../../../../assets/background/winners.svg";
+import WinnersRankBackground from "../../../../assets/background/winners-rank.svg";
+import BasicBoardBackground from "../../../../assets/background/board-basic.svg";
+import EmptyBoardBackground from "../../../../assets/background/board-empty.svg";
+
 interface WinnersProps {
     rankings: Ranking[];
     tournament: Tournament;

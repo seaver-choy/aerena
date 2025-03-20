@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
@@ -14,14 +14,14 @@ import {
     getAthletePositionBackground,
 } from "../../../../helpers/athletes";
 import { Athlete, Skin } from "../../../../helpers/interfaces";
+import { getAthlete } from "../../../../helpers/lambda.helper";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteModal } from "../../modals/AthleteModal";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
-import { AthleteCard } from "../../../../components/AthleteCard";
-import { AthleteModal } from "../../modals/AthleteModal";
-import { getAthlete } from "../../../../helpers/lambda.helper";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 export const Collection = () => {
     const user = useUsers();
@@ -48,15 +48,15 @@ export const Collection = () => {
     const handlePurchase = () => {
         navigate(`/exchange`);
     };
-    
+
     const fetchAthlete = async (skin) => {
         const result = await getAthlete(skin.athleteId, user.initDataRaw);
-        if(result) {
+        if (result) {
             setSelectedAthlete(result);
             setSelectedSkin(skin);
             setShowAthleteModal(true);
         }
-    }
+    };
 
     const displayAthleteModal = (skin: Skin) => {
         fetchAthlete(skin);
@@ -78,8 +78,10 @@ export const Collection = () => {
                 obj.player.includes(searchString.toUpperCase())
             );
         else
-            filteredPosition = user.skins.filter((obj) =>
-                obj.position.includes(position) && obj.player.includes(searchString.toUpperCase())
+            filteredPosition = user.skins.filter(
+                (obj) =>
+                    obj.position.includes(position) &&
+                    obj.player.includes(searchString.toUpperCase())
             );
 
         const sorted = filteredPosition.sort((a, b) => {
@@ -102,7 +104,10 @@ export const Collection = () => {
     async function fetchMoreData() {
         if (hasNextPage && !isLoadingMore) {
             setIsLoadingMore(true);
-            setDisplaySkins((prevSkins) => [...prevSkins, ...filteredSkins.slice(offset, offset + 12)]);
+            setDisplaySkins((prevSkins) => [
+                ...prevSkins,
+                ...filteredSkins.slice(offset, offset + 12),
+            ]);
             setHasNextPage(filteredSkins.length > offset + 12);
             setOffset((prevOffset) => prevOffset + 12);
             setIsLoadingMore(false);
@@ -256,9 +261,7 @@ export const Collection = () => {
                             />
                         </button>
                     </div>
-                    <div
-                        className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]"
-                    >
+                    <div className="absolute mb-[4vw] mt-[46vw] flex h-[135vw]">
                         <div
                             className="disable-scrollbar m-[4vw] flex flex-row flex-wrap content-start gap-[2vw] overflow-y-auto pl-[2vw]"
                             id="collection-scroll"
@@ -278,53 +281,60 @@ export const Collection = () => {
                                 currentSkins?.length > 0
                                     ? currentSkins?.map((athlete, index) =>
                                           index < showSkinOffset ? (
-                                            <motion.button
-                                                className="relative flex h-[36.4vw] w-[28vw]"
-                                                key={index}
-                                                onClick={() => {
-                                                    displayAthleteModal(athlete);
-                                                }}
-                                                {...appearCardAnimation}
-                                            >
-                                                <AthleteCard
-                                                    color={athlete.teamData.colors}
-                                                    ign={athlete.player}
-                                                    opacity={{wave: athlete.teamData.colors.wave}}
-                                                    role={athlete.position[0]}
-                                                    type={"basic"}
-                                                    league={athlete.league}
-                                                    id={index}
-                                                />
-                                            </motion.button>
-                                        )
-                                        :
-                                        (
-                                            <motion.div
-                                                className="relative flex h-[36.4vw] w-[28vw]"
-                                                {...pulseAnimation}
-                                            >
-                                                <img
-                                                    className="h-full w-full"
-                                                    src={AthleteSonner}
-                                                />
-                                            </motion.div>
-                                        )
-                                    )
+                                              <motion.button
+                                                  className="relative flex h-[36.4vw] w-[28vw]"
+                                                  key={index}
+                                                  onClick={() => {
+                                                      displayAthleteModal(
+                                                          athlete
+                                                      );
+                                                  }}
+                                                  {...appearCardAnimation}
+                                              >
+                                                  <AthleteCard
+                                                      color={
+                                                          athlete.teamData
+                                                              .colors
+                                                      }
+                                                      ign={athlete.player}
+                                                      opacity={{
+                                                          wave: athlete.teamData
+                                                              .colors.wave,
+                                                      }}
+                                                      role={athlete.position[0]}
+                                                      type={"basic"}
+                                                      league={athlete.league}
+                                                      id={index}
+                                                  />
+                                              </motion.button>
+                                          ) : (
+                                              <motion.div
+                                                  className="relative flex h-[36.4vw] w-[28vw]"
+                                                  {...pulseAnimation}
+                                              >
+                                                  <img
+                                                      className="h-full w-full"
+                                                      src={AthleteSonner}
+                                                  />
+                                              </motion.div>
+                                          )
+                                      )
                                     : currentSkins != null &&
                                       hasFetchedInitial && (
-                                        <div className="mt-[2vw] px-[5vw]">
-                                            <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
-                                                You do not have skins for{" "}
-                                                {positionList[positionIndex]}. Purchase
-                                                packs to obtain skins.
-                                            </p>
-                                        </div>
-                                    )}
+                                          <div className="mt-[2vw] px-[5vw]">
+                                              <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] font-normal text-transparent">
+                                                  You do not have skins for{" "}
+                                                  {positionList[positionIndex]}.
+                                                  Purchase packs to obtain
+                                                  skins.
+                                              </p>
+                                          </div>
+                                      )}
                             </InfiniteScroll>
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>
             {showAthleteModal && (
                 <AthleteModal
                     athlete={selectedAthlete}
