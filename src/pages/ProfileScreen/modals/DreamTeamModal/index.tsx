@@ -105,17 +105,13 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     };
 
     const setSampleURL = async () => {
-        isExporting(true);
         const result = await sampleURL(user.id, "dreamteam", user.initDataRaw);
         setCurrentlySample(true);
         setImageUrl(result.imageUrl);
     };
 
     useEffect(() => {
-        setSampleURL();
-    }, [lineupRef.current]);
-
-    useEffect(() => {
+        isExporting(true);
         if (currentlySample)
             setTimeout(() => {
                 isExporting(false);
@@ -123,6 +119,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     }, [currentlySample]);
 
     useEffect(() => {
+        setSampleURL();
         document.body.style.overflow = "hidden";
 
         return () => {
