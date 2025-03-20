@@ -59,7 +59,10 @@ export const MatchBanner = () => {
                         </div>
                     </button>
                 </motion.div>
-                <div className="absolute left-0 h-[30vw] w-[70vw] bg-red">
+                <div className="absolute left-[6vw] top-[10vw] h-[10vw] w-[26vw]">
+                    <TeamCard color={color} />
+                </div>
+                <div className="absolute right-[6vw] top-[10vw] h-[10vw] w-[26vw]">
                     <TeamCard color={color} />
                 </div>
             </div>
