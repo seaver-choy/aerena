@@ -31,7 +31,6 @@ import { ErrorModal } from "../../modals/ErrorModal";
 
 import ChoicePackSonner from "../../../../assets/sonner/pack-choice.svg";
 import ChoicePackBackground from "../../../../assets/background/pack-choice.svg";
-import AerenaTextLogo from "../../../../assets/logo/aerena-text.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 import BlackButton from "../../../../assets/button/black.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
@@ -240,7 +239,7 @@ export const ChoiceBanner = () => {
                                 />
                             </motion.div>
                             <div className="absolute right-[4vw] top-[10vw] flex w-[50vw] flex-col">
-                                <motion.div
+                                {/* <motion.div
                                     className="h-[5vw] w-full"
                                     {...slideRightTextAnimation}
                                 >
@@ -248,8 +247,16 @@ export const ChoiceBanner = () => {
                                         className="h-full"
                                         src={AerenaTextLogo}
                                     />
-                                </motion.div>
+                                </motion.div> */}
                                 <div className="mt-[1vw] flex w-full">
+                                    <motion.p
+                                        className="text-nowrap font-russoone text-[4vw] font-normal text-golddark"
+                                        {...slideRightTextAnimation}
+                                    >
+                                        PH S15
+                                    </motion.p>
+                                </div>
+                                <div className="-mt-[1vw] flex w-full">
                                     <motion.p
                                         className="text-nowrap bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[6vw] font-normal text-transparent"
                                         {...slideRightTextAnimation}
@@ -277,7 +284,7 @@ export const ChoiceBanner = () => {
                                     }}
                                     {...appearTextAnimation}
                                 >
-                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                    <div className="absolute -mt-[0.4vw] flex h-full w-full items-center justify-center gap-[1vw]">
                                         <img
                                             className="h-[3.5vw]"
                                             src={TGStarIcon}

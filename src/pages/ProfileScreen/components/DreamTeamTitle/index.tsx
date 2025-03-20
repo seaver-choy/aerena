@@ -49,7 +49,7 @@ export const DreamTeamTitle = ({
                     {...appearTextAnimation}
                 >
                     <div className="absolute flex">
-                        <p className="font-russoone text-[2.4vw] font-normal tracking-wide text-white">
+                        <p className="font-russoone text-[2.8vw] font-normal tracking-wide text-white">
                             Team
                         </p>
                     </div>
