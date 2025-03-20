@@ -146,7 +146,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                         </div>
                         <div className="absolute top-[10.5vw]">
                             <p
-                                className={`bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent ${isIOS() ? "ios-text-rendering" : "android-text-rendering"}`}
+                                className={`font-russoone text-[4vw] text-golddark ${isIOS() ? "ios-text-rendering" : "android-text-rendering"}`}
                             >
                                 {dreamTeam.teamProfile != null &&
                                 dreamTeam.teamProfile.key != undefined
