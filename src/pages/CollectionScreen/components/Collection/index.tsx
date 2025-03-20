@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearCardAnimation,
-    appearTextAnimation,
     pulseAnimation,
     slideRightAnimation,
-    slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import {
     getAthletePositionLogo,
@@ -19,13 +16,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { AthleteModal } from "../../../../modals/AthleteModal";
 
-import FunctionButton from "../../../../assets/button/function.svg";
-import GoldLine from "../../../../assets/others/line-gold.svg";
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
 export const Collection = () => {
     const user = useUsers();
-    const navigate = useNavigate();
     const positionList = ["All", "Roam", "Mid", "Jungle", "Gold", "EXP"];
     const [positionIndex, setPositionIndex] = useState<number>(0);
     const [currentSkins, setCurrentSkins] = useState<Skin[]>(null);
@@ -44,10 +38,6 @@ export const Collection = () => {
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
     const containerRef = useRef(null);
-
-    const handlePurchase = () => {
-        navigate(`/exchange`);
-    };
 
     const fetchAthlete = async (skin) => {
         const result = await getAthlete(skin.athleteId, user.initDataRaw);
@@ -151,21 +141,6 @@ export const Collection = () => {
 
     return (
         <div className="mt-[4vw] h-[193vw]">
-            <motion.div
-                className="mx-[4vw] mb-[4vw] h-[12vw] rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]"
-                {...slideRightAnimation}
-            >
-                <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw]">
-                    <input
-                        className="flex w-full bg-transparent font-russoone text-[3.5vw] font-normal text-white focus:outline-none"
-                        type="text"
-                        placeholder="Search Player..."
-                        maxLength={12}
-                        value={queryString}
-                        onChange={(e) => setQueryString(e.target.value)}
-                    ></input>
-                </div>
-            </motion.div>
             <div className="mt-[4vw] h-[193vw]">
                 <div className="relative flex">
                     <img
@@ -174,36 +149,24 @@ export const Collection = () => {
                             positionList[positionIndex]
                         )}
                     />
-                    <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[11vw]">
-                        <div className="flex h-full w-[50%] items-center pl-[4vw]">
-                            <motion.p
-                                className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
-                                {...slideRightTextAnimation}
-                            >
-                                Personal Collection
-                            </motion.p>
-                        </div>
-                        <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
-                            <motion.button
-                                className="relative flex h-[7vw] items-center justify-center"
-                                onClick={handlePurchase}
-                                {...appearTextAnimation}
-                            >
-                                <div className="absolute flex">
-                                    <p className="font-russoone text-[2.8vw] font-normal tracking-wide text-white">
-                                        Buy
-                                    </p>
-                                </div>
-                                <img
-                                    className="h-[100%]"
-                                    src={FunctionButton}
-                                ></img>
-                            </motion.button>
-                        </div>
-                        <img
-                            className="absolute bottom-0 left-0 w-full"
-                            src={GoldLine}
-                        ></img>
+                    <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[12.5vw]">
+                        <motion.div
+                            className="mx-[4vw] h-[12vw] w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]"
+                            {...slideRightAnimation}
+                        >
+                            <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw]">
+                                <input
+                                    className="flex w-full bg-transparent font-russoone text-[3.5vw] font-normal text-white focus:outline-none"
+                                    type="text"
+                                    placeholder="Search Player..."
+                                    maxLength={12}
+                                    value={queryString}
+                                    onChange={(e) =>
+                                        setQueryString(e.target.value)
+                                    }
+                                ></input>
+                            </div>
+                        </motion.div>
                     </div>
                     <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center gap-[5vw] px-[4vw]">
                         <button

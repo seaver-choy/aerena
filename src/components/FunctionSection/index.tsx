@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import {
     appearTextAnimation,
@@ -25,6 +26,7 @@ interface FunctionSectionProps {
     dreamTeam?: DreamTeam;
     handleDreamTeam?: (teamProfile: TeamProfile, tokens: Token[]) => void;
     showTeamButton?: boolean;
+    showBuyButton?: boolean;
 }
 
 export const FunctionSection = ({
@@ -32,15 +34,17 @@ export const FunctionSection = ({
     regions,
     chosenRegion,
     setChosenRegion,
-    showRegionButton = true,
+    showRegionButton = false,
     leagueTypes,
     chosenLeagueType,
     setChosenLeagueType,
-    showLeagueButton = true,
+    showLeagueButton = false,
     dreamTeam,
     handleDreamTeam,
     showTeamButton = false,
+    showBuyButton = false,
 }: FunctionSectionProps) => {
+    const navigate = useNavigate();
     const [showRegionModal, setShowRegionModal] = useState<boolean>(false);
     const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
     const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
@@ -78,6 +82,10 @@ export const FunctionSection = ({
         dreamTeam?.teamProfile?.key !== null
             ? dreamTeam.teamProfile.key
             : title;
+
+    const handlePurchase = () => {
+        navigate(`/exchange`);
+    };
 
     return (
         <div className="relative mt-[4vw] flex h-[13.8vw] w-full">
@@ -137,6 +145,23 @@ export const FunctionSection = ({
                             <div className="absolute flex">
                                 <p className="font-russoone text-[2.8vw] font-normal tracking-wide text-white">
                                     Team
+                                </p>
+                            </div>
+                            <img
+                                className="h-[100%]"
+                                src={FunctionButton}
+                            ></img>
+                        </motion.button>
+                    )}
+                    {showBuyButton && (
+                        <motion.button
+                            className="relative flex h-[7vw] items-center justify-center"
+                            onClick={handlePurchase}
+                            {...appearTextAnimation}
+                        >
+                            <div className="absolute flex">
+                                <p className="font-russoone text-[2.8vw] font-normal tracking-wide text-white">
+                                    Buy
                                 </p>
                             </div>
                             <img

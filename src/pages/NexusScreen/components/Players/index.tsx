@@ -156,9 +156,11 @@ export const Players = () => {
                 regions={regions}
                 chosenRegion={chosenRegion}
                 setChosenRegion={setChosenRegion}
+                showRegionButton={true}
                 leagueTypes={leagueTypes}
                 chosenLeagueType={chosenLeagueType}
                 setChosenLeagueType={setChosenLeagueType}
+                showLeagueButton={true}
             />
             <div className="mt-[4vw] h-[193vw]">
                 <div className="relative flex">
@@ -169,41 +171,6 @@ export const Players = () => {
                         )}
                     />
                     <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[12.5vw]">
-                        {/* <div className="flex h-full w-[50%] items-center pl-[4vw]">
-                            <motion.p
-                                className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
-                                {...slideRightTextAnimation}
-                            >
-                                {chosenLeagueType == null
-                                    ? "Player Catalog"
-                                    : chosenLeagueType}
-                            </motion.p>
-                        </div>
-                        <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
-                            <motion.button
-                                className="relative flex h-[7vw] items-center justify-center"
-                                onClick={displayLeagueModal}
-                                {...appearTextAnimation}
-                                disabled={
-                                    leagueTypes === null ||
-                                    currentAthletes === null
-                                }
-                            >
-                                <div className="absolute flex">
-                                    <p className="font-russoone text-[2.4vw] font-normal tracking-wide text-white">
-                                        Filter
-                                    </p>
-                                </div>
-                                <img
-                                    className="h-[100%]"
-                                    src={FunctionButton}
-                                ></img>
-                            </motion.button>
-                        </div>
-                        <img
-                            className="absolute bottom-0 left-0 w-full"
-                            src={GoldLine}
-                        ></img> */}
                         <motion.div
                             className="mx-[4vw] h-[12vw] w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]"
                             {...slideRightAnimation}

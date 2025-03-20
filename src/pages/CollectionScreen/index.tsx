@@ -1,16 +1,13 @@
-import { useState } from "react";
-import { collectionOptions } from "../../helpers/tabs";
 import { Layout } from "../../components/Layout";
-import { Tabs } from "../../components/Tabs";
+import { TitleSection } from "../../components/TitleSection";
+import { FunctionSection } from "../../components/FunctionSection";
 import { Collection } from "./components/Collection";
-import { Catalog } from "./components/Catalog";
 
 export const CollectionScreen = () => {
-    const [collectionTab, setCollectionTab] = useState("Collection");
-
     return (
         <Layout>
-            <Tabs
+            <TitleSection title="Collection" />
+            {/* <Tabs
                 options={collectionOptions}
                 onToggle={(selected) => {
                     setCollectionTab(selected);
@@ -18,7 +15,9 @@ export const CollectionScreen = () => {
                 selectedTab={collectionTab}
             />
             {collectionTab === "Collection" && <Collection />}
-            {collectionTab === "Catalog" && <Catalog />}
+            {collectionTab === "Catalog" && <Catalog />} */}
+            <FunctionSection title="My Skins" showBuyButton={true} />
+            <Collection />
         </Layout>
     );
 };

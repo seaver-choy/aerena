@@ -7,7 +7,11 @@ import { MatchBanner } from "../MatchBanner";
 export const Schedule = () => {
     return (
         <div>
-            <FunctionSection title="Filter Options" />
+            <FunctionSection
+                title="Filter Options"
+                showRegionButton={true}
+                showLeagueButton={true}
+            />
             <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
                 <button className="items-center justify-center bg-graydark px-[2vw]">
                     <motion.p
@@ -58,14 +62,14 @@ export const Schedule = () => {
                     </motion.p>
                 </button>
             </div>
-            <TitleSection />
+            <TitleSection title="Day 1" />
             <MatchBanner />
             <MatchBanner />
-            <TitleSection />
+            <TitleSection title="Day 2" />
             <MatchBanner />
             <MatchBanner />
             <MatchBanner />
-            <TitleSection />
+            <TitleSection title="Day 3" />
             <MatchBanner />
             <MatchBanner />
         </div>
