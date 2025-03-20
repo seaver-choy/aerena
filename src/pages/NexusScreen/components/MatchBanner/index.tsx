@@ -64,7 +64,7 @@ export const MatchBanner = () => {
                     </button>
                 </motion.div>
                 <div className="absolute left-[6vw] top-[10vw] h-[10vw] w-[26vw]">
-                    <TeamCard color={color} />
+                    <TeamCard color={color} team={"ANRCHY"} />
                 </div>
                 <div className="absolute bottom-[6vw] left-[6vw] flex h-[6vw] w-[26vw] justify-center pl-[5vw]">
                     <img className="h-full" src={LoseLeft} />
@@ -72,7 +72,7 @@ export const MatchBanner = () => {
                     <img className="-ml-[2vw] h-full" src={WinLeft} />
                 </div>
                 <div className="absolute right-[6vw] top-[10vw] h-[10vw] w-[26vw]">
-                    <TeamCard color={color} />
+                    <TeamCard color={color} team={"ANRCHY"} />
                 </div>
                 <div className="absolute bottom-[6vw] right-[6vw] flex h-[6vw] w-[26vw] justify-center pr-[5vw]">
                     <img className="h-full" src={WinRight} />
