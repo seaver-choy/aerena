@@ -20,6 +20,18 @@
     animation: riseUp 1s forwards;
 }
 
+.ios-text-rendering {
+    -webkit-text-fill-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.android-text-rendering {
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-rendering: geometricPrecision;
+}
+
 @layer utilities {
     .disable-select {
         user-select: none;
