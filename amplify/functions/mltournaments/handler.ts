@@ -22,7 +22,9 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
     }
     if (event.path.includes("leagues")) {
         return getLeagues();
-    } if (event.path.includes("teamprofiles")) {
+    } else if (event.path.includes("countries")) {
+        return getCountries();
+    } else if (event.path.includes("teamprofiles")) {
         return getTeamProfiles();
     } else {
         switch (event.httpMethod) {
@@ -46,7 +48,9 @@ async function getLeagues() {
 
     try {
         const result = await mlTournamentModel
-            .find({isActiveFilter: true}).sort({endDate: -1}).select('code'); //TODO: currently is used for league filter in Catalog
+            .find({ isActiveFilter: true })
+            .sort({ endDate: -1 })
+            .select("code"); //TODO: currently is used for league filter in Catalog
 
         if (!result) {
             return {
@@ -65,9 +69,7 @@ async function getLeagues() {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify(
-                [...new Set(result.map(item => item.code))]
-            ),
+            body: JSON.stringify([...new Set(result.map((item) => item.code))]),
         };
     } catch (e) {
         return {
@@ -87,8 +89,7 @@ async function getTeamProfiles() {
     const teamProfilesModel = conn!.model("TeamProfiles");
 
     try {
-        const result = await teamProfilesModel
-            .find();
+        const result = await teamProfilesModel.find();
 
         if (!result) {
             return {
@@ -122,4 +123,43 @@ async function getTeamProfiles() {
         };
     }
 }
+async function getCountries() {
+    const teamProfilesModel = conn!.model("TeamProfiles");
 
+    try {
+        const result = await teamProfilesModel.aggregate([
+            { $group: { _id: "$country" } },
+            { $sort: { _id: 1 } },
+        ]);
+        if (!result) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "No countries found" }),
+            };
+        }
+        const countries = result.map((item) => item._id);
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(countries),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get countries list: ${e}`,
+            }),
+        };
+    }
+}

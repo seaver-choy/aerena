@@ -17,7 +17,7 @@ import { Athlete, Skin } from "../../../../helpers/interfaces";
 import { getAthlete } from "../../../../helpers/lambda.helper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { AthleteModal } from "../../modals/AthleteModal";
+import { AthleteModal } from "../../../../modals/AthleteModal";
 
 import FunctionButton from "../../../../assets/button/function.svg";
 import GoldLine from "../../../../assets/others/line-gold.svg";

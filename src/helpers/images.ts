@@ -40,6 +40,8 @@ export function getStickerImage(league: string) {
 
 export function getCountryImage(country: string) {
     switch (country) {
+        case "ALL":
+            return AllSticker;
         case "China":
             return ChinaSticker;
         case "Cambodia":

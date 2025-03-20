@@ -649,6 +649,27 @@ export const getLeagues = async (initDataRaw) => {
     }
 };
 
+export const getCountries = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/countries",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of countries ${e}`);
+    }
+};
+
 export const getAthletes = async (initDataRaw) => {
     try {
         const restOperation = get({
@@ -840,6 +861,7 @@ export const getAthletePaginated = async (
     searchString: string,
     position: string,
     leagueTypes: string[],
+    region: string,
     initDataRaw: string
 ) => {
     try {
@@ -848,6 +870,7 @@ export const getAthletePaginated = async (
             limit: limit.toString(),
             searchString: searchString,
             leagueTypes: leagueTypes.toString(),
+            region: region,
             position: position,
         };
         const restOperation = get({
