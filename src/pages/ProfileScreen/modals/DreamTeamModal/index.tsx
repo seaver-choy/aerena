@@ -111,7 +111,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     };
 
     useEffect(() => {
-        isExporting(true);
+        if (imageUrl == null) isExporting(true);
         if (currentlySample)
             setTimeout(() => {
                 isExporting(false);
