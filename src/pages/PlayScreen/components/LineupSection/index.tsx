@@ -333,7 +333,11 @@ export const LineupSection = ({
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
                     <div className="absolute top-[4vw] flex h-[20vw] w-full justify-center px-[0.5vw]">
-                        <FunctionSection title="Fantasy Lineup" />
+                        <FunctionSection
+                            title="Fantasy Lineup"
+                            showRegionButton={false}
+                            showLeagueButton={false}
+                        />
                     </div>
                     <Lineup
                         key={

@@ -7,7 +7,7 @@ import {
     TournamentLineup,
 } from "../../../../helpers/interfaces";
 import { saveDreamTeam } from "../../../../helpers/lambda.helper";
-import { DreamTeamTitle } from "../DreamTeamTitle";
+import { FunctionSection } from "../../../../components/FunctionSection";
 import { DreamTeamLineup } from "../DreamTeamLineup";
 import { DreamTeamModal } from "../../modals/DreamTeamModal";
 import { ErrorModal } from "../../modals/ErrorModal";
@@ -105,10 +105,16 @@ export const DreamTeamSection = () => {
     return (
         <div className="mb-[6vw] mt-[4vw] h-[120vw]">
             <div className="relative flex justify-center">
-                <DreamTeamTitle
-                    dreamTeam={dreamTeam}
-                    handleDreamTeam={handleDreamTeam}
-                />
+                <div className="absolute top-[4vw] flex h-[20vw] w-full justify-center px-[0.5vw]">
+                    <FunctionSection
+                        title="My Dream Team"
+                        showRegionButton={false}
+                        showLeagueButton={false}
+                        dreamTeam={dreamTeam}
+                        handleDreamTeam={handleDreamTeam}
+                        showTeamButton={true}
+                    />
+                </div>
                 <DreamTeamLineup
                     dreamTeam={dreamTeam}
                     handleDreamTeam={handleDreamTeam}
