@@ -24,7 +24,6 @@ import Dust from "../../../../assets/others/dust-gold.svg";
 import Glow from "../../../../assets/others/glow-radial.svg";
 import Back from "../../../../assets/card/back.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import WhiteButton from "../../../../assets/button/white.svg";
 
 interface AnimationModalProps {
     athleteChoices: Skin[];
@@ -391,7 +390,7 @@ export const AnimationModal = ({
                                 >
                                     <img className="h-full" src={GoldButton} />
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                        <p className="font-russoone text-[4vw] font-normal text-white">
                                             Open Pack
                                         </p>
                                     </div>
@@ -413,7 +412,7 @@ export const AnimationModal = ({
                                 >
                                     <img className="h-full" src={GoldButton} />
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                        <p className="font-russoone text-[4vw] font-normal text-white">
                                             {getButtonText()}
                                         </p>
                                     </div>
@@ -441,7 +440,7 @@ export const AnimationModal = ({
                                             src={GoldButton}
                                         />
                                         <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                            <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            <p className="font-russoone text-[4vw] font-normal text-white">
                                                 Select
                                             </p>
                                         </div>
@@ -457,10 +456,10 @@ export const AnimationModal = ({
                                     >
                                         <img
                                             className="h-full"
-                                            src={WhiteButton}
+                                            src={GoldButton}
                                         />
                                         <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                            <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            <p className="font-russoone text-[4vw] font-normal text-white">
                                                 Back
                                             </p>
                                         </div>
@@ -476,7 +475,7 @@ export const AnimationModal = ({
                                             src={GoldButton}
                                         />
                                         <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                            <p className="mt-[0.2vw] font-russoone text-[4vw] font-normal text-white">
+                                            <p className="font-russoone text-[4vw] font-normal text-white">
                                                 Confirm
                                             </p>
                                         </div>
