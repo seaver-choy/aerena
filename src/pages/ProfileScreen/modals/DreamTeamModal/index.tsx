@@ -12,9 +12,9 @@ import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import {
     FacebookIcon,
-    FacebookShareButton,
+    // FacebookShareButton,
     TelegramIcon,
-    TelegramShareButton,
+    // TelegramShareButton,
 } from "react-share";
 import { sampleURL, shareDreamTeam } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
@@ -79,10 +79,28 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         utils.openLink(imageUrl);
     };
 
+    const downloadImageBrowser = async () => {
+        await exportLineup();
+        utils.openLink(imageUrl, { tryBrowser: true });
+    };
+
+    const downloadImageInstantView = async () => {
+        await exportLineup();
+        utils.openLink(imageUrl, { tryInstantView: true });
+    };
+
     const shareOnFB = async () => {
         await exportLineup();
         const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}`;
         window.open(shareUrl, "_blank");
+    };
+
+    const shareOnTelegram = async () => {
+        await exportLineup();
+        utils.shareURL(
+            imageUrl,
+            "Check out my dream team lineup! Visit https://t.me/aerena_bot"
+        );
     };
 
     const setSampleURL = async () => {
@@ -178,7 +196,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                         />
                     </div>
                     <div className="flex h-[10vw] w-[80vw] items-center justify-center">
-                        <motion.div className="h-full" {...appearAnimation}>
+                        {/* <motion.div className="h-full" {...appearAnimation}>
                             <TelegramShareButton
                                 url={imageUrl}
                                 disabled={exporting}
@@ -193,7 +211,18 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                     round={true}
                                 />
                             </TelegramShareButton>
-                        </motion.div>
+                        </motion.div> */}
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={shareOnTelegram}
+                        >
+                            <TelegramIcon
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`} /* opacity-75 for differentiating */
+                                round={true}
+                            />
+                        </motion.button>
                         <motion.button
                             className="h-[10vw]"
                             {...appearAnimation}
@@ -205,7 +234,29 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                 round={true}
                             />
                         </motion.button>
-                        <motion.div className="h-[10vw]" {...appearAnimation}>
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={downloadImageBrowser}
+                        >
+                            <TelegramIcon
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
+                                round={true}
+                            />
+                        </motion.button>
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={downloadImageInstantView}
+                        >
+                            <TelegramIcon
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
+                                round={true}
+                            />
+                        </motion.button>
+                        {/* <motion.div className="h-[10vw]" {...appearAnimation}>
                             <FacebookShareButton
                                 url={imageUrl}
                                 disabled={exporting}
@@ -217,7 +268,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                     round={true}
                                 />
                             </FacebookShareButton>
-                        </motion.div>
+                        </motion.div> */}
 
                         <motion.button
                             className="h-[10vw]"
