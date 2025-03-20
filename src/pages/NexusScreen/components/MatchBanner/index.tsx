@@ -22,7 +22,7 @@ export const MatchBanner = () => {
     };
 
     return (
-        <div className="mt-[4vw] bg-red">
+        <div className="mt-[4vw] bg-graydark">
             <div className="relative flex h-[42vw] w-full justify-center">
                 <img className="h-full w-full" src={MatchBackground} />
                 <div className="absolute top-[4vw] flex flex-col items-center">

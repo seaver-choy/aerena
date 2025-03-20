@@ -11,7 +11,7 @@ import { getCountryImage } from "../../../../helpers/images";
 import { getTeamProfiles } from "../../../../helpers/lambda.helper";
 import { TeamSlider } from "../../../../components/TeamSlider";
 
-import LargeModal from "../../../../assets/modal/large.svg";
+import SmallModal from "../../../../assets/modal/small.svg";
 import CloseIcon from "../../../../assets/icon/close.svg";
 import LeftIcon from "../../../../assets/icon/left-gold.svg";
 import RightIcon from "../../../../assets/icon/right-gold.svg";
@@ -134,7 +134,7 @@ export const TeamModal = ({ dreamTeam, onSelect, onClose }: TeamModalProps) => {
                     className="absolute z-40 h-[82.5vw] w-[80vw]"
                     {...appearModalAnimation}
                 >
-                    <img className="h-full w-full" src={LargeModal} />
+                    <img className="h-full w-full" src={SmallModal} />
                 </motion.div>
                 <div className="absolute z-50 flex h-[66.5vw] w-[66vw] flex-col justify-center">
                     <div className="relative flex h-[11vw] flex-col items-center gap-[2vw]">
@@ -193,7 +193,7 @@ export const TeamModal = ({ dreamTeam, onSelect, onClose }: TeamModalProps) => {
                             />
                         </motion.button>
                     </div>
-                    <div className="mb-[4vw] flex h-[58.5vw]">
+                    <div className="mb-[4vw] flex h-[26vw]">
                         {filteredTeams != null && (
                             <TeamSlider
                                 teams={filteredTeams}
