@@ -863,7 +863,7 @@ export const MiddleWingsShine = () => {
     );
 };
 
-export const Team = () => {
+export const Team = ({ color, team }) => {
     return (
         <svg
             width="100%"
@@ -874,7 +874,7 @@ export const Team = () => {
         >
             <text
                 xmlSpace="preserve"
-                fill="#F1F5EE"
+                fill={color.details}
                 fontFamily="Russo One"
                 fontSize={32}
                 letterSpacing="0em"
@@ -883,7 +883,7 @@ export const Team = () => {
                 }}
             >
                 <tspan x={143.6} y={76} textAnchor="middle">
-                    {"ANRCHY"}
+                    {team}
                 </tspan>
             </text>
         </svg>

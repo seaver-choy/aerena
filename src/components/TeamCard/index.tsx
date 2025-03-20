@@ -33,9 +33,10 @@ import { TeamColor } from "../../helpers/interfaces";
 
 interface Props {
     color: TeamColor;
+    team: string;
 }
 
-export const TeamCard = ({ color }: Props) => {
+export const TeamCard = ({ color, team }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
@@ -81,7 +82,7 @@ export const TeamCard = ({ color }: Props) => {
                 <BaseDarken />
             </div>
             <div className="absolute h-full w-full">
-                <Team />
+                <Team color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <KnivesShadow />

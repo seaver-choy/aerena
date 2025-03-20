@@ -131,12 +131,12 @@ export const TeamModal = ({ dreamTeam, onSelect, onClose }: TeamModalProps) => {
             <div className="relative flex h-full w-full items-center justify-center">
                 <div className="h-full w-full bg-graydark opacity-95" />
                 <motion.div
-                    className="absolute z-40 h-[115vw] w-[80vw]"
+                    className="absolute z-40 h-[82.5vw] w-[80vw]"
                     {...appearModalAnimation}
                 >
                     <img className="h-full w-full" src={LargeModal} />
                 </motion.div>
-                <div className="absolute z-50 flex h-[99vw] w-[66vw] flex-col justify-center">
+                <div className="absolute z-50 flex h-[66.5vw] w-[66vw] flex-col justify-center">
                     <div className="relative flex h-[11vw] flex-col items-center gap-[2vw]">
                         <motion.div {...appearTextAnimation}>
                             <p className="mt-[2vw] bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">

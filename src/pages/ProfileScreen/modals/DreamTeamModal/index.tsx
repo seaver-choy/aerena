@@ -12,14 +12,13 @@ import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
 import {
     FacebookIcon,
-    FacebookMessengerIcon,
-    FacebookMessengerShareButton,
     FacebookShareButton,
     TelegramIcon,
     TelegramShareButton,
 } from "react-share";
 import { sampleURL, shareDreamTeam } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
+import { useUtils } from "@telegram-apps/sdk-react";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
     onClose: () => void;
@@ -35,6 +34,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     const [currentlySample, setCurrentlySample] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string>(null);
     const [exporting, isExporting] = useState<boolean>(false);
+    const utils = useUtils();
 
     const exportLineup = async () => {
         if (currentlySample) {
@@ -72,6 +72,17 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             }
         }
         return Promise.resolve();
+    };
+
+    const downloadImage = async () => {
+        await exportLineup();
+        utils.openLink(imageUrl);
+    };
+
+    const shareOnFB = async () => {
+        await exportLineup();
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}`;
+        window.open(shareUrl, "_blank");
     };
 
     const setSampleURL = async () => {
@@ -171,6 +182,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             <TelegramShareButton
                                 url={imageUrl}
                                 disabled={exporting}
+                                disabledStyle={{ opacity: 0.5 }}
                                 title={
                                     "Check out my dream team lineup! Visit https://t.me/aerena_bot"
                                 }
@@ -182,10 +194,22 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                 />
                             </TelegramShareButton>
                         </motion.div>
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={downloadImage}
+                        >
+                            <TelegramIcon
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
+                                round={true}
+                            />
+                        </motion.button>
                         <motion.div className="h-[10vw]" {...appearAnimation}>
                             <FacebookShareButton
                                 url={imageUrl}
                                 disabled={exporting}
+                                disabledStyle={{ opacity: 0.5 }}
                                 beforeOnClick={() => exportLineup()}
                             >
                                 <FacebookIcon
@@ -194,23 +218,23 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                                 />
                             </FacebookShareButton>
                         </motion.div>
-                        <motion.div className="h-[10vw]" {...appearAnimation}>
-                            <FacebookMessengerShareButton
-                                url={imageUrl}
-                                appId={"816106684053890"}
-                                beforeOnClick={() => exportLineup()}
-                                disabled={exporting}
-                            >
-                                <FacebookMessengerIcon
-                                    className="h-[10vw]"
-                                    round={true}
-                                />
-                            </FacebookMessengerShareButton>
-                        </motion.div>
+
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={shareOnFB}
+                        >
+                            <FacebookIcon
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
+                                round={true}
+                            />
+                        </motion.button>
                     </div>
                     <div className="flex h-[10vw] w-[80vw] items-center justify-center">
                         <motion.button
                             className="h-[10vw]"
+                            disabled={exporting}
                             onClick={onClose}
                             {...appearAnimation}
                         >

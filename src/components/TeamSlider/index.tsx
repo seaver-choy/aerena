@@ -1,7 +1,7 @@
 import { motion, useMotionValue } from "motion/react";
 import { appearAnimation } from "../../helpers/animation";
 import { TeamProfile } from "../../helpers/interfaces";
-import { X } from "../X";
+import { TeamCard } from "../TeamCard";
 
 const buffer = 30;
 const transition = {
@@ -80,10 +80,9 @@ export const TeamSlider = ({
                             }}
                             transition={transition}
                         >
-                            <X
+                            <TeamCard
                                 color={teamColors}
                                 team={teamProfile.key}
-                                opacity={{ wave: teamColors.wave }}
                             />
                         </motion.div>
                     );
