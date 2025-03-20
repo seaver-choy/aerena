@@ -19,7 +19,6 @@ import {
 } from "../../../../helpers/lambda.helper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { Filter } from "../../../../components/Filter";
 import { AthleteModal } from "../../../../modals/AthleteModal";
 import { LeagueModal } from "../../../../modals/LeagueModal";
 
@@ -84,6 +83,7 @@ export const Catalog = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                "",
                 user.initDataRaw
             );
 
@@ -134,6 +134,7 @@ export const Catalog = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                "",
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);
@@ -150,7 +151,6 @@ export const Catalog = () => {
 
     return (
         <div>
-            <Filter />
             <div className="mt-[4vw] h-[193vw]">
                 {showLeagueModal && (
                     <LeagueModal
