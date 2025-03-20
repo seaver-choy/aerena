@@ -10,15 +10,12 @@ import * as htmlToImage from "html-to-image";
 import { DreamTeam, TeamColor } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
-import {
-    FacebookIcon,
-    // FacebookShareButton,
-    TelegramIcon,
-    // TelegramShareButton,
-} from "react-share";
 import { sampleURL, shareDreamTeam } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
 import { useUtils } from "@telegram-apps/sdk-react";
+import FacebookIcon from "../../../../assets/icon/facebook.svg";
+import TelegramIcon from "../../../../assets/icon/telegram.svg";
+import MessengerIcon from "../../../../assets/icon/messenger.svg";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
     onClose: () => void;
@@ -74,16 +71,6 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         return Promise.resolve();
     };
 
-    const downloadImage = async () => {
-        await exportLineup();
-        utils.openLink(imageUrl);
-    };
-
-    const downloadImageBrowser = async () => {
-        await exportLineup();
-        utils.openLink(imageUrl, { tryBrowser: true });
-    };
-
     const downloadImageInstantView = async () => {
         await exportLineup();
         utils.openLink(imageUrl, { tryInstantView: true });
@@ -92,7 +79,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     const shareOnFB = async () => {
         await exportLineup();
         const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}`;
-        window.open(shareUrl, "_blank");
+        utils.openLink(shareUrl);
     };
 
     const shareOnTelegram = async () => {
@@ -108,12 +95,18 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         const result = await sampleURL(user.id, "dreamteam", user.initDataRaw);
         setCurrentlySample(true);
         setImageUrl(result.imageUrl);
-        isExporting(false);
     };
 
     useEffect(() => {
         setSampleURL();
     }, [lineupRef.current]);
+
+    useEffect(() => {
+        if (currentlySample)
+            setTimeout(() => {
+                isExporting(false);
+            }, 1000);
+    }, [currentlySample]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -195,94 +188,40 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             src={DreamTeamBackground}
                         />
                     </div>
-                    <div className="flex h-[10vw] w-[80vw] items-center justify-center">
-                        {/* <motion.div className="h-full" {...appearAnimation}>
-                            <TelegramShareButton
-                                url={imageUrl}
-                                disabled={exporting}
-                                disabledStyle={{ opacity: 0.5 }}
-                                title={
-                                    "Check out my dream team lineup! Visit https://t.me/aerena_bot"
-                                }
-                                beforeOnClick={() => exportLineup()}
-                            >
-                                <TelegramIcon
-                                    className="h-[10vw]"
-                                    round={true}
-                                />
-                            </TelegramShareButton>
-                        </motion.div> */}
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={shareOnTelegram}
-                        >
-                            <TelegramIcon
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`} /* opacity-75 for differentiating */
-                                round={true}
-                            />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={downloadImage}
-                        >
-                            <TelegramIcon
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
-                                round={true}
-                            />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={downloadImageBrowser}
-                        >
-                            <TelegramIcon
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
-                                round={true}
-                            />
-                        </motion.button>
+                    <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[2vw]">
                         <motion.button
                             className="h-[10vw]"
                             {...appearAnimation}
                             disabled={exporting}
                             onClick={downloadImageInstantView}
                         >
-                            <TelegramIcon
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
-                                round={true}
+                            <img
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
+                                src={MessengerIcon} /* temporary/filler */
                             />
                         </motion.button>
-                        {/* <motion.div className="h-[10vw]" {...appearAnimation}>
-                            <FacebookShareButton
-                                url={imageUrl}
-                                disabled={exporting}
-                                disabledStyle={{ opacity: 0.5 }}
-                                beforeOnClick={() => exportLineup()}
-                            >
-                                <FacebookIcon
-                                    className="h-[10vw]"
-                                    round={true}
-                                />
-                            </FacebookShareButton>
-                        </motion.div> */}
-
+                        <motion.button
+                            className="h-[10vw]"
+                            {...appearAnimation}
+                            disabled={exporting}
+                            onClick={shareOnTelegram}
+                        >
+                            <img
+                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
+                                src={TelegramIcon}
+                            />
+                        </motion.button>
                         <motion.button
                             className="h-[10vw]"
                             {...appearAnimation}
                             disabled={exporting}
                             onClick={shareOnFB}
                         >
-                            <FacebookIcon
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-75"}`} /* opacity-75 for differentiating */
-                                round={true}
+                            <img
+                                className={`h-full ${exporting ? "opacity-50" : "opacity-100"}`}
+                                src={FacebookIcon}
                             />
                         </motion.button>
-                    </div>
-                    <div className="flex h-[10vw] w-[80vw] items-center justify-center">
                         <motion.button
                             className="h-[10vw]"
                             disabled={exporting}

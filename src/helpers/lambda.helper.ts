@@ -1317,7 +1317,6 @@ export const shareDreamTeam = async (userId, dataUrl, initDataRaw) => {
         const { body } = await restOperation.response;
 
         const response = await body.text();
-        console.log(response);
         return JSON.parse(response);
     } catch (e) {
         console.log(`shareDreamTeam call failed ${e}`);
