@@ -5,6 +5,7 @@ import {
     Base,
     BaseDarken,
     BaseShadow,
+    Dust,
     Fangs,
     FangsAccent,
     FangsShadow,
@@ -56,6 +57,9 @@ export const TeamCard = ({ color, team }: Props) => {
             </div>
             <div className="absolute h-full w-full">
                 <Wave />
+            </div>
+            <div className="absolute h-full w-full">
+                <Dust color={color} />
             </div>
             <div className="absolute h-full w-full">
                 <Line color={color} />
