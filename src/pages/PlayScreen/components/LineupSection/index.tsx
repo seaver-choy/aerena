@@ -19,8 +19,8 @@ import {
     isTournamentUpcoming,
 } from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
+import { FunctionSection } from "../../../../components/FunctionSection";
 import { Lineup } from "../Lineup";
-import { LineupTitle } from "../LineupTitle";
 import { ConfirmModal } from "../../modals/ConfirmModal";
 import { NameModal } from "../../modals/NameModal";
 import { SuccessModal } from "../../modals/SuccessModal";
@@ -332,7 +332,9 @@ export const LineupSection = ({
                 {loading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
-                    <LineupTitle />
+                    <div className="absolute top-[4vw] flex h-[20vw] w-full justify-center px-[0.5vw]">
+                        <FunctionSection title="Fantasy Lineup" />
+                    </div>
                     <Lineup
                         key={
                             ongoingTournament != null

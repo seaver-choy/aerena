@@ -114,7 +114,7 @@ export const PurchaseModal = ({
                             >
                                 <img className="h-full" src={WhiteButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.8vw] font-normal text-transparent">
+                                    <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent">
                                         Cancel
                                     </p>
                                 </div>
@@ -128,7 +128,7 @@ export const PurchaseModal = ({
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                    <p className="font-russoone text-[3.2vw] font-normal text-white">
                                         Purchase
                                     </p>
                                 </div>

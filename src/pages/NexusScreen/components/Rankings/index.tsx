@@ -1,9 +1,9 @@
-import { Filter } from "../../../../components/Filter";
+import { FunctionSection } from "../../../../components/FunctionSection";
 
 export const Rankings = () => {
     return (
         <div>
-            <Filter />
+            <FunctionSection title="Filter Options" />
         </div>
     );
 };

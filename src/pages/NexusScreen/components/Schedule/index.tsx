@@ -1,13 +1,13 @@
 import { motion } from "motion/react";
 import { appearTextAnimation } from "../../../../helpers/animation";
-import { Filter } from "../../../../components/Filter";
+import { FunctionSection } from "../../../../components/FunctionSection";
 import { TitleSection } from "../../../../components/TitleSection";
 import { MatchBanner } from "../MatchBanner";
 
 export const Schedule = () => {
     return (
         <div>
-            <Filter />
+            <FunctionSection title="Filter Options" />
             <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
                 <button className="items-center justify-center bg-graydark px-[2vw]">
                     <motion.p

@@ -1,16 +1,17 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import {
     appearTextAnimation,
     slideRightTextAnimation,
 } from "../../helpers/animation";
-
-import FilterBackground from "../../assets/background/filter.svg";
-import FunctionButton from "../../assets/button/function.svg";
 import { LeagueModal } from "../../modals/LeagueModal";
 import { RegionModal } from "../../modals/RegionModal";
-import { useState } from "react";
+
+import FunctionBackground from "../../assets/background/function.svg";
+import FunctionButton from "../../assets/button/function.svg";
 
 interface FilterProps {
+    title: string;
     regions?: string[];
     chosenRegion?: string;
     setChosenRegion?: (chosenRegion: string) => void;
@@ -19,7 +20,8 @@ interface FilterProps {
     setChosenLeagueType?: (chosenLeagueTypes: string) => void;
 }
 
-export const Filter = ({
+export const FunctionSection = ({
+    title,
     regions,
     chosenRegion,
     setChosenRegion,
@@ -55,14 +57,14 @@ export const Filter = ({
 
     return (
         <div className="relative mt-[4vw] flex h-[13.8vw] w-full">
-            <img className="h-full" src={FilterBackground} />
+            <img className="h-full" src={FunctionBackground} />
             <div className="absolute flex h-full w-full px-[6vw]">
                 <div className="flex h-full w-[50%] items-center pl-[2vw]">
                     <motion.p
                         className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                         {...slideRightTextAnimation}
                     >
-                        Filter Options
+                        {title}
                     </motion.p>
                 </div>
                 <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">

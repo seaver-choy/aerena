@@ -20,7 +20,7 @@ import {
 } from "../../../../helpers/lambda.helper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
-import { Filter } from "../../../../components/Filter";
+import { FunctionSection } from "../../../../components/FunctionSection";
 import { AthleteModal } from "../../../../modals/AthleteModal";
 
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
@@ -151,7 +151,8 @@ export const Players = () => {
 
     return (
         <div>
-            <Filter
+            <FunctionSection
+                title="Filter Options"
                 regions={regions}
                 chosenRegion={chosenRegion}
                 setChosenRegion={setChosenRegion}
