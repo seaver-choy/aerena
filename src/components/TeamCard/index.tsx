@@ -39,7 +39,10 @@ interface Props {
 
 export const TeamCard = ({ color, team }: Props) => {
     return (
-        <div className="relative h-full w-full">
+        <div
+            className="relative h-full w-full will-change-transform backface-hidden"
+            style={{ transform: "none", transition: "none" }}
+        >
             <div className="absolute h-full w-full">
                 <Back color={color} team={team} />
             </div>

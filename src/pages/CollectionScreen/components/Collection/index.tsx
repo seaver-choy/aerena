@@ -32,9 +32,7 @@ export const Collection = () => {
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
     const [hasFetchedInitial, setHasFetchedInitial] = useState<boolean>(false);
-
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
     const containerRef = useRef(null);
