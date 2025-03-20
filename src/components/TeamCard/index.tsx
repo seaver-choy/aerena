@@ -41,40 +41,40 @@ export const TeamCard = ({ color, team }: Props) => {
     return (
         <div className="relative h-full w-full">
             <div className="absolute h-full w-full">
-                <Back color={color} />
+                <Back color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <BackWings color={color} />
+                <BackWings color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <BackWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <BaseShadow />
+                <BaseShadow team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <Base color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Wave />
+                <Wave team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <Dust color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Line color={color} />
+                <Line color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <MiddleWingsShadow />
+                <MiddleWingsShadow team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <MiddleWings color={color} />
+                <MiddleWings color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <MiddleWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <FangsShadow color={color} />
+                <FangsShadow color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <Fangs color={color} />
@@ -89,31 +89,31 @@ export const TeamCard = ({ color, team }: Props) => {
                 <Team color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <KnivesShadow />
+                <KnivesShadow team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <KnivesAccent color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Knives color={color} />
+                <Knives color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <KnivesShine />
             </div>
             <div className="absolute h-full w-full">
-                <FrontWingsShadow />
+                <FrontWingsShadow team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <FrontWings color={color} />
+                <FrontWings color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <FrontWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <LogoShadow />
+                <LogoShadow team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <LogoOutline color={color} />
+                <LogoOutline color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
                 <LogoBase color={color} />
