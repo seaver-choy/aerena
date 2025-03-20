@@ -5,6 +5,10 @@ import { TeamCard } from "../../../../components/TeamCard";
 
 import MatchBackground from "../../../../assets/background/match.svg";
 import MatchButton from "../../../../assets/button/match.svg";
+import WinLeft from "../../../../assets/others/win-left.svg";
+import WinRight from "../../../../assets/others/win-right.svg";
+import LoseLeft from "../../../../assets/others/lose-left.svg";
+import LoseRight from "../../../../assets/others/lose-right.svg";
 
 export const MatchBanner = () => {
     const color = {
@@ -62,8 +66,18 @@ export const MatchBanner = () => {
                 <div className="absolute left-[6vw] top-[10vw] h-[10vw] w-[26vw]">
                     <TeamCard color={color} />
                 </div>
+                <div className="absolute bottom-[6vw] left-[6vw] flex h-[6vw] w-[26vw] justify-center pl-[5vw]">
+                    <img className="h-full" src={LoseLeft} />
+                    <img className="-ml-[2vw] h-full" src={WinLeft} />
+                    <img className="-ml-[2vw] h-full" src={WinLeft} />
+                </div>
                 <div className="absolute right-[6vw] top-[10vw] h-[10vw] w-[26vw]">
                     <TeamCard color={color} />
+                </div>
+                <div className="absolute bottom-[6vw] right-[6vw] flex h-[6vw] w-[26vw] justify-center pr-[5vw]">
+                    <img className="h-full" src={WinRight} />
+                    <img className="-ml-[2vw] h-full" src={WinRight} />
+                    <img className="-ml-[2vw] h-full" src={LoseRight} />
                 </div>
             </div>
         </div>

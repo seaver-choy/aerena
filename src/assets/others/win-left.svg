@@ -1,0 +1,17 @@
+<svg width="51" height="60" viewBox="0 0 51 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="win-left">
+<g id="win">
+<g id="glow" filter="url(#filter0_f_3453_26205)">
+<path d="M39 48L30 12H12L21 48H39Z" fill="#F1F5EE"/>
+</g>
+<path id="score" opacity="0.9" d="M39 48L30 12H12L21 48H39Z" fill="#F5F1EE"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_3453_26205" x="0.9" y="0.9" width="49.2" height="58.2" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="5.55" result="effect1_foregroundBlur_3453_26205"/>
+</filter>
+</defs>
+</svg>

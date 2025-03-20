@@ -1,4 +1,3 @@
-import { Title } from "../../../../components/Title";
 import { MatchBanner } from "../MatchBanner";
 
 import TitleBackground from "../../../../assets/background/title.svg";
