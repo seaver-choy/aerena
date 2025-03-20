@@ -184,7 +184,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                         <div className="absolute bottom-[2.6vw] flex h-[10vw] w-[33vw]">
                             <div className="relative w-full items-center justify-center">
                                 <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.2vw] font-russoone text-[1.8vw] text-white">
+                                    <p className="text-center font-russoone text-[1.8vw] text-white">
                                         Aerena Esports Fantasy
                                     </p>
                                 </div>
