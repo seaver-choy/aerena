@@ -1,86 +1,70 @@
 import {
     Back,
+    BackWings,
     Base,
-    BigDiamond,
-    BottomDiamond,
-    BottomWings,
-    BottomWingsAccent,
-    Darken,
-    Dust,
-    Glow,
-    Line,
+    Fangs,
+    FangsAccent,
+    FangsShadow,
+    FrontWings,
+    Knives,
+    KnivesAccent,
     Logo,
-    MiddleDiamond,
-    Outline,
-    SmallDiamond,
-    Team,
-    TopWings,
-    TopWingsAccent,
-    Wave,
-} from "./assets";
+    LogoAccent,
+    LogoBase,
+    LogoOutline,
+    MiddleWings,
+} from "./Layers";
 
 import { TeamColor } from "../../helpers/interfaces";
+
 interface Props {
     color: TeamColor;
-    team: string;
-    opacity: { wave: string };
 }
-export const TeamCard = ({ color, team, opacity }: Props) => {
+
+export const TeamCard = ({ color }: Props) => {
     return (
         <div className="relative h-full w-full">
-            <div className="absolute h-full w-full">
-                <Glow />
-            </div>
             <div className="absolute h-full w-full">
                 <Back color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <BigDiamond color={color} />
+                <BackWings color={color} />
             </div>
             <div className="absolute h-full w-full">
                 <Base color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Wave opacity={opacity} />
+                <MiddleWings color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Dust color={color} />
+                <FangsShadow color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <BottomWingsAccent color={color} />
+                <FangsAccent color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <BottomWings color={color} />
+                <Fangs color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <TopWingsAccent color={color} />
+                <KnivesAccent color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <TopWings color={color} />
+                <Knives color={color} />
+            </div>
+            <div className="absolute h-full w-full">
+                <FrontWings color={color} />
+            </div>
+            <div className="absolute h-full w-full">
+                <LogoOutline color={color} />
+            </div>
+            <div className="absolute h-full w-full">
+                <LogoBase color={color} />
+            </div>
+            <div className="absolute h-full w-full">
+                <LogoAccent color={color} />
             </div>
             <div className="absolute h-full w-full">
                 <Logo color={color} />
-            </div>
-            <div className="absolute h-full w-full">
-                <Line color={color} />
-            </div>
-            <div className="absolute h-full w-full">
-                <MiddleDiamond color={color} />
-            </div>
-            <div className="absolute h-full w-full">
-                <Darken />
-            </div>
-            <div className="absolute h-full w-full">
-                <Team color={color} team={team} />
-            </div>
-            <div className="absolute h-full w-full">
-                <BottomDiamond color={color} />
-            </div>
-            <div className="absolute h-full w-full">
-                <Outline color={color} />
-            </div>
-            <div className="absolute h-full w-full">
-                <SmallDiamond color={color} />
             </div>
         </div>
     );
