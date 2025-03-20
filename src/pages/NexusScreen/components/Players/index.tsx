@@ -16,12 +16,12 @@ import { Athlete, TeamColor } from "../../../../helpers/interfaces";
 import {
     getLeagues,
     getAthletePaginated,
+    getCountries,
 } from "../../../../helpers/lambda.helper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { Filter } from "../../../../components/Filter";
 import { AthleteModal } from "../../../../modals/AthleteModal";
-import { LeagueModal } from "../../../../pages/CollectionScreen/modals/LeagueModal";
 
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
@@ -34,7 +34,8 @@ export const Players = () => {
     const [currentAthletes, setCurrentAthletes] = useState<Athlete[]>(null);
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
     const [chosenLeagueType, setChosenLeagueType] = useState<string>("ALL");
-    const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
+    const [regions, setRegions] = useState<string[]>(null);
+    const [chosenRegion, setChosenRegion] = useState<string>("ALL");
     const [showAthleteModal, setShowAthleteModal] = useState<boolean>(false);
     const [selectedAthlete, setSelectedAthlete] = useState<Athlete>();
     const [showAthleteOffset, setShowAthleteOffset] = useState<number>(-1);
@@ -45,10 +46,6 @@ export const Players = () => {
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
     const containerRef = useRef(null);
-
-    const closeLeagueModal = () => {
-        setShowLeagueModal(false);
-    };
 
     const displayAthleteModal = (athlete: Athlete) => {
         setSelectedAthlete(athlete);
@@ -67,14 +64,6 @@ export const Players = () => {
         setCurrentAthletes([...uniqueAthletesMap.values()]);
     }
 
-    function handleSetLeagueType(leagueType: string) {
-        if (leagueType === "ALL") {
-            setChosenLeagueType("ALL");
-        } else {
-            setChosenLeagueType(leagueType);
-        }
-    }
-
     async function fetchMoreData() {
         if (hasNextPage && !isLoadingMore) {
             setIsLoadingMore(true); // Set loading flag
@@ -84,6 +73,7 @@ export const Players = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                chosenRegion !== "ALL" ? chosenRegion : "",
                 user.initDataRaw
             );
 
@@ -127,6 +117,14 @@ export const Players = () => {
     }, []);
 
     useEffect(() => {
+        async function fetchAllCountries() {
+            const res = await getCountries(user.initDataRaw);
+            setRegions(["ALL", ...res]);
+        }
+        fetchAllCountries();
+    }, []);
+
+    useEffect(() => {
         async function fetchInitialAthletes() {
             const res = await getAthletePaginated(
                 0,
@@ -134,6 +132,7 @@ export const Players = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                chosenRegion !== "ALL" ? chosenRegion : "",
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);
@@ -142,24 +141,25 @@ export const Players = () => {
             setShowAthleteOffset(-1);
             setHasNextPage(res.hasNextPage);
         }
+        console.log(chosenLeagueType);
+        console.log(chosenRegion);
         fetchInitialAthletes();
         if (containerRef.current) {
             containerRef.current.scrollTop = 0;
         }
-    }, [searchString, positionIndex, chosenLeagueType]);
+    }, [searchString, positionIndex, chosenLeagueType, chosenRegion]);
 
     return (
         <div>
-            <Filter />
+            <Filter
+                regions={regions}
+                chosenRegion={chosenRegion}
+                setChosenRegion={setChosenRegion}
+                leagueTypes={leagueTypes}
+                chosenLeagueType={chosenLeagueType}
+                setChosenLeagueType={setChosenLeagueType}
+            />
             <div className="mt-[4vw] h-[193vw]">
-                {showLeagueModal && (
-                    <LeagueModal
-                        onClose={closeLeagueModal}
-                        leagueTypes={leagueTypes}
-                        chosenLeagueType={chosenLeagueType}
-                        setChosenLeagueType={handleSetLeagueType}
-                    />
-                )}
                 <div className="relative flex">
                     <img
                         className="h-full w-full"

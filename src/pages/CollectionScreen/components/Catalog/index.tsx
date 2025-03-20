@@ -20,8 +20,8 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { Filter } from "../../../../components/Filter";
-import { AthleteModal } from "../../modals/AthleteModal";
-import { LeagueModal } from "../../modals/LeagueModal";
+import { AthleteModal } from "../../../../modals/AthleteModal";
+import { LeagueModal } from "../../../../modals/LeagueModal";
 
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 

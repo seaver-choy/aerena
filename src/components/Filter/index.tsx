@@ -6,8 +6,53 @@ import {
 
 import FilterBackground from "../../assets/background/filter.svg";
 import FunctionButton from "../../assets/button/function.svg";
+import { LeagueModal } from "../../modals/LeagueModal";
+import { RegionModal } from "../../modals/RegionModal";
+import { useState } from "react";
 
-export const Filter = () => {
+interface FilterProps {
+    regions?: string[];
+    chosenRegion?: string;
+    setChosenRegion?: (chosenRegion: string) => void;
+    leagueTypes?: string[];
+    chosenLeagueType?: string;
+    setChosenLeagueType?: (chosenLeagueTypes: string) => void;
+}
+
+export const Filter = ({
+    regions,
+    chosenRegion,
+    setChosenRegion,
+    leagueTypes,
+    chosenLeagueType,
+    setChosenLeagueType,
+}: FilterProps) => {
+    const [showRegionModal, setShowRegionModal] = useState<boolean>(false);
+    const [showLeagueModal, setShowLeagueModal] = useState<boolean>(false);
+
+    const closeLeagueModal = () => {
+        setShowLeagueModal(false);
+    };
+    const closeRegionModal = () => {
+        setShowRegionModal(false);
+    };
+
+    function handleSetLeagueType(leagueType: string) {
+        if (leagueType === "ALL") {
+            setChosenLeagueType("ALL");
+        } else {
+            setChosenLeagueType(leagueType);
+        }
+    }
+
+    function handleSetRegion(region: string) {
+        if (region === "ALL") {
+            setChosenRegion("ALL");
+        } else {
+            setChosenRegion(region);
+        }
+    }
+
     return (
         <div className="relative mt-[4vw] flex h-[13.8vw] w-full">
             <img className="h-full" src={FilterBackground} />
@@ -23,6 +68,8 @@ export const Filter = () => {
                 <div className="flex h-full w-[50%] items-center justify-end gap-[2vw]">
                     <motion.button
                         className="relative flex h-[7vw] items-center justify-center"
+                        onClick={() => setShowRegionModal(true)}
+                        disabled={regions == null || leagueTypes == null}
                         {...appearTextAnimation}
                     >
                         <div className="absolute flex">
@@ -34,6 +81,8 @@ export const Filter = () => {
                     </motion.button>
                     <motion.button
                         className="relative flex h-[7vw] items-center justify-center"
+                        onClick={() => setShowLeagueModal(true)}
+                        disabled={regions == null || leagueTypes == null}
                         {...appearTextAnimation}
                     >
                         <div className="absolute flex">
@@ -45,6 +94,22 @@ export const Filter = () => {
                     </motion.button>
                 </div>
             </div>
+            {showRegionModal && (
+                <RegionModal
+                    onClose={closeRegionModal}
+                    regions={regions}
+                    chosenRegion={chosenRegion}
+                    setChosenRegion={handleSetRegion}
+                />
+            )}
+            {showLeagueModal && (
+                <LeagueModal
+                    onClose={closeLeagueModal}
+                    leagueTypes={leagueTypes}
+                    chosenLeagueType={chosenLeagueType}
+                    setChosenLeagueType={handleSetLeagueType}
+                />
+            )}
         </div>
     );
 };

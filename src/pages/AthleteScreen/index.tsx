@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { athleteOptions } from "../../../../helpers/tabs";
-import { Layout } from "../../../../components/Layout";
-import { Tabs } from "../../../../components/Tabs";
-import { AthleteHeader } from "../../components/AthleteHeader";
-import { PlayerProfile } from "../../components/PlayerProfile";
-import { StatsSection } from "../../components/StatsSection";
-import { CardSkins } from "../../components/CardSkins";
+import { athleteOptions } from "../../helpers/tabs";
+import { Layout } from "../../components/Layout";
+import { Tabs } from "../../components/Tabs";
+import { AthleteHeader } from "./components/AthleteHeader";
+import { PlayerProfile } from "./components/PlayerProfile";
+import { StatsSection } from "./components/StatsSection";
+import { CardSkins } from "./components/CardSkins";
 
 export const AthleteScreen = () => {
     const [athleteTab, setAthleteTab] = useState("Player Profile");
