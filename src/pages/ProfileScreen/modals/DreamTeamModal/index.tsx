@@ -16,6 +16,7 @@ import { useUtils } from "@telegram-apps/sdk-react";
 import FacebookIcon from "../../../../assets/icon/facebook.svg";
 import TelegramIcon from "../../../../assets/icon/telegram.svg";
 import MessengerIcon from "../../../../assets/icon/messenger.svg";
+import { isIOS } from "../../../../helpers/utilities";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
     onClose: () => void;
@@ -88,6 +89,19 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
             imageUrl,
             "Check out my dream team lineup! Visit https://t.me/aerena_bot"
         );
+    };
+
+    const shareOnNavigator = async () => {
+        await exportLineup();
+        try {
+            await navigator.share({
+                title: "Dream Team Lineup",
+                text: "Check out my dream team lineup! Visit https://t.me/aerena_bot",
+                url: imageUrl,
+            });
+        } catch (err) {
+            console.error("Error sharing:", err);
+        }
     };
 
     const setSampleURL = async () => {
@@ -188,49 +202,71 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             src={DreamTeamBackground}
                         />
                     </div>
-                    <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[2vw]">
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={downloadImageInstantView}
-                        >
-                            <img
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
-                                src={MessengerIcon} /* temporary/filler */
-                            />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={shareOnTelegram}
-                        >
-                            <img
-                                className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
-                                src={TelegramIcon}
-                            />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            {...appearAnimation}
-                            disabled={exporting}
-                            onClick={shareOnFB}
-                        >
-                            <img
-                                className={`h-full ${exporting ? "opacity-50" : "opacity-100"}`}
-                                src={FacebookIcon}
-                            />
-                        </motion.button>
-                        <motion.button
-                            className="h-[10vw]"
-                            disabled={exporting}
-                            onClick={onClose}
-                            {...appearAnimation}
-                        >
-                            <img className="h-full" src={CloseIcon} />
-                        </motion.button>
-                    </div>
+                    {isIOS() ? (
+                        <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[2vw]">
+                            <motion.button
+                                className="h-[10vw]"
+                                {...appearAnimation}
+                                disabled={exporting}
+                                onClick={shareOnNavigator}
+                            >
+                                <img
+                                    className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
+                                    src={MessengerIcon} /* temporary/filler */
+                                />
+                            </motion.button>
+                            <motion.button
+                                className="h-[10vw]"
+                                onClick={onClose}
+                                {...appearAnimation}
+                            >
+                                <img className="h-full" src={CloseIcon} />
+                            </motion.button>
+                        </div>
+                    ) : (
+                        <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[2vw]">
+                            <motion.button
+                                className="h-[10vw]"
+                                {...appearAnimation}
+                                disabled={exporting}
+                                onClick={downloadImageInstantView}
+                            >
+                                <img
+                                    className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
+                                    src={MessengerIcon} /* temporary/filler */
+                                />
+                            </motion.button>
+                            <motion.button
+                                className="h-[10vw]"
+                                {...appearAnimation}
+                                disabled={exporting}
+                                onClick={shareOnTelegram}
+                            >
+                                <img
+                                    className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
+                                    src={TelegramIcon}
+                                />
+                            </motion.button>
+                            <motion.button
+                                className="h-[10vw]"
+                                {...appearAnimation}
+                                disabled={exporting}
+                                onClick={shareOnFB}
+                            >
+                                <img
+                                    className={`h-full ${exporting ? "opacity-50" : "opacity-100"}`}
+                                    src={FacebookIcon}
+                                />
+                            </motion.button>
+                            <motion.button
+                                className="h-[10vw]"
+                                onClick={onClose}
+                                {...appearAnimation}
+                            >
+                                <img className="h-full" src={CloseIcon} />
+                            </motion.button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
