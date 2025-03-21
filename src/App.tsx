@@ -14,8 +14,6 @@ import {
     initSwipeBehavior,
 } from "@telegram-apps/sdk-react";
 import { AppRoot } from "@telegram-apps/telegram-ui";
-import { CollectionScreen } from "./pages/CollectionScreen";
-import { AthleteScreen } from "./pages/AthleteScreen";
 import { useBackButton } from "@telegram-apps/sdk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo } from "react";

@@ -6,7 +6,6 @@ import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
 import { TeamCard } from "../../../../components/TeamCard";
 
 import MatchBackground from "../../../../assets/background/match.svg";
