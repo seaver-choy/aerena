@@ -449,3 +449,23 @@ export const packInfoSchema = new mongoose.Schema(
         collection: "packinfos",
     }
 );
+
+export const scheduleSchema = new mongoose.Schema(
+    {
+        match_id: String,
+        league: String,
+        boType: Number,
+        matchDate: Date,
+        team1: String,
+        team2: String,
+        score1: Number,
+        score2: Number,
+        week: Number,
+        day: Number,
+        matchType: String,
+        playoffs: Boolean,
+    },
+    {
+        collection: "schedules",
+    }
+);

@@ -15,7 +15,8 @@ import { useUsers } from "../../../../hooks/useUser";
 import { useUtils } from "@telegram-apps/sdk-react";
 import FacebookIcon from "../../../../assets/icon/facebook.svg";
 import TelegramIcon from "../../../../assets/icon/telegram.svg";
-import MessengerIcon from "../../../../assets/icon/messenger.svg";
+import DownloadIcon from "../../../../assets/icon/download.svg";
+import ShareIcon from "../../../../assets/icon/share.svg";
 import { isIOS } from "../../../../helpers/utilities";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
@@ -30,7 +31,7 @@ interface DreamTeamModalProps {
 
 export const DreamTeamModal = ({
     dreamTeam,
-    imageUrl,
+    imageUrl = null,
     currentlySample,
     setCurrentlySample,
     onClose,
@@ -47,7 +48,6 @@ export const DreamTeamModal = ({
             if (!lineupRef.current) {
                 return Promise.resolve();
             }
-
             try {
                 const dataUrl = await htmlToImage.toPng(lineupRef.current, {
                     cacheBust: true,
@@ -109,6 +109,15 @@ export const DreamTeamModal = ({
             console.error("Error sharing:", err);
         }
     };
+
+    useEffect(() => {
+        isExporting(true);
+        if (imageUrl != null) {
+            setTimeout(() => {
+                isExporting(false);
+            }, 2000);
+        }
+    }, [imageUrl]);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -200,7 +209,7 @@ export const DreamTeamModal = ({
                             >
                                 <img
                                     className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
-                                    src={MessengerIcon} /* temporary/filler */
+                                    src={ShareIcon}
                                 />
                             </motion.button>
                             <motion.button
@@ -221,7 +230,7 @@ export const DreamTeamModal = ({
                             >
                                 <img
                                     className={`h-[10vw] ${exporting ? "opacity-50" : "opacity-100"}`}
-                                    src={MessengerIcon} /* temporary/filler */
+                                    src={DownloadIcon}
                                 />
                             </motion.button>
                             <motion.button

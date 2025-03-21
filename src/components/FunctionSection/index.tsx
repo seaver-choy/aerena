@@ -104,7 +104,7 @@ export const FunctionSection = ({
                         <motion.button
                             className="relative flex h-[7vw] items-center justify-center"
                             onClick={() => setShowRegionModal(true)}
-                            disabled={regions == null || leagueTypes == null}
+                            disabled={regions == null}
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex">
@@ -122,7 +122,7 @@ export const FunctionSection = ({
                         <motion.button
                             className="relative flex h-[7vw] items-center justify-center"
                             onClick={() => setShowLeagueModal(true)}
-                            disabled={regions == null || leagueTypes == null}
+                            disabled={leagueTypes == null}
                             {...appearTextAnimation}
                         >
                             <div className="absolute flex">

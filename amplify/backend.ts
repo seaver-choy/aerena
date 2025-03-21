@@ -1,3 +1,4 @@
+import { schedulesFunction } from "./functions/schedules/resource";
 import { defineBackend } from "@aws-amplify/backend";
 import { Stack, aws_lambda, Duration, aws_secretsmanager } from "aws-cdk-lib";
 import {
@@ -39,6 +40,7 @@ const backend = defineBackend({
     telegramstarsFunction,
     mlTournamentFunction,
     packInfoFunction,
+    schedulesFunction,
 });
 
 const __dirname = path.dirname("../.env");
@@ -148,6 +150,9 @@ const mlTournamentIntegration = new LambdaIntegration(
 const packInfoIntegration = new LambdaIntegration(
     backend.packInfoFunction.resources.lambda
 );
+const schedulesIntegration = new LambdaIntegration(
+    backend.schedulesFunction.resources.lambda
+);
 
 //addResource section
 const userPath = api.root.addResource("user", {});
@@ -164,6 +169,7 @@ const invoicelinkPath = api.root.addResource("invoice", {});
 const mlTournamentPath = api.root.addResource("mltournaments", {});
 const packInfoPath = api.root.addResource("packinfos", {});
 const joinBasicPath = api.root.addResource("joinbasic", {});
+const schedulesPath = api.root.addResource("schedules", {});
 
 //addMethod section
 userPath.addMethod("GET", userIntegration, {
@@ -245,6 +251,10 @@ joinBasicPath.addMethod("PUT", userIntegration, {
     requestParameters: { "method.request.header.X-Telegram-Auth": true },
 });
 
+schedulesPath.addMethod("GET", packInfoIntegration, {
+    requestParameters: { "method.request.header.X-Telegram-Auth": true },
+});
+
 //addProxy section
 userPath.addProxy({
     anyMethod: true,
@@ -282,6 +292,11 @@ mlTournamentPath.addProxy({
 packInfoPath.addProxy({
     anyMethod: true,
     defaultIntegration: packInfoIntegration,
+});
+
+schedulesPath.addProxy({
+    anyMethod: true,
+    defaultIntegration: schedulesIntegration,
 });
 
 backend.addOutput({

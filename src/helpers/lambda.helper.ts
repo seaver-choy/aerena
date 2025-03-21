@@ -670,6 +670,31 @@ export const getCountries = async (initDataRaw) => {
     }
 };
 
+export const getFilteredLeagues = async (country, initDataRaw) => {
+    try {
+        const queryParams = {
+            country: country,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/filtered",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of leagues ${e}`);
+    }
+};
+
 export const getAthletes = async (initDataRaw) => {
     try {
         const restOperation = get({
@@ -1343,5 +1368,81 @@ export const shareDreamTeam = async (userId, dataUrl, initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`shareDreamTeam call failed ${e}`);
+    }
+};
+
+export const getActiveSchedules = async (league, initDataRaw: string) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/active",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        return JSON.parse(JSON.stringify(response));
+    } catch (e) {
+        console.log(`getActiveSchedules call failed ${e}`);
+    }
+};
+
+export const getNearestSchedules = async (
+    leagueTypes: string[],
+    initDataRaw: string
+) => {
+    try {
+        const queryParams = {
+            leagueTypes: leagueTypes.toString(),
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/nearest",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        return JSON.parse(JSON.stringify(response));
+    } catch (e) {
+        console.log(`getNearestSchedules call failed ${e}`);
+    }
+};
+
+export const getTeams = async (leagueTypes: string[], initDataRaw) => {
+    try {
+        const queryParams = {
+            leagueTypes: leagueTypes.toString(),
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/teams",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of teams ${e}`);
     }
 };

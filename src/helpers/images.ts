@@ -4,7 +4,7 @@ import M6Sticker from "../assets/sticker/m6.svg";
 import SPS6Sticker from "../assets/sticker/sps6.svg";
 import PH15Sticker from "../assets/sticker/ph15.svg";
 import ID15Sticker from "../assets/sticker/id15.svg";
-import AllSticker from "../assets/sticker/all-leagues.svg";
+import AllLeaguesSticker from "../assets/sticker/all-leagues.svg";
 
 import ChinaSticker from "../assets/sticker/china.svg";
 import CambodiaSticker from "../assets/sticker/cambodia.svg";
@@ -13,6 +13,7 @@ import MalaysiaSticker from "../assets/sticker/malaysia.svg";
 import MyanmarSticker from "../assets/sticker/myanmar.svg";
 import PhilippinesSticker from "../assets/sticker/philippines.svg";
 import SingaporeSticker from "../assets/sticker/singapore.svg";
+import AllRegionsSticker from "../assets/sticker/all-regions.svg";
 
 import PH15ChoicePack from "../assets/pack/choice-ph15.svg";
 import ID15ChoicePack from "../assets/pack/choice-id15.svg";
@@ -32,7 +33,7 @@ export function getStickerImage(league: string) {
         case "ID15":
             return ID15Sticker;
         case "ALL":
-            return AllSticker;
+            return AllLeaguesSticker;
         default:
             return null;
     }
@@ -41,7 +42,7 @@ export function getStickerImage(league: string) {
 export function getCountryImage(country: string) {
     switch (country) {
         case "ALL":
-            return AllSticker;
+            return AllRegionsSticker;
         case "China":
             return ChinaSticker;
         case "Cambodia":

@@ -230,3 +230,24 @@ export interface Skin {
     costType: string;
     savedAt: Date;
 }
+
+export interface ScheduleInfo {
+    match_id: string;
+    league: string;
+    boType: number;
+    matchDate: Date;
+    team1: string;
+    team2: string;
+    score1: number;
+    score2: number;
+    week: number;
+    day: number;
+    matchType: string;
+    playoffs: boolean;
+}
+
+export interface ScheduleGroup {
+    league: string;
+    week: number;
+    schedules: ScheduleInfo[];
+}
