@@ -3,6 +3,7 @@ import { ProfileScreen } from "../../pages/ProfileScreen";
 import { NexusScreen } from "../../pages/NexusScreen";
 import { PlayScreen } from "../../pages/PlayScreen";
 import { ExchangeScreen } from "../../pages/ExchangeScreen";
+import { MatchScreen } from "../../pages/MatchScreen";
 import { QuestsScreen } from "../../pages/ProfileScreen/pages/QuestsScreen";
 import { TournamentScreen } from "../../pages/PlayScreen/pages/TournamentScreen";
 import { PreviousScreen } from "../../pages/PlayScreen/pages/PreviousScreen";
@@ -21,6 +22,7 @@ export const routes: Route[] = [
     { path: "/nexus", Component: NexusScreen, title: "Nexus Screen" },
     { path: "/quests", Component: QuestsScreen, title: "Quests Screen" },
     { path: "/exchange", Component: ExchangeScreen, title: "Exchange Screen" },
+    { path: "/match", Component: MatchScreen, title: "Match Screen" },
     {
         path: "/tournament/:tournamentId",
         Component: TournamentScreen,

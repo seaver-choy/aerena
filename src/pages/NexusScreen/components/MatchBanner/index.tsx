@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import {
     appearAnimation,
@@ -17,6 +18,7 @@ import LoseLeft from "../../../../assets/others/lose-left.svg";
 import LoseRight from "../../../../assets/others/lose-right.svg";
 
 export const MatchBanner = () => {
+    const navigate = useNavigate();
     const [showMatchBanner, setShowMatchBanner] = useState<boolean>(false);
 
     const color = {
@@ -27,6 +29,10 @@ export const MatchBanner = () => {
         accent: getBaseTeamColor().accent,
         details: getBaseTeamColor().details,
         wave: getBaseTeamColor().wave,
+    };
+
+    const handleViewDetails = () => {
+        navigate(`/match`);
     };
 
     useEffect(() => {
@@ -122,7 +128,10 @@ export const MatchBanner = () => {
                         className="absolute bottom-[3vw] flex"
                         {...appearTextAnimation}
                     >
-                        <button className="relative flex h-[7vw] justify-center">
+                        <button
+                            className="relative flex h-[7vw] justify-center"
+                            onClick={handleViewDetails}
+                        >
                             <img className="h-full" src={MatchButton} />
                             <div className="absolute flex h-full w-full items-center justify-center">
                                 <p className="font-russoone text-[2.8vw] font-normal text-white">
