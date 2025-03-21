@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useUsers } from "../../hooks/useUser";
 
 import ProfileIcon from "../../assets/icon/profile.svg";
+import NexusIcon from "../../assets/icon/nexus.svg";
 import QuestsIcon from "../../assets/icon/quests.svg";
 import PlayIcon from "../../assets/icon/play.svg";
 import CollectionIcon from "../../assets/icon/collection.svg";
@@ -10,8 +11,8 @@ import ExchangeIcon from "../../assets/icon/exchange.svg";
 export const NavBar = () => {
     const location = useLocation();
     const tabs = [
-        { id: "/profile", Icon: ProfileIcon, iconSize: "9vw" },
-        { id: "/nexus", text: "Nexus", Icon: QuestsIcon, iconSize: "6vw" },
+        { id: "/profile", text: "Profile", Icon: ProfileIcon, iconSize: "8vw" },
+        { id: "/nexus", text: "Nexus", Icon: NexusIcon, iconSize: "8vw" },
         { id: "/", text: "Play", Icon: PlayIcon, iconSize: "6vw" },
         {
             id: "/collection",
@@ -52,7 +53,7 @@ export const NavBar = () => {
                                         src={tab.Icon}
                                         alt=""
                                     ></img>
-                                    <p className="pt-[1vw] text-center font-montserrat text-[2.5vw] text-graydark">
+                                    <p className="pt-[0.5vw] text-center font-montserrat text-[2.5vw] text-graydark">
                                         {tab.text}
                                     </p>
                                 </Link>
