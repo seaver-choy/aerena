@@ -212,7 +212,7 @@ export const DreamTeamModal = ({
                             </motion.button>
                         </div>
                     ) : (
-                        <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[2vw]">
+                        <div className="flex h-[10vw] w-[80vw] items-center justify-center gap-[4vw]">
                             <motion.button
                                 className="h-[10vw]"
                                 {...appearAnimation}
