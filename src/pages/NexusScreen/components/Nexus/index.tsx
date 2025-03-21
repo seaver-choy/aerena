@@ -15,20 +15,11 @@ export const Nexus = () => {
     const [leagueTypes, setLeagueTypes] = useState<string[]>(null);
     const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [teams, setTeams] = useState<Team[]>(null);
-    const [scheduleGroups, setScheduleGroups] = useState<ScheduleGroup[]>(null);
-    const [filteredScheduleGroup, setFilteredScheduleGroup] =
-        useState<ScheduleGroup>(null);
-
-    const filterSchedules = () => {
-        if (!scheduleGroups || !chosenLeagueType) return null;
-        setFilteredScheduleGroup(
-            scheduleGroups.find((group) => group.league === chosenLeagueType)
-        );
-    };
+    const [scheduleGroup, setScheduleGroup] = useState<ScheduleGroup>(null);
 
     const fetchData = async () => {
         const schedulesResult = await getNearestSchedules(
-            leagueTypes,
+            chosenLeagueType,
             user.initDataRaw
         );
         const transformedGroups = schedulesResult.map((group) => ({
@@ -36,25 +27,23 @@ export const Nexus = () => {
             week: group._id.week,
             schedules: group.schedules,
         }));
-        setScheduleGroups(
-            [...transformedGroups].sort((a, b) => b.week - a.week)
-        );
+        setScheduleGroup([...transformedGroups][0]);
         const teamsResult = await getTeams(leagueTypes, user.initDataRaw);
         setTeams(teamsResult);
-        setChosenLeagueType(leagueTypes[0]);
     };
 
     useEffect(() => {
         async function fetchAllLeagueTypes() {
             const res = await getLeagues(user.initDataRaw);
-            setLeagueTypes([...sortLeagues(res, user.country)]);
+            const sortedLeagues = [...sortLeagues(res, user.country)];
+            setLeagueTypes(sortedLeagues);
+            setChosenLeagueType(sortedLeagues[0]);
         }
         fetchAllLeagueTypes();
     }, []);
 
     useEffect(() => {
-        if (scheduleGroups != null && chosenLeagueType != null)
-            filterSchedules();
+        if (scheduleGroup != null && chosenLeagueType != null) fetchData();
     }, [chosenLeagueType]);
 
     useEffect(() => {
@@ -62,7 +51,7 @@ export const Nexus = () => {
     }, [leagueTypes]);
 
     return (
-        scheduleGroups != null && (
+        scheduleGroup != null && (
             <div>
                 <FunctionSection
                     title="Filter Options"
@@ -71,10 +60,7 @@ export const Nexus = () => {
                     setChosenLeagueType={setChosenLeagueType}
                     showLeagueButton={true}
                 />
-                <FeaturedSchedule
-                    scheduleGroup={filteredScheduleGroup}
-                    teams={teams}
-                />
+                <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
             </div>
         )
     );

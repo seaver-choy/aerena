@@ -1396,12 +1396,12 @@ export const getActiveSchedules = async (league, initDataRaw: string) => {
 };
 
 export const getNearestSchedules = async (
-    leagueTypes: string[],
+    league: string,
     initDataRaw: string
 ) => {
     try {
         const queryParams = {
-            leagueTypes: leagueTypes.toString(),
+            league: league,
         };
         const restOperation = get({
             apiName: "playibleApi",

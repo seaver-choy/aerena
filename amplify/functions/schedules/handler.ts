@@ -119,15 +119,25 @@ async function getNearestSchedules(event: APIGatewayProxyEvent) {
     const scheduleModel = conn!.model("Schedules");
 
     try {
-        const leagueTypes = event
-            .queryStringParameters!.leagueTypes!.split(",")
-            .filter((type) => type !== "");
+        const league = event.queryStringParameters!.league;
         const currentDate = new Date();
+        const weekResult = await scheduleModel.findOne({
+            league: league,
+            matchDate: { $gt: currentDate },
+        });
+
+        if (!weekResult) {
+            throw new Error("No upcoming matches found");
+        }
+
+        const week = weekResult.week;
+
         const result = await scheduleModel.aggregate([
             {
                 $match: {
-                    league: { $in: leagueTypes },
+                    league: league,
                     matchDate: { $gt: currentDate },
+                    week: week,
                 },
             },
             {
@@ -151,7 +161,7 @@ async function getNearestSchedules(event: APIGatewayProxyEvent) {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ message: "No teams found" }),
+                body: JSON.stringify({ message: "No schedule found" }),
             };
         }
 
