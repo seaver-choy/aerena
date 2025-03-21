@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useUsers } from "../../hooks/useUser";
 
-import FriendsIcon from "../../assets/icon/friends.svg";
+import ProfileIcon from "../../assets/icon/profile.svg";
 import QuestsIcon from "../../assets/icon/quests.svg";
 import PlayIcon from "../../assets/icon/play.svg";
 import CollectionIcon from "../../assets/icon/collection.svg";
@@ -10,11 +10,21 @@ import ExchangeIcon from "../../assets/icon/exchange.svg";
 export const NavBar = () => {
     const location = useLocation();
     const tabs = [
-        { id: "/profile", text: "Profile", Icon: FriendsIcon },
-        { id: "/nexus", text: "Nexus", Icon: QuestsIcon },
-        { id: "/", text: "Play", Icon: PlayIcon },
-        { id: "/collection", text: "Collection", Icon: CollectionIcon },
-        { id: "/exchange", text: "Exchange", Icon: ExchangeIcon },
+        { id: "/profile", Icon: ProfileIcon, iconSize: "9vw" },
+        { id: "/nexus", text: "Nexus", Icon: QuestsIcon, iconSize: "6vw" },
+        { id: "/", text: "Play", Icon: PlayIcon, iconSize: "6vw" },
+        {
+            id: "/collection",
+            text: "Collection",
+            Icon: CollectionIcon,
+            iconSize: "6vw",
+        },
+        {
+            id: "/exchange",
+            text: "Exchange",
+            Icon: ExchangeIcon,
+            iconSize: "6vw",
+        },
     ];
     const user = useUsers();
 
@@ -38,7 +48,7 @@ export const NavBar = () => {
                                     key={tab.id}
                                 >
                                     <img
-                                        className="h-[6vw]"
+                                        className={`h-[${tab.iconSize}]`}
                                         src={tab.Icon}
                                         alt=""
                                     ></img>
