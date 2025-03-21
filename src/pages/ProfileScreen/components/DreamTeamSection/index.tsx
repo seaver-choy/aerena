@@ -6,7 +6,7 @@ import {
     Token,
     TournamentLineup,
 } from "../../../../helpers/interfaces";
-import { saveDreamTeam } from "../../../../helpers/lambda.helper";
+import { sampleURL, saveDreamTeam } from "../../../../helpers/lambda.helper";
 import { FunctionSection } from "../../../../components/FunctionSection";
 import { DreamTeamLineup } from "../DreamTeamLineup";
 import { DreamTeamModal } from "../../modals/DreamTeamModal";
@@ -47,6 +47,8 @@ export const DreamTeamSection = () => {
         useState<boolean>(false);
     const [showIncompleteModal, setShowIncompleteModal] =
         useState<boolean>(false);
+    const [currentlySample, setCurrentlySample] = useState<boolean>(false);
+    const [imageUrl, setImageUrl] = useState<string>(null);
 
     const handleDreamTeam = async (
         teamProfile: TeamProfile,
@@ -89,12 +91,19 @@ export const DreamTeamSection = () => {
         updateDreamTeamLineup();
     }, [dreamTeam]);
 
-    const displayDreamTeamModal = () => {
+    const displayDreamTeamModal = async () => {
         setCurrentPositionIndex(-1);
         if (dreamTeam.lineup?.some((athlete) => athlete === null)) {
             setShowIncompleteModal(true);
         } else {
             setShowDreamTeamModal(true);
+            const result = await sampleURL(
+                user.id,
+                "dreamteam",
+                user.initDataRaw
+            );
+            setCurrentlySample(true);
+            setImageUrl(result.imageUrl);
         }
     };
 
@@ -147,6 +156,9 @@ export const DreamTeamSection = () => {
                     {showDreamTeamModal && (
                         <DreamTeamModal
                             dreamTeam={dreamTeam}
+                            imageUrl={imageUrl}
+                            currentlySample={currentlySample}
+                            setCurrentlySample={setCurrentlySample}
                             onClose={closeDreamTeamModal}
                         />
                     )}

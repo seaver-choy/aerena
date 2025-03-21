@@ -100,14 +100,6 @@ const App = () => {
                     {routes.map((route) => (
                         <Route key={route.path} {...route} />
                     ))}
-                    <Route key={"collection"} path={"collection"}>
-                        <Route index Component={CollectionScreen} />
-                        <Route
-                            key={"athlete"}
-                            path={"athlete"}
-                            Component={AthleteScreen}
-                        />
-                    </Route>
                     <Route path="*" element={<Navigate to="/" />} />
                 </Route>
             </Routes>

@@ -10,7 +10,7 @@ import * as htmlToImage from "html-to-image";
 import { DreamTeam, TeamColor } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { getBaseTeamColor } from "../../../../helpers/athletes";
-import { sampleURL, shareDreamTeam } from "../../../../helpers/lambda.helper";
+import { shareDreamTeam } from "../../../../helpers/lambda.helper";
 import { useUsers } from "../../../../hooks/useUser";
 import { useUtils } from "@telegram-apps/sdk-react";
 import FacebookIcon from "../../../../assets/icon/facebook.svg";
@@ -19,18 +19,25 @@ import MessengerIcon from "../../../../assets/icon/messenger.svg";
 import { isIOS } from "../../../../helpers/utilities";
 interface DreamTeamModalProps {
     dreamTeam: DreamTeam;
+    imageUrl: string;
+    currentlySample: boolean;
+    setCurrentlySample: (currentlySample: boolean) => void;
     onClose: () => void;
     // isExporting: boolean;
     // setIsExporting: (isExporting: boolean) => void;
     // setShareData: (data: ShareData) => void;
 }
 
-export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
+export const DreamTeamModal = ({
+    dreamTeam,
+    imageUrl,
+    currentlySample,
+    setCurrentlySample,
+    onClose,
+}: DreamTeamModalProps) => {
     const user = useUsers();
     const lineupRef = useRef<HTMLDivElement>(null);
     const [baseColor] = useState<TeamColor>(getBaseTeamColor());
-    const [currentlySample, setCurrentlySample] = useState<boolean>(false);
-    const [imageUrl, setImageUrl] = useState<string>(null);
     const [exporting, isExporting] = useState<boolean>(false);
     const utils = useUtils();
 
@@ -52,7 +59,6 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                     dataUrl,
                     user.initDataRaw
                 );
-                setImageUrl(result.imageUrl);
                 user.dispatch({
                     type: "SET_DREAM_TEAM_SHARE_COUNTER",
                     payload: {
@@ -104,26 +110,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
         }
     };
 
-    const setSampleURL = async () => {
-        const result = await sampleURL(user.id, "dreamteam", user.initDataRaw);
-        setCurrentlySample(true);
-        setImageUrl(result.imageUrl);
-    };
-
     useEffect(() => {
-        if (imageUrl == null) isExporting(true);
-        if (currentlySample)
-            setTimeout(() => {
-                isExporting(false);
-            }, 1000);
-    }, [currentlySample]);
-
-    useEffect(() => {
-        console.log(dreamTeam);
-    }, [dreamTeam]);
-
-    useEffect(() => {
-        setSampleURL();
         document.body.style.overflow = "hidden";
 
         return () => {

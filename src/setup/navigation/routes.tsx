@@ -9,6 +9,8 @@ import { TournamentScreen } from "../../pages/PlayScreen/pages/TournamentScreen"
 import { PreviousScreen } from "../../pages/PlayScreen/pages/PreviousScreen";
 import { UpcomingScreen } from "../../pages/PlayScreen/pages/UpcomingScreen";
 import { CommunityLineupsScreen } from "../../pages/PlayScreen/pages/CommunityLineupsScreen";
+import { AthleteScreen } from "../../pages/AthleteScreen";
+import { CollectionScreen } from "../../pages/CollectionScreen";
 
 interface Route {
     path: string;
@@ -35,4 +37,6 @@ export const routes: Route[] = [
         Component: CommunityLineupsScreen,
         title: "Community Lineups Screen",
     },
+    { path: "/athlete", Component: AthleteScreen },
+    { path: "/collection", Component: CollectionScreen },
 ];
