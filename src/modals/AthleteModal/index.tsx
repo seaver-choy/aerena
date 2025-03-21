@@ -63,7 +63,7 @@ export const AthleteModal = ({
     });
 
     const handleViewPlayerProfile = () => {
-        navigate(`athlete`, {
+        navigate(`/athlete`, {
             state: {
                 athlete,
                 sameAthletes,
