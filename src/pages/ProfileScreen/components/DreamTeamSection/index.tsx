@@ -147,7 +147,7 @@ export const DreamTeamSection = () => {
                         onClick={displayDreamTeamModal}
                     >
                         <div className="absolute flex h-full w-full items-center justify-center">
-                            <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                            <p className="font-russoone text-[3.4vw] text-white">
                                 Share Lineup
                             </p>
                         </div>

@@ -375,27 +375,27 @@ export const LineupSection = ({
                                 </div>
                             ) : ongoingTournament.type === "basic" ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        className="-mt-[0.4vw] h-[3vw]"
                                         src={BattlePointsIcon}
                                     ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}
                                     </p>
                                 </div>
                             ) : (
                                 <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        className="-mt-[0.8vw] h-[3vw]"
                                         src={TGStarIcon}
                                     ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}
                                     </p>
                                 </div>
