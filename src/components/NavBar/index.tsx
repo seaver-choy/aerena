@@ -3,7 +3,6 @@ import { useUsers } from "../../hooks/useUser";
 
 import ProfileIcon from "../../assets/icon/profile.svg";
 import NexusIcon from "../../assets/icon/nexus.svg";
-import QuestsIcon from "../../assets/icon/quests.svg";
 import PlayIcon from "../../assets/icon/play.svg";
 import CollectionIcon from "../../assets/icon/collection.svg";
 import ExchangeIcon from "../../assets/icon/exchange.svg";
