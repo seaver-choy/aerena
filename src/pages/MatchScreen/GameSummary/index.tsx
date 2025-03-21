@@ -1,5 +1,8 @@
 import { motion } from "motion/react";
-import { appearAnimation } from "../../../helpers/animation";
+import {
+    appearAnimation,
+    appearTextAnimation,
+} from "../../../helpers/animation";
 import { getBaseTeamColor } from "../../../helpers/athletes";
 import { TeamCard } from "../../../components/TeamCard";
 
@@ -25,7 +28,7 @@ export const GameSummary = () => {
                 >
                     <TeamCard color={color} team={"ANRCHY"} />
                 </motion.div>
-                <motion.div className="-mt-[3vw]">
+                <motion.div className="-mt-[3vw]" {...appearTextAnimation}>
                     <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
                         VICTORY
                     </p>
@@ -95,7 +98,7 @@ export const GameSummary = () => {
                 >
                     <TeamCard color={color} team={"ANRCHY"} />
                 </motion.div>
-                <motion.div className="-mt-[3vw]">
+                <motion.div className="-mt-[3vw]" {...appearTextAnimation}>
                     <p className="font-russoone text-[4vw] font-normal text-gray opacity-50 will-change-transform backface-hidden">
                         DEFEAT
                     </p>
