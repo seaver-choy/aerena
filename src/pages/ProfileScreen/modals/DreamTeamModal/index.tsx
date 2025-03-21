@@ -119,6 +119,10 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
     }, [currentlySample]);
 
     useEffect(() => {
+        console.log(dreamTeam);
+    }, [dreamTeam]);
+
+    useEffect(() => {
         setSampleURL();
         document.body.style.overflow = "hidden";
 
@@ -145,9 +149,7 @@ export const DreamTeamModal = ({ dreamTeam, onClose }: DreamTeamModalProps) => {
                             </div>
                         </div>
                         <div className="absolute top-[10.5vw]">
-                            <p
-                                className={`font-russoone text-[4vw] text-golddark ${isIOS() ? "ios-text-rendering" : "android-text-rendering"}`}
-                            >
+                            <p className="font-russoone text-[4vw] text-golddark">
                                 {dreamTeam.teamProfile != null &&
                                 dreamTeam.teamProfile.key != undefined
                                     ? dreamTeam.teamProfile.key
