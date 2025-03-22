@@ -17,7 +17,7 @@ export const NavBar = () => {
             id: "/collection",
             text: "Collection",
             Icon: CollectionIcon,
-            iconSize: "6vw",
+            iconSize: "8vw",
         },
         {
             id: "/exchange",
