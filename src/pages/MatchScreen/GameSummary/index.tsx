@@ -8,6 +8,7 @@ import {
 import { getBaseTeamColor } from "../../../helpers/athletes";
 import { TeamCard } from "../../../components/TeamCard";
 
+import GameSummaryBackground from "../../../assets/background/game-summary.svg";
 import GameSummarySonner from "../../../assets/sonner/game-summary.svg";
 import StatsBackground from "../../../assets/background/stats.svg";
 
@@ -34,8 +35,12 @@ export const GameSummary = () => {
     return (
         <div className="mx-[4vw] mt-[6vw]">
             {showGameSummary ? (
-                <div className="flex flex-row py-[2vw]">
-                    <div className="flex w-[46vw] flex-col items-center gap-[4vw] px-[2vw]">
+                <div className="relative flex h-[106.3vw]">
+                    <img
+                        className="h-full w-full"
+                        src={GameSummaryBackground}
+                    />
+                    <div className="absolute left-0 flex h-full w-[46vw] flex-col items-center pt-[12.5vw]">
                         <motion.div
                             className="h-[14vw] w-[36vw] overflow-hidden"
                             {...appearAnimation}
@@ -43,7 +48,7 @@ export const GameSummary = () => {
                             <TeamCard color={color} team={"ANRCHY"} />
                         </motion.div>
                         <motion.div
-                            className="-mt-[3vw]"
+                            className="mt-[1vw]"
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
@@ -51,7 +56,7 @@ export const GameSummary = () => {
                             </p>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -70,7 +75,7 @@ export const GameSummary = () => {
                             </div>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -89,7 +94,7 @@ export const GameSummary = () => {
                             </div>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -108,7 +113,7 @@ export const GameSummary = () => {
                             </div>
                         </motion.div>
                     </div>
-                    <div className="flex w-[46vw] flex-col items-center gap-[4vw] px-[2vw]">
+                    <div className="absolute right-0 flex h-full w-[46vw] flex-col items-center pt-[12.5vw]">
                         <motion.div
                             className="h-[14vw] w-[36vw] overflow-hidden"
                             {...appearAnimation}
@@ -116,7 +121,7 @@ export const GameSummary = () => {
                             <TeamCard color={color} team={"ANRCHY"} />
                         </motion.div>
                         <motion.div
-                            className="-mt-[3vw]"
+                            className="mt-[1vw]"
                             {...appearTextAnimation}
                         >
                             <p className="font-russoone text-[4vw] font-normal text-gray opacity-50 will-change-transform backface-hidden">
@@ -124,7 +129,7 @@ export const GameSummary = () => {
                             </p>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -143,7 +148,7 @@ export const GameSummary = () => {
                             </div>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -162,7 +167,7 @@ export const GameSummary = () => {
                             </div>
                         </motion.div>
                         <motion.div
-                            className="h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -183,7 +188,7 @@ export const GameSummary = () => {
                     </div>
                 </div>
             ) : (
-                <div className="h-[88vw] bg-loading">
+                <div className="h-[106.3vw] bg-loading">
                     <motion.div className="relative" {...pulseAnimation}>
                         <img
                             className="h-full w-full"
