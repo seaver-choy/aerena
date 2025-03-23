@@ -11,3 +11,4 @@ export const athleteOptions = [
 ];
 export const matchOptions = ["Game 1", "Game 2", "Game 3"];
 export const gameOptions = ["Team 1", "Summary", "Team 2"];
+export const rankingsOptions = ["Kills", "Assists", "KDA", "MVP", "Points"];

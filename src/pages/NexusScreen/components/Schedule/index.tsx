@@ -1,18 +1,18 @@
+import { useEffect, useState } from "react";
+import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import { appearTextAnimation } from "../../../../helpers/animation";
-import { FunctionSection } from "../../../../components/FunctionSection";
-import { TitleSection } from "../../../../components/TitleSection";
-import { MatchBanner } from "../MatchBanner";
-import { useEffect, useState } from "react";
+import { ScheduleGroup, Team } from "../../../../helpers/interfaces";
+import { getCountryCode, getCountryFull } from "../../../../helpers/utilities";
 import {
     getActiveSchedules,
     getCountries,
     getFilteredLeagues,
     getTeams,
 } from "../../../../helpers/lambda.helper";
-import { useUsers } from "../../../../hooks/useUser";
-import { ScheduleGroup, Team } from "../../../../helpers/interfaces";
-import { getCountryCode, getCountryFull } from "../../../../helpers/utilities";
+import { FunctionSection } from "../../../../components/FunctionSection";
+import { TitleSection } from "../../../../components/TitleSection";
+import { MatchBanner } from "../MatchBanner";
 
 export const Schedule = () => {
     const user = useUsers();

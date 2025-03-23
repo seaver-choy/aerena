@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { rankingsOptions } from "../../../../helpers/tabs";
 import { FunctionSection } from "../../../../components/FunctionSection";
+import { Tabs } from "../../../../components/Tabs";
+import { RankLeaderboard } from "../RankLeaderboard";
 
 export const Rankings = () => {
+    const [rankingsTab, setRankingsTab] = useState("Kills");
+
     return (
         <div>
             <FunctionSection
@@ -8,6 +14,14 @@ export const Rankings = () => {
                 showRegionButton={true}
                 showLeagueButton={true}
             />
+            <Tabs
+                options={rankingsOptions}
+                onToggle={(selected) => {
+                    setRankingsTab(selected);
+                }}
+                selectedTab={rankingsTab}
+            />
+            <RankLeaderboard />
         </div>
     );
 };
