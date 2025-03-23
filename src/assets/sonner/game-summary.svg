@@ -1,16 +1,20 @@
 <svg width="394" height="454" viewBox="0 0 394 454" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="game-summary">
-<g id="Group 465">
-<rect id="Rectangle 408" x="35.0222" y="158.917" width="125.861" height="70.0444" fill="#D9D9D9"/>
-<rect id="Rectangle 414" x="60.1943" y="121.706" width="76.6111" height="14.2278" fill="#D9D9D9"/>
-<rect id="Rectangle 416" x="21.8889" y="54.9443" width="153.222" height="55.8167" fill="#D9D9D9"/>
-<rect id="Rectangle 417" x="218.889" y="54.9443" width="153.222" height="55.8167" fill="#D9D9D9"/>
-<rect id="Rectangle 415" x="257.194" y="121.706" width="76.6111" height="14.2278" fill="#D9D9D9"/>
-<rect id="Rectangle 409" x="232.022" y="158.917" width="125.861" height="70.0444" fill="#D9D9D9"/>
-<rect id="Rectangle 410" x="35.0222" y="246.472" width="125.861" height="70.0444" fill="#D9D9D9"/>
-<rect id="Rectangle 411" x="232.022" y="246.472" width="125.861" height="70.0444" fill="#D9D9D9"/>
-<rect id="Rectangle 412" x="35.0222" y="334.028" width="125.861" height="70.0444" fill="#D9D9D9"/>
-<rect id="Rectangle 413" x="232.022" y="334.028" width="125.861" height="70.0444" fill="#D9D9D9"/>
+<g id="Group 466">
+<g id="Group 467">
+<rect id="Rectangle 408" x="42.0222" y="158.917" width="125.861" height="70.0444" fill="#D9D9D9"/>
+<rect id="Rectangle 414" x="67.1943" y="121.706" width="76.6111" height="14.2278" fill="#D9D9D9"/>
+<rect id="Rectangle 416" x="28.8889" y="54.9443" width="153.222" height="55.8167" fill="#D9D9D9"/>
+<rect id="Rectangle 410" x="42.0222" y="246.472" width="125.861" height="70.0444" fill="#D9D9D9"/>
+<rect id="Rectangle 412" x="42.0222" y="334.028" width="125.861" height="70.0444" fill="#D9D9D9"/>
+</g>
+<g id="Group 468">
+<rect id="Rectangle 417" x="211.889" y="54.9443" width="153.222" height="55.8167" fill="#D9D9D9"/>
+<rect id="Rectangle 415" x="250.194" y="121.706" width="76.6111" height="14.2278" fill="#D9D9D9"/>
+<rect id="Rectangle 409" x="225.022" y="158.917" width="125.861" height="70.0444" fill="#D9D9D9"/>
+<rect id="Rectangle 411" x="225.022" y="246.472" width="125.861" height="70.0444" fill="#D9D9D9"/>
+<rect id="Rectangle 413" x="225.022" y="334.028" width="125.861" height="70.0444" fill="#D9D9D9"/>
+</g>
 </g>
 </g>
 </svg>

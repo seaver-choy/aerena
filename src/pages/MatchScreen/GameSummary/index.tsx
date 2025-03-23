@@ -33,14 +33,14 @@ export const GameSummary = () => {
     }, []);
 
     return (
-        <div className="mx-[4vw] mt-[6vw]">
+        <div className="mt-[6vw]">
             {showGameSummary ? (
-                <div className="relative flex h-[106.3vw]">
+                <div className="relative flex h-[115vw]">
                     <img
                         className="h-full w-full"
                         src={GameSummaryBackground}
                     />
-                    <div className="absolute left-0 flex h-full w-[46vw] flex-col items-center pt-[12.5vw]">
+                    <div className="absolute left-[4vw] flex h-full w-[46vw] flex-col items-center pt-[14vw]">
                         <motion.div
                             className="h-[14vw] w-[36vw] overflow-hidden"
                             {...appearAnimation}
@@ -48,7 +48,7 @@ export const GameSummary = () => {
                             <TeamCard color={color} team={"ANRCHY"} />
                         </motion.div>
                         <motion.div
-                            className="mt-[1vw]"
+                            className="mt-[2vw]"
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
@@ -56,7 +56,7 @@ export const GameSummary = () => {
                             </p>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -65,17 +65,17 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         KILLS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
                             </div>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -84,17 +84,17 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         DEATHS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
                             </div>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -103,17 +103,17 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         ASSISTS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
                             </div>
                         </motion.div>
                     </div>
-                    <div className="absolute right-0 flex h-full w-[46vw] flex-col items-center pt-[12.5vw]">
+                    <div className="absolute right-[4vw] flex h-full w-[46vw] flex-col items-center pt-[14vw]">
                         <motion.div
                             className="h-[14vw] w-[36vw] overflow-hidden"
                             {...appearAnimation}
@@ -121,7 +121,7 @@ export const GameSummary = () => {
                             <TeamCard color={color} team={"ANRCHY"} />
                         </motion.div>
                         <motion.div
-                            className="mt-[1vw]"
+                            className="mt-[2vw]"
                             {...appearTextAnimation}
                         >
                             <p className="font-russoone text-[4vw] font-normal text-gray opacity-50 will-change-transform backface-hidden">
@@ -129,7 +129,7 @@ export const GameSummary = () => {
                             </p>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -138,17 +138,17 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         KILLS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
                             </div>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -157,17 +157,17 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         DEATHS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
                             </div>
                         </motion.div>
                         <motion.div
-                            className="mt-[3.8vw] h-[16.5vw] w-[30vw] overflow-hidden"
+                            className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
                             {...appearAnimation}
                         >
                             <div className="relative flex h-full w-full">
@@ -176,10 +176,10 @@ export const GameSummary = () => {
                                     src={StatsBackground}
                                 />
                                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
+                                    <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
                                         ASSISTS
                                     </p>
-                                    <motion.pre className="-mt-[1vw] font-russoone text-[5.5vw] font-normal text-white">
+                                    <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
                                         0.00
                                     </motion.pre>
                                 </div>
@@ -188,7 +188,7 @@ export const GameSummary = () => {
                     </div>
                 </div>
             ) : (
-                <div className="h-[106.3vw] bg-loading">
+                <div className="h-[115vw] bg-loading">
                     <motion.div className="relative" {...pulseAnimation}>
                         <img
                             className="h-full w-full"
