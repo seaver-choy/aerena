@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import {
     appearCardAnimation,
     appearTextAnimation,
+    slideRightTextAnimation,
 } from "../../../../helpers/animation";
 
 import RankingsLeaderBoardBackground from "../../../../assets/background/rankings-leaderboard.svg";
@@ -9,19 +10,27 @@ import RankingsItemBackground from "../../../../assets/background/rankings-item.
 import GoldButton from "../../../../assets/button/gold.svg";
 import Sample from "../../../../assets/card/sample.svg";
 
-export const RankLeaderboard = () => {
+interface RankLeaderboardProps {
+    category: string;
+    subCategory: string;
+}
+
+export const RankLeaderboard = ({
+    category,
+    subCategory,
+}: RankLeaderboardProps) => {
     return (
-        <div className="relative mt-[6vw] flex h-[96.3vw] justify-center">
+        <div className="relative mt-[4vw] flex h-[96.3vw] justify-center">
             <img
                 className="h-full w-full"
                 src={RankingsLeaderBoardBackground}
             />
             <motion.div className="absolute top-[12vw] flex flex-col justify-center">
                 <p className="text-center font-russoone text-[7vw] text-white">
-                    ASSISTS
+                    {category}
                 </p>
-                <p className="-mt-[2vw] text-center font-russoone text-[4vw] text-white">
-                    IN A GAME
+                <p className="-mt-[2vw] bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[4vw] text-transparent">
+                    {subCategory}
                 </p>
             </motion.div>
             <div className="absolute top-[29vw] flex flex-col gap-[2vw]">
@@ -37,7 +46,7 @@ export const RankLeaderboard = () => {
                     <div className="flex w-[50vw] flex-col gap-[1vw]">
                         <motion.div
                             className="relative flex h-[7vw]"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             <img
                                 className="h-full w-full"
@@ -55,7 +64,7 @@ export const RankLeaderboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex h-full w-[25%] items-center justify-center">
-                                    <p className="font-russoone text-[3vw] text-white">
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
                                         00.00
                                     </p>
                                 </div>
@@ -63,7 +72,7 @@ export const RankLeaderboard = () => {
                         </motion.div>
                         <motion.div
                             className="relative flex h-[7vw]"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             <img
                                 className="h-full w-full"
@@ -81,7 +90,7 @@ export const RankLeaderboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex h-full w-[25%] items-center justify-center">
-                                    <p className="font-russoone text-[3vw] text-white">
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
                                         00.00
                                     </p>
                                 </div>
@@ -89,7 +98,7 @@ export const RankLeaderboard = () => {
                         </motion.div>
                         <motion.div
                             className="relative flex h-[7vw]"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             <img
                                 className="h-full w-full"
@@ -107,7 +116,7 @@ export const RankLeaderboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex h-full w-[25%] items-center justify-center">
-                                    <p className="font-russoone text-[3vw] text-white">
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
                                         100
                                     </p>
                                 </div>
@@ -115,7 +124,7 @@ export const RankLeaderboard = () => {
                         </motion.div>
                         <motion.div
                             className="relative flex h-[7vw]"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             <img
                                 className="h-full w-full"
@@ -133,7 +142,7 @@ export const RankLeaderboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex h-full w-[25%] items-center justify-center">
-                                    <p className="font-russoone text-[3vw] text-white">
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
                                         0.00
                                     </p>
                                 </div>
@@ -141,7 +150,7 @@ export const RankLeaderboard = () => {
                         </motion.div>
                         <motion.div
                             className="relative flex h-[7vw]"
-                            {...appearTextAnimation}
+                            {...slideRightTextAnimation}
                         >
                             <img
                                 className="h-full w-full"
@@ -159,7 +168,7 @@ export const RankLeaderboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex h-full w-[25%] items-center justify-center">
-                                    <p className="font-russoone text-[3vw] text-white">
+                                    <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
                                         0.00
                                     </p>
                                 </div>

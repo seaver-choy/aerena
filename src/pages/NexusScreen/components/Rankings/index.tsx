@@ -21,7 +21,9 @@ export const Rankings = () => {
                 }}
                 selectedTab={rankingsTab}
             />
-            <RankLeaderboard />
+            <RankLeaderboard category="KILLS" subCategory="AVERAGES" />
+            <RankLeaderboard category="KILLS" subCategory="TOTALS" />
+            <RankLeaderboard category="KILLS" subCategory="IN A GAME" />
         </div>
     );
 };
