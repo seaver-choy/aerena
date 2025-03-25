@@ -194,7 +194,7 @@ export const RankLeaderboard = ({
         //         </div>
         //     </div>
         // </div>
-        <div className="mt-[4vw] h-[127.9vw]">
+        <div className="mt-[4vw] h-[128vw] bg-red">
             <div className="relative flex justify-center">
                 <img
                     className="h-full w-full"
