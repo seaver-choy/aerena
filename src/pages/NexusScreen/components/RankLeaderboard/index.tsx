@@ -24,7 +24,7 @@ export const RankLeaderboard = () => {
     }, []);
 
     return (
-        <div className="mt-[4vw] h-[138.1vw] bg-red">
+        <div className="mt-[4vw] h-[138.1vw]">
             {showLeaderboard ? (
                 <div className="relative flex justify-center">
                     <img
@@ -49,7 +49,7 @@ export const RankLeaderboard = () => {
                                         src={StatsBackground}
                                     />
                                     <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                        <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
@@ -76,7 +76,7 @@ export const RankLeaderboard = () => {
                                         src={StatsBackground}
                                     />
                                     <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                        <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
@@ -103,7 +103,7 @@ export const RankLeaderboard = () => {
                                         src={StatsBackground}
                                     />
                                     <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                        <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
@@ -130,7 +130,7 @@ export const RankLeaderboard = () => {
                                         src={StatsBackground}
                                     />
                                     <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                        <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
@@ -157,7 +157,7 @@ export const RankLeaderboard = () => {
                                         src={StatsBackground}
                                     />
                                     <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                        <p className="mt-[1vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
                                             ASSISTS
                                         </p>
                                         <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
