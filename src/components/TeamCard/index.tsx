@@ -38,46 +38,47 @@ interface Props {
 }
 
 export const TeamCard = ({ color, team }: Props) => {
+    const teamNoSpace = team.replace(" ", "-");
     return (
         <div
             className="relative h-full w-full will-change-transform backface-hidden"
             style={{ transform: "none", transition: "none" }}
         >
             <div className="absolute h-full w-full">
-                <Back color={color} team={team} />
+                <Back color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
-                <BackWings color={color} team={team} />
+                <BackWings color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <BackWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <BaseShadow team={team} />
+                <BaseShadow team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <Base color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Wave team={team} />
+                <Wave team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <Dust color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Line color={color} team={team} />
+                <Line color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
-                <MiddleWingsShadow team={team} />
+                <MiddleWingsShadow team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
-                <MiddleWings color={color} team={team} />
+                <MiddleWings color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <MiddleWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <FangsShadow color={color} team={team} />
+                <FangsShadow color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <Fangs color={color} />
@@ -92,31 +93,31 @@ export const TeamCard = ({ color, team }: Props) => {
                 <Team color={color} team={team} />
             </div>
             <div className="absolute h-full w-full">
-                <KnivesShadow team={team} />
+                <KnivesShadow team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <KnivesAccent color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Knives color={color} team={team} />
+                <Knives color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <KnivesShine />
             </div>
             <div className="absolute h-full w-full">
-                <FrontWingsShadow team={team} />
+                <FrontWingsShadow team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
-                <FrontWings color={color} team={team} />
+                <FrontWings color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <FrontWingsShine />
             </div>
             <div className="absolute h-full w-full">
-                <LogoShadow team={team} />
+                <LogoShadow team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
-                <LogoOutline color={color} team={team} />
+                <LogoOutline color={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <LogoBase color={color} />
