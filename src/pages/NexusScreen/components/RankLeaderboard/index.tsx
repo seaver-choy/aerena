@@ -194,7 +194,7 @@ export const RankLeaderboard = ({
         //         </div>
         //     </div>
         // </div>
-        <div className="mt-[4vw] h-[127.8vw]">
+        <div className="mt-[4vw] h-[127.9vw]">
             <div className="relative flex justify-center">
                 <img
                     className="h-full w-full"
@@ -220,19 +220,19 @@ export const RankLeaderboard = ({
                             className="h-full w-full"
                             src={RankingsItemBackground}
                         />
-                        <div className="absolute mt-[0.2vw] flex h-full w-full">
+                        <div className="absolute flex h-full w-full">
                             <div className="flex h-full w-[15%] items-center justify-center pl-[1vw]">
-                                <p className="font-russoone text-[3vw] text-white">
+                                <p className="font-russoone text-[3.2vw] text-white">
                                     1
                                 </p>
                             </div>
                             <div className="flex h-full w-[60%] items-center">
-                                <p className="font-russoone text-[3vw] text-white">
+                                <p className="font-russoone text-[3.2vw] text-white">
                                     SPIDER MILEZ
                                 </p>
                             </div>
                             <div className="flex h-full w-[25%] items-center justify-center">
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
                                     00.00
                                 </p>
                             </div>
@@ -246,19 +246,19 @@ export const RankLeaderboard = ({
                             className="h-full w-full"
                             src={RankingsItemBackground}
                         />
-                        <div className="absolute mt-[0.2vw] flex h-full w-full">
+                        <div className="absolute flex h-full w-full">
                             <div className="flex h-full w-[15%] items-center justify-center pl-[1vw]">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    1
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    2
                                 </p>
                             </div>
                             <div className="flex h-full w-[60%] items-center">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    SPIDER MILEZ
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    MP THE KING
                                 </p>
                             </div>
                             <div className="flex h-full w-[25%] items-center justify-center">
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
                                     00.00
                                 </p>
                             </div>
@@ -272,20 +272,20 @@ export const RankLeaderboard = ({
                             className="h-full w-full"
                             src={RankingsItemBackground}
                         />
-                        <div className="absolute mt-[0.2vw] flex h-full w-full">
+                        <div className="absolute flex h-full w-full">
                             <div className="flex h-full w-[15%] items-center justify-center pl-[1vw]">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    1
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    3
                                 </p>
                             </div>
                             <div className="flex h-full w-[60%] items-center">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    SPIDER MILEZ
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    KENYYZSKIEE
                                 </p>
                             </div>
                             <div className="flex h-full w-[25%] items-center justify-center">
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
-                                    00.00
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                    100
                                 </p>
                             </div>
                         </div>
@@ -298,20 +298,20 @@ export const RankLeaderboard = ({
                             className="h-full w-full"
                             src={RankingsItemBackground}
                         />
-                        <div className="absolute mt-[0.2vw] flex h-full w-full">
+                        <div className="absolute flex h-full w-full">
                             <div className="flex h-full w-[15%] items-center justify-center pl-[1vw]">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    1
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    4
                                 </p>
                             </div>
                             <div className="flex h-full w-[60%] items-center">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    SPIDER MILEZ
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    AERONNSHIKII
                                 </p>
                             </div>
                             <div className="flex h-full w-[25%] items-center justify-center">
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3vw] text-transparent">
-                                    00.00
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                    0.00
                                 </p>
                             </div>
                         </div>
@@ -324,20 +324,20 @@ export const RankLeaderboard = ({
                             className="h-full w-full"
                             src={RankingsItemBackground}
                         />
-                        <div className="absolute mt-[0.2vw] flex h-full w-full">
+                        <div className="absolute flex h-full w-full">
                             <div className="flex h-full w-[15%] items-center justify-center pl-[1vw]">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    1
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    5
                                 </p>
                             </div>
                             <div className="flex h-full w-[60%] items-center">
-                                <p className="font-russoone text-[3vw] text-white">
-                                    SPIDER MILEZ
+                                <p className="font-russoone text-[3.2vw] text-white">
+                                    SUPER FRINCE
                                 </p>
                             </div>
                             <div className="flex h-full w-[25%] items-center justify-center">
-                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] text-transparent">
-                                    00.00
+                                <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] text-transparent">
+                                    0.00
                                 </p>
                             </div>
                         </div>
