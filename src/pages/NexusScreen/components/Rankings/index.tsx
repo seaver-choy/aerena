@@ -2,6 +2,7 @@ import { useState } from "react";
 import { rankingsOptions } from "../../../../helpers/tabs";
 import { FunctionSection } from "../../../../components/FunctionSection";
 import { Tabs } from "../../../../components/Tabs";
+import { TitleSection } from "../../../../components/TitleSection";
 import { RankLeaderboard } from "../RankLeaderboard";
 
 export const Rankings = () => {
@@ -21,9 +22,12 @@ export const Rankings = () => {
                 }}
                 selectedTab={rankingsTab}
             />
-            <RankLeaderboard category="KILLS" subCategory="AVERAGE" />
-            <RankLeaderboard category="KILLS" subCategory="TOTAL" />
-            <RankLeaderboard category="KILLS" subCategory="SINGLE GAME" />
+            <TitleSection title="AVERAGES" />
+            <RankLeaderboard />
+            <TitleSection title="TOTALS" />
+            <RankLeaderboard />
+            <TitleSection title="GAME HIGH" />
+            <RankLeaderboard />
         </div>
     );
 };
