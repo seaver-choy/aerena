@@ -30,15 +30,16 @@ export const RankLeaderboard = ({
     }, []);
 
     return (
-        <div className="mt-[4vw] h-[128.4vw]">
+        <div className="mt-[4vw] h-[128vw]">
             {showLeaderboard ? (
                 <div className="relative flex justify-center">
+                    <div className="absolute mt-[1vw] h-[127vw] w-full border-l-[1vw] border-r-[1vw] border-graydark"></div>
                     <img
-                        className="h-full w-full"
+                        className="z-10 h-full w-full"
                         src={RankingsLeaderBoardBackground}
                     />
                     <motion.div
-                        className="absolute top-[23.5vw] flex flex-col justify-center"
+                        className="absolute top-[23.5vw] z-20 flex flex-col justify-center"
                         {...appearTextAnimation}
                     >
                         <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text text-center font-russoone text-[2.5vw] text-transparent">
@@ -48,7 +49,7 @@ export const RankLeaderboard = ({
                             {category}
                         </p>
                     </motion.div>
-                    <div className="absolute top-[43vw] flex flex-col justify-center gap-[2vw]">
+                    <div className="absolute top-[43vw] z-20 flex flex-col justify-center gap-[2vw]">
                         <motion.div
                             className="relative flex h-[9vw] w-[64vw]"
                             {...slideRightTextAnimation}
@@ -76,7 +77,7 @@ export const RankLeaderboard = ({
                             </div>
                         </motion.div>
                         <motion.div
-                            className="relative flex h-[9vw] w-[64vw]"
+                            className="relative z-20 flex h-[9vw] w-[64vw]"
                             {...slideRightTextAnimation}
                         >
                             <img
@@ -102,7 +103,7 @@ export const RankLeaderboard = ({
                             </div>
                         </motion.div>
                         <motion.div
-                            className="relative flex h-[9vw] w-[64vw]"
+                            className="relative z-20 flex h-[9vw] w-[64vw]"
                             {...slideRightTextAnimation}
                         >
                             <img
@@ -128,7 +129,7 @@ export const RankLeaderboard = ({
                             </div>
                         </motion.div>
                         <motion.div
-                            className="relative flex h-[9vw] w-[64vw]"
+                            className="relative z-20 flex h-[9vw] w-[64vw]"
                             {...slideRightTextAnimation}
                         >
                             <img
@@ -154,7 +155,7 @@ export const RankLeaderboard = ({
                             </div>
                         </motion.div>
                         <motion.div
-                            className="relative flex h-[9vw] w-[64vw]"
+                            className="relative z-20 flex h-[9vw] w-[64vw]"
                             {...slideRightTextAnimation}
                         >
                             <img
@@ -180,7 +181,7 @@ export const RankLeaderboard = ({
                             </div>
                         </motion.div>
                         <motion.div
-                            className="mt-[2vw] flex justify-center"
+                            className="z-20 mt-[2vw] flex justify-center"
                             {...appearTextAnimation}
                         >
                             <button className="relative flex h-[7vw] justify-center">
