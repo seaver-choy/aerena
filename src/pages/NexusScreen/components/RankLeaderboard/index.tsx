@@ -3,195 +3,151 @@ import { motion } from "motion/react";
 import {
     appearAnimation,
     appearCardAnimation,
-    appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
 
 import RankingsLeaderBoardBackground from "../../../../assets/background/rankings-leaderboard.svg";
 import RankingsLeaderboardSonner from "../../../../assets/sonner/rankings-leaderboard.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
-import GoldButton from "../../../../assets/button/gold.svg";
-import Sample from "../../../../assets/card/sample.svg";
+import { RankingInfo } from "../../../../helpers/interfaces";
+import { AthleteCard } from "../../../../components/AthleteCard";
 
-export const RankLeaderboard = () => {
+interface RankLeaderboardProps {
+    rankingsTab: string;
+    rankingStats: RankingInfo[];
+    statType: string;
+}
+export const RankLeaderboard = ({
+    rankingsTab = null,
+    rankingStats = null,
+    statType = null,
+}: RankLeaderboardProps) => {
     const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
 
     useEffect(() => {
+        setShowLeaderboard(false);
         const timer = setTimeout(() => {
             setShowLeaderboard(true);
-        }, 1000);
+        }, 500);
         return () => clearTimeout(timer);
-    }, []);
+    }, [rankingStats]);
+
+    const processText = (rankingStat: RankingInfo) => {
+        switch (rankingsTab) {
+            case "Kills":
+                if (statType == "Average")
+                    return rankingStat.avgKills.toFixed(2);
+                else if (statType == "Total") return rankingStat.totalKills;
+                else if (statType == "Max") return rankingStat.maxKills;
+                else return 0.0;
+            case "Deaths":
+                if (statType == "Average")
+                    return rankingStat.avgDeaths.toFixed(2);
+                else if (statType == "Total") return rankingStat.totalDeaths;
+                else if (statType == "Max") return rankingStat.maxDeaths;
+                else return 0.0;
+            case "Assists":
+                if (statType == "Average")
+                    return rankingStat.avgAssists.toFixed(2);
+                else if (statType == "Total") return rankingStat.totalAssists;
+                else if (statType == "Max") return rankingStat.maxAssists;
+                else return 0.0;
+            case "KDA":
+                if (statType == "Average") return rankingStat.avgKDA.toFixed(2);
+                else if (statType == "Total") return rankingStat.totalKDA;
+                else if (statType == "Max") return rankingStat.maxKDA;
+                else return 0.0;
+            case "MVP":
+                return rankingStat.mvpCount;
+            case "Points":
+                if (statType == "Average")
+                    return rankingStat.avgPoints.toFixed(2);
+                else if (statType == "Total") return rankingStat.totalPoints;
+                else if (statType == "Max") return rankingStat.maxPoints;
+                else return 0.0;
+            default:
+                return 0.0;
+        }
+    };
 
     return (
-        <div className="mt-[4vw] h-[138.1vw]">
-            {showLeaderboard ? (
-                <div className="relative flex justify-center">
-                    <img
-                        className="h-full w-full"
-                        src={RankingsLeaderBoardBackground}
-                    />
-                    <div className="absolute top-[13vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
-                        <div className="flex flex-col items-center">
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...appearCardAnimation}
-                            >
-                                <img className="h-full w-full" src={Sample} />
-                            </motion.div>
-                            <motion.div
-                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                            0.00
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...appearCardAnimation}
-                            >
-                                <img className="h-full w-full" src={Sample} />
-                            </motion.div>
-                            <motion.div
-                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                            0.00
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...appearCardAnimation}
-                            >
-                                <img className="h-full w-full" src={Sample} />
-                            </motion.div>
-                            <motion.div
-                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                            0.00
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...appearCardAnimation}
-                            >
-                                <img className="h-full w-full" src={Sample} />
-                            </motion.div>
-                            <motion.div
-                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                            0.00
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <motion.div
-                                className="relative flex h-[36.4vw] w-[28vw]"
-                                {...appearCardAnimation}
-                            >
-                                <img className="h-full w-full" src={Sample} />
-                            </motion.div>
-                            <motion.div
-                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                            0.00
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                    <motion.div
-                        className="absolute bottom-[12vw] mt-[2vw] flex justify-center"
-                        {...appearTextAnimation}
-                    >
-                        <button className="relative flex h-[7vw] justify-center">
-                            <img className="h-full" src={GoldButton} />
-                            <div className="absolute flex h-full w-full items-center justify-center">
-                                <p className="font-russoone text-[2.8vw] font-normal text-white">
-                                    View All
-                                </p>
+        rankingStats != null && (
+            <div className="mt-[4vw] h-[138.1vw]">
+                {showLeaderboard ? (
+                    rankingStats != null && (
+                        <div className="relative flex justify-center">
+                            <img
+                                className="h-full w-full"
+                                src={RankingsLeaderBoardBackground}
+                            />
+                            <div className="absolute top-[13vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
+                                {rankingStats
+                                    .splice(0, 5)
+                                    .map((rankingStat, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex flex-col items-center"
+                                        >
+                                            <motion.div
+                                                className="relative flex h-[36.4vw] w-[28vw]"
+                                                {...appearCardAnimation}
+                                            >
+                                                <AthleteCard
+                                                    color={
+                                                        rankingStat.teamInfo
+                                                            .colors
+                                                    }
+                                                    ign={rankingStat.player}
+                                                    opacity={{
+                                                        wave: rankingStat
+                                                            .teamInfo.colors
+                                                            .wave,
+                                                    }}
+                                                    role={
+                                                        rankingStat.teamInfo
+                                                            .position[0]
+                                                    }
+                                                    type={"basic"}
+                                                    league={rankingStat.league}
+                                                />
+                                            </motion.div>
+                                            <motion.div
+                                                className="h-[11vw] w-[20vw] overflow-hidden"
+                                                {...appearAnimation}
+                                            >
+                                                <div className="relative flex h-full w-full">
+                                                    <img
+                                                        className="h-full w-full will-change-transform backface-hidden"
+                                                        src={StatsBackground}
+                                                    />
+                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
+                                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
+                                                            {rankingsTab}
+                                                        </p>
+                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
+                                                            {processText(
+                                                                rankingStat
+                                                            )}
+                                                        </motion.pre>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </div>
+                                    ))}
                             </div>
-                        </button>
-                    </motion.div>
-                </div>
-            ) : (
-                <div className="h-[138.1vw] bg-loading">
-                    <motion.div className="relative" {...pulseAnimation}>
-                        <img
-                            className="h-full w-full"
-                            src={RankingsLeaderboardSonner}
-                        />
-                    </motion.div>
-                </div>
-            )}
-        </div>
+                        </div>
+                    )
+                ) : (
+                    <div className="h-[138.1vw] bg-loading">
+                        <motion.div className="relative" {...pulseAnimation}>
+                            <img
+                                className="h-full w-full"
+                                src={RankingsLeaderboardSonner}
+                            />
+                        </motion.div>
+                    </div>
+                )}
+            </div>
+        )
     );
 };

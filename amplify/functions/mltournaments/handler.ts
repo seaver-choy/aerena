@@ -3,6 +3,7 @@ import mongoose, { Connection } from "mongoose";
 
 import {
     mlTournamentSchema,
+    scheduleSchema,
     teamProfileSchema,
     teamSchema,
 } from "../../schema";
@@ -24,6 +25,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         conn.model("MLTournaments", mlTournamentSchema);
         conn.model("TeamProfiles", teamProfileSchema);
         conn.model("Teams", teamSchema);
+        conn.model("Schedules", scheduleSchema);
     }
     if (event.path.includes("leagues")) {
         return getLeagues();
@@ -175,27 +177,57 @@ async function getCountries() {
 
 async function getFilteredLeagues(event: APIGatewayProxyEvent) {
     const mlTournamentModel = conn!.model("MLTournaments");
-
     try {
         const country = event.queryStringParameters?.country;
-        const result = await mlTournamentModel
-            .find({
-                code:
-                    country === "ALL"
-                        ? { $regex: /^(SPS|M\d+|MSC)/i }
-                        : { $regex: `^${country}`, $options: "i" },
-            })
-            .sort({ endDate: -1 })
-            .select("code");
+        const tournamentResult = await mlTournamentModel.aggregate([
+            {
+                $match: {
+                    code:
+                        country === "ALL"
+                            ? { $regex: /^(SPS|M\d+|MSC)/i }
+                            : { $regex: `^${country}`, $options: "i" },
+                },
+            },
+            {
+                $lookup: {
+                    from: "schedules",
+                    let: { code: "$code" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$$code", "$league"],
+                                },
+                            },
+                        },
+                    ],
+                    as: "scheduleInfo",
+                },
+            },
+            {
+                $unwind: "$scheduleInfo",
+            },
+            {
+                $sort: { endDate: -1 },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    code: 1,
+                },
+            },
+        ]);
 
-        if (!result) {
+        if (!tournamentResult) {
             return {
                 statusCode: 500,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ message: "No leagues found" }),
+                body: JSON.stringify({
+                    message: "No leagues in schedule found",
+                }),
             };
         }
 
@@ -205,7 +237,9 @@ async function getFilteredLeagues(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify([...new Set(result.map((item) => item.code))]),
+            body: JSON.stringify([
+                ...new Set(tournamentResult.map((item) => item.code)),
+            ]),
         };
     } catch (e) {
         return {

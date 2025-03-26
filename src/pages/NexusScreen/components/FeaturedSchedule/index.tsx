@@ -26,12 +26,7 @@ export const FeaturedSchedule = ({
                             {(scheduleIndex == 0 || !isSameDay) && (
                                 <TitleSection title={`Day ${schedule.day}`} />
                             )}
-                            <MatchBanner
-                                week={schedule.week}
-                                league={schedule.league}
-                                schedule={schedule}
-                                teams={teams}
-                            />
+                            <MatchBanner schedule={schedule} teams={teams} />
                         </div>
                     );
                 })}

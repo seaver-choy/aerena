@@ -142,6 +142,7 @@ export interface Ranking {
 }
 
 export interface MatchStats {
+    athleteId: number;
     player: string;
     team: string;
     kills: number;
@@ -149,6 +150,9 @@ export interface MatchStats {
     assists: number;
     isMVP: boolean;
     teamWon: boolean;
+    points: number;
+    kda: number;
+    killParticipation: number;
     game: number;
     day: number;
     match_id: string;
@@ -236,6 +240,8 @@ export interface ScheduleInfo {
     league: string;
     boType: number;
     matchDate: Date;
+    matchNumber: number;
+    matchWeekName: string;
     team1: string;
     team2: string;
     score1: number;
@@ -250,4 +256,42 @@ export interface ScheduleGroup {
     league: string;
     week: number;
     schedules: ScheduleInfo[];
+}
+
+export interface MatchInfo {
+    team: string;
+    game: number;
+    players: [
+        {
+            position: string;
+            stats: MatchStats;
+        },
+    ];
+}
+
+export interface RankingInfo {
+    athleteId: number;
+    player: string;
+    team: string;
+    league: string;
+    avgKills: number;
+    totalKills: number;
+    maxKills: number;
+    avgDeaths: number;
+    totalDeaths: number;
+    maxDeaths: number;
+    avgAssists: number;
+    totalAssists: number;
+    maxAssists: number;
+    totalKDA: number;
+    avgKDA: number;
+    maxKDA: number;
+    mvpCount: number;
+    avgPoints: number;
+    totalPoints: number;
+    maxPoints: number;
+    teamInfo: {
+        colors: TeamColor;
+        position: string[];
+    };
 }

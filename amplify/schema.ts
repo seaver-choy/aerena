@@ -456,6 +456,8 @@ export const scheduleSchema = new mongoose.Schema(
         league: String,
         boType: Number,
         matchDate: Date,
+        matchNumber: Number,
+        matchWeekName: String,
         team1: String,
         team2: String,
         score1: Number,

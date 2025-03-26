@@ -670,14 +670,14 @@ export const getCountries = async (initDataRaw) => {
     }
 };
 
-export const getFilteredLeagues = async (country, initDataRaw) => {
+export const getFilteredLeaguesWithSchedule = async (country, initDataRaw) => {
     try {
         const queryParams = {
             country: country,
         };
         const restOperation = get({
             apiName: "playibleApi",
-            path: "mltournaments/filtered",
+            path: "mltournaments/filteredwithschedule",
             options: {
                 headers: {
                     "X-Telegram-Auth": `tma ${initDataRaw}`,
@@ -1444,5 +1444,60 @@ export const getTeams = async (leagueTypes: string[], initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`Encountered error during GET of teams ${e}`);
+    }
+};
+
+export const getSpecificMatchStats = async (
+    matchId: string,
+    team1: string,
+    team2: string,
+    initDataRaw: string
+) => {
+    try {
+        const queryParams = {
+            matchId: matchId,
+            team1: team1,
+            team2: team2,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/specificmatchstats`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getSpecificMatchStats ${e}`);
+    }
+};
+
+export const getRankingStats = async (league, initDataRaw) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/rankingstats`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getRankingStats ${e}`);
     }
 };

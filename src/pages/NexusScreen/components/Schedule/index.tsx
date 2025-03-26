@@ -7,7 +7,7 @@ import { getCountryCode, getCountryFull } from "../../../../helpers/utilities";
 import {
     getActiveSchedules,
     getCountries,
-    getFilteredLeagues,
+    getFilteredLeaguesWithSchedule,
     getTeams,
 } from "../../../../helpers/lambda.helper";
 import { FunctionSection } from "../../../../components/FunctionSection";
@@ -31,7 +31,9 @@ export const Schedule = () => {
     };
 
     const updateRegions = async () => {
-        const leaguesResult = await getFilteredLeagues(
+        setScheduleGroups(null);
+        setTeams(null);
+        const leaguesResult = await getFilteredLeaguesWithSchedule(
             getCountryCode(chosenRegion),
             user.initDataRaw
         );
@@ -133,8 +135,6 @@ export const Schedule = () => {
                                             />
                                         )}
                                         <MatchBanner
-                                            week={group.week}
-                                            league={group.league}
                                             schedule={schedule}
                                             teams={teams}
                                         />

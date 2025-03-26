@@ -17,36 +17,42 @@ import LoseLeft from "../../../../assets/others/lose-left.svg";
 import LoseRight from "../../../../assets/others/lose-right.svg";
 import { ScheduleInfo, Team } from "../../../../helpers/interfaces";
 import { matchDateFormat, matchTimeFormat } from "../../../../hooks/dates";
+import { getBaseTeamColor } from "../../../../helpers/athletes";
 
 interface MatchBannerProps {
-    week: number;
-    league: string;
     schedule: ScheduleInfo;
     teams: Team[];
 }
 
 export const MatchBanner = ({
-    week = null,
-    league = null,
     schedule = null,
-    teams,
+    teams = null,
 }: MatchBannerProps) => {
     const navigate = useNavigate();
     const [showMatchBanner, setShowMatchBanner] = useState<boolean>(false);
 
     const handleViewDetails = () => {
-        navigate(`/match`);
+        navigate(`/match`, {
+            state: {
+                schedule,
+                teams,
+            },
+        });
     };
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowMatchBanner(true);
-        }, 1000);
-        return () => clearTimeout(timer);
+        setShowMatchBanner(false);
+        if (schedule != null && teams != null)
+            setTimeout(() => setShowMatchBanner(true), 500);
+    }, [schedule, teams]);
+
+    useEffect(() => {
+        setTimeout(() => setShowMatchBanner(true), 500);
     }, []);
 
     return (
-        schedule != null && (
+        schedule != null &&
+        teams != null && (
             <div className="mt-[4vw]">
                 {showMatchBanner ? (
                     <div className="relative flex h-[42vw] w-full justify-center bg-graydark">
@@ -54,7 +60,7 @@ export const MatchBanner = ({
                         <div className="absolute top-[4vw] flex flex-col items-center">
                             <motion.div {...appearTextAnimation}>
                                 <p className="text-nowrap font-russoone text-[5vw] font-normal text-white">
-                                    Match 1
+                                    Match {schedule.matchNumber}
                                 </p>
                             </motion.div>
                             <motion.div
@@ -62,9 +68,7 @@ export const MatchBanner = ({
                                 {...appearTextAnimation}
                             >
                                 <p className="text-nowrap font-russoone text-[2.8vw] font-normal text-white">
-                                    {league != null
-                                        ? `${league.slice(0, 2)} S${league.slice(2, 4)} Week ${week}`
-                                        : ""}
+                                    {schedule.matchWeekName}
                                 </p>
                             </motion.div>
                             <motion.div
@@ -90,7 +94,7 @@ export const MatchBanner = ({
                                 color={
                                     teams.find(
                                         (team) => team.key === schedule.team1
-                                    ).colors
+                                    )?.colors ?? getBaseTeamColor()
                                 }
                                 team={schedule.team1}
                             />
@@ -128,7 +132,7 @@ export const MatchBanner = ({
                                 color={
                                     teams.find(
                                         (team) => team.key === schedule.team2
-                                    ).colors
+                                    )?.colors ?? getBaseTeamColor()
                                 }
                                 team={schedule.team2}
                             />
