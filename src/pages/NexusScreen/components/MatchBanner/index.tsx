@@ -6,6 +6,9 @@ import {
     appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
+import { getBaseTeamColor } from "../../../../helpers/athletes";
+import { ScheduleInfo, Team } from "../../../../helpers/interfaces";
+import { matchDateFormat, matchTimeFormat } from "../../../../hooks/dates";
 import { TeamCard } from "../../../../components/TeamCard";
 
 import MatchBackground from "../../../../assets/background/match.svg";
@@ -15,9 +18,6 @@ import WinLeft from "../../../../assets/others/win-left.svg";
 import WinRight from "../../../../assets/others/win-right.svg";
 import LoseLeft from "../../../../assets/others/lose-left.svg";
 import LoseRight from "../../../../assets/others/lose-right.svg";
-import { ScheduleInfo, Team } from "../../../../helpers/interfaces";
-import { matchDateFormat, matchTimeFormat } from "../../../../hooks/dates";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
 
 interface MatchBannerProps {
     schedule: ScheduleInfo;
@@ -67,12 +67,12 @@ export const MatchBanner = ({
                                 className="-mt-[0.5vw]"
                                 {...appearTextAnimation}
                             >
-                                <p className="text-nowrap font-russoone text-[2.8vw] font-normal text-white">
+                                <p className="text-nowrap font-russoone text-[2.6vw] font-normal text-white">
                                     {schedule.matchWeekName}
                                 </p>
                             </motion.div>
                             <motion.div
-                                className="mt-[2vw]"
+                                className="mt-[2.2vw]"
                                 {...appearTextAnimation}
                             >
                                 {schedule.matchDate &&
