@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { matchOptions, gameOptions } from "../../helpers/tabs";
 import { Layout } from "../../components/Layout";
 import { Tabs } from "../../components/Tabs";
+import { MatchHeader } from "./components/MatchHeader";
 import { GameSummary } from "./components/GameSummary";
 import { GameDetails } from "./components/GameDetails";
 import { useLocation } from "react-router-dom";
@@ -80,6 +81,7 @@ export const MatchScreen = () => {
 
     return (
         <Layout>
+            <MatchHeader />
             <Tabs
                 options={
                     schedule.score1 + schedule.score2 < 3
