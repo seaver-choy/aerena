@@ -277,9 +277,6 @@ export interface RankingInfo {
     avgKills: number;
     totalKills: number;
     maxKills: number;
-    avgDeaths: number;
-    totalDeaths: number;
-    maxDeaths: number;
     avgAssists: number;
     totalAssists: number;
     maxAssists: number;

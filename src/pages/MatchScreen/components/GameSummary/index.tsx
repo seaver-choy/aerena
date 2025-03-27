@@ -78,6 +78,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                             <StatsDisplay
                                 text="DEATHS"
@@ -87,6 +88,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                             <StatsDisplay
                                 text="ASSISTS"
@@ -96,6 +98,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                         </div>
                         <div className="absolute right-[4vw] flex h-full w-[46vw] flex-col items-center pt-[14vw]">
@@ -130,6 +133,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                             <StatsDisplay
                                 text="DEATHS"
@@ -139,6 +143,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                             <StatsDisplay
                                 text="ASSISTS"
@@ -148,6 +153,7 @@ export const GameSummary = ({
                                     0
                                 )}
                                 fromMatchScreen={true}
+                                isTotal={true}
                             />
                         </div>
                     </div>

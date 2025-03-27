@@ -58,11 +58,13 @@ export const GameStats = ({
                                                 text="KILLS"
                                                 value={player.stats.kills}
                                                 fromGameTeamStats={true}
+                                                isTotal={true}
                                             />
                                             <StatsDisplay
                                                 text="ASSISTS"
                                                 value={player.stats.assists}
                                                 fromGameTeamStats={true}
+                                                isTotal={true}
                                             />
                                         </div>
                                         <div className="flex gap-[2vw]">
@@ -70,6 +72,7 @@ export const GameStats = ({
                                                 text="DEATHS"
                                                 value={player.stats.deaths}
                                                 fromGameTeamStats={true}
+                                                isTotal={true}
                                             />
                                             <StatsDisplay
                                                 text="KP %"
@@ -90,6 +93,7 @@ export const GameStats = ({
                                                 text="POINTS"
                                                 value={player.stats.points}
                                                 fromGameTeamStats={true}
+                                                isTotal={true}
                                             />
                                         </div>
                                     </div>

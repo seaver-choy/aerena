@@ -49,24 +49,6 @@ export const Rankings = () => {
                 ]);
                 break;
             }
-            case "Deaths": {
-                setAverageRankingStats([
-                    ...allRankingStats.sort(
-                        (a, b) => b.avgDeaths - a.avgDeaths
-                    ),
-                ]);
-                setTotalRankingStats([
-                    ...allRankingStats.sort(
-                        (a, b) => b.totalDeaths - a.totalDeaths
-                    ),
-                ]);
-                setMaxRankingStats([
-                    ...allRankingStats.sort(
-                        (a, b) => b.maxDeaths - a.maxDeaths
-                    ),
-                ]);
-                break;
-            }
             case "Assists": {
                 setAverageRankingStats([
                     ...allRankingStats.sort(

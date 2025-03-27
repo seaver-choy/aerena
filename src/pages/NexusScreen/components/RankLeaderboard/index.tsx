@@ -38,11 +38,6 @@ export const RankLeaderboard = ({
                 else if (statType == "Total") return rankingStat.totalKills;
                 else if (statType == "Max") return rankingStat.maxKills;
                 else return 0.0;
-            case "Deaths":
-                if (statType == "Average") return rankingStat.avgDeaths;
-                else if (statType == "Total") return rankingStat.totalDeaths;
-                else if (statType == "Max") return rankingStat.maxDeaths;
-                else return 0.0;
             case "Assists":
                 if (statType == "Average") return rankingStat.avgAssists;
                 else if (statType == "Total") return rankingStat.totalAssists;
@@ -109,7 +104,11 @@ export const RankLeaderboard = ({
                                                 text={rankingsTab.toUpperCase()}
                                                 value={processText(rankingStat)}
                                                 fromRankings={true}
-                                                isTotal={statType == "Total"}
+                                                isTotal={
+                                                    statType == "Total" ||
+                                                    (rankingsTab != "KDA" &&
+                                                        statType == "Max")
+                                                }
                                             />
                                         </div>
                                     ))}
