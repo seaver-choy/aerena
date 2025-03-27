@@ -103,7 +103,9 @@ export const Schedule = () => {
                                 className={`text-nowrap font-russoone text-[3.5vw] ${index == scheduleIndex ? "text-white" : "text-gold"}`}
                                 {...appearTextAnimation}
                             >
-                                WEEK {group.week}
+                                {group.schedules[0].playoffs
+                                    ? "PLAYOFFS"
+                                    : "WEEK " + group.week}
                             </motion.p>
                         </button>
                     ))}

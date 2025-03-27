@@ -1478,10 +1478,11 @@ export const getSpecificMatchStats = async (
     }
 };
 
-export const getRankingStats = async (league, initDataRaw) => {
+export const getRankingStats = async (league, week, initDataRaw) => {
     try {
         const queryParams = {
             league: league,
+            week: week,
         };
         const restOperation = get({
             apiName: "playibleApi",
@@ -1499,5 +1500,29 @@ export const getRankingStats = async (league, initDataRaw) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(`Encountered error during getRankingStats ${e}`);
+    }
+};
+
+export const getScheduleWeeks = async (league, initDataRaw) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/scheduleweeks`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getScheduleWeeks ${e}`);
     }
 };

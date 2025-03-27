@@ -28,6 +28,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return getSpecificMatchStats(event);
     } else if (event.path.includes("rankingstats")) {
         return getRankingStats(event);
+    } else if (event.path.includes("scheduleweeks")) {
+        return getScheduleWeeks(event);
     } else {
         switch (event.httpMethod) {
             default:
@@ -120,6 +122,7 @@ async function getActiveSchedules(event: APIGatewayProxyEvent) {
         };
     }
 }
+
 async function getNearestSchedules(event: APIGatewayProxyEvent) {
     const scheduleModel = conn!.model("Schedules");
 
@@ -424,10 +427,128 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
 
     try {
         const league = event.queryStringParameters?.league;
+        const week = event.queryStringParameters?.week;
+
+        // let result;
+        // if (league!.length == 2) {
+        //     result = await statsModel.aggregate([
+        //         {
+        //             $match: {
+        //                 league: {
+        //                     $regex: `^${league}`,
+        //                     $options: "i",
+        //                 },
+        //             },
+        //         },
+        //         {
+        //             $addFields: {
+        //                 matchDate: {
+        //                     $dateFromString: {
+        //                         dateString: {
+        //                             $arrayElemAt: [
+        //                                 { $split: ["$match_id", "-"] },
+        //                                 2,
+        //                             ],
+        //                         },
+        //                         format: "%Y%m%d",
+        //                     },
+        //                 },
+        //             },
+        //         },
+        //         {
+        //             $sort: {
+        //                 matchDate: -1,
+        //             },
+        //         },
+        //         {
+        //             $lookup: {
+        //                 from: "teams",
+        //                 let: {
+        //                     team: "$team",
+        //                     athleteId: "$athleteId",
+        //                     league: "$league",
+        //                 },
+        //                 pipeline: [
+        //                     {
+        //                         $match: {
+        //                             $expr: {
+        //                                 $and: [
+        //                                     { $eq: ["$key", "$$team"] },
+        //                                     { $eq: ["$league", "$$league"] },
+        //                                 ],
+        //                             },
+        //                         },
+        //                     },
+        //                     {
+        //                         $project: {
+        //                             _id: 0,
+        //                             colors: 1,
+        //                             position: {
+        //                                 $arrayElemAt: [
+        //                                     {
+        //                                         $map: {
+        //                                             input: {
+        //                                                 $filter: {
+        //                                                     input: "$players",
+        //                                                     cond: {
+        //                                                         $eq: [
+        //                                                             "$$this.athleteId",
+        //                                                             "$$athleteId",
+        //                                                         ],
+        //                                                     },
+        //                                                 },
+        //                                             },
+        //                                             as: "player",
+        //                                             in: "$$player.position",
+        //                                         },
+        //                                     },
+        //                                     0,
+        //                                 ],
+        //                             },
+        //                         },
+        //                     },
+        //                 ],
+        //                 as: "teamInfo",
+        //             },
+        //         },
+        //         {
+        //             $addFields: {
+        //                 teamInfo: { $arrayElemAt: ["$teamInfo", 0] },
+        //             },
+        //         },
+        //         {
+        //             $group: {
+        //                 _id: "$athleteId",
+        //                 player: { $first: "$player" },
+        //                 team: { $first: "$team" },
+        //                 league: { $first: "$league" },
+        //                 teamInfo: { $first: "$teamInfo" },
+        //                 matchDate: { $first: "$matchDate" },
+        //                 totalKills: { $sum: "$kills" },
+        //                 avgKills: { $avg: "$kills" },
+        //                 maxKills: { $max: "$kills" },
+        //                 totalAssists: { $sum: "$assists" },
+        //                 avgAssists: { $avg: "$assists" },
+        //                 maxAssists: { $max: "$assists" },
+        //                 avgKDA: { $avg: "$kda" },
+        //                 maxKDA: { $max: "$kda" },
+        //                 mvpCount: { $sum: { $cond: ["$isMVP", 1, 0] } },
+        //                 totalPoints: { $sum: "$points" },
+        //                 avgPoints: { $avg: "$points" },
+        //                 maxPoints: { $max: "$points" },
+        //             },
+        //         },
+        //     ]);
+        // } else {
+        // result = await statsModel.aggregate([
         const result = await statsModel.aggregate([
             {
                 $match: {
                     league: league,
+                    day:
+                        week === "0" || week === ""
+                            ? { $exists: true }
+                            : parseInt(week!),
                 },
             },
             {
@@ -509,6 +630,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                 },
             },
         ]);
+        // }
 
         if (!result) {
             return {
@@ -530,6 +652,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
             body: JSON.stringify(result),
         };
     } catch (e) {
+        console.log("[ERROR] " + e);
         return {
             statusCode: 500,
             headers: {
@@ -538,6 +661,72 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: `Failed to get teams list: ${e}`,
+            }),
+        };
+    }
+}
+
+async function getScheduleWeeks(event: APIGatewayProxyEvent) {
+    const scheduleModel = conn!.model("Schedules");
+
+    try {
+        const league = event.queryStringParameters?.league;
+        const result = await scheduleModel.aggregate([
+            {
+                $match: {
+                    league: league,
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        week: "$week",
+                        playoffs: "$playoffs",
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    week: "$_id.week",
+                    playoffs: "$_id.playoffs",
+                },
+            },
+            {
+                $sort: {
+                    week: 1,
+                },
+            },
+        ]);
+
+        if (!result) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "No schedule weeks found" }),
+            };
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(result),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get schedule weeks list: ${e}`,
             }),
         };
     }

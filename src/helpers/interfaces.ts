@@ -291,3 +291,8 @@ export interface RankingInfo {
         position: string[];
     };
 }
+
+export interface WeekInfo {
+    week: number;
+    playoffs: boolean;
+}

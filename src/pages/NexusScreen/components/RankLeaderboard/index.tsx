@@ -15,22 +15,14 @@ interface RankLeaderboardProps {
     rankingsTab: string;
     rankingStats: RankingInfo[];
     statType: string;
+    showLeaderboard: boolean;
 }
 export const RankLeaderboard = ({
     rankingsTab = null,
     rankingStats = null,
     statType = null,
+    showLeaderboard = false,
 }: RankLeaderboardProps) => {
-    const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
-
-    useEffect(() => {
-        setShowLeaderboard(false);
-        const timer = setTimeout(() => {
-            setShowLeaderboard(true);
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [rankingStats]);
-
     const processText = (rankingStat: RankingInfo) => {
         switch (rankingsTab) {
             case "Kills":
