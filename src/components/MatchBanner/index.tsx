@@ -18,7 +18,7 @@ import WinLeft from "../../assets/others/win-left.svg";
 import WinRight from "../../assets/others/win-right.svg";
 import LoseLeft from "../../assets/others/lose-left.svg";
 import LoseRight from "../../assets/others/lose-right.svg";
-import AerenaLogo from "../../assets/logo/aerena-text.svg";
+import AerenaLogo from "../../assets/logo/aerena.svg";
 
 interface MatchBannerProps {
     schedule: ScheduleInfo;
@@ -89,7 +89,7 @@ export const MatchBanner = ({
                                     matchTimeFormat(schedule.matchDate)}
                             </motion.div>
                             {noButton && (
-                                <motion.div className="mt-[5vw] h-[5vw] w-[18vw]">
+                                <motion.div className="mt-[4vw] h-[6vw] w-[18vw]">
                                     <img
                                         className="h-full w-full"
                                         src={AerenaLogo}

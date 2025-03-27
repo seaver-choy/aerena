@@ -12,7 +12,7 @@ export const NavBar = () => {
     const tabs = [
         { id: "/profile", text: "Profile", Icon: ProfileIcon, iconSize: "8vw" },
         { id: "/nexus", text: "Nexus", Icon: NexusIcon, iconSize: "8vw" },
-        { id: "/", text: "Play", Icon: PlayIcon, iconSize: "6vw" },
+        { id: "/", text: "Play", Icon: PlayIcon, iconSize: "8vw" },
         {
             id: "/collection",
             text: "Collection",
