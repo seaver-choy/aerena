@@ -23,7 +23,7 @@ export const NavBar = () => {
             id: "/exchange",
             text: "Exchange",
             Icon: ExchangeIcon,
-            iconSize: "6vw",
+            iconSize: "8vw",
         },
     ];
     const user = useUsers();
