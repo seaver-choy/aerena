@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
-    appearAnimation,
     appearCardAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
 
 import RankingsLeaderBoardBackground from "../../../../assets/background/rankings-leaderboard.svg";
 import RankingsLeaderboardSonner from "../../../../assets/sonner/rankings-leaderboard.svg";
-import StatsBackground from "../../../../assets/background/stats.svg";
 import { RankingInfo } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { StatsDisplay } from "../../../../components/StatsDisplay";

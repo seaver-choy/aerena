@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
-    appearAnimation,
     appearCardAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
 
 import GameStatsSonner from "../../../../assets/sonner/stats-game.svg";
-import StatsBackground from "../../../../assets/background/stats.svg";
 import { MatchInfo, Team } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { StatsDisplay } from "../../../../components/StatsDisplay";

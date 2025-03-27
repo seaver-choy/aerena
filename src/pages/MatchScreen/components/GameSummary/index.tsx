@@ -9,7 +9,6 @@ import { TeamCard } from "../../../../components/TeamCard";
 
 import GameSummaryBackground from "../../../../assets/background/game-summary.svg";
 import GameSummarySonner from "../../../../assets/sonner/game-summary.svg";
-import StatsBackground from "../../../../assets/background/stats.svg";
 import { MatchInfo, ScheduleInfo, Team } from "../../../../helpers/interfaces";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
 
