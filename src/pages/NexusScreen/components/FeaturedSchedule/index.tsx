@@ -1,6 +1,6 @@
 import { ScheduleGroup, Team } from "../../../../helpers/interfaces";
 import { TitleSection } from "../../../../components/TitleSection";
-import { MatchBanner } from "../MatchBanner";
+import { MatchBanner } from "../../../../components/MatchBanner";
 
 interface FeaturedScheduleProps {
     scheduleGroup: ScheduleGroup;

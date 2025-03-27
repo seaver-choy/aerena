@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { matchOptions, gameOptions } from "../../helpers/tabs";
 import { Layout } from "../../components/Layout";
 import { Tabs } from "../../components/Tabs";
-import { MatchHeader } from "./components/MatchHeader";
 import { GameSummary } from "./components/GameSummary";
 import { GameDetails } from "./components/GameDetails";
 import { useLocation } from "react-router-dom";
 import { MatchInfo, ScheduleInfo, Team } from "../../helpers/interfaces";
 import { getSpecificMatchStats } from "../../helpers/lambda.helper";
 import { useUsers } from "../../hooks/useUser";
+import { MatchBanner } from "../../components/MatchBanner";
 
 interface LocationState {
     schedule?: ScheduleInfo;
@@ -21,6 +21,7 @@ export const MatchScreen = () => {
     const [gameTab, setGameTab] = useState("Summary");
     const locationState = useLocation().state as LocationState;
     const schedule = locationState.schedule;
+    const teams = locationState.teams;
     const [allMatchStats, setAllMatchStats] = useState<MatchInfo[]>(null);
     const [team1Stats, setTeam1Stats] = useState<MatchInfo>(null);
     const [team2Stats, setTeam2Stats] = useState<MatchInfo>(null);
@@ -81,7 +82,7 @@ export const MatchScreen = () => {
 
     return (
         <Layout>
-            <MatchHeader />
+            <MatchBanner schedule={schedule} teams={teams} noButton={true} />
             <Tabs
                 options={
                     schedule.score1 + schedule.score2 < 3

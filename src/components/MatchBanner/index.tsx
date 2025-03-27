@@ -5,28 +5,31 @@ import {
     appearAnimation,
     appearTextAnimation,
     pulseAnimation,
-} from "../../../../helpers/animation";
-import { getBaseTeamColor } from "../../../../helpers/athletes";
-import { ScheduleInfo, Team } from "../../../../helpers/interfaces";
-import { matchDateFormat, matchTimeFormat } from "../../../../hooks/dates";
-import { TeamCard } from "../../../../components/TeamCard";
+} from "../../helpers/animation";
+import { getBaseTeamColor } from "../../helpers/athletes";
+import { ScheduleInfo, Team } from "../../helpers/interfaces";
+import { matchDateFormat, matchTimeFormat } from "../../hooks/dates";
+import { TeamCard } from "../TeamCard";
 
-import MatchBackground from "../../../../assets/background/match.svg";
-import MatchSonner from "../../../../assets/sonner/match.svg";
-import MatchButton from "../../../../assets/button/match.svg";
-import WinLeft from "../../../../assets/others/win-left.svg";
-import WinRight from "../../../../assets/others/win-right.svg";
-import LoseLeft from "../../../../assets/others/lose-left.svg";
-import LoseRight from "../../../../assets/others/lose-right.svg";
+import MatchBackground from "../../assets/background/match.svg";
+import MatchSonner from "../../assets/sonner/match.svg";
+import MatchButton from "../../assets/button/match.svg";
+import WinLeft from "../../assets/others/win-left.svg";
+import WinRight from "../../assets/others/win-right.svg";
+import LoseLeft from "../../assets/others/lose-left.svg";
+import LoseRight from "../../assets/others/lose-right.svg";
+import AerenaLogo from "../../assets/logo/aerena-text.svg";
 
 interface MatchBannerProps {
     schedule: ScheduleInfo;
     teams: Team[];
+    noButton?: boolean;
 }
 
 export const MatchBanner = ({
     schedule = null,
     teams = null,
+    noButton = false,
 }: MatchBannerProps) => {
     const navigate = useNavigate();
     const [showMatchBanner, setShowMatchBanner] = useState<boolean>(false);
@@ -53,7 +56,7 @@ export const MatchBanner = ({
     return (
         schedule != null &&
         teams != null && (
-            <div className="mt-[4vw]">
+            <div className={`${noButton ? "" : "mt-[4vw]"}`}>
                 {showMatchBanner ? (
                     <div className="relative flex h-[42vw] w-full justify-center bg-graydark">
                         <img className="h-full w-full" src={MatchBackground} />
@@ -85,6 +88,14 @@ export const MatchBanner = ({
                                 {schedule.matchDate &&
                                     matchTimeFormat(schedule.matchDate)}
                             </motion.div>
+                            {noButton && (
+                                <motion.div className="mt-[5vw] h-[5vw] w-[18vw]">
+                                    <img
+                                        className="h-full w-full"
+                                        src={AerenaLogo}
+                                    />
+                                </motion.div>
+                            )}
                         </div>
                         <motion.div
                             className="absolute left-[6vw] top-[12vw] h-[10vw] w-[26vw] overflow-hidden"
@@ -162,22 +173,24 @@ export const MatchBanner = ({
                                 />
                             ))}
                         </motion.div>
-                        <motion.div
-                            className="absolute bottom-[3vw] flex"
-                            {...appearTextAnimation}
-                        >
-                            <button
-                                className="relative flex h-[7vw] justify-center"
-                                onClick={handleViewDetails}
+                        {!noButton && (
+                            <motion.div
+                                className="absolute bottom-[3vw] flex"
+                                {...appearTextAnimation}
                             >
-                                <img className="h-full" src={MatchButton} />
-                                <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="font-russoone text-[2.8vw] font-normal text-white">
-                                        View Details
-                                    </p>
-                                </div>
-                            </button>
-                        </motion.div>
+                                <button
+                                    className="relative flex h-[7vw] justify-center"
+                                    onClick={handleViewDetails}
+                                >
+                                    <img className="h-full" src={MatchButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center">
+                                        <p className="font-russoone text-[2.8vw] font-normal text-white">
+                                            View Details
+                                        </p>
+                                    </div>
+                                </button>
+                            </motion.div>
+                        )}
                     </div>
                 ) : (
                     <div className="h-[42vw] bg-loading">

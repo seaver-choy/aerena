@@ -283,7 +283,6 @@ export interface RankingInfo {
     avgAssists: number;
     totalAssists: number;
     maxAssists: number;
-    totalKDA: number;
     avgKDA: number;
     maxKDA: number;
     mvpCount: number;

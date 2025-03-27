@@ -89,9 +89,6 @@ export const Rankings = () => {
                 setAverageRankingStats([
                     ...allRankingStats.sort((a, b) => b.avgKDA - a.avgKDA),
                 ]);
-                setTotalRankingStats([
-                    ...allRankingStats.sort((a, b) => b.totalKDA - a.totalKDA),
-                ]);
                 setMaxRankingStats([
                     ...allRankingStats.sort((a, b) => b.maxKDA - a.maxKDA),
                 ]);
@@ -190,12 +187,16 @@ export const Rankings = () => {
                         />
                     </div>
                 )}
-                <TitleSection title="TOTALS" />
-                <RankLeaderboard
-                    rankingsTab={rankingsTab}
-                    rankingStats={totalRankingStats}
-                    statType={"Total"}
-                />
+                {rankingsTab != "KDA" && (
+                    <div>
+                        <TitleSection title="TOTALS" />
+                        <RankLeaderboard
+                            rankingsTab={rankingsTab}
+                            rankingStats={totalRankingStats}
+                            statType={"Total"}
+                        />
+                    </div>
+                )}
                 {rankingsTab != "MVP" && (
                     <div>
                         <TitleSection title="GAME HIGH" />

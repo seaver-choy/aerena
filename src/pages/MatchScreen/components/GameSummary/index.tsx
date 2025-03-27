@@ -11,6 +11,7 @@ import GameSummaryBackground from "../../../../assets/background/game-summary.sv
 import GameSummarySonner from "../../../../assets/sonner/game-summary.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 import { MatchInfo, ScheduleInfo, Team } from "../../../../helpers/interfaces";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 
 interface GameSummaryProps {
     team1: Team;
@@ -70,78 +71,33 @@ export const GameSummary = ({
                                     </p>
                                 )}
                             </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            KILLS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team1Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.kills || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            DEATHS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team1Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.deaths || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team1Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.assists || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            <StatsDisplay
+                                text="KILLS"
+                                value={team1Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.kills || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
+                            <StatsDisplay
+                                text="DEATHS"
+                                value={team1Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.deaths || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
+                            <StatsDisplay
+                                text="ASSISTS"
+                                value={team1Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.assists || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
                         </div>
                         <div className="absolute right-[4vw] flex h-full w-[46vw] flex-col items-center pt-[14vw]">
                             <motion.div
@@ -167,78 +123,33 @@ export const GameSummary = ({
                                     </p>
                                 )}
                             </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            KILLS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team2Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.kills || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            DEATHS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team2Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.deaths || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
-                            <motion.div
-                                className="mt-[4.4vw] h-[17.5vw] w-[32vw] overflow-hidden"
-                                {...appearAnimation}
-                            >
-                                <div className="relative flex h-full w-full">
-                                    <img
-                                        className="h-full w-full will-change-transform backface-hidden"
-                                        src={StatsBackground}
-                                    />
-                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                            ASSISTS
-                                        </p>
-                                        <motion.pre className="-mt-[1.5vw] font-russoone text-[5.5vw] font-normal text-white">
-                                            {team2Stats.players.reduce(
-                                                (sum, player) =>
-                                                    sum +
-                                                    (player.stats.assists || 0),
-                                                0
-                                            )}
-                                        </motion.pre>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            <StatsDisplay
+                                text="KILLS"
+                                value={team2Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.kills || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
+                            <StatsDisplay
+                                text="DEATHS"
+                                value={team2Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.deaths || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
+                            <StatsDisplay
+                                text="ASSISTS"
+                                value={team2Stats.players.reduce(
+                                    (sum, player) =>
+                                        sum + (player.stats.assists || 0),
+                                    0
+                                )}
+                                fromMatchScreen={true}
+                            />
                         </div>
                     </div>
                 ) : (

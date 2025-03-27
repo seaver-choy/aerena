@@ -11,6 +11,7 @@ import RankingsLeaderboardSonner from "../../../../assets/sonner/rankings-leader
 import StatsBackground from "../../../../assets/background/stats.svg";
 import { RankingInfo } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 
 interface RankLeaderboardProps {
     rankingsTab: string;
@@ -35,33 +36,28 @@ export const RankLeaderboard = ({
     const processText = (rankingStat: RankingInfo) => {
         switch (rankingsTab) {
             case "Kills":
-                if (statType == "Average")
-                    return rankingStat.avgKills.toFixed(2);
+                if (statType == "Average") return rankingStat.avgKills;
                 else if (statType == "Total") return rankingStat.totalKills;
                 else if (statType == "Max") return rankingStat.maxKills;
                 else return 0.0;
             case "Deaths":
-                if (statType == "Average")
-                    return rankingStat.avgDeaths.toFixed(2);
+                if (statType == "Average") return rankingStat.avgDeaths;
                 else if (statType == "Total") return rankingStat.totalDeaths;
                 else if (statType == "Max") return rankingStat.maxDeaths;
                 else return 0.0;
             case "Assists":
-                if (statType == "Average")
-                    return rankingStat.avgAssists.toFixed(2);
+                if (statType == "Average") return rankingStat.avgAssists;
                 else if (statType == "Total") return rankingStat.totalAssists;
                 else if (statType == "Max") return rankingStat.maxAssists;
                 else return 0.0;
             case "KDA":
-                if (statType == "Average") return rankingStat.avgKDA.toFixed(2);
-                else if (statType == "Total") return rankingStat.totalKDA;
+                if (statType == "Average") return rankingStat.avgKDA;
                 else if (statType == "Max") return rankingStat.maxKDA;
                 else return 0.0;
             case "MVP":
                 return rankingStat.mvpCount;
             case "Points":
-                if (statType == "Average")
-                    return rankingStat.avgPoints.toFixed(2);
+                if (statType == "Average") return rankingStat.avgPoints;
                 else if (statType == "Total") return rankingStat.totalPoints;
                 else if (statType == "Max") return rankingStat.maxPoints;
                 else return 0.0;
@@ -111,27 +107,12 @@ export const RankLeaderboard = ({
                                                     league={rankingStat.league}
                                                 />
                                             </motion.div>
-                                            <motion.div
-                                                className="h-[11vw] w-[20vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[1.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            {rankingsTab}
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.2vw] font-normal text-white">
-                                                            {processText(
-                                                                rankingStat
-                                                            )}
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                            <StatsDisplay
+                                                text={rankingsTab.toUpperCase()}
+                                                value={processText(rankingStat)}
+                                                fromRankings={true}
+                                                isTotal={statType == "Total"}
+                                            />
                                         </div>
                                     ))}
                             </div>

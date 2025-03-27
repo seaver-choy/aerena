@@ -12,7 +12,7 @@ import {
 } from "../../../../helpers/lambda.helper";
 import { FunctionSection } from "../../../../components/FunctionSection";
 import { TitleSection } from "../../../../components/TitleSection";
-import { MatchBanner } from "../MatchBanner";
+import { MatchBanner } from "../../../../components/MatchBanner";
 
 export const Schedule = () => {
     const user = useUsers();

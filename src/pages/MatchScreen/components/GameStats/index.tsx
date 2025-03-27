@@ -10,6 +10,7 @@ import GameStatsSonner from "../../../../assets/sonner/stats-game.svg";
 import StatsBackground from "../../../../assets/background/stats.svg";
 import { MatchInfo, Team } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
+import { StatsDisplay } from "../../../../components/StatsDisplay";
 interface GameStatsProps {
     team: Team;
     teamStats: MatchInfo;
@@ -55,136 +56,43 @@ export const GameStats = ({
                                 <div className="flex h-[47.42vw] w-full flex-col gap-[2vw]">
                                     <div className="mt-[2vw] flex flex-col items-end gap-[2vw]">
                                         <div className="flex gap-[2vw]">
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            KILLS
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {player.stats.kills}
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            ASSISTS
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {
-                                                                player.stats
-                                                                    .assists
-                                                            }
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                            <StatsDisplay
+                                                text="KILLS"
+                                                value={player.stats.kills}
+                                                fromGameTeamStats={true}
+                                            />
+                                            <StatsDisplay
+                                                text="ASSISTS"
+                                                value={player.stats.assists}
+                                                fromGameTeamStats={true}
+                                            />
                                         </div>
                                         <div className="flex gap-[2vw]">
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            DEATHS
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {
-                                                                player.stats
-                                                                    .deaths
-                                                            }
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            KP %
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {player.stats.killParticipation.toFixed(
-                                                                2
-                                                            )}
-                                                            %
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                            <StatsDisplay
+                                                text="DEATHS"
+                                                value={player.stats.deaths}
+                                                fromGameTeamStats={true}
+                                            />
+                                            <StatsDisplay
+                                                text="KP %"
+                                                value={
+                                                    player.stats
+                                                        .killParticipation
+                                                }
+                                                fromGameTeamStats={true}
+                                            />
                                         </div>
                                         <div className="flex gap-[2vw]">
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            KDA
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {player.stats.kda}
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                            <motion.div
-                                                className="h-[13.14vw] w-[24vw] overflow-hidden"
-                                                {...appearAnimation}
-                                            >
-                                                <div className="relative flex h-full w-full">
-                                                    <img
-                                                        className="h-full w-full will-change-transform backface-hidden"
-                                                        src={StatsBackground}
-                                                    />
-                                                    <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
-                                                        <p className="mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.5vw] font-normal text-transparent will-change-transform backface-hidden">
-                                                            POINTS
-                                                        </p>
-                                                        <motion.pre className="-mt-[1vw] font-russoone text-[4.5vw] font-normal text-white">
-                                                            {
-                                                                player.stats
-                                                                    .points
-                                                            }
-                                                        </motion.pre>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
+                                            <StatsDisplay
+                                                text="KDA"
+                                                value={player.stats.kda}
+                                                fromGameTeamStats={true}
+                                            />
+                                            <StatsDisplay
+                                                text="POINTS"
+                                                value={player.stats.points}
+                                                fromGameTeamStats={true}
+                                            />
                                         </div>
                                     </div>
                                 </div>

@@ -10,6 +10,9 @@ interface Props {
     isTotal?: boolean;
     fromStats?: boolean;
     fromFullDetails?: boolean;
+    fromMatchScreen?: boolean;
+    fromGameTeamStats?: boolean;
+    fromRankings?: boolean;
     noStats?: boolean;
 }
 export const StatsDisplay = ({
@@ -18,6 +21,9 @@ export const StatsDisplay = ({
     isTotal,
     fromStats,
     fromFullDetails,
+    fromMatchScreen,
+    fromGameTeamStats,
+    fromRankings,
     noStats,
 }: Props) => {
     const mv = useMotionValue(0);
@@ -54,7 +60,7 @@ export const StatsDisplay = ({
 
     return (
         <motion.div
-            className={`${fromStats ? "h-[13.14vw] w-[24vw]" : fromFullDetails ? "h-full w-[27vw]" : "h-full w-[21.5vw]"} overflow-hidden`}
+            className={`${fromMatchScreen ? "mt-[4.4vw] h-[17.5vw] w-[32vw]" : fromStats || fromGameTeamStats ? "h-[13.14vw] w-[24vw]" : fromRankings ? "w-[20vw h-[11vw]" : fromFullDetails ? "h-full w-[27vw]" : "h-full w-[21.5vw]"} overflow-hidden`}
             {...appearAnimation}
         >
             <div className="relative flex h-full w-full">
@@ -64,21 +70,21 @@ export const StatsDisplay = ({
                 />
                 <div className="absolute flex h-full w-full flex-col items-center justify-center overflow-hidden">
                     <p
-                        className={`mt-[0.8vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone ${fromFullDetails ? "text-[3.2vw]" : "text-[2.5vw]"} font-normal text-transparent will-change-transform backface-hidden`}
+                        className={`${fromRankings ? "mt-[1.2vw]" : "mt-[0.8vw]"} bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone ${fromMatchScreen ? "text-[3.5vw]" : fromRankings ? "text-[2vw]" : fromFullDetails ? "text-[3.2vw]" : "text-[2.5vw]"} font-normal text-transparent will-change-transform backface-hidden`}
                     >
                         {text}
                     </p>
                     {fromFullDetails ? (
                         <motion.main
                             id={"stat-value"}
-                            className={`-mt-[1vw] font-russoone text-[5vw] font-normal ${text === "POINTS" || text === "PPG" ? "text-goldlight" : "text-white"}`}
+                            className={`${fromMatchScreen ? "-mt-[1.5vw]" : "-mt-[1vw]"} font-russoone ${fromMatchScreen ? "text-[5.5vw]" : "text-[5vw]"} font-normal ${(text === "POINTS" || text === "PPG") && !fromRankings ? "text-goldlight" : "text-white"}`}
                         >
                             {noStats ? "-" : stat}
                         </motion.main>
                     ) : (
                         <motion.pre
                             id={"stat-value"}
-                            className={`-mt-[1vw] font-russoone ${fromFullDetails ? "text-[5vw]" : "text-[4.5vw]"} font-normal ${text === "POINTS" || text === "PPG" ? "text-goldlight" : "text-white"}`}
+                            className={`${fromMatchScreen ? "-mt-[1.5vw]" : "-mt-[1vw]"} font-russoone ${fromMatchScreen ? "text-[5.5vw]" : fromRankings ? "text-[4.2vw]" : fromFullDetails ? "text-[5vw]" : "text-[4.5vw]"} font-normal ${(text === "POINTS" || text === "PPG") && !fromRankings ? "text-goldlight" : "text-white"}`}
                         >
                             {noStats ? "-" : stat}
                         </motion.pre>
