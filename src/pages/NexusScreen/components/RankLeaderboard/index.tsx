@@ -1,11 +1,13 @@
 import { motion } from "motion/react";
 import {
     appearCardAnimation,
+    appearTextAnimation,
     pulseAnimation,
 } from "../../../../helpers/animation";
 
 import RankingsLeaderBoardBackground from "../../../../assets/background/rankings-leaderboard.svg";
 import RankingsLeaderboardSonner from "../../../../assets/sonner/rankings-leaderboard.svg";
+import GoldButton from "../../../../assets/button/gold.svg";
 import { RankingInfo } from "../../../../helpers/interfaces";
 import { AthleteCard } from "../../../../components/AthleteCard";
 import { StatsDisplay } from "../../../../components/StatsDisplay";
@@ -25,26 +27,15 @@ export const RankLeaderboard = ({
     const processText = (rankingStat: RankingInfo) => {
         switch (rankingsTab) {
             case "Kills":
-                if (statType == "Average") return rankingStat.avgKills;
-                else if (statType == "Total") return rankingStat.totalKills;
-                else if (statType == "Max") return rankingStat.maxKills;
-                else return 0.0;
+                return rankingStat.kills;
             case "Assists":
-                if (statType == "Average") return rankingStat.avgAssists;
-                else if (statType == "Total") return rankingStat.totalAssists;
-                else if (statType == "Max") return rankingStat.maxAssists;
-                else return 0.0;
+                return rankingStat.assists;
             case "KDA":
-                if (statType == "Average") return rankingStat.avgKDA;
-                else if (statType == "Max") return rankingStat.maxKDA;
-                else return 0.0;
+                return rankingStat.kda;
             case "MVP":
                 return rankingStat.mvpCount;
             case "Points":
-                if (statType == "Average") return rankingStat.avgPoints;
-                else if (statType == "Total") return rankingStat.totalPoints;
-                else if (statType == "Max") return rankingStat.maxPoints;
-                else return 0.0;
+                return rankingStat.points;
             default:
                 return 0.0;
         }
@@ -61,49 +52,62 @@ export const RankLeaderboard = ({
                                 src={RankingsLeaderBoardBackground}
                             />
                             <div className="absolute top-[13vw] flex flex-row flex-wrap items-center justify-center gap-[4vw]">
-                                {rankingStats
-                                    .splice(0, 5)
-                                    .map((rankingStat, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex flex-col items-center"
+                                {rankingStats.map((rankingStat, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex flex-col items-center"
+                                    >
+                                        <motion.div
+                                            className="relative flex h-[36.4vw] w-[28vw]"
+                                            {...appearCardAnimation}
                                         >
-                                            <motion.div
-                                                className="relative flex h-[36.4vw] w-[28vw]"
-                                                {...appearCardAnimation}
-                                            >
-                                                <AthleteCard
-                                                    color={
-                                                        rankingStat.teamInfo
-                                                            .colors
-                                                    }
-                                                    ign={rankingStat.player}
-                                                    opacity={{
-                                                        wave: rankingStat
-                                                            .teamInfo.colors
-                                                            .wave,
-                                                    }}
-                                                    role={
-                                                        rankingStat.teamInfo
-                                                            .position[0]
-                                                    }
-                                                    type={"basic"}
-                                                    league={rankingStat.league}
-                                                />
-                                            </motion.div>
-                                            <StatsDisplay
-                                                text={rankingsTab.toUpperCase()}
-                                                value={processText(rankingStat)}
-                                                fromRankings={true}
-                                                isTotal={
-                                                    statType == "Total" ||
-                                                    (rankingsTab != "KDA" &&
-                                                        statType == "Max")
+                                            <AthleteCard
+                                                color={
+                                                    rankingStat.teamInfo.colors
                                                 }
+                                                ign={rankingStat.player}
+                                                opacity={{
+                                                    wave: rankingStat.teamInfo
+                                                        .colors.wave,
+                                                }}
+                                                role={
+                                                    rankingStat.teamInfo
+                                                        .position[0]
+                                                }
+                                                type={"basic"}
+                                                league={rankingStat.league}
                                             />
-                                        </div>
-                                    ))}
+                                        </motion.div>
+                                        <StatsDisplay
+                                            text={rankingsTab.toUpperCase()}
+                                            value={processText(rankingStat)}
+                                            fromRankings={true}
+                                            isTotal={
+                                                statType == "Total" ||
+                                                (rankingsTab != "KDA" &&
+                                                    statType == "Max")
+                                            }
+                                        />
+                                    </div>
+                                ))}
                             </div>
+
+                            <motion.div
+                                className="absolute bottom-[12vw] mt-[2vw] flex justify-center"
+                                {...appearTextAnimation}
+                            >
+                                <button
+                                    className="relative flex h-[7vw] justify-center"
+                                    disabled
+                                >
+                                    <img className="h-full" src={GoldButton} />
+                                    <div className="absolute flex h-full w-full items-center justify-center">
+                                        <p className="font-russoone text-[2.8vw] font-normal text-white opacity-50">
+                                            View All
+                                        </p>
+                                    </div>
+                                </button>
+                            </motion.div>
                         </div>
                     )
                 ) : (

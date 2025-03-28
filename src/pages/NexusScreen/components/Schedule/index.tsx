@@ -111,6 +111,7 @@ export const Schedule = () => {
                     ))}
             </div>
             {scheduleGroups != null &&
+                teams != null &&
                 scheduleGroups.map((group, index) => {
                     let dayNumber = 1;
                     let initialDay;

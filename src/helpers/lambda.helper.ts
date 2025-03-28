@@ -1478,11 +1478,12 @@ export const getSpecificMatchStats = async (
     }
 };
 
-export const getRankingStats = async (league, week, initDataRaw) => {
+export const getRankingStats = async (league, week, stat_type, initDataRaw) => {
     try {
         const queryParams = {
             league: league,
             week: week,
+            stat_type: stat_type,
         };
         const restOperation = get({
             apiName: "playibleApi",

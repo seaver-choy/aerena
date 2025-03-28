@@ -115,13 +115,12 @@ export const MatchBanner = ({
                             {...appearAnimation}
                         >
                             {Array.from({
-                                length: Math.abs(
-                                    schedule.boType - schedule.score1 - 1
-                                ),
+                                length:
+                                    schedule.boType / 2 + 1 - schedule.score1,
                             }).map((_, index) => (
                                 <img
                                     key={`lose-${schedule.team1}-${index}`}
-                                    className={`${schedule.score1 < schedule.boType - 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
+                                    className={`${schedule.score1 < schedule.boType / 2 + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
                                     src={LoseLeft}
                                 />
                             ))}
@@ -129,7 +128,7 @@ export const MatchBanner = ({
                                 (_, index) => (
                                     <img
                                         key={`win-${schedule.team1}-${index}`}
-                                        className={`${schedule.score1 == schedule.boType - 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
+                                        className={`${schedule.score1 == schedule.boType / 2 + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
                                         src={WinLeft}
                                     />
                                 )
@@ -162,9 +161,8 @@ export const MatchBanner = ({
                                 )
                             )}
                             {Array.from({
-                                length: Math.abs(
-                                    schedule.boType - schedule.score2 - 1
-                                ),
+                                length:
+                                    schedule.boType / 2 + 1 - schedule.score2,
                             }).map((_, index) => (
                                 <img
                                     key={`lose-${schedule.team2}-${index}`}

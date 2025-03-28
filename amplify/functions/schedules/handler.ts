@@ -428,229 +428,625 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
     try {
         const league = event.queryStringParameters?.league;
         const week = event.queryStringParameters?.week;
+        const statType = event.queryStringParameters?.stat_type as string;
 
-        // let result;
-        // if (league!.length == 2) {
-        //     result = await statsModel.aggregate([
-        //         {
-        //             $match: {
-        //                 league: {
-        //                     $regex: `^${league}`,
-        //                     $options: "i",
-        //                 },
-        //             },
-        //         },
-        //         {
-        //             $addFields: {
-        //                 matchDate: {
-        //                     $dateFromString: {
-        //                         dateString: {
-        //                             $arrayElemAt: [
-        //                                 { $split: ["$match_id", "-"] },
-        //                                 2,
-        //                             ],
-        //                         },
-        //                         format: "%Y%m%d",
-        //                     },
-        //                 },
-        //             },
-        //         },
-        //         {
-        //             $sort: {
-        //                 matchDate: -1,
-        //             },
-        //         },
-        //         {
-        //             $lookup: {
-        //                 from: "teams",
-        //                 let: {
-        //                     team: "$team",
-        //                     athleteId: "$athleteId",
-        //                     league: "$league",
-        //                 },
-        //                 pipeline: [
-        //                     {
-        //                         $match: {
-        //                             $expr: {
-        //                                 $and: [
-        //                                     { $eq: ["$key", "$$team"] },
-        //                                     { $eq: ["$league", "$$league"] },
-        //                                 ],
-        //                             },
-        //                         },
-        //                     },
-        //                     {
-        //                         $project: {
-        //                             _id: 0,
-        //                             colors: 1,
-        //                             position: {
-        //                                 $arrayElemAt: [
-        //                                     {
-        //                                         $map: {
-        //                                             input: {
-        //                                                 $filter: {
-        //                                                     input: "$players",
-        //                                                     cond: {
-        //                                                         $eq: [
-        //                                                             "$$this.athleteId",
-        //                                                             "$$athleteId",
-        //                                                         ],
-        //                                                     },
-        //                                                 },
-        //                                             },
-        //                                             as: "player",
-        //                                             in: "$$player.position",
-        //                                         },
-        //                                     },
-        //                                     0,
-        //                                 ],
-        //                             },
-        //                         },
-        //                     },
-        //                 ],
-        //                 as: "teamInfo",
-        //             },
-        //         },
-        //         {
-        //             $addFields: {
-        //                 teamInfo: { $arrayElemAt: ["$teamInfo", 0] },
-        //             },
-        //         },
-        //         {
-        //             $group: {
-        //                 _id: "$athleteId",
-        //                 player: { $first: "$player" },
-        //                 team: { $first: "$team" },
-        //                 league: { $first: "$league" },
-        //                 teamInfo: { $first: "$teamInfo" },
-        //                 matchDate: { $first: "$matchDate" },
-        //                 totalKills: { $sum: "$kills" },
-        //                 avgKills: { $avg: "$kills" },
-        //                 maxKills: { $max: "$kills" },
-        //                 totalAssists: { $sum: "$assists" },
-        //                 avgAssists: { $avg: "$assists" },
-        //                 maxAssists: { $max: "$assists" },
-        //                 avgKDA: { $avg: "$kda" },
-        //                 maxKDA: { $max: "$kda" },
-        //                 mvpCount: { $sum: { $cond: ["$isMVP", 1, 0] } },
-        //                 totalPoints: { $sum: "$points" },
-        //                 avgPoints: { $avg: "$points" },
-        //                 maxPoints: { $max: "$points" },
-        //             },
-        //         },
-        //     ]);
-        // } else {
-        // result = await statsModel.aggregate([
-        const result = await statsModel.aggregate([
-            {
-                $match: {
-                    league: league,
-                    day:
-                        week === "0" || week === ""
-                            ? { $exists: true }
-                            : parseInt(week!),
-                },
-            },
-            {
-                $lookup: {
-                    from: "teams",
-                    let: {
-                        team: "$team",
-                        athleteId: "$athleteId",
-                    },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        { $eq: ["$key", "$$team"] },
-                                        { $eq: ["$league", league] },
-                                    ],
-                                },
-                            },
-                        },
-                        {
-                            $project: {
-                                _id: 0,
-                                colors: 1,
-                                position: {
-                                    $arrayElemAt: [
-                                        {
-                                            $map: {
-                                                input: {
-                                                    $filter: {
-                                                        input: "$players",
-                                                        cond: {
-                                                            $eq: [
-                                                                "$$this.athleteId",
-                                                                "$$athleteId",
-                                                            ],
-                                                        },
-                                                    },
-                                                },
-                                                as: "player",
-                                                in: "$$player.position",
-                                            },
-                                        },
-                                        0,
-                                    ],
-                                },
-                            },
-                        },
-                    ],
-                    as: "teamInfo",
-                },
-            },
-            {
-                $addFields: {
-                    teamInfo: {
-                        $arrayElemAt: ["$teamInfo", 0],
-                    },
-                },
-            },
-            {
+        let totalResult = [];
+        let averageResult = [];
+        let maxResult = [];
+        let totalGroupStage;
+        if (statType == "mvp")
+            totalGroupStage = {
                 $group: {
                     _id: "$athleteId",
                     player: { $first: "$player" },
                     team: { $first: "$team" },
                     league: { $first: "$league" },
                     teamInfo: { $first: "$teamInfo" },
-                    totalKills: { $sum: "$kills" },
-                    avgKills: { $avg: "$kills" },
-                    maxKills: { $max: "$kills" },
-                    totalAssists: { $sum: "$assists" },
-                    avgAssists: { $avg: "$assists" },
-                    maxAssists: { $max: "$assists" },
-                    avgKDA: { $avg: "$kda" },
-                    maxKDA: { $max: "$kda" },
                     mvpCount: { $sum: { $cond: ["$isMVP", 1, 0] } },
-                    totalPoints: { $sum: "$points" },
-                    avgPoints: { $avg: "$points" },
-                    maxPoints: { $max: "$points" },
                 },
+            };
+        else
+            totalGroupStage = {
+                $group: {
+                    _id: "$athleteId",
+                    player: { $first: "$player" },
+                    team: { $first: "$team" },
+                    league: { $first: "$league" },
+                    teamInfo: { $first: "$teamInfo" },
+                    [statType]: { $sum: `$${statType}` },
+                },
+            };
+        const averageGroupStage = {
+            $group: {
+                _id: "$athleteId",
+                player: { $first: "$player" },
+                team: { $first: "$team" },
+                league: { $first: "$league" },
+                teamInfo: { $first: "$teamInfo" },
+                [statType]: { $avg: `$${statType}` },
             },
-        ]);
-        // }
+        };
+        const maxGroupStage = {
+            $project: {
+                _id: "$athleteId",
+                player: "$player",
+                team: "$team",
+                league: "$league",
+                teamInfo: "$teamInfo",
+                [statType]: `$${statType}`,
+            },
+        };
 
-        if (!result) {
+        if (league!.length == 2) {
+            if (statType != "kda")
+                totalResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: {
+                                $regex: `^${league}`,
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                league: "$league",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                {
+                                                    $eq: [
+                                                        "$league",
+                                                        "$$league",
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    totalGroupStage,
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (statType != "mvp")
+                averageResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: {
+                                $regex: `^${league}`,
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                league: "$league",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                {
+                                                    $eq: [
+                                                        "$league",
+                                                        "$$league",
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    averageGroupStage,
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (statType != "mvp")
+                maxResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: {
+                                $regex: `^${league}`,
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                league: "$league",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                {
+                                                    $eq: [
+                                                        "$league",
+                                                        "$$league",
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    maxGroupStage,
+                    {
+                        $group: {
+                            _id: {
+                                player: "$player",
+                                team: "$team",
+                                league: "$league",
+                                statTypeValue: `$${statType}`,
+                            },
+                            doc: { $first: "$$ROOT" },
+                        },
+                    },
+                    {
+                        $replaceRoot: {
+                            newRoot: "$doc",
+                        },
+                    },
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (!totalResult && !averageResult && !maxResult) {
+                return {
+                    statusCode: 500,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                    },
+                    body: JSON.stringify({ message: "No teams found" }),
+                };
+            }
+
+            console.log("Returning ranking stats result for ALL leagues");
+
             return {
-                statusCode: 500,
+                statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
                 },
-                body: JSON.stringify({ message: "No teams found" }),
+                body: JSON.stringify({
+                    total: totalResult,
+                    average: averageResult,
+                    max: maxResult,
+                }),
+            };
+        } else {
+            if (statType != "kda")
+                totalResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: league,
+                            day:
+                                week === "0" || week === ""
+                                    ? { $exists: true }
+                                    : parseInt(week!),
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                { $eq: ["$league", league] },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    totalGroupStage,
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (statType != "mvp")
+                averageResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: league,
+                            day:
+                                week === "0" || week === ""
+                                    ? { $exists: true }
+                                    : parseInt(week!),
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                { $eq: ["$league", league] },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    averageGroupStage,
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (statType != "mvp")
+                maxResult = await statsModel.aggregate([
+                    {
+                        $match: {
+                            league: league,
+                            day:
+                                week === "0" || week === ""
+                                    ? { $exists: true }
+                                    : parseInt(week!),
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "teams",
+                            let: {
+                                team: "$team",
+                                athleteId: "$athleteId",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                { $eq: ["$key", "$$team"] },
+                                                { $eq: ["$league", league] },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        colors: 1,
+                                        position: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $map: {
+                                                        input: {
+                                                            $filter: {
+                                                                input: "$players",
+                                                                cond: {
+                                                                    $eq: [
+                                                                        "$$this.athleteId",
+                                                                        "$$athleteId",
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                        as: "player",
+                                                        in: "$$player.position",
+                                                    },
+                                                },
+                                                0,
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "teamInfo",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            teamInfo: {
+                                $arrayElemAt: ["$teamInfo", 0],
+                            },
+                        },
+                    },
+                    maxGroupStage,
+                    {
+                        $group: {
+                            _id: {
+                                player: "$player",
+                                team: "$team",
+                                league: "$league",
+                                statTypeValue: `$${statType}`,
+                            },
+                            doc: { $first: "$$ROOT" },
+                        },
+                    },
+                    {
+                        $replaceRoot: {
+                            newRoot: "$doc",
+                        },
+                    },
+                    {
+                        $sort: {
+                            [statType === "mvp" ? "mvpCount" : statType]: -1,
+                        },
+                    },
+                    {
+                        $limit: 5,
+                    },
+                ]);
+
+            if (!totalResult && !averageResult && !maxResult) {
+                return {
+                    statusCode: 500,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                    },
+                    body: JSON.stringify({ message: "No teams found" }),
+                };
+            }
+            console.log("Returning ranking stats result for " + league);
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({
+                    total: totalResult,
+                    average: averageResult,
+                    max: maxResult,
+                }),
             };
         }
-
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-            },
-            body: JSON.stringify(result),
-        };
     } catch (e) {
         console.log("[ERROR] " + e);
         return {

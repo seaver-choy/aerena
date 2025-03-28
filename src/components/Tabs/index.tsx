@@ -9,15 +9,21 @@ interface TabsProps {
     options: string[];
     onToggle?: (selectedOption: string) => void;
     selectedTab: string;
+    disabled?: boolean;
 }
-export const Tabs = ({ options, onToggle, selectedTab }: TabsProps) => {
+export const Tabs = ({
+    options,
+    onToggle,
+    selectedTab,
+    disabled = false,
+}: TabsProps) => {
     const [selectedOption, setSelectedOption] = useState(selectedTab);
 
     const handleToggle = (option) => {
-        // if (option !== "Favorites" && option !== "Weekly")
-        //temporary in disabling Favorites; comment together with the line in FriendsScreen/index.tsx to enable
-        setSelectedOption(option);
-        if (onToggle) onToggle(option);
+        if (!disabled) {
+            setSelectedOption(option);
+            if (onToggle) onToggle(option);
+        }
     };
 
     return (

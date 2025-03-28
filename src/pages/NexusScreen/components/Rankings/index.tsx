@@ -23,7 +23,6 @@ export const Rankings = () => {
     const [chosenLeagueType, setChosenLeagueType] = useState<string>(null);
     const [regions, setRegions] = useState<string[]>(null);
     const [chosenRegion, setChosenRegion] = useState<string>(null);
-    const [allRankingStats, setAllRankingStats] = useState<RankingInfo[]>(null);
     const [averageRankingStats, setAverageRankingStats] =
         useState<RankingInfo[]>(null);
     const [totalRankingStats, setTotalRankingStats] =
@@ -32,6 +31,8 @@ export const Rankings = () => {
     const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
     const [weekInfos, setWeekInfos] = useState<WeekInfo[]>(null);
     const [weekIndex, setWeekIndex] = useState<number>(0);
+    const [rankingsLoaded, setRankingsLoaded] = useState<boolean>(false);
+    const [dataSorted, setDataSorted] = useState<boolean>(false);
 
     const fetchInitialData = async () => {
         const regionsResult = await getCountries(user.initDataRaw);
@@ -39,83 +40,147 @@ export const Rankings = () => {
         setChosenRegion(getCountryFull(user.country));
     };
 
+    // function removeDuplicates(
+    //     stats: RankingInfo[],
+    //     statName: string
+    // ): RankingInfo[] {
+    //     const seen = new Map<string, RankingInfo>();
+
+    //     return stats.reduce<RankingInfo[]>((uniqueItems, currentItem) => {
+    //         const key = `${currentItem.athleteId}-${currentItem.player}-${currentItem.team}-${currentItem.league}-${statName == "kills" ? currentItem.kills : statName == "assists" ? currentItem.assists : statName == "kda" ? currentItem.kda : statName == "points" ? currentItem.points : ""}`;
+    //         const existingItem = seen.get(key);
+    //         if (!existingItem) {
+    //             seen.set(key, currentItem);
+    //             uniqueItems.push(currentItem);
+    //         }
+
+    //         return uniqueItems;
+    //     }, []);
+    // }
+
     const sortData = async () => {
         switch (rankingsTab) {
             case "Kills": {
                 setAverageRankingStats(
-                    [...allRankingStats].sort((a, b) => b.avgKills - a.avgKills)
+                    [...averageRankingStats].sort((a, b) => {
+                        const killsDiff = b.kills - a.kills;
+                        return killsDiff !== 0
+                            ? killsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setTotalRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.totalKills - a.totalKills
-                    )
+                    [...totalRankingStats].sort((a, b) => {
+                        const killsDiff = b.kills - a.kills;
+                        return killsDiff !== 0
+                            ? killsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setMaxRankingStats(
-                    [...allRankingStats].sort((a, b) => b.maxKills - a.maxKills)
+                    [...maxRankingStats].sort((a, b) => {
+                        const killsDiff = b.kills - a.kills;
+                        return killsDiff !== 0
+                            ? killsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 break;
             }
             case "Assists": {
                 setAverageRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.avgAssists - a.avgAssists
-                    )
+                    [...averageRankingStats].sort((a, b) => {
+                        const assistsDiff = b.assists - a.assists;
+                        return assistsDiff !== 0
+                            ? assistsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setTotalRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.totalAssists - a.totalAssists
-                    )
+                    [...totalRankingStats].sort((a, b) => {
+                        const assistsDiff = b.assists - a.assists;
+                        return assistsDiff !== 0
+                            ? assistsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setMaxRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.maxAssists - a.maxAssists
-                    )
+                    [...maxRankingStats].sort((a, b) => {
+                        const assistsDiff = b.assists - a.assists;
+                        return assistsDiff !== 0
+                            ? assistsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 break;
             }
             case "KDA": {
                 setAverageRankingStats(
-                    [...allRankingStats].sort((a, b) => b.avgKDA - a.avgKDA)
+                    [...averageRankingStats].sort((a, b) => {
+                        const kdaDiff = b.kda - a.kda;
+                        return kdaDiff !== 0
+                            ? kdaDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setMaxRankingStats(
-                    [...allRankingStats].sort((a, b) => b.maxKDA - a.maxKDA)
+                    [...maxRankingStats].sort((a, b) => {
+                        const kdaDiff = b.kda - a.kda;
+                        return kdaDiff !== 0
+                            ? kdaDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 break;
             }
             case "MVP": {
                 setTotalRankingStats(
-                    [...allRankingStats].sort((a, b) => b.mvpCount - a.mvpCount)
+                    [...totalRankingStats].sort((a, b) => {
+                        const mvpDiff = b.mvpCount - a.mvpCount;
+                        return mvpDiff !== 0
+                            ? mvpDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 break;
             }
             case "Points": {
                 setAverageRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.avgPoints - a.avgPoints
-                    )
+                    [...averageRankingStats].sort((a, b) => {
+                        const pointsDiff = b.points - a.points;
+                        return pointsDiff !== 0
+                            ? pointsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setTotalRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.totalPoints - a.totalPoints
-                    )
+                    [...totalRankingStats].sort((a, b) => {
+                        const pointsDiff = b.points - a.points;
+                        return pointsDiff !== 0
+                            ? pointsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 setMaxRankingStats(
-                    [...allRankingStats].sort(
-                        (a, b) => b.maxPoints - a.maxPoints
-                    )
+                    [...maxRankingStats].sort((a, b) => {
+                        const pointsDiff = b.points - a.points;
+                        return pointsDiff !== 0
+                            ? pointsDiff
+                            : a.player.localeCompare(b.player);
+                    })
                 );
                 break;
             }
         }
+        setDataSorted(true);
     };
 
     const updateRegions = async () => {
-        setShowLeaderboard(false);
         const leaguesResult = await getFilteredLeaguesWithSchedule(
             getCountryCode(chosenRegion),
             user.initDataRaw
         );
-        setLeagueTypes([/*"ALL",*/ ...leaguesResult]);
+        setLeagueTypes(["ALL", ...leaguesResult]);
         setChosenLeagueType(
             leaguesResult.length > 0 ? leaguesResult[0] : "ALL"
         );
@@ -129,30 +194,63 @@ export const Rankings = () => {
     };
 
     const updateRankings = async () => {
+        setShowLeaderboard(false);
         const result = await getRankingStats(
             chosenLeagueType == "ALL"
                 ? getCountryCode(chosenRegion)
                 : chosenLeagueType,
             chosenLeagueType == "ALL" ? 0 : weekIndex,
+            rankingsTab.toLowerCase(),
             user.initDataRaw
         );
-        setAllRankingStats(result);
+        setTotalRankingStats(result.total);
+        setAverageRankingStats(result.average);
+        setMaxRankingStats(result.max);
+        setRankingsLoaded(true);
     };
 
     const changeSchedule = async (index) => {
-        setWeekIndex(index);
+        if (weekIndex != index) {
+            setWeekIndex(index);
+            setShowLeaderboard(false);
+        }
+    };
+
+    const handleChosenRegion = async (choice) => {
+        setChosenRegion(choice);
+        setWeekIndex(0);
+        setDataSorted(false);
+        setShowLeaderboard(false);
+    };
+
+    const handleChosenLeagueType = async (choice) => {
+        setChosenLeagueType(choice);
+        setWeekIndex(0);
+        setDataSorted(false);
+        setShowLeaderboard(false);
     };
 
     useEffect(() => {
-        if (chosenRegion != null) updateRegions();
+        if (chosenRegion != null) {
+            setRankingsLoaded(false);
+            updateRegions();
+        }
     }, [chosenRegion]);
 
     useEffect(() => {
-        if (chosenLeagueType != null) updateRankings();
-    }, [chosenLeagueType, weekIndex]);
+        if (chosenLeagueType != null) {
+            setRankingsLoaded(false);
+            updateRankings();
+        }
+    }, [chosenLeagueType, rankingsTab, weekIndex]);
 
     useEffect(() => {
-        if (allRankingStats != null) {
+        if (
+            averageRankingStats != null &&
+            totalRankingStats != null &&
+            maxRankingStats != null &&
+            rankingsLoaded
+        ) {
             sortData();
 
             setShowLeaderboard(false);
@@ -161,91 +259,92 @@ export const Rankings = () => {
             }, 500);
             return () => clearTimeout(timer);
         }
-    }, [allRankingStats, rankingsTab]);
+    }, [rankingsLoaded]);
 
     useEffect(() => {
         fetchInitialData();
     }, []);
 
     return (
-        averageRankingStats != null &&
-        totalRankingStats != null &&
-        maxRankingStats != null && (
-            <div>
-                <FunctionSection
-                    title="Filter Options"
-                    regions={regions}
-                    chosenRegion={chosenRegion}
-                    setChosenRegion={setChosenRegion}
-                    leagueTypes={leagueTypes}
-                    chosenLeagueType={chosenLeagueType}
-                    setChosenLeagueType={setChosenLeagueType}
-                    showRegionButton={true}
-                    showLeagueButton={true}
-                />
-                <Tabs
-                    options={rankingsOptions}
-                    onToggle={(selected) => {
-                        setRankingsTab(selected);
-                    }}
-                    selectedTab={rankingsTab}
-                />
-                {weekInfos != null && chosenLeagueType != "ALL" && (
-                    <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
-                        {weekInfos.map((weekInfo, index) => (
-                            <button
-                                key={index}
-                                className={`items-center justify-center ${index == weekIndex ? "bg-graydark" : ""} px-[2vw]`}
-                                onClick={() => changeSchedule(index)}
-                            >
-                                <motion.p
-                                    className={`text-nowrap font-russoone text-[3.5vw] ${index == weekIndex ? "text-white" : "text-gold"}`}
-                                    {...appearTextAnimation}
+        <div>
+            <FunctionSection
+                title="Filter Options"
+                regions={regions}
+                chosenRegion={chosenRegion}
+                setChosenRegion={handleChosenRegion}
+                leagueTypes={leagueTypes}
+                chosenLeagueType={chosenLeagueType}
+                setChosenLeagueType={handleChosenLeagueType}
+                showRegionButton={true}
+                showLeagueButton={true}
+            />
+            <Tabs
+                options={rankingsOptions}
+                onToggle={(selected) => {
+                    setRankingsTab(selected);
+                }}
+                selectedTab={rankingsTab}
+                disabled={!dataSorted}
+            />
+            {dataSorted && (
+                <div>
+                    {weekInfos != null && chosenLeagueType != "ALL" && (
+                        <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
+                            {weekInfos.map((weekInfo, index) => (
+                                <button
+                                    key={index}
+                                    className={`items-center justify-center ${index == weekIndex ? "bg-graydark" : ""} px-[2vw]`}
+                                    onClick={() => changeSchedule(index)}
                                 >
-                                    {weekInfo.week == 0
-                                        ? "ALL"
-                                        : weekInfo.playoffs
-                                          ? "PLAYOFFS"
-                                          : "WEEK " + weekInfo.week}
-                                </motion.p>
-                            </button>
-                        ))}
-                    </div>
-                )}
-                {rankingsTab != "MVP" && (
-                    <div>
-                        <TitleSection title="AVERAGES" />
-                        <RankLeaderboard
-                            rankingsTab={rankingsTab}
-                            rankingStats={averageRankingStats}
-                            statType={"Average"}
-                            showLeaderboard={showLeaderboard}
-                        />
-                    </div>
-                )}
-                {rankingsTab != "KDA" && (
-                    <div>
-                        <TitleSection title="TOTALS" />
-                        <RankLeaderboard
-                            rankingsTab={rankingsTab}
-                            rankingStats={totalRankingStats}
-                            statType={"Total"}
-                            showLeaderboard={showLeaderboard}
-                        />
-                    </div>
-                )}
-                {rankingsTab != "MVP" && (
-                    <div>
-                        <TitleSection title="GAME HIGH" />
-                        <RankLeaderboard
-                            rankingsTab={rankingsTab}
-                            rankingStats={maxRankingStats}
-                            statType={"Max"}
-                            showLeaderboard={showLeaderboard}
-                        />
-                    </div>
-                )}
-            </div>
-        )
+                                    <motion.p
+                                        className={`text-nowrap font-russoone text-[3.5vw] ${index == weekIndex ? "text-white" : "text-gold"}`}
+                                        {...appearTextAnimation}
+                                    >
+                                        {weekInfo.week == 0
+                                            ? "ALL"
+                                            : weekInfo.playoffs
+                                              ? "PLAYOFFS"
+                                              : "WEEK " + weekInfo.week}
+                                    </motion.p>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    {rankingsTab != "MVP" && (
+                        <div>
+                            <TitleSection title="AVERAGES" />
+                            <RankLeaderboard
+                                rankingsTab={rankingsTab}
+                                rankingStats={averageRankingStats}
+                                statType={"Average"}
+                                showLeaderboard={showLeaderboard}
+                            />
+                        </div>
+                    )}
+                    {rankingsTab != "KDA" && (
+                        <div>
+                            <TitleSection title="TOTALS" />
+                            <RankLeaderboard
+                                rankingsTab={rankingsTab}
+                                rankingStats={totalRankingStats}
+                                statType={"Total"}
+                                showLeaderboard={showLeaderboard}
+                            />
+                        </div>
+                    )}
+                    {rankingsTab != "MVP" && (
+                        <div>
+                            <TitleSection title="GAME HIGH" />
+                            <RankLeaderboard
+                                rankingsTab={rankingsTab}
+                                rankingStats={maxRankingStats}
+                                statType={"Max"}
+                                showLeaderboard={showLeaderboard}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
     );
 };

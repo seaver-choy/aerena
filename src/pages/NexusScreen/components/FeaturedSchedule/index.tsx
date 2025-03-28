@@ -9,10 +9,11 @@ interface FeaturedScheduleProps {
 
 export const FeaturedSchedule = ({
     scheduleGroup = null,
-    teams,
+    teams = null,
 }: FeaturedScheduleProps) => {
     return (
-        scheduleGroup != null && (
+        scheduleGroup != null &&
+        teams != null && (
             <div>
                 {scheduleGroup.schedules.map((schedule, scheduleIndex) => {
                     const oldDay =

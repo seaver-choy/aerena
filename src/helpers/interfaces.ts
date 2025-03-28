@@ -274,22 +274,15 @@ export interface RankingInfo {
     player: string;
     team: string;
     league: string;
-    avgKills: number;
-    totalKills: number;
-    maxKills: number;
-    avgAssists: number;
-    totalAssists: number;
-    maxAssists: number;
-    avgKDA: number;
-    maxKDA: number;
-    mvpCount: number;
-    avgPoints: number;
-    totalPoints: number;
-    maxPoints: number;
     teamInfo: {
         colors: TeamColor;
         position: string[];
     };
+    kills?: number;
+    assists?: number;
+    kda?: number;
+    mvpCount?: number;
+    points?: number;
 }
 
 export interface WeekInfo {

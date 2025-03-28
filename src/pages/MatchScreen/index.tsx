@@ -56,7 +56,7 @@ export const MatchScreen = () => {
     useEffect(() => {
         if (
             allMatchStats != null &&
-            (schedule.score1 != 0 || schedule.score2 == 0)
+            (schedule.score1 != 0 || schedule.score2 != 0)
         ) {
             const gameNumber = parseInt(matchTab.split(" ")[1]);
             setTeam1Stats(
