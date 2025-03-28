@@ -101,7 +101,9 @@ export const MatchScreen = () => {
                 }}
                 selectedTab={gameTab}
             />
-            {schedule.score1 == 0 && schedule.score2 == 0 ? (
+            {(schedule.score1 == 0 && schedule.score2 == 0) ||
+            team1Stats == undefined ||
+            team2Stats == undefined ? (
                 <div className="mt-[15vh]">
                     <p className="items-center bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text text-center font-montserrat text-[5vw] font-bold text-transparent">
                         No Match Results
@@ -122,10 +124,18 @@ export const MatchScreen = () => {
                         />
                     )}
                     {gameTab === "Team 1" && (
-                        <GameDetails team={team1} teamStats={team1Stats} />
+                        <GameDetails
+                            team={team1}
+                            teamStats={team1Stats}
+                            league={schedule.league}
+                        />
                     )}
                     {gameTab === "Team 2" && (
-                        <GameDetails team={team2} teamStats={team2Stats} />
+                        <GameDetails
+                            team={team2}
+                            teamStats={team2Stats}
+                            league={schedule.league}
+                        />
                     )}
                 </div>
             )}

@@ -74,7 +74,7 @@ export const GameSummary = ({
                                 text="KILLS"
                                 value={team1Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.kills || 0),
+                                        sum + (player.stats?.kills || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}
@@ -84,7 +84,7 @@ export const GameSummary = ({
                                 text="DEATHS"
                                 value={team1Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.deaths || 0),
+                                        sum + (player.stats?.deaths || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}
@@ -94,7 +94,7 @@ export const GameSummary = ({
                                 text="ASSISTS"
                                 value={team1Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.assists || 0),
+                                        sum + (player.stats?.assists || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}
@@ -120,7 +120,7 @@ export const GameSummary = ({
                                         VICTORY
                                     </p>
                                 ) : (
-                                    <p className="font-russoone text-[4vw] font-normal text-gray opacity-50 will-change-transform backface-hidden">
+                                    <p className="font-russoone text-[4vw] font-normal text-white opacity-50 will-change-transform backface-hidden">
                                         DEFEAT
                                     </p>
                                 )}
@@ -129,7 +129,7 @@ export const GameSummary = ({
                                 text="KILLS"
                                 value={team2Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.kills || 0),
+                                        sum + (player.stats?.kills || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}
@@ -139,7 +139,7 @@ export const GameSummary = ({
                                 text="DEATHS"
                                 value={team2Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.deaths || 0),
+                                        sum + (player.stats?.deaths || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}
@@ -149,7 +149,7 @@ export const GameSummary = ({
                                 text="ASSISTS"
                                 value={team2Stats.players.reduce(
                                     (sum, player) =>
-                                        sum + (player.stats.assists || 0),
+                                        sum + (player.stats?.assists || 0),
                                     0
                                 )}
                                 fromMatchScreen={true}

@@ -151,7 +151,7 @@ async function getNearestSchedules(event: APIGatewayProxyEvent) {
             {
                 $match: {
                     league: league,
-                    matchDate: { $gt: currentDate },
+                    // matchDate: { $gt: currentDate },
                     week: week,
                 },
             },

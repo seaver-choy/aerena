@@ -24,7 +24,7 @@ export const Schedule = () => {
     const [chosenRegion, setChosenRegion] = useState<string>(null);
     const [scheduleIndex, setScheduleIndex] = useState<number>(0);
     const [teams, setTeams] = useState<Team[]>(null);
-
+    const [schedulesLoaded, setSchedulesLoaded] = useState<boolean>(false);
     const fetchInitialData = async () => {
         const regionsResult = await getCountriesWithSchedule(user.initDataRaw);
         setRegions([/*"ALL",*/ ...regionsResult]);
@@ -43,6 +43,7 @@ export const Schedule = () => {
     };
 
     const updateScheduleGroups = async () => {
+        setSchedulesLoaded(false);
         const schedulesResult = await getActiveSchedules(
             chosenLeagueType,
             user.initDataRaw
@@ -61,6 +62,7 @@ export const Schedule = () => {
             user.initDataRaw
         );
         setTeams(teamsResult);
+        setSchedulesLoaded(true);
     };
 
     const changeSchedule = async (index) => {
@@ -79,7 +81,7 @@ export const Schedule = () => {
         fetchInitialData();
     }, []);
 
-    return scheduleGroups != null && teams != null ? (
+    return (
         <div>
             <FunctionSection
                 title="Filter Options"
@@ -92,56 +94,68 @@ export const Schedule = () => {
                 showRegionButton={true}
                 showLeagueButton={true}
             />
-            <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
-                {scheduleGroups.map((group, index) => (
-                    <button
-                        key={index}
-                        className={`items-center justify-center ${index == scheduleIndex ? "bg-graydark" : ""} px-[2vw]`}
-                        onClick={() => changeSchedule(index)}
-                    >
-                        <motion.p
-                            className={`text-nowrap font-russoone text-[3.5vw] ${index == scheduleIndex ? "text-white" : "text-gold"}`}
-                            {...appearTextAnimation}
-                        >
-                            {group.schedules[0].playoffs
-                                ? "PLAYOFFS"
-                                : "WEEK " + group.week}
-                        </motion.p>
-                    </button>
-                ))}
-            </div>
-            {scheduleGroups.map((group, index) => {
-                let dayNumber = 1;
-                let initialDay;
-                if (index === scheduleIndex) {
-                    return group.schedules.map((schedule, scheduleIndex) => {
-                        const oldDay =
-                            scheduleIndex === 0
-                                ? schedule.day
-                                : group.schedules[scheduleIndex - 1].day;
-                        const currentDay = schedule.day;
-                        const isSameDay = oldDay == currentDay;
-                        dayNumber =
-                            oldDay == currentDay ? dayNumber : dayNumber + 1;
-                        initialDay = scheduleIndex === 0 ? true : false;
-                        return (
-                            <div key={scheduleIndex}>
-                                {(initialDay || !isSameDay) && (
-                                    <TitleSection title={`Day ${dayNumber}`} />
-                                )}
-                                <MatchBanner
-                                    schedule={schedule}
-                                    teams={teams}
-                                />
-                            </div>
-                        );
-                    });
-                }
-            })}
-        </div>
-    ) : (
-        <div className="mt-[30vh] flex items-center justify-center">
-            <Loading />
+            {scheduleGroups != null && teams != null && schedulesLoaded ? (
+                <div>
+                    <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {scheduleGroups.map((group, index) => (
+                            <button
+                                key={index}
+                                className={`items-center justify-center ${index == scheduleIndex ? "bg-graydark" : ""} px-[2vw]`}
+                                onClick={() => changeSchedule(index)}
+                            >
+                                <motion.p
+                                    className={`text-nowrap font-russoone text-[3.5vw] ${index == scheduleIndex ? "text-white" : "text-gold"}`}
+                                    {...appearTextAnimation}
+                                >
+                                    {group.schedules[0].playoffs
+                                        ? "PLAYOFFS"
+                                        : "WEEK " + group.week}
+                                </motion.p>
+                            </button>
+                        ))}
+                    </div>
+                    {scheduleGroups.map((group, index) => {
+                        let dayNumber = 1;
+                        let initialDay;
+                        if (index === scheduleIndex) {
+                            return group.schedules.map(
+                                (schedule, scheduleIndex) => {
+                                    const oldDay =
+                                        scheduleIndex === 0
+                                            ? schedule.day
+                                            : group.schedules[scheduleIndex - 1]
+                                                  .day;
+                                    const currentDay = schedule.day;
+                                    const isSameDay = oldDay == currentDay;
+                                    dayNumber =
+                                        oldDay == currentDay
+                                            ? dayNumber
+                                            : dayNumber + 1;
+                                    initialDay =
+                                        scheduleIndex === 0 ? true : false;
+                                    return (
+                                        <div key={scheduleIndex}>
+                                            {(initialDay || !isSameDay) && (
+                                                <TitleSection
+                                                    title={`Day ${dayNumber}`}
+                                                />
+                                            )}
+                                            <MatchBanner
+                                                schedule={schedule}
+                                                teams={teams}
+                                            />
+                                        </div>
+                                    );
+                                }
+                            );
+                        }
+                    })}
+                </div>
+            ) : (
+                <div className="mt-[30vh] flex items-center justify-center">
+                    <Loading />
+                </div>
+            )}
         </div>
     );
 };

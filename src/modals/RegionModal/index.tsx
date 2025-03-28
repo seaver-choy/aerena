@@ -34,7 +34,6 @@ export const RegionModal = ({
     };
 
     const fetchImages = async () => {
-        console.log(regions);
         const leagueImages = await Promise.all(
             regions.map(async (region) => {
                 return getCountryImage(region);

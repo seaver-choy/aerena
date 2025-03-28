@@ -51,7 +51,7 @@ export const Nexus = () => {
         if (leagueTypes != null) fetchData();
     }, [leagueTypes]);
 
-    return scheduleGroup != null ? (
+    return (
         <div>
             <FunctionSection
                 title="Filter Options"
@@ -60,11 +60,13 @@ export const Nexus = () => {
                 setChosenLeagueType={setChosenLeagueType}
                 showLeagueButton={true}
             />
-            <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
-        </div>
-    ) : (
-        <div className="mt-[30vh] flex items-center justify-center">
-            <Loading />
+            {scheduleGroup != null ? (
+                <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
+            ) : (
+                <div className="mt-[30vh] flex items-center justify-center">
+                    <Loading />
+                </div>
+            )}
         </div>
     );
 };

@@ -12,10 +12,12 @@ import { StatsDisplay } from "../../../../components/StatsDisplay";
 interface GameStatsProps {
     team: Team;
     teamStats: MatchInfo;
+    league: string;
 }
 export const GameStats = ({
     team = null,
     teamStats = null,
+    league = null,
 }: GameStatsProps) => {
     const [showGameStats, setShowGameStats] = useState<boolean>(false);
 
@@ -41,13 +43,13 @@ export const GameStats = ({
                                     >
                                         <AthleteCard
                                             color={team.colors}
-                                            ign={player.stats.player}
+                                            ign={player.stats?.player || "-"}
                                             opacity={{
                                                 wave: team.colors.wave,
                                             }}
                                             role={player.position}
                                             type={"basic"}
-                                            league={player.stats.league}
+                                            league={league}
                                         />
                                     </motion.div>
                                 </div>
@@ -56,44 +58,68 @@ export const GameStats = ({
                                         <div className="flex gap-[2vw]">
                                             <StatsDisplay
                                                 text="KILLS"
-                                                value={player.stats.kills}
+                                                value={player.stats?.kills || 0}
                                                 fromGameTeamStats={true}
                                                 isTotal={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                             <StatsDisplay
                                                 text="ASSISTS"
-                                                value={player.stats.assists}
+                                                value={
+                                                    player.stats?.assists || 0
+                                                }
                                                 fromGameTeamStats={true}
                                                 isTotal={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                         </div>
                                         <div className="flex gap-[2vw]">
                                             <StatsDisplay
                                                 text="DEATHS"
-                                                value={player.stats.deaths}
+                                                value={
+                                                    player.stats?.deaths || 0
+                                                }
                                                 fromGameTeamStats={true}
                                                 isTotal={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                             <StatsDisplay
                                                 text="KP %"
                                                 value={
                                                     player.stats
-                                                        .killParticipation
+                                                        ?.killParticipation || 0
                                                 }
                                                 fromGameTeamStats={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                         </div>
                                         <div className="flex gap-[2vw]">
                                             <StatsDisplay
                                                 text="KDA"
-                                                value={player.stats.kda}
+                                                value={player.stats?.kda || 0}
                                                 fromGameTeamStats={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                             <StatsDisplay
                                                 text="POINTS"
-                                                value={player.stats.points}
+                                                value={
+                                                    player.stats?.points || 0
+                                                }
                                                 fromGameTeamStats={true}
                                                 isTotal={true}
+                                                noStats={
+                                                    player.stats == undefined
+                                                }
                                             />
                                         </div>
                                     </div>
