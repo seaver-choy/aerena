@@ -89,7 +89,7 @@ export const MatchBanner = ({
                                     matchTimeFormat(schedule.matchDate)}
                             </motion.div>
                             {noButton && (
-                                <motion.div className="mt-[4vw] h-[6vw] w-[18vw]">
+                                <motion.div className="mt-[4vw] h-[6vw] w-[6vw]">
                                     <img
                                         className="h-full w-full"
                                         src={AerenaLogo}

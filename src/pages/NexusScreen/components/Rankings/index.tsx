@@ -3,6 +3,7 @@ import { rankingsOptions } from "../../../../helpers/tabs";
 import { FunctionSection } from "../../../../components/FunctionSection";
 import { Tabs } from "../../../../components/Tabs";
 import { TitleSection } from "../../../../components/TitleSection";
+import { Loading } from "../../../../components/Loading";
 import { RankLeaderboard } from "../RankLeaderboard";
 import {
     getCountriesWithSchedule,
@@ -345,7 +346,9 @@ export const Rankings = () => {
                     )}
                 </div>
             ) : (
-                <div></div>
+                <div className="mt-[35vw] flex items-center justify-center">
+                    <Loading />
+                </div>
             )}
         </div>
     );
