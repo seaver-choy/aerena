@@ -60,7 +60,7 @@ export const TeamCard = ({ color, team }: Props) => {
                 <Base color={color} />
             </div>
             <div className="absolute h-full w-full">
-                <Wave team={teamNoSpace} />
+                <Wave opacity={color} team={teamNoSpace} />
             </div>
             <div className="absolute h-full w-full">
                 <Dust color={color} />

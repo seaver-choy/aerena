@@ -1527,3 +1527,24 @@ export const getScheduleWeeks = async (league, initDataRaw) => {
         console.log(`Encountered error during getScheduleWeeks ${e}`);
     }
 };
+
+export const getCountriesWithSchedule = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/countries",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getCountriesWithSchedule ${e}`);
+    }
+};

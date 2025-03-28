@@ -5,7 +5,7 @@ import { Tabs } from "../../../../components/Tabs";
 import { TitleSection } from "../../../../components/TitleSection";
 import { RankLeaderboard } from "../RankLeaderboard";
 import {
-    getCountries,
+    getCountriesWithSchedule,
     getFilteredLeaguesWithSchedule,
     getRankingStats,
     getScheduleWeeks,
@@ -35,7 +35,7 @@ export const Rankings = () => {
     const [dataSorted, setDataSorted] = useState<boolean>(false);
 
     const fetchInitialData = async () => {
-        const regionsResult = await getCountries(user.initDataRaw);
+        const regionsResult = await getCountriesWithSchedule(user.initDataRaw);
         setRegions([/*"ALL",*/ ...regionsResult]);
         setChosenRegion(getCountryFull(user.country));
     };
@@ -286,7 +286,7 @@ export const Rankings = () => {
                 selectedTab={rankingsTab}
                 disabled={!dataSorted}
             />
-            {dataSorted && (
+            {dataSorted ? (
                 <div>
                     {weekInfos != null && chosenLeagueType != "ALL" && (
                         <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -344,6 +344,8 @@ export const Rankings = () => {
                         </div>
                     )}
                 </div>
+            ) : (
+                <div></div>
             )}
         </div>
     );

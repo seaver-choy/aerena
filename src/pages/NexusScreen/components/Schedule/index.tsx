@@ -6,7 +6,7 @@ import { ScheduleGroup, Team } from "../../../../helpers/interfaces";
 import { getCountryCode, getCountryFull } from "../../../../helpers/utilities";
 import {
     getActiveSchedules,
-    getCountries,
+    getCountriesWithSchedule,
     getFilteredLeaguesWithSchedule,
     getTeams,
 } from "../../../../helpers/lambda.helper";
@@ -25,7 +25,7 @@ export const Schedule = () => {
     const [teams, setTeams] = useState<Team[]>(null);
 
     const fetchInitialData = async () => {
-        const regionsResult = await getCountries(user.initDataRaw);
+        const regionsResult = await getCountriesWithSchedule(user.initDataRaw);
         setRegions([/*"ALL",*/ ...regionsResult]);
         setChosenRegion(getCountryFull(user.country));
     };

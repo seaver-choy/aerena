@@ -1,7 +1,11 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 
-import { matchStatsSchema, scheduleSchema } from "../../schema";
+import {
+    matchStatsSchema,
+    scheduleSchema,
+    teamProfileSchema,
+} from "../../schema";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -19,6 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
         conn.model("Schedules", scheduleSchema);
         conn.model("MatchStats", matchStatsSchema);
+        conn.model("TeamProfiles", teamProfileSchema);
     }
     if (event.path.includes("active")) {
         return getActiveSchedules(event);
@@ -30,6 +35,8 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
         return getRankingStats(event);
     } else if (event.path.includes("scheduleweeks")) {
         return getScheduleWeeks(event);
+    } else if (event.path.includes("countries")) {
+        return getCountriesWithSchedule();
     } else {
         switch (event.httpMethod) {
             default:
@@ -1123,6 +1130,113 @@ async function getScheduleWeeks(event: APIGatewayProxyEvent) {
             },
             body: JSON.stringify({
                 message: `Failed to get schedule weeks list: ${e}`,
+            }),
+        };
+    }
+}
+async function getCountriesWithSchedule() {
+    const teamProfilesModel = conn!.model("TeamProfiles");
+    const schedulesModel = conn!.model("Schedules");
+
+    try {
+        const scheduleResult = await schedulesModel.aggregate([
+            {
+                $match: {
+                    league: { $not: { $regex: /^(SPS|M\d+|MSC)/i } },
+                },
+            },
+            {
+                $project: {
+                    countryCode: { $substr: ["$league", 0, 2] },
+                },
+            },
+            {
+                $group: {
+                    _id: "$countryCode",
+                },
+            },
+        ]);
+
+        const validCountryCodes = scheduleResult.map((item) => item._id);
+
+        const result = await teamProfilesModel.aggregate([
+            {
+                $addFields: {
+                    countryCode: {
+                        $switch: {
+                            branches: [
+                                {
+                                    case: { $eq: ["$country", "China"] },
+                                    then: "CN",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Cambodia"] },
+                                    then: "KH",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Indonesia"] },
+                                    then: "ID",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Malaysia"] },
+                                    then: "MY",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Myanmar"] },
+                                    then: "MM",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Philippines"] },
+                                    then: "PH",
+                                },
+                                {
+                                    case: { $eq: ["$country", "Singapore"] },
+                                    then: "SG",
+                                },
+                            ],
+                            default: "",
+                        },
+                    },
+                },
+            },
+            {
+                $match: {
+                    countryCode: { $in: validCountryCodes },
+                },
+            },
+            {
+                $sort: { country: 1 },
+            },
+        ]);
+
+        if (!result) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "No countries found" }),
+            };
+        }
+        const countries = [...new Set(result.map((item) => item.country))];
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(countries),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get countries list: ${e}`,
             }),
         };
     }
