@@ -35,6 +35,7 @@ import GoldButton from "../../../../assets/button/gold.svg";
 import BlackButton from "../../../../assets/button/black.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import { Loading } from "../../../../components/Loading";
 
 export const ChoiceBanner = () => {
     const user = useUsers();
@@ -200,7 +201,7 @@ export const ChoiceBanner = () => {
 
     return (
         <div className="mt-[6vw]">
-            {packInfos != null &&
+            {packInfos != null ? (
                 packInfos?.map((packInfo) =>
                     showChoiceBanners ? (
                         <div
@@ -336,7 +337,12 @@ export const ChoiceBanner = () => {
                             </motion.div>
                         </div>
                     )
-                )}
+                )
+            ) : (
+                <div className="mt-[50vw] flex items-center justify-center">
+                    <Loading />
+                </div>
+            )}
 
             {showErrorModal && (
                 <ErrorModal
