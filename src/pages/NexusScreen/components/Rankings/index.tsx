@@ -229,6 +229,13 @@ export const Rankings = () => {
         setWeekIndex(0);
         setDataSorted(false);
         setShowLeaderboard(false);
+        if (choice != "ALL") {
+            const weeksResult = await getScheduleWeeks(
+                choice,
+                user.initDataRaw
+            );
+            setWeekInfos([{ week: 0, playoffs: false }, ...weeksResult]);
+        } else setWeekInfos(null);
     };
 
     useEffect(() => {
