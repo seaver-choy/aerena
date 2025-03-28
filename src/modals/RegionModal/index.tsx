@@ -70,7 +70,7 @@ export const RegionModal = ({
                             {...appearTextAnimation}
                         >
                             <p className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent">
-                                Catalog Filter
+                                Region Filter
                             </p>
                         </motion.div>
                         <motion.button

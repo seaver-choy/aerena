@@ -254,7 +254,13 @@ export const ChoiceBanner = () => {
                                         className="text-nowrap font-russoone text-[4vw] font-normal text-golddark"
                                         {...slideRightTextAnimation}
                                     >
-                                        PH S15
+                                        {/^(SPS|M\d+|MSC)/i.test(
+                                            packInfo.league
+                                        )
+                                            ? packInfo.league
+                                            : packInfo.league.slice(0, 2) +
+                                              " S" +
+                                              packInfo.league.slice(2, 4)}
                                     </motion.p>
                                 </div>
                                 <div className="-mt-[1vw] flex w-full">
