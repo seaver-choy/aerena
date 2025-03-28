@@ -65,7 +65,7 @@ export const GameSummary = ({
                                         VICTORY
                                     </p>
                                 ) : (
-                                    <p className="font-russoone text-[4vw] font-normal text-gray opacity-50 will-change-transform backface-hidden">
+                                    <p className="font-russoone text-[4vw] font-normal text-white opacity-50 will-change-transform backface-hidden">
                                         DEFEAT
                                     </p>
                                 )}
