@@ -353,7 +353,7 @@ export const Rankings = () => {
                     )}
                 </div>
             ) : (
-                <div className="mt-[15vh] flex items-center justify-center">
+                <div className="mt-[20vh] flex items-center justify-center">
                     <Loading />
                 </div>
             )}

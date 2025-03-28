@@ -63,7 +63,7 @@ export const Nexus = () => {
             {scheduleGroup != null ? (
                 <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
             ) : (
-                <div className="mt-[30vh] flex items-center justify-center">
+                <div className="mt-[25vh] flex items-center justify-center">
                     <Loading />
                 </div>
             )}
