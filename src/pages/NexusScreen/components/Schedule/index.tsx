@@ -13,6 +13,7 @@ import {
 import { FunctionSection } from "../../../../components/FunctionSection";
 import { TitleSection } from "../../../../components/TitleSection";
 import { MatchBanner } from "../../../../components/MatchBanner";
+import { Loading } from "../../../../components/Loading";
 
 export const Schedule = () => {
     const user = useUsers();
@@ -78,7 +79,7 @@ export const Schedule = () => {
         fetchInitialData();
     }, []);
 
-    return (
+    return scheduleGroups != null && teams != null ? (
         <div>
             <FunctionSection
                 title="Filter Options"
@@ -92,61 +93,55 @@ export const Schedule = () => {
                 showLeagueButton={true}
             />
             <div className="mx-[6vw] mt-[4vw] flex h-[8vw] flex-row gap-[1vw] overflow-x-scroll [-ms-overflow-style:none] [scrollbar-width:none]">
-                {scheduleGroups != null &&
-                    scheduleGroups.map((group, index) => (
-                        <button
-                            key={index}
-                            className={`items-center justify-center ${index == scheduleIndex ? "bg-graydark" : ""} px-[2vw]`}
-                            onClick={() => changeSchedule(index)}
+                {scheduleGroups.map((group, index) => (
+                    <button
+                        key={index}
+                        className={`items-center justify-center ${index == scheduleIndex ? "bg-graydark" : ""} px-[2vw]`}
+                        onClick={() => changeSchedule(index)}
+                    >
+                        <motion.p
+                            className={`text-nowrap font-russoone text-[3.5vw] ${index == scheduleIndex ? "text-white" : "text-gold"}`}
+                            {...appearTextAnimation}
                         >
-                            <motion.p
-                                className={`text-nowrap font-russoone text-[3.5vw] ${index == scheduleIndex ? "text-white" : "text-gold"}`}
-                                {...appearTextAnimation}
-                            >
-                                {group.schedules[0].playoffs
-                                    ? "PLAYOFFS"
-                                    : "WEEK " + group.week}
-                            </motion.p>
-                        </button>
-                    ))}
+                            {group.schedules[0].playoffs
+                                ? "PLAYOFFS"
+                                : "WEEK " + group.week}
+                        </motion.p>
+                    </button>
+                ))}
             </div>
-            {scheduleGroups != null &&
-                teams != null &&
-                scheduleGroups.map((group, index) => {
-                    let dayNumber = 1;
-                    let initialDay;
-                    if (index === scheduleIndex) {
-                        return group.schedules.map(
-                            (schedule, scheduleIndex) => {
-                                const oldDay =
-                                    scheduleIndex === 0
-                                        ? schedule.day
-                                        : group.schedules[scheduleIndex - 1]
-                                              .day;
-                                const currentDay = schedule.day;
-                                const isSameDay = oldDay == currentDay;
-                                dayNumber =
-                                    oldDay == currentDay
-                                        ? dayNumber
-                                        : dayNumber + 1;
-                                initialDay = scheduleIndex === 0 ? true : false;
-                                return (
-                                    <div key={scheduleIndex}>
-                                        {(initialDay || !isSameDay) && (
-                                            <TitleSection
-                                                title={`Day ${dayNumber}`}
-                                            />
-                                        )}
-                                        <MatchBanner
-                                            schedule={schedule}
-                                            teams={teams}
-                                        />
-                                    </div>
-                                );
-                            }
+            {scheduleGroups.map((group, index) => {
+                let dayNumber = 1;
+                let initialDay;
+                if (index === scheduleIndex) {
+                    return group.schedules.map((schedule, scheduleIndex) => {
+                        const oldDay =
+                            scheduleIndex === 0
+                                ? schedule.day
+                                : group.schedules[scheduleIndex - 1].day;
+                        const currentDay = schedule.day;
+                        const isSameDay = oldDay == currentDay;
+                        dayNumber =
+                            oldDay == currentDay ? dayNumber : dayNumber + 1;
+                        initialDay = scheduleIndex === 0 ? true : false;
+                        return (
+                            <div key={scheduleIndex}>
+                                {(initialDay || !isSameDay) && (
+                                    <TitleSection title={`Day ${dayNumber}`} />
+                                )}
+                                <MatchBanner
+                                    schedule={schedule}
+                                    teams={teams}
+                                />
+                            </div>
                         );
-                    }
-                })}
+                    });
+                }
+            })}
+        </div>
+    ) : (
+        <div className="mt-[50vw] flex items-center justify-center">
+            <Loading />
         </div>
     );
 };

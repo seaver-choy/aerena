@@ -9,6 +9,7 @@ import {
 import { sortLeagues } from "../../../../helpers/athletes";
 import { useUsers } from "../../../../hooks/useUser";
 import { ScheduleGroup, Team } from "../../../../helpers/interfaces";
+import { Loading } from "../../../../components/Loading";
 
 export const Nexus = () => {
     const user = useUsers();
@@ -50,18 +51,20 @@ export const Nexus = () => {
         if (leagueTypes != null) fetchData();
     }, [leagueTypes]);
 
-    return (
-        scheduleGroup != null && (
-            <div>
-                <FunctionSection
-                    title="Filter Options"
-                    leagueTypes={leagueTypes}
-                    chosenLeagueType={chosenLeagueType}
-                    setChosenLeagueType={setChosenLeagueType}
-                    showLeagueButton={true}
-                />
-                <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
-            </div>
-        )
+    return scheduleGroup != null ? (
+        <div>
+            <FunctionSection
+                title="Filter Options"
+                leagueTypes={leagueTypes}
+                chosenLeagueType={chosenLeagueType}
+                setChosenLeagueType={setChosenLeagueType}
+                showLeagueButton={true}
+            />
+            <FeaturedSchedule scheduleGroup={scheduleGroup} teams={teams} />
+        </div>
+    ) : (
+        <div className="mt-[50vw] flex items-center justify-center">
+            <Loading />
+        </div>
     );
 };
