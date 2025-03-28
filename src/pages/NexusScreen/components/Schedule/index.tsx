@@ -140,7 +140,7 @@ export const Schedule = () => {
             })}
         </div>
     ) : (
-        <div className="mt-[50vw] flex items-center justify-center">
+        <div className="mt-[30vh] flex items-center justify-center">
             <Loading />
         </div>
     );
