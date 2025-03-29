@@ -649,6 +649,52 @@ export const getLeagues = async (initDataRaw) => {
     }
 };
 
+export const getCountries = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/countries",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of countries ${e}`);
+    }
+};
+
+export const getFilteredLeaguesWithSchedule = async (country, initDataRaw) => {
+    try {
+        const queryParams = {
+            country: country,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/filteredwithschedule",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of leagues ${e}`);
+    }
+};
+
 export const getAthletes = async (initDataRaw) => {
     try {
         const restOperation = get({
@@ -840,6 +886,7 @@ export const getAthletePaginated = async (
     searchString: string,
     position: string,
     leagueTypes: string[],
+    region: string,
     initDataRaw: string
 ) => {
     try {
@@ -848,6 +895,7 @@ export const getAthletePaginated = async (
             limit: limit.toString(),
             searchString: searchString,
             leagueTypes: leagueTypes.toString(),
+            region: region,
             position: position,
         };
         const restOperation = get({
@@ -1268,5 +1316,235 @@ export const getAthlete = async (athleteId: number, initDataRaw: string) => {
         return JSON.parse(response);
     } catch (e) {
         console.log(e);
+    }
+};
+
+export const sampleURL = async (userId, shareType, initDataRaw) => {
+    try {
+        const data = {
+            userId: userId,
+            shareType: shareType,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/sampleurl`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`sampleURL call failed ${e}`);
+    }
+};
+
+export const shareDreamTeam = async (userId, dataUrl, initDataRaw) => {
+    try {
+        const data = {
+            userId: userId,
+            dataUrl: dataUrl,
+        };
+
+        const restOperation = put({
+            apiName: "playibleApi",
+            path: `user/sharedreamteam`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                body: JSON.stringify(data),
+            },
+        });
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`shareDreamTeam call failed ${e}`);
+    }
+};
+
+export const getActiveSchedules = async (league, initDataRaw: string) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/active",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        return JSON.parse(JSON.stringify(response));
+    } catch (e) {
+        console.log(`getActiveSchedules call failed ${e}`);
+    }
+};
+
+export const getNearestSchedules = async (
+    league: string,
+    initDataRaw: string
+) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/nearest",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        return JSON.parse(JSON.stringify(response));
+    } catch (e) {
+        console.log(`getNearestSchedules call failed ${e}`);
+    }
+};
+
+export const getTeams = async (leagueTypes: string[], initDataRaw) => {
+    try {
+        const queryParams = {
+            leagueTypes: leagueTypes.toString(),
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "mltournaments/teams",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during GET of teams ${e}`);
+    }
+};
+
+export const getSpecificMatchStats = async (
+    matchId: string,
+    team1: string,
+    team2: string,
+    initDataRaw: string
+) => {
+    try {
+        const queryParams = {
+            matchId: matchId,
+            team1: team1,
+            team2: team2,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/specificmatchstats`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getSpecificMatchStats ${e}`);
+    }
+};
+
+export const getRankingStats = async (league, week, stat_type, initDataRaw) => {
+    try {
+        const queryParams = {
+            league: league,
+            week: week,
+            stat_type: stat_type,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/rankingstats`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getRankingStats ${e}`);
+    }
+};
+
+export const getScheduleWeeks = async (league, initDataRaw) => {
+    try {
+        const queryParams = {
+            league: league,
+        };
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: `schedules/scheduleweeks`,
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+                queryParams: queryParams,
+            },
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getScheduleWeeks ${e}`);
+    }
+};
+
+export const getCountriesWithSchedule = async (initDataRaw) => {
+    try {
+        const restOperation = get({
+            apiName: "playibleApi",
+            path: "schedules/countries",
+            options: {
+                headers: {
+                    "X-Telegram-Auth": `tma ${initDataRaw}`,
+                },
+            },
+        });
+
+        const { body } = await restOperation.response;
+
+        const response = await body.text();
+        return JSON.parse(response);
+    } catch (e) {
+        console.log(`Encountered error during getCountriesWithSchedule ${e}`);
     }
 };

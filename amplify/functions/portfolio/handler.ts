@@ -151,6 +151,7 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
     const leagueTypes = event
         .queryStringParameters!.leagueTypes!.split(",")
         .filter((type) => type !== "");
+    const region = event.queryStringParameters!.region!;
 
     // const search = {
     //     offset: pageOffset,
@@ -193,6 +194,43 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
                     },
                 },
             },
+
+            //for checking country
+            {
+                $addFields: {
+                    shouldLookupProfile: {
+                        $ne: ["", region],
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: "athleteprofiles",
+                    let: { athleteId: "$athleteId" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$athleteId", "$$athleteId"] },
+                                        { $eq: ["$country", region] },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "profileData",
+                },
+            },
+            {
+                $match: {
+                    $or: [
+                        { shouldLookupProfile: false },
+                        { profileData: { $ne: [] } },
+                    ],
+                },
+            },
+
             {
                 $lookup: {
                     from: "ml_tournaments",
@@ -253,6 +291,43 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
                     },
                 },
             },
+
+            //for checking country
+            {
+                $addFields: {
+                    shouldLookupProfile: {
+                        $ne: ["", region],
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: "athleteprofiles",
+                    let: { athleteId: "$athleteId" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$athleteId", "$$athleteId"] },
+                                        { $eq: ["$country", region] },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "profileData",
+                },
+            },
+            {
+                $match: {
+                    $or: [
+                        { shouldLookupProfile: false },
+                        { profileData: { $ne: [] } },
+                    ],
+                },
+            },
+
             {
                 $lookup: {
                     from: "ml_tournaments",

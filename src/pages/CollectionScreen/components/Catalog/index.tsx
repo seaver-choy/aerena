@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
 import {
     appearCardAnimation,
-    appearTextAnimation,
     pulseAnimation,
     slideRightAnimation,
-    slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import {
     getAthletePositionLogo,
@@ -19,13 +17,10 @@ import {
     getLeagues,
     getAthletePaginated,
 } from "../../../../helpers/lambda.helper";
-import { AthleteCard } from "../../../../components/AthleteCard";
-import { AthleteModal } from "../../modals/AthleteModal";
-import { LeagueModal } from "../../modals/LeagueModal";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-import FunctionButton from "../../../../assets/button/function.svg";
-import GoldLine from "../../../../assets/others/line-gold.svg";
+import { AthleteCard } from "../../../../components/AthleteCard";
+import { AthleteModal } from "../../../../modals/AthleteModal";
+import { LeagueModal } from "../../../../modals/LeagueModal";
 
 import AthleteSonner from "../../../../assets/sonner/athlete-gold.svg";
 
@@ -45,16 +40,10 @@ export const Catalog = () => {
     const [offset, setOffset] = useState<number>(0);
     const [hasNextPage, setHasNextPage] = useState<boolean>();
     const [hasFetchedInitial, setHasFetchedInitial] = useState<boolean>(false);
-
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-
     const [searchString, setSearchString] = useState<string>("");
     const [queryString, setQueryString] = useState<string>("");
     const containerRef = useRef(null);
-
-    const displayLeagueModal = () => {
-        setShowLeagueModal(true);
-    };
 
     const closeLeagueModal = () => {
         setShowLeagueModal(false);
@@ -94,6 +83,7 @@ export const Catalog = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                "",
                 user.initDataRaw
             );
 
@@ -144,6 +134,7 @@ export const Catalog = () => {
                 searchString,
                 positionList[positionIndex],
                 chosenLeagueType !== "ALL" ? [chosenLeagueType] : [],
+                "",
                 user.initDataRaw
             );
             setLeagueAthletes(res.docs);
@@ -159,22 +150,7 @@ export const Catalog = () => {
     }, [searchString, positionIndex, chosenLeagueType]);
 
     return (
-        <div className="mt-[4vw]">
-            <motion.div
-                className="mx-[4vw] mb-[4vw] h-[12vw] rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]"
-                {...slideRightAnimation}
-            >
-                <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw]">
-                    <input
-                        className="flex w-full bg-transparent font-russoone text-[3.5vw] font-normal text-white focus:outline-none"
-                        type="text"
-                        placeholder="Search Player..."
-                        maxLength={12}
-                        value={queryString}
-                        onChange={(e) => setQueryString(e.target.value)}
-                    ></input>
-                </div>
-            </motion.div>
+        <div>
             <div className="mt-[4vw] h-[193vw]">
                 {showLeagueModal && (
                     <LeagueModal
@@ -191,8 +167,8 @@ export const Catalog = () => {
                             positionList[positionIndex]
                         )}
                     />
-                    <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[11vw]">
-                        <div className="flex h-full w-[50%] items-center pl-[4vw]">
+                    <div className="absolute flex h-[25vw] w-full px-[4vw] pt-[12.5vw]">
+                        {/* <div className="flex h-full w-[50%] items-center pl-[4vw]">
                             <motion.p
                                 className="bg-gradient-to-r from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent"
                                 {...slideRightTextAnimation}
@@ -226,7 +202,24 @@ export const Catalog = () => {
                         <img
                             className="absolute bottom-0 left-0 w-full"
                             src={GoldLine}
-                        ></img>
+                        ></img> */}
+                        <motion.div
+                            className="mx-[4vw] h-[12vw] w-full rounded-[3vw] bg-gradient-to-b from-gold to-graydark px-[0.5vh] pt-[0.5vh]"
+                            {...slideRightAnimation}
+                        >
+                            <div className="flex h-full w-full rounded-[2.4vw] bg-graydark px-[4vw]">
+                                <input
+                                    className="flex w-full bg-transparent font-russoone text-[3.5vw] font-normal text-white focus:outline-none"
+                                    type="text"
+                                    placeholder="Search Player..."
+                                    maxLength={12}
+                                    value={queryString}
+                                    onChange={(e) =>
+                                        setQueryString(e.target.value)
+                                    }
+                                ></input>
+                            </div>
+                        </motion.div>
                     </div>
                     <div className="absolute mt-[29vw] flex h-[13vw] w-full justify-center gap-[5vw] px-[4vw]">
                         <button

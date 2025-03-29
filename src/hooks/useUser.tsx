@@ -50,6 +50,7 @@ interface State {
     referredBy: Referrer;
     skins: Skin[];
     country: string;
+    dreamTeamShareCounter: number;
 }
 
 interface Action {
@@ -81,7 +82,8 @@ interface Action {
         | "SET_REFERRAL_CODE"
         | "SET_REFERRED_BY"
         | "SET_SKINS"
-        | "SET_COUNTRY";
+        | "SET_COUNTRY"
+        | "SET_DREAM_TEAM_SHARE_COUNTER";
     payload?: Partial<State>;
 }
 
@@ -114,6 +116,7 @@ export interface UserContextValue {
     referredBy: Referrer;
     skins: Skin[];
     country: string;
+    dreamTeamShareCounter: number;
     initDataRaw: string;
     dispatch: React.Dispatch<Action>;
 }
@@ -147,6 +150,7 @@ const initialState: State = {
     referredBy: null,
     skins: [],
     country: "",
+    dreamTeamShareCounter: 0,
     initDataRaw: retrieveLaunchParams().initDataRaw,
 };
 
@@ -220,7 +224,8 @@ function reducer(state: State, action: Action): State {
             return {
                 ...state,
                 joinedTgCommunity:
-                    action.payload?.joinedTgCommunity ?? state.joinedTgCommunity,
+                    action.payload?.joinedTgCommunity ??
+                    state.joinedTgCommunity,
             };
         case "SET_JOINED_TG_CHANNEL":
             return {
@@ -284,37 +289,35 @@ function reducer(state: State, action: Action): State {
         case "SET_DREAM_TEAM":
             return {
                 ...state,
-                dreamTeam:
-                    action.payload?.dreamTeam ??
-                    state.dreamTeam,
+                dreamTeam: action.payload?.dreamTeam ?? state.dreamTeam,
             };
         case "SET_REFERRAL_CODE":
             return {
                 ...state,
                 referralCode:
-                    action.payload?.referralCode ??
-                    state.referralCode,
+                    action.payload?.referralCode ?? state.referralCode,
             };
         case "SET_REFERRED_BY":
             return {
                 ...state,
-                referredBy:
-                    action.payload?.referredBy ??
-                    state.referredBy,
+                referredBy: action.payload?.referredBy ?? state.referredBy,
             };
         case "SET_SKINS":
             return {
                 ...state,
-                skins:
-                    action.payload?.skins ??
-                    state.skins,
+                skins: action.payload?.skins ?? state.skins,
             };
         case "SET_COUNTRY":
             return {
                 ...state,
-                country:
-                    action.payload?.country ??
-                    state.country,
+                country: action.payload?.country ?? state.country,
+            };
+        case "SET_DREAM_TEAM_SHARE_COUNTER":
+            return {
+                ...state,
+                dreamTeamShareCounter:
+                    action.payload?.dreamTeamShareCounter ??
+                    state.dreamTeamShareCounter,
             };
         default:
             return state;
@@ -350,6 +353,7 @@ export const UserContext = createContext<UserContextValue>({
     referredBy: null,
     skins: [],
     country: "",
+    dreamTeamShareCounter: 0,
     initDataRaw: retrieveLaunchParams().initDataRaw,
     dispatch: () => undefined,
 });
@@ -432,7 +436,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     });
                     dispatch({
                         type: "SET_JOINED_TG_COMMUNITY",
-                        payload: { joinedTgCommunity: data["joinedTgCommunity"] },
+                        payload: {
+                            joinedTgCommunity: data["joinedTgCommunity"],
+                        },
                     });
                     dispatch({
                         type: "SET_JOINED_TG_CHANNEL",
@@ -500,6 +506,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         type: "SET_COUNTRY",
                         payload: {
                             country: data["country"],
+                        },
+                    });
+                    dispatch({
+                        type: "SET_DREAM_TEAM_SHARE_COUNTER",
+                        payload: {
+                            dreamTeamShareCounter:
+                                data["dreamTeamShareCounter"],
                         },
                     });
                 } catch (e) {

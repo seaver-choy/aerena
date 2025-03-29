@@ -31,9 +31,6 @@ export const PreviousScreen = () => {
 
     return (
         <Layout>
-            {/* sample button for back, needs useNavigate above */}
-            {/* <button onClick={() => navigate(-1)} className="text-black">Back</button> */}
-
             <Title title="Previous Tournaments" />
             {previousTournaments != null &&
                 previousTournaments.map((tournament) => (

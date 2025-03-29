@@ -17,7 +17,11 @@ interface TeamSliderProps {
     setCardIndex: (index: number) => void;
 }
 
-export const TeamSlider = ({ teams, cardIndex, setCardIndex }: TeamSliderProps) => {
+export const TeamSlider = ({
+    teams,
+    cardIndex,
+    setCardIndex,
+}: TeamSliderProps) => {
     const dragX = useMotionValue(0);
 
     const onDragEnd = () => {
@@ -79,7 +83,6 @@ export const TeamSlider = ({ teams, cardIndex, setCardIndex }: TeamSliderProps) 
                             <TeamCard
                                 color={teamColors}
                                 team={teamProfile.key}
-                                opacity={{ wave: teamColors.wave }}
                             />
                         </motion.div>
                     );

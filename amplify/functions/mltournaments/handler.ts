@@ -1,7 +1,12 @@
-import type { APIGatewayProxyHandler } from "aws-lambda";
+import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 
-import { mlTournamentSchema, teamProfileSchema } from "../../schema";
+import {
+    mlTournamentSchema,
+    scheduleSchema,
+    teamProfileSchema,
+    teamSchema,
+} from "../../schema";
 
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -19,11 +24,19 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
         conn.model("MLTournaments", mlTournamentSchema);
         conn.model("TeamProfiles", teamProfileSchema);
+        conn.model("Teams", teamSchema);
+        conn.model("Schedules", scheduleSchema);
     }
     if (event.path.includes("leagues")) {
         return getLeagues();
-    } if (event.path.includes("teamprofiles")) {
+    } else if (event.path.includes("countries")) {
+        return getCountries();
+    } else if (event.path.includes("filtered")) {
+        return getFilteredLeagues(event);
+    } else if (event.path.includes("teamprofiles")) {
         return getTeamProfiles();
+    } else if (event.path.includes("teams")) {
+        return getTeams(event);
     } else {
         switch (event.httpMethod) {
             default:
@@ -46,7 +59,9 @@ async function getLeagues() {
 
     try {
         const result = await mlTournamentModel
-            .find({isActiveFilter: true}).sort({endDate: -1}).select('code'); //TODO: currently is used for league filter in Catalog
+            .find({ isActiveFilter: true })
+            .sort({ endDate: -1 })
+            .select("code");
 
         if (!result) {
             return {
@@ -65,9 +80,7 @@ async function getLeagues() {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify(
-                [...new Set(result.map(item => item.code))]
-            ),
+            body: JSON.stringify([...new Set(result.map((item) => item.code))]),
         };
     } catch (e) {
         return {
@@ -87,8 +100,7 @@ async function getTeamProfiles() {
     const teamProfilesModel = conn!.model("TeamProfiles");
 
     try {
-        const result = await teamProfilesModel
-            .find();
+        const result = await teamProfilesModel.find();
 
         if (!result) {
             return {
@@ -122,4 +134,165 @@ async function getTeamProfiles() {
         };
     }
 }
+async function getCountries() {
+    const teamProfilesModel = conn!.model("TeamProfiles");
 
+    try {
+        const result = await teamProfilesModel.aggregate([
+            { $group: { _id: "$country" } },
+            { $sort: { _id: 1 } },
+        ]);
+        if (!result) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "No countries found" }),
+            };
+        }
+        const countries = result.map((item) => item._id);
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(countries),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get countries list: ${e}`,
+            }),
+        };
+    }
+}
+
+async function getFilteredLeagues(event: APIGatewayProxyEvent) {
+    const mlTournamentModel = conn!.model("MLTournaments");
+    try {
+        const country = event.queryStringParameters?.country;
+        const tournamentResult = await mlTournamentModel.aggregate([
+            {
+                $match: {
+                    code:
+                        country === "ALL"
+                            ? { $regex: /^(SPS|M\d+|MSC)/i }
+                            : { $regex: `^${country}`, $options: "i" },
+                },
+            },
+            {
+                $lookup: {
+                    from: "schedules",
+                    let: { code: "$code" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$$code", "$league"],
+                                },
+                            },
+                        },
+                    ],
+                    as: "scheduleInfo",
+                },
+            },
+            {
+                $unwind: "$scheduleInfo",
+            },
+            {
+                $sort: { endDate: -1 },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    code: 1,
+                },
+            },
+        ]);
+
+        if (!tournamentResult) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({
+                    message: "No leagues in schedule found",
+                }),
+            };
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify([
+                ...new Set(tournamentResult.map((item) => item.code)),
+            ]),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get league list: ${e}`,
+            }),
+        };
+    }
+}
+
+async function getTeams(event: APIGatewayProxyEvent) {
+    const teamModel = conn!.model("Teams");
+
+    try {
+        const leagueTypes = event
+            .queryStringParameters!.leagueTypes!.split(",")
+            .filter((type) => type !== "");
+        const result = await teamModel.find({ league: { $in: leagueTypes } });
+
+        if (!result) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                },
+                body: JSON.stringify({ message: "No teams found" }),
+            };
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify(result),
+        };
+    } catch (e) {
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: `Failed to get teams list: ${e}`,
+            }),
+        };
+    }
+}

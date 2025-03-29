@@ -1,8 +1,8 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useUsers } from "../../hooks/useUser";
 
-import FriendsIcon from "../../assets/icon/friends.svg";
-import QuestsIcon from "../../assets/icon/quests.svg";
+import ProfileIcon from "../../assets/icon/profile.svg";
+import NexusIcon from "../../assets/icon/nexus.svg";
 import PlayIcon from "../../assets/icon/play.svg";
 import CollectionIcon from "../../assets/icon/collection.svg";
 import ExchangeIcon from "../../assets/icon/exchange.svg";
@@ -10,11 +10,21 @@ import ExchangeIcon from "../../assets/icon/exchange.svg";
 export const NavBar = () => {
     const location = useLocation();
     const tabs = [
-        { id: "/friends", text: "Friends", Icon: FriendsIcon },
-        { id: "/quests", text: "Quests", Icon: QuestsIcon },
-        { id: "/", text: "Play", Icon: PlayIcon },
-        { id: "/collection", text: "Collection", Icon: CollectionIcon },
-        { id: "/exchange", text: "Exchange", Icon: ExchangeIcon },
+        { id: "/profile", text: "Profile", Icon: ProfileIcon, iconSize: "8vw" },
+        { id: "/nexus", text: "Nexus", Icon: NexusIcon, iconSize: "8vw" },
+        { id: "/", text: "Play", Icon: PlayIcon, iconSize: "8vw" },
+        {
+            id: "/collection",
+            text: "Collection",
+            Icon: CollectionIcon,
+            iconSize: "8vw",
+        },
+        {
+            id: "/exchange",
+            text: "Exchange",
+            Icon: ExchangeIcon,
+            iconSize: "8vw",
+        },
     ];
     const user = useUsers();
 
@@ -38,11 +48,11 @@ export const NavBar = () => {
                                     key={tab.id}
                                 >
                                     <img
-                                        className="h-[6vw]"
+                                        className={`h-[${tab.iconSize}]`}
                                         src={tab.Icon}
                                         alt=""
                                     ></img>
-                                    <p className="pt-[1vw] text-center font-montserrat text-[2.5vw] text-graydark">
+                                    <p className="pt-[0.5vw] text-center font-montserrat text-[2.5vw] text-graydark">
                                         {tab.text}
                                     </p>
                                 </Link>

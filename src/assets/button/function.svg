@@ -1,1 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="250" height="100" fill="none" xmlns:v="https://vecta.io/nano"><path d="M217 100H33L0 50 33 0h184l33 50-33 50z" fill="url(#A)"/><g fill-rule="evenodd"><path d="M22 43l22-32h60 102l22 32h-3l-20-29-101 .114L45 14 25 43h-3z" fill="url(#B)"/><path d="M22 57l22 32h60 102l22-32h-3l-20 29-101-.114L45 86 25 57h-3z" fill="url(#C)"/></g><path d="M26 41l-9 9 9 9 9-9-9-9z" fill="url(#D)"/><path d="M224 41l-9 9 9 9 9-9-9-9z" fill="url(#E)"/><defs><linearGradient id="A" x1="399.236" y1="94.138" x2="322.39" y2="-69.858" href="#F"><stop stop-color="#ffba39"/><stop offset=".279" stop-color="#d8a956"/><stop offset=".629" stop-color="#ab750f"/></linearGradient><linearGradient id="B" x1="23" y1="27.211" x2="227" y2="27.211" href="#F"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".516" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="C" x1="23" y1="72.789" x2="227" y2="72.789" href="#F"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".516" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="D" x1="26" y1="41" x2="26" y2="59" href="#F"><stop stop-color="#f5f1ee"/><stop offset="1" stop-color="#d8a956"/></linearGradient><linearGradient id="E" x1="224" y1="41" x2="224" y2="59" href="#F"><stop stop-color="#f5f1ee"/><stop offset="1" stop-color="#d8a956"/></linearGradient><linearGradient id="F" gradientUnits="userSpaceOnUse"/></defs></svg>
+<svg width="250" height="100" viewBox="0 0 250 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="function">
+<g id="shape">
+<path d="M217 100L33 100L-4.35954e-06 50L33 3.428e-05L217 4.10396e-05L250 50L217 100Z" fill="#CB9A40"/>
+<path d="M217 100L33 100L-4.35954e-06 50L33 3.428e-05L217 4.10396e-05L250 50L217 100Z" fill="url(#paint0_linear_3464_5840)"/>
+</g>
+<g id="Mask group">
+<mask id="mask0_3464_5840" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="250" height="100">
+<path id="shape_2" d="M217 100L33 100L-4.35954e-06 50L33 3.428e-05L217 4.10396e-05L250 50L217 100Z" fill="#CB9A40"/>
+</mask>
+<g mask="url(#mask0_3464_5840)">
+<path id="Vector 483" d="M23 22.5L49 -15H166L135 33L191.5 36L236.5 62.5L202 110.5L151.5 114.5L143.5 70L74.5 74V43.5L23 22.5Z" fill="black" fill-opacity="0.05"/>
+</g>
+</g>
+<path id="shape (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M214.847 96L245.207 50L214.847 4.00004L35.1527 4.00003L4.79266 50L35.1527 96L214.847 96ZM33 100L217 100L250 50L217 4.10396e-05L33 3.428e-05L-4.35954e-06 50L33 100Z" fill="#D8A956"/>
+<path id="shape (Stroke) (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M250 50L217 100L33 100L1.08992e-05 50L33 3.428e-05L217 4.10396e-05L250 50ZM245.207 50L214.847 4.00004L35.1527 4.00003L4.79267 50L35.1527 96L214.847 96L245.207 50ZM212.695 92L245.207 50L214.847 4.00004L35.1527 4.00003L4.79267 50L37.3054 92L212.695 92ZM217 100L33 100L1.08992e-05 50L33 3.428e-05L217 4.10396e-05L250 50L217 100Z" fill="#99690F"/>
+<path id="Vector 487" d="M38.0835 75.9129L21 65.3582L38.4999 89.8531L49.0984 74.8308L38.0835 75.9129Z" fill="white" fill-opacity="0.1"/>
+<path id="Vector 486" d="M211.394 7C215.866 14.9671 225.123 28.926 225.123 28.926L218.358 36.4577L211.394 7Z" fill="white" fill-opacity="0.1"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_3464_5840" x1="243.59" y1="96.5" x2="71.2594" y2="-38.7456" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB750F"/>
+<stop offset="0.544722" stop-color="#EEBB60"/>
+<stop offset="1" stop-color="#AB750F"/>
+</linearGradient>
+</defs>
+</svg>

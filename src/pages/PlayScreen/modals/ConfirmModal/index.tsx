@@ -12,19 +12,19 @@ import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-gold.svg";
 
 interface ConfirmModalProps {
-    onClose: () => void;
     onConfirm: () => void;
     loading: boolean;
     tournamentType?: string;
     joinCost?: number;
+    onClose: () => void;
 }
 
 export const ConfirmModal = ({
-    onClose,
     onConfirm,
     loading,
     tournamentType = null,
     joinCost = 0,
+    onClose,
 }: ConfirmModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -89,7 +89,7 @@ export const ConfirmModal = ({
                             >
                                 <img className="h-full" src={WhiteButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[2.8vw] font-normal text-transparent">
+                                    <p className="-mt-[0.4vw] bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[3.2vw] font-normal text-transparent">
                                         Cancel
                                     </p>
                                 </div>
@@ -102,7 +102,7 @@ export const ConfirmModal = ({
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                    <p className="-mt-[0.4vw] font-russoone text-[3.2vw] font-normal text-white">
                                         Confirm
                                     </p>
                                 </div>

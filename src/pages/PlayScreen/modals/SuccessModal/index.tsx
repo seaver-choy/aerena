@@ -9,15 +9,15 @@ import SmallModal from "../../../../assets/modal/small.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
 
 interface SuccessModalProps {
-    onClose: () => void;
     title: string;
     message: string;
+    onClose: () => void;
 }
 
 export const SuccessModal = ({
-    onClose,
     title,
     message,
+    onClose,
 }: SuccessModalProps) => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -65,7 +65,7 @@ export const SuccessModal = ({
                             >
                                 <img className="h-full" src={GoldButton} />
                                 <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                    <p className="mt-[0.2vw] font-russoone text-[2.8vw] font-normal text-white">
+                                    <p className="-mt-[0.4vw] font-russoone text-[3.2vw] font-normal text-white">
                                         Okay
                                     </p>
                                 </div>

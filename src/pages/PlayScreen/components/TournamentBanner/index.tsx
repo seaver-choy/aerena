@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
 import { useUsers } from "../../../../hooks/useUser";
+import { motion } from "motion/react";
 import {
     isTournamentClosed,
     isTournamentUpcoming,
 } from "../../../../hooks/dates";
-import { Tournament } from "../../../../helpers/interfaces";
-import {
-    getOngoingTournaments,
-    getLatestPreviousTournament,
-} from "../../../../helpers/lambda.helper";
-import { getStickerImage } from "../../../../helpers/images";
 import {
     appearAnimation,
     appearTextAnimation,
     pulseAnimation,
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
+import { sortList } from "../../../../helpers/athletes";
+import { Tournament } from "../../../../helpers/interfaces";
+import {
+    getOngoingTournaments,
+    getLatestPreviousTournament,
+} from "../../../../helpers/lambda.helper";
+import { getStickerImage } from "../../../../helpers/images";
 import { LeagueModal } from "../../modals/LeagueModal";
 
 import TournamentSonner from "../../../../assets/sonner/tournament.svg";
@@ -29,7 +30,6 @@ import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
 import Closed from "../../../../assets/others/closed.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
-import { sortList } from "../../../../helpers/athletes";
 
 interface TournamentBannerProps {
     ongoingTournament: Tournament;
@@ -77,7 +77,10 @@ export const TournamentBanner = ({
                         playTab.split(" ")[1],
                         user.initDataRaw
                     );
-                const sortedResult = sortList(previousTournamentResult, user.country);
+                const sortedResult = sortList(
+                    previousTournamentResult,
+                    user.country
+                );
                 setOngoingTournaments(sortList(sortedResult, user.country));
                 setOngoingTournament(sortedResult[0]);
             }
@@ -309,7 +312,7 @@ export const TournamentBanner = ({
                                 >
                                     <img className="h-full" src={GoldButton} />
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="mt-[0.2vw] font-russoone text-[2.6vw] font-normal text-white">
+                                        <p className="font-russoone text-[2.8vw] font-normal text-white">
                                             View Details
                                         </p>
                                     </div>

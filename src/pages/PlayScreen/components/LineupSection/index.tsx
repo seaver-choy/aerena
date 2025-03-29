@@ -19,9 +19,10 @@ import {
     isTournamentUpcoming,
 } from "../../../../hooks/dates";
 import { initInvoice } from "@telegram-apps/sdk-react";
+import { FunctionSection } from "../../../../components/FunctionSection";
 import { Lineup } from "../Lineup";
-import { LineupTitle } from "../LineupTitle";
 import { ConfirmModal } from "../../modals/ConfirmModal";
+import { NameModal } from "../../modals/NameModal";
 import { SuccessModal } from "../../modals/SuccessModal";
 import { ErrorModal } from "../../modals/ErrorModal";
 import { LoadingModal } from "../../modals/LoadingModal";
@@ -32,22 +33,18 @@ import LuckyPickIcon from "../../../../assets/icon/lucky-pick.svg";
 import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
 import BattlePointsIcon from "../../../../assets/icon/battle-points-white.svg";
 import LockedIcon from "../../../../assets/icon/locked.svg";
-import { NameModal } from "../../modals/NameModal";
 
 interface LineupSectionProps {
     ongoingTournament: Tournament;
     updateLineup: (ongoingTournament: Tournament) => void;
     showTournament: boolean;
-    // playTab: string;
 }
 
 export const LineupSection = ({
     ongoingTournament,
     updateLineup,
     showTournament,
-    // playTab,
 }: LineupSectionProps) => {
-    // const [showAfterTimer, setShowAfterTimer] = useState<boolean>(false);
     const user = useUsers();
     const positionList =
         ongoingTournament !== null
@@ -335,14 +332,19 @@ export const LineupSection = ({
                 {loading && <LoadingModal />}
                 <div className="relative flex justify-center">
                     <img className="h-full w-full" src={LineupBackground} />
-                    <LineupTitle />
+                    <div className="absolute top-[4vw] flex h-[20vw] w-full justify-center px-[0.5vw]">
+                        <FunctionSection
+                            title="Fantasy Lineup"
+                            showRegionButton={false}
+                            showLeagueButton={false}
+                        />
+                    </div>
                     <Lineup
                         key={
                             ongoingTournament != null
                                 ? ongoingTournament.tournamentId
                                 : 0
                         }
-                        // playTab={playTab}
                         athleteSkins={athleteSkins}
                         tournament={ongoingTournament}
                         tournamentLineup={tournamentLineup}
@@ -373,27 +375,27 @@ export const LineupSection = ({
                                 </div>
                             ) : ongoingTournament.type === "basic" ? (
                                 <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        className="-mt-[0.4vw] h-[3vw]"
                                         src={BattlePointsIcon}
                                     ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}
                                     </p>
                                 </div>
                             ) : (
                                 <div className="absolute flex h-full w-full items-center justify-center">
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         JOIN FOR&nbsp;
                                     </p>
                                     <img
-                                        className="mt-[0.1vw] h-[2.5vw]"
+                                        className="-mt-[0.8vw] h-[3vw]"
                                         src={TGStarIcon}
                                     ></img>
-                                    <p className="pt-[0.6vw] font-russoone text-[3vw] text-white">
+                                    <p className="font-russoone text-[3.4vw] text-white">
                                         &nbsp;{ongoingTournament.joinCost}
                                     </p>
                                 </div>
