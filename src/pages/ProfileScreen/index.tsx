@@ -15,11 +15,10 @@ export const ProfileScreen = () => {
             <Tabs
                 options={profileOptions}
                 onToggle={(selected) => {
-                    // if (selected !== "Favorites")
-                    //temporary in disabling Favorites; comment together with the line in Tabs to enable
                     setProfileTab(selected);
                 }}
                 selectedTab={profileTab}
+                disabled={true} //TODO: temporary
             />
             {profileTab === "Friends" && <FriendsSection />}
             {profileTab === "Favorites" && <DreamTeamSection />}
