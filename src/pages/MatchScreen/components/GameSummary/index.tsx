@@ -60,7 +60,9 @@ export const GameSummary = ({
                                 className="mt-[2vw]"
                                 {...appearTextAnimation}
                             >
-                                {schedule.score1 == schedule.boType - 1 ? (
+                                {team1Stats.players.some(
+                                    (player) => player.stats?.teamWon === true
+                                ) ? (
                                     <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
                                         VICTORY
                                     </p>
@@ -115,7 +117,9 @@ export const GameSummary = ({
                                 className="mt-[2vw]"
                                 {...appearTextAnimation}
                             >
-                                {schedule.score2 == schedule.boType - 1 ? (
+                                {team2Stats.players.some(
+                                    (player) => player.stats?.teamWon === true
+                                ) ? (
                                     <p className="bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-russoone text-[4vw] font-normal text-transparent will-change-transform backface-hidden">
                                         VICTORY
                                     </p>
