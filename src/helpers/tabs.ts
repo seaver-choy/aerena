@@ -9,6 +9,14 @@ export const athleteOptions = [
     "Global Stats",
     "Card Skins",
 ];
-export const matchOptions = ["Game 1", "Game 2", "Game 3"];
+export const matchOptions = [
+    "Game 1",
+    "Game 2",
+    "Game 3",
+    "Game 4",
+    "Game 5",
+    "Game 6",
+    "Game 7",
+];
 export const gameOptions = ["Team 1", "Summary", "Team 2"];
 export const rankingsOptions = ["Kills", "Assists", "KDA", "MVP", "Points"];

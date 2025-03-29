@@ -84,11 +84,12 @@ export const MatchScreen = () => {
         <Layout>
             <MatchBanner schedule={schedule} teams={teams} noButton={true} />
             <Tabs
-                options={
-                    schedule.score1 + schedule.score2 < 3
-                        ? matchOptions.slice(0, 2)
-                        : matchOptions
-                }
+                options={matchOptions.slice(
+                    0,
+                    schedule.score1 == 0 && schedule.score2 == 0
+                        ? Math.floor(schedule.boType / 2) + 1
+                        : schedule.score1 + schedule.score2
+                )}
                 onToggle={(selected) => {
                     setMatchTab(selected);
                 }}

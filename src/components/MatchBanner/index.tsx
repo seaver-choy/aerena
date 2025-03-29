@@ -116,11 +116,13 @@ export const MatchBanner = ({
                         >
                             {Array.from({
                                 length:
-                                    schedule.boType / 2 + 1 - schedule.score1,
+                                    Math.floor(schedule.boType / 2) +
+                                    1 -
+                                    schedule.score1,
                             }).map((_, index) => (
                                 <img
                                     key={`lose-${schedule.team1}-${index}`}
-                                    className={`${schedule.score1 < schedule.boType / 2 + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
+                                    className={`${schedule.score1 < Math.floor(schedule.boType / 2) + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
                                     src={LoseLeft}
                                 />
                             ))}
@@ -128,7 +130,7 @@ export const MatchBanner = ({
                                 (_, index) => (
                                     <img
                                         key={`win-${schedule.team1}-${index}`}
-                                        className={`${schedule.score1 == schedule.boType / 2 + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
+                                        className={`${schedule.score1 == Math.floor(schedule.boType / 2) + 1 && index == 0 ? "" : "-ml-[2vw]"} h-full will-change-transform backface-hidden`}
                                         src={WinLeft}
                                     />
                                 )
@@ -162,7 +164,9 @@ export const MatchBanner = ({
                             )}
                             {Array.from({
                                 length:
-                                    schedule.boType / 2 + 1 - schedule.score2,
+                                    Math.floor(schedule.boType / 2) +
+                                    1 -
+                                    schedule.score2,
                             }).map((_, index) => (
                                 <img
                                     key={`lose-${schedule.team2}-${index}`}
