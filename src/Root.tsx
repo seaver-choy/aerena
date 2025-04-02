@@ -29,10 +29,6 @@ if(import.meta.env.VITE_ENVIRONMENT == "prod") {
     });
 }
 
-console.log(process.env.ENVIRONMENT)
-console.log(TelegramAnalytics)
-
-
 const Inner: FC = () => {
     const debug = useLaunchParams().startParam === "debug";
     const manifestUrl = useMemo(() => {
