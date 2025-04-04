@@ -55,7 +55,9 @@ export const Tabs = ({
                             alt=""
                         />
                     )}
-                    <p className="mt-[0.4vw] text-center font-russoone text-[3.5vw] font-normal leading-tight">
+                    <p
+                        className={`mt-[0.4vw] text-center font-russoone ${options.length > 5 ? "text-[2.5vw]" : "text-[3.5vw]"} font-normal leading-tight`}
+                    >
                         {option}
                     </p>
                 </motion.div>

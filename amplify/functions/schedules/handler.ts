@@ -135,11 +135,20 @@ async function getNearestSchedules(event: APIGatewayProxyEvent) {
 
     try {
         const league = event.queryStringParameters!.league;
-        const currentDate = new Date();
-        const weekResult = await scheduleModel.findOne({
-            league: league,
-            matchDate: { $gt: currentDate },
-        });
+        const currentDate = new Date().toISOString().split("T")[0];
+
+        const weekResult = await scheduleModel.findOne(
+            {
+                league: league,
+                matchDate: {
+                    $gte: currentDate,
+                },
+            },
+            null,
+            {
+                sort: { matchDate: 1 },
+            }
+        );
 
         if (!weekResult) {
             throw new Error("No upcoming matches found");
