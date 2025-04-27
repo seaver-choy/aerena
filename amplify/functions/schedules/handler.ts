@@ -790,7 +790,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     {
                         $match: {
                             league: league,
-                            day:
+                            week:
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
@@ -869,7 +869,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     {
                         $match: {
                             league: league,
-                            day:
+                            week:
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
@@ -948,7 +948,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     {
                         $match: {
                             league: league,
-                            day:
+                            week:
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
