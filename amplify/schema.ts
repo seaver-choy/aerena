@@ -2,14 +2,13 @@ import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
 export const tokenSchema = new mongoose.Schema({
-    tokenId: String,
     athleteId: Number,
     player: String,
     displayName: String,
     team: String,
     position: [String],
     img: String,
-    athleteScore: Number,
+    athleteScore: { type: Number, default: 0 },
     league: String,
     skin: {
         skinId: String,
@@ -360,6 +359,7 @@ export const matchStatsSchema = new mongoose.Schema(
         isMVP: Boolean,
         teamWon: Boolean,
         game: Number,
+        week: Number,
         day: Number,
         match_id: String,
         league: String,
