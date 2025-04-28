@@ -301,11 +301,13 @@ export const Rankings = () => {
                             {weekInfos.map((weekInfo, index) => (
                                 <button
                                     key={index}
-                                    className={`items-center justify-center ${index == weekIndex ? "bg-graydark" : ""} px-[2vw]`}
-                                    onClick={() => changeSchedule(index)}
+                                    className={`items-center justify-center ${weekInfo.week == weekIndex ? "bg-graydark" : ""} px-[2vw]`}
+                                    onClick={() =>
+                                        changeSchedule(weekInfo.week)
+                                    }
                                 >
                                     <motion.p
-                                        className={`text-nowrap font-russoone text-[3.5vw] ${index == weekIndex ? "text-white" : "text-gold"}`}
+                                        className={`text-nowrap font-russoone text-[3.5vw] ${weekInfo.week == weekIndex ? "text-white" : "text-gold"}`}
                                         {...appearTextAnimation}
                                     >
                                         {weekInfo.week == 0

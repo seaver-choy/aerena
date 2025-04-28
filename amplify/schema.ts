@@ -359,6 +359,7 @@ export const matchStatsSchema = new mongoose.Schema(
         isMVP: Boolean,
         teamWon: Boolean,
         game: Number,
+        week: Number,
         day: Number,
         match_id: String,
         league: String,

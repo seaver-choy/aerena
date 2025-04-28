@@ -501,6 +501,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                             league: {
                                 $regex: `^${league}`,
                             },
+                            playoffs: false,
                         },
                     },
                     {
@@ -584,6 +585,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                             league: {
                                 $regex: `^${league}`,
                             },
+                            playoffs: false,
                         },
                     },
                     {
@@ -667,6 +669,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                             league: {
                                 $regex: `^${league}`,
                             },
+                            playoffs: false,
                         },
                     },
                     {
@@ -794,6 +797,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
+                            playoffs:
+                                week === "0" || week === ""
+                                    ? false
+                                    : { $exists: true },
                         },
                     },
                     {
@@ -873,6 +880,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
+                            playoffs:
+                                week === "0" || week === ""
+                                    ? false
+                                    : { $exists: true },
                         },
                     },
                     {
@@ -952,6 +963,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                                 week === "0" || week === ""
                                     ? { $exists: true }
                                     : parseInt(week!),
+                            playoffs:
+                                week === "0" || week === ""
+                                    ? false
+                                    : { $exists: true },
                         },
                     },
                     {
