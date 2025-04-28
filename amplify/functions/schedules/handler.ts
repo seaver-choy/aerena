@@ -456,7 +456,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     _id: "$athleteId",
                     player: { $first: "$player" },
                     team: { $first: "$team" },
-                    league: { $first: "$league" },
+                    league: {
+                        $first:
+                            league!.length == 2 ? "$tournamentCode" : "$league",
+                    },
                     teamInfo: { $first: "$teamInfo" },
                     mvpCount: { $sum: { $cond: ["$isMVP", 1, 0] } },
                 },
@@ -467,7 +470,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     _id: "$athleteId",
                     player: { $first: "$player" },
                     team: { $first: "$team" },
-                    league: { $first: "$league" },
+                    league: {
+                        $first:
+                            league!.length == 2 ? "$tournamentCode" : "$league",
+                    },
                     teamInfo: { $first: "$teamInfo" },
                     [statType]: { $sum: `$${statType}` },
                 },
@@ -477,7 +483,10 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                 _id: "$athleteId",
                 player: { $first: "$player" },
                 team: { $first: "$team" },
-                league: { $first: "$league" },
+                league: {
+                    $first: league!.length == 2 ? "$tournamentCode" : "$league",
+                },
+                tournamentCode: { $first: "$tournamentCode" },
                 teamInfo: { $first: "$teamInfo" },
                 [statType]: { $avg: `$${statType}` },
             },
@@ -487,7 +496,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                 _id: "$athleteId",
                 player: "$player",
                 team: "$team",
-                league: "$league",
+                league: league!.length == 2 ? "$tournamentCode" : "$league",
                 teamInfo: "$teamInfo",
                 [statType]: `$${statType}`,
             },
@@ -506,22 +515,62 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     },
                     {
                         $lookup: {
+                            from: "athleteprofiles",
+                            let: { athleteId: "$athleteId" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ["$athleteId", "$$athleteId"],
+                                        },
+                                    },
+                                },
+                                {
+                                    $limit: 1,
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        latestTournamentCode:
+                                            "$latestTournament.code",
+                                    },
+                                },
+                            ],
+                            as: "athleteProfileData",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            tournamentCode: {
+                                $arrayElemAt: [
+                                    "$athleteProfileData.latestTournamentCode",
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
                             from: "teams",
                             let: {
-                                team: "$team",
-                                league: "$league",
                                 athleteId: "$athleteId",
+                                tournamentCode: "$tournamentCode",
                             },
                             pipeline: [
                                 {
                                     $match: {
                                         $expr: {
                                             $and: [
-                                                { $eq: ["$key", "$$team"] },
                                                 {
                                                     $eq: [
                                                         "$league",
-                                                        "$$league",
+                                                        "$$tournamentCode",
+                                                    ],
+                                                },
+                                                {
+                                                    $in: [
+                                                        "$$athleteId",
+                                                        "$players.athleteId",
                                                     ],
                                                 },
                                             ],
@@ -590,22 +639,62 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     },
                     {
                         $lookup: {
+                            from: "athleteprofiles",
+                            let: { athleteId: "$athleteId" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ["$athleteId", "$$athleteId"],
+                                        },
+                                    },
+                                },
+                                {
+                                    $limit: 1,
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        latestTournamentCode:
+                                            "$latestTournament.code",
+                                    },
+                                },
+                            ],
+                            as: "athleteProfileData",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            tournamentCode: {
+                                $arrayElemAt: [
+                                    "$athleteProfileData.latestTournamentCode",
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
                             from: "teams",
                             let: {
-                                team: "$team",
-                                league: "$league",
                                 athleteId: "$athleteId",
+                                tournamentCode: "$tournamentCode",
                             },
                             pipeline: [
                                 {
                                     $match: {
                                         $expr: {
                                             $and: [
-                                                { $eq: ["$key", "$$team"] },
                                                 {
                                                     $eq: [
                                                         "$league",
-                                                        "$$league",
+                                                        "$$tournamentCode",
+                                                    ],
+                                                },
+                                                {
+                                                    $in: [
+                                                        "$$athleteId",
+                                                        "$players.athleteId",
                                                     ],
                                                 },
                                             ],
@@ -674,22 +763,62 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                     },
                     {
                         $lookup: {
+                            from: "athleteprofiles",
+                            let: { athleteId: "$athleteId" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ["$athleteId", "$$athleteId"],
+                                        },
+                                    },
+                                },
+                                {
+                                    $limit: 1,
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        latestTournamentCode:
+                                            "$latestTournament.code",
+                                    },
+                                },
+                            ],
+                            as: "athleteProfileData",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            tournamentCode: {
+                                $arrayElemAt: [
+                                    "$athleteProfileData.latestTournamentCode",
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
                             from: "teams",
                             let: {
-                                team: "$team",
-                                league: "$league",
                                 athleteId: "$athleteId",
+                                tournamentCode: "$tournamentCode",
                             },
                             pipeline: [
                                 {
                                     $match: {
                                         $expr: {
                                             $and: [
-                                                { $eq: ["$key", "$$team"] },
                                                 {
                                                     $eq: [
                                                         "$league",
-                                                        "$$league",
+                                                        "$$tournamentCode",
+                                                    ],
+                                                },
+                                                {
+                                                    $in: [
+                                                        "$$athleteId",
+                                                        "$players.athleteId",
                                                     ],
                                                 },
                                             ],
@@ -742,6 +871,7 @@ async function getRankingStats(event: APIGatewayProxyEvent) {
                                 player: "$player",
                                 team: "$team",
                                 league: "$league",
+                                tournamentCode: "$tournamentCode",
                                 statTypeValue: `$${statType}`,
                             },
                             doc: { $first: "$$ROOT" },
