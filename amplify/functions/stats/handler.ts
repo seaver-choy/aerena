@@ -1,11 +1,11 @@
-import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import {
+    athleteProfileSchema,
     athleteSchema,
     matchStatsSchema,
-    totalStatsSchema,
-    athleteProfileSchema,
     mlTournamentSchema,
+    totalStatsSchema,
 } from "../../schema";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
@@ -227,7 +227,7 @@ async function getLeagueWeeks(event: APIGatewayProxyEvent) {
         try {
             const league = decodeURIComponent(params[0]);
 
-            const weeks = await statsModel.distinct("day", {
+            const weeks = await statsModel.distinct("week", {
                 league: league,
                 playoffs: false,
             });
