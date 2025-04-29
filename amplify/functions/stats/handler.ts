@@ -317,7 +317,7 @@ async function getAthleteWeeklyStats(event: APIGatewayProxyEvent) {
                 inputType = {
                     athleteId: parseInt(params[0]),
                     league: league,
-                    day: parseInt(params[2]),
+                    week: parseInt(params[2]),
                 };
             }
 
