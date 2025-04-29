@@ -1,13 +1,13 @@
-import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { AthleteDocument } from "../../interface";
 import {
-    userSchema,
+    athleteProfileSchema,
     athleteSchema,
     teamSchema,
-    athleteProfileSchema,
+    userSchema,
 } from "../../schema";
-import { AthleteDocument } from "../../interface";
 let conn: Connection | null = null;
 const uri = process.env.MONGODB_URI!;
 
@@ -186,11 +186,11 @@ async function getPaginatedAthletes(event: APIGatewayProxyEvent) {
                         $regex: searchString,
                         $options: "i",
                     },
-                    league: {
-                        $in: leagueTypes,
-                    },
                     position: {
                         $regex: position === "All" ? "" : position,
+                    },
+                    league: {
+                        $in: leagueTypes,
                     },
                 },
             },
