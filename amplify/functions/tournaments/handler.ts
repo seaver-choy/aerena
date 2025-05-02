@@ -1,6 +1,11 @@
 import type { APIGatewayProxyHandler, APIGatewayProxyEvent } from "aws-lambda";
 import mongoose, { Connection } from "mongoose";
-import { tournamentSchema, userSchema, athleteSchema, mlTournamentSchema } from "../../schema";
+import {
+    tournamentSchema,
+    userSchema,
+    athleteSchema,
+    mlTournamentSchema,
+} from "../../schema";
 import { MLTournament, TournamentDocument } from "../../interface";
 import paginate from "mongoose-paginate-v2";
 let conn: Connection | null = null;
@@ -385,12 +390,13 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        const result = await tournamentModel.find({
-            type: type,
-            tournamentStartSubmissionDate: { $lte: currentDate },
-            tournamentEndSubmissionDate: { $gt: currentDate }
-        })
-        .sort({ tournamentEndSubmissionDate: -1 });
+        const result = await tournamentModel
+            .find({
+                type: type,
+                tournamentStartSubmissionDate: { $lte: currentDate },
+                tournamentEndSubmissionDate: { $gt: currentDate },
+            })
+            .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Ongoing tournaments not found in database.`
@@ -405,15 +411,18 @@ async function getOngoingTournaments(event: APIGatewayProxyEvent) {
                     message: "No ongoing tournaments found",
                 }),
             };
-        } else if(result.length != 0) {
+        } else if (result.length != 0) {
             const previousResult = await tournamentModel.find({
                 type: type,
                 tournamentStartSubmissionDate: { $lte: currentDate },
                 tournamentEndSubmissionDate: { $lt: currentDate },
                 resultsTallied: false,
-            })
+            });
 
-            const finalResult = previousResult.length > 0 ? [...result, ...previousResult] : result;
+            const finalResult =
+                previousResult.length > 0
+                    ? [...result, ...previousResult]
+                    : result;
             return {
                 statusCode: 200,
                 headers: {
@@ -456,50 +465,60 @@ async function getLatestPreviousTournament(event: APIGatewayProxyEvent) {
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        const activeFilters = await mlTournamentModel.find({ isActiveFilter: true });
+        const activeFilters = await mlTournamentModel.find({
+            isActiveFilter: true,
+        });
 
         const getNearestForFilter = async (filter: MLTournament) => {
-            const upcoming = await tournamentModel.findOne({
-                type: type,
-                tournamentStartSubmissionDate: { $gt: currentDate },
-                league: filter.code
-            })
-            .sort({ tournamentStartSubmissionDate: 1 });
+            const upcoming = await tournamentModel
+                .findOne({
+                    type: type,
+                    tournamentStartSubmissionDate: { $gt: currentDate },
+                    league: filter.code,
+                })
+                .sort({ tournamentStartSubmissionDate: 1 });
 
             let previous;
-            if(!upcoming) {
-                previous = await tournamentModel.findOne({
-                    type: type,
-                    tournamentEndSubmissionDate: { $lt: currentDate },
-                    resultsTallied: true,
-                    league: filter.code
-                })
-                .sort({ tournamentEndSubmissionDate: -1 });
-            }
-            else {
-                previous = await tournamentModel.findOne({
-                    type: type,
-                    tournamentEndSubmissionDate: { $lt: currentDate },
-                    resultsTallied: false,
-                    league: filter.code
-                }).sort({ tournamentEndSubmissionDate: -1 });
+            if (!upcoming) {
+                previous = await tournamentModel
+                    .findOne({
+                        type: type,
+                        tournamentEndSubmissionDate: { $lt: currentDate },
+                        league: filter.code,
+                    })
+                    .sort({ tournamentEndSubmissionDate: -1 });
+            } else {
+                previous = await tournamentModel
+                    .findOne({
+                        type: type,
+                        tournamentEndSubmissionDate: { $lt: currentDate },
+                        resultsTallied: false,
+                        league: filter.code,
+                    })
+                    .sort({ tournamentEndSubmissionDate: -1 });
             }
 
             return { filter, upcoming, previous };
         };
 
-        const results = await Promise.all(activeFilters.map(filter => getNearestForFilter(filter)));
+        const results = await Promise.all(
+            activeFilters.map((filter) => getNearestForFilter(filter))
+        );
 
-        let finalResult = results.flatMap(r => [r.upcoming, r.previous]).filter(tournament => tournament !== null);
-        if(finalResult.length == 0) {
-            finalResult = await tournamentModel.find({
-                type: type,
-                tournamentEndSubmissionDate: { $lt: currentDate },
-                resultsTallied: true,
-            })
-            .sort({ tournamentEndSubmissionDate: -1 }).limit(1);
+        let finalResult = results
+            .flatMap((r) => [r.upcoming, r.previous])
+            .filter((tournament) => tournament !== null);
+        if (finalResult.length == 0) {
+            finalResult = await tournamentModel
+                .find({
+                    type: type,
+                    tournamentEndSubmissionDate: { $lt: currentDate },
+                    resultsTallied: true,
+                })
+                .sort({ tournamentEndSubmissionDate: -1 })
+                .limit(1);
         }
-        
+
         if (!finalResult) {
             console.error(
                 `[ERROR][TOURNAMENT] Previous latest tournament not found in database.`
@@ -546,12 +565,13 @@ async function getPreviousTournaments(event: APIGatewayProxyEvent) {
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        const result = await tournamentModel.find({
-            type: type,
-            tournamentEndSubmissionDate: { $lt: currentDate },
-            resultsTallied: true,
-        })
-        .sort({ tournamentEndSubmissionDate: -1 });
+        const result = await tournamentModel
+            .find({
+                type: type,
+                tournamentEndSubmissionDate: { $lt: currentDate },
+                resultsTallied: true,
+            })
+            .sort({ tournamentEndSubmissionDate: -1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Previous tournaments not found in database.`
@@ -598,11 +618,12 @@ async function getUpcomingTournaments(event: APIGatewayProxyEvent) {
     try {
         const type = event.queryStringParameters?.type;
         const currentDate = new Date();
-        const result = await tournamentModel.find({
-            type: type,
-            tournamentStartSubmissionDate: { $gt: currentDate },
-        })
-        .sort({ tournamentStartSubmissionDate: 1 });
+        const result = await tournamentModel
+            .find({
+                type: type,
+                tournamentStartSubmissionDate: { $gt: currentDate },
+            })
+            .sort({ tournamentStartSubmissionDate: 1 });
         if (!result) {
             console.error(
                 `[ERROR][TOURNAMENT] Upcoming tournaments not found in database.`
@@ -663,35 +684,34 @@ async function getTournamentResults(event: APIGatewayProxyEvent) {
                 body: JSON.stringify({ message: "Tournament not found" }),
             };
         }
-        const usersJoined = result.usersJoined.sort((a: UserJoined, b: UserJoined) => b.score - a.score);;
+        const usersJoined = result.usersJoined.sort(
+            (a: UserJoined, b: UserJoined) => b.score - a.score
+        );
         const rankings = [];
-        let currentScore = -1, currentRankingIndex = -1;
-        for(let i = 0; i < usersJoined.length; i++){
+        let currentScore = -1,
+            currentRankingIndex = -1;
+        for (let i = 0; i < usersJoined.length; i++) {
             const currentUser = usersJoined[i];
-            if(currentScore == -1)
-                currentScore = currentUser.score;
-            if(currentRankingIndex == -1)
-                currentRankingIndex = 0;
+            if (currentScore == -1) currentScore = currentUser.score;
+            if (currentRankingIndex == -1) currentRankingIndex = 0;
 
-            if(currentScore == currentUser.score){
-                if(!rankings[currentRankingIndex]) {
+            if (currentScore == currentUser.score) {
+                if (!rankings[currentRankingIndex]) {
                     rankings[currentRankingIndex] = {
                         score: currentScore,
-                        users: []
+                        users: [],
                     };
                 }
                 rankings[currentRankingIndex].users.push(currentUser);
             } else {
                 currentScore = currentUser.score;
                 currentRankingIndex++;
-                if(i < 10){
+                if (i < 10) {
                     rankings[currentRankingIndex] = {
                         score: currentScore,
-                        users: [currentUser]
+                        users: [currentUser],
                     };
-                }
-                else
-                    break;
+                } else break;
             }
         }
         return {
@@ -700,7 +720,7 @@ async function getTournamentResults(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
             },
-            body: JSON.stringify({rankings: rankings}),
+            body: JSON.stringify({ rankings: rankings }),
         };
     } catch (e) {
         console.error(
@@ -712,7 +732,9 @@ async function getTournamentResults(event: APIGatewayProxyEvent) {
                 "Access-Control-Allow-Origin": "*", // Required for CORS support to work
                 "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             },
-            body: JSON.stringify({ message: "Failed to get tournament results" }),
+            body: JSON.stringify({
+                message: "Failed to get tournament results",
+            }),
         };
     }
 }
