@@ -254,7 +254,13 @@ export const TournamentBanner = ({
                             <p
                                 className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                             >
-                                {ongoingTournament.usersJoined.length * 50 + 1000}
+                                {ongoingTournament.type === "basic"
+                                    ? ongoingTournament.prizePool.toLocaleString()
+                                    : (
+                                          ongoingTournament.usersJoined.length *
+                                              ongoingTournament.joinCost +
+                                          ongoingTournament.prizePool
+                                      ).toLocaleString()}
                             </p>
                         </motion.div>
                         {ongoingTournament != null &&
