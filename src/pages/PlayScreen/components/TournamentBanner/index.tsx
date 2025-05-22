@@ -1,11 +1,6 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUsers } from "../../../../hooks/useUser";
 import { motion } from "motion/react";
-import {
-    isTournamentClosed,
-    isTournamentUpcoming,
-} from "../../../../hooks/dates";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     appearAnimation,
     appearTextAnimation,
@@ -13,23 +8,28 @@ import {
     slideRightTextAnimation,
 } from "../../../../helpers/animation";
 import { sortList } from "../../../../helpers/athletes";
+import { getStickerImage } from "../../../../helpers/images";
 import { Tournament } from "../../../../helpers/interfaces";
 import {
-    getOngoingTournaments,
     getLatestPreviousTournament,
+    getOngoingTournaments,
 } from "../../../../helpers/lambda.helper";
-import { getStickerImage } from "../../../../helpers/images";
+import {
+    isTournamentClosed,
+    isTournamentUpcoming,
+} from "../../../../hooks/dates";
+import { useUsers } from "../../../../hooks/useUser";
 import { LeagueModal } from "../../modals/LeagueModal";
 
-import TournamentSonner from "../../../../assets/sonner/tournament.svg";
 import BasicTournamentBackground from "../../../../assets/background/tournament-basic.svg";
 import PremiumTournamentBackground from "../../../../assets/background/tournament-premium.svg";
-import ChangeIcon from "../../../../assets/icon/change-white.svg";
-import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
-import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
-import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
-import Closed from "../../../../assets/others/closed.svg";
 import GoldButton from "../../../../assets/button/gold.svg";
+import BattlePointsIcon from "../../../../assets/icon/battle-points-gold.svg";
+import ChangeGoldIcon from "../../../../assets/icon/change-gold.svg";
+import ChangeIcon from "../../../../assets/icon/change-white.svg";
+import TGStarIcon from "../../../../assets/icon/tg-star-white.svg";
+import Closed from "../../../../assets/others/closed.svg";
+import TournamentSonner from "../../../../assets/sonner/tournament.svg";
 
 interface TournamentBannerProps {
     ongoingTournament: Tournament;
@@ -254,7 +254,7 @@ export const TournamentBanner = ({
                             <p
                                 className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                             >
-                                {ongoingTournament.prizePool.toLocaleString()}
+                                {ongoingTournament.usersJoined.length * 50 + 1000}
                             </p>
                         </motion.div>
                         {ongoingTournament != null &&
