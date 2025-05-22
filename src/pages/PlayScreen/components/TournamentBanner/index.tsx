@@ -254,7 +254,13 @@ export const TournamentBanner = ({
                             <p
                                 className={`text-nowrap font-russoone text-[9vw] font-normal ${currentTournamentType == "basic" ? "bg-gradient-to-b from-golddark via-goldlight to-golddark bg-clip-text font-montserrat text-[3vw] text-transparent" : "text-white"}`}
                             >
-                                {ongoingTournament.usersJoined.length * 50 + 1000}
+                                {ongoingTournament.type === "basic"
+                                    ? ongoingTournament.prizePool.toLocaleString()
+                                    : (
+                                          ongoingTournament.usersJoined.length *
+                                              ongoingTournament.joinCost +
+                                          ongoingTournament.prizePool
+                                      ).toLocaleString()}
                             </p>
                         </motion.div>
                         {ongoingTournament != null &&
@@ -307,8 +313,17 @@ export const TournamentBanner = ({
                                 {...appearTextAnimation}
                             >
                                 <button
-                                    className="relative flex h-[7vw] justify-center"
+                                    className={`relative flex h-[7vw] justify-center ${
+                                        ongoingTournament.type === "premium" &&
+                                        !ongoingTournament.resultsTallied
+                                            ? "opacity-50"
+                                            : "opacity-100"
+                                    }`}
                                     onClick={handleViewDetails}
+                                    disabled={
+                                        ongoingTournament.type === "premium" &&
+                                        !ongoingTournament.resultsTallied
+                                    }
                                 >
                                     <img className="h-full" src={GoldButton} />
                                     <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
