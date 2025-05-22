@@ -312,17 +312,24 @@ export const TournamentBanner = ({
                                 className="flex h-full w-[40%] items-center justify-end"
                                 {...appearTextAnimation}
                             >
-                                <button
-                                    className="relative flex h-[7vw] justify-center"
-                                    onClick={handleViewDetails}
-                                >
-                                    <img className="h-full" src={GoldButton} />
-                                    <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
-                                        <p className="font-russoone text-[2.8vw] font-normal text-white">
-                                            View Details
-                                        </p>
-                                    </div>
-                                </button>
+                                {(ongoingTournament.type === "basic" ||
+                                    (ongoingTournament.type === "premium" &&
+                                        ongoingTournament.resultsTallied)) && (
+                                    <button
+                                        className="relative flex h-[7vw] justify-center"
+                                        onClick={handleViewDetails}
+                                    >
+                                        <img
+                                            className="h-full"
+                                            src={GoldButton}
+                                        />
+                                        <div className="absolute flex h-full w-full items-center justify-center gap-[1vw]">
+                                            <p className="font-russoone text-[2.8vw] font-normal text-white">
+                                                View Details
+                                            </p>
+                                        </div>
+                                    </button>
+                                )}
                             </motion.div>
                         </div>
                     </div>
