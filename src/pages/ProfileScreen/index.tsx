@@ -18,7 +18,7 @@ export const ProfileScreen = () => {
                     setProfileTab(selected);
                 }}
                 selectedTab={profileTab}
-                // disabled={true} //TODO: temporary
+                disabled={true} //TODO: temporary
             />
             {profileTab === "Friends" && <FriendsSection />}
             {profileTab === "Favorites" && <DreamTeamSection />}
